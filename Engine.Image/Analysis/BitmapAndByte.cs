@@ -137,7 +137,13 @@ namespace Engine.Image.Analysis
                 return null;
             }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dataR"></param>
+        /// <param name="dataG"></param>
+        /// <param name="dataB"></param>
+        /// <returns></returns>
         public static Bitmap ToRgbBitmap(byte[,] dataR, byte[,] dataG, byte[,] dataB)
         {
             //

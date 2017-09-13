@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Engine.Image.Entity;
+using System;
 
 namespace Engine.Image.Analysis
 {
     public interface IProjection
     {
-        BaseType.Point Porject(double lat, double lng);
-        BaseType.LatLng unPorject(double x, double y);
+        GPoint Porject(double lat, double lng);
+        LatLng unPorject(double x, double y);
     }
 
     /// <summary>
@@ -27,7 +24,7 @@ namespace Engine.Image.Analysis
         /// <param name="lat">纬度</param>
         /// <param name="lng">经度</param>
         /// <returns></returns>
-        public BaseType.Point Porject(double lat, double lng)
+        public GPoint Porject(double lat, double lng)
         {
             double d = Math.PI / 180;
             double r = R;
@@ -37,7 +34,7 @@ namespace Engine.Image.Analysis
             double con = e * Math.Sin(y);
             double ts = Math.Tan(Math.PI / 4 - y / 2) / Math.Pow((1 - con) / (1 + con), e / 2);
             y = -r * Math.Log(Math.Max(ts, 1E-10));
-            return new BaseType.Point(lng * d * r, y);
+            return new GPoint(lng * d * r, y);
         }
         /// <summary>
         /// 反投影
@@ -45,7 +42,7 @@ namespace Engine.Image.Analysis
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public BaseType.LatLng unPorject(double x, double y)
+        public LatLng unPorject(double x, double y)
         {
             double d = 180 / Math.PI;
             double r = R;
@@ -62,7 +59,7 @@ namespace Engine.Image.Analysis
                 dphi = Math.PI / 2 - 2 * Math.Atan(ts * con) - phi;
                 phi += dphi;
             }
-            return new BaseType.LatLng(phi * d, x * d / r);
+            return new LatLng(phi * d, x * d / r);
         }
     }
 
@@ -78,12 +75,12 @@ namespace Engine.Image.Analysis
         /// <param name="lat">纬度</param>
         /// <param name="lng">经度</param>
         /// <returns></returns>
-        public BaseType.Point Porject(double lat, double lng)
+        public GPoint Porject(double lat, double lng)
         {
             double d = Math.PI / 180;
             double max = 1 - 1E-15;
             double sin = Math.Max(Math.Min(Math.Sin(lat * d), max), -max);
-            return new BaseType.Point(this.R * lng * d, this.R * Math.Log((1 + sin) / (1 - sin)) / 2);
+            return new GPoint(this.R * lng * d, this.R * Math.Log((1 + sin) / (1 - sin)) / 2);
         }
         /// <summary>
         /// 
@@ -91,10 +88,10 @@ namespace Engine.Image.Analysis
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public BaseType.LatLng unPorject(double x, double y)
+        public LatLng unPorject(double x, double y)
         {
             var d = 180 / Math.PI;
-            return new BaseType.LatLng((2 * Math.Atan(Math.Exp(y / this.R)) - (Math.PI / 2)) * d, x * d / this.R);
+            return new LatLng((2 * Math.Atan(Math.Exp(y / this.R)) - (Math.PI / 2)) * d, x * d / this.R);
         }
     }
 

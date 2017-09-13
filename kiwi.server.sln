@@ -13,8 +13,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Interface", "Interface", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Implement", "Implement", "{FD4E5BF7-46EC-42DD-B92A-D70F297CF867}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Programstrap", "Programstrap\Programstrap.csproj", "{F56CEFFA-DD6D-4BCB-A8DD-D3E42C40D6E0}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Core", "Engine.Core\Engine.Core.csproj", "{B9954A20-0950-4CAC-9F7C-137138CD93E8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Image", "Engine.Image\Engine.Image.csproj", "{90A56C3D-5542-41F5-A2EE-A723B2B221BD}"
@@ -25,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Crawler", "Engine.Cr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Mongo", "Engine.Mongo\Engine.Mongo.csproj", "{6F5AD85E-BB07-4D4F-BEE1-46E10F2A91C4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Programstrap", "Programstrap\Programstrap.csproj", "{0A5EC5A7-6FB3-4B2D-92F1-1A67904827CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,12 +33,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F56CEFFA-DD6D-4BCB-A8DD-D3E42C40D6E0}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{F56CEFFA-DD6D-4BCB-A8DD-D3E42C40D6E0}.Debug|x86.ActiveCfg = Debug|x86
-		{F56CEFFA-DD6D-4BCB-A8DD-D3E42C40D6E0}.Debug|x86.Build.0 = Debug|x86
-		{F56CEFFA-DD6D-4BCB-A8DD-D3E42C40D6E0}.Release|Any CPU.ActiveCfg = Release|x86
-		{F56CEFFA-DD6D-4BCB-A8DD-D3E42C40D6E0}.Release|x86.ActiveCfg = Release|x86
-		{F56CEFFA-DD6D-4BCB-A8DD-D3E42C40D6E0}.Release|x86.Build.0 = Release|x86
 		{B9954A20-0950-4CAC-9F7C-137138CD93E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B9954A20-0950-4CAC-9F7C-137138CD93E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9954A20-0950-4CAC-9F7C-137138CD93E8}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -71,6 +65,14 @@ Global
 		{6F5AD85E-BB07-4D4F-BEE1-46E10F2A91C4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6F5AD85E-BB07-4D4F-BEE1-46E10F2A91C4}.Release|x86.ActiveCfg = Release|Any CPU
 		{6F5AD85E-BB07-4D4F-BEE1-46E10F2A91C4}.Release|x86.Build.0 = Release|Any CPU
+		{0A5EC5A7-6FB3-4B2D-92F1-1A67904827CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A5EC5A7-6FB3-4B2D-92F1-1A67904827CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A5EC5A7-6FB3-4B2D-92F1-1A67904827CB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0A5EC5A7-6FB3-4B2D-92F1-1A67904827CB}.Debug|x86.Build.0 = Debug|Any CPU
+		{0A5EC5A7-6FB3-4B2D-92F1-1A67904827CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A5EC5A7-6FB3-4B2D-92F1-1A67904827CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A5EC5A7-6FB3-4B2D-92F1-1A67904827CB}.Release|x86.ActiveCfg = Release|Any CPU
+		{0A5EC5A7-6FB3-4B2D-92F1-1A67904827CB}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Engine.Image.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,17 +18,17 @@ namespace Engine.Image.Analysis
             _d = d;
         }
 
-        public BaseType.Point Transform(BaseType.Point point, double scale=1)
+        public GPoint Transform(GPoint point, double scale=1)
         {
-            BaseType.Point _point = point.Clone();
+            GPoint _point = point.Clone();
             _point.X = scale * (_a * point.X + _b);
             _point.Y = scale*(_c * point.Y + _d);
             return _point;
         }
 
-        public BaseType.Point unTransfrom(BaseType.Point point, double scale=1)
+        public GPoint unTransfrom(GPoint point, double scale=1)
         {
-            return new BaseType.Point((point.X / scale - this._b) / this._a, (point.Y / scale - this._d) / this._c);
+            return new GPoint((point.X / scale - this._b) / this._a, (point.Y / scale - this._d) / this._c);
         }
 
         static double R = 6378137;

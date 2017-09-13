@@ -117,35 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="gdal16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\lib\gdal16.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="gdal18" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\lib\gdal18.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="gdalconst_csharp" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\lib\gdalconst_csharp.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="gdalconst_wrap" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\lib\gdalconst_wrap.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="gdal_csharp" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\lib\gdal_csharp.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="gdal_wrap" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\lib\gdal_wrap.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="ogr_csharp" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\lib\ogr_csharp.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="ogr_wrap" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\lib\ogr_wrap.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="osr_csharp" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\lib\osr_csharp.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="osr_wrap" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\lib\osr_wrap.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
 </root>
