@@ -8,14 +8,14 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Engine.Mongo
+namespace Engine.Mongo.Template
 {
     /// 提供 push-pull-sync-transaction 操作的分布式库
     /// 支持:
     /// 同步-数据拉取-写入
     /// @modify yellow date 2016.11.21
     /// </summary>
-    public class Template
+    public class MemoryCacheTemplate
     {
         /// <summary>
         /// 返回当前最新时间

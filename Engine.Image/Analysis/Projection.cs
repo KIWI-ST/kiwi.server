@@ -5,8 +5,20 @@ namespace Engine.Image.Analysis
 {
     public interface IProjection
     {
+        /// <summary>
+        /// 经纬度转换为投影坐标
+        /// </summary>
+        /// <param name="lat"></param>
+        /// <param name="lng"></param>
+        /// <returns></returns>
         GPoint Porject(double lat, double lng);
-        LatLng unPorject(double x, double y);
+        /// <summary>
+        /// 投影坐标转换为经纬度
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        LatLng UnPorject(double x, double y);
     }
 
     /// <summary>
@@ -42,7 +54,7 @@ namespace Engine.Image.Analysis
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public LatLng unPorject(double x, double y)
+        public LatLng UnPorject(double x, double y)
         {
             double d = 180 / Math.PI;
             double r = R;
@@ -68,7 +80,7 @@ namespace Engine.Image.Analysis
          //长半轴
         double R = 6378137;
         //短半轴
-        double R_MINOR = 6356752.314245179;
+        //double R_MINOR = 6356752.314245179;
         /// <summary>
         /// 投影
         /// </summary>
@@ -88,7 +100,7 @@ namespace Engine.Image.Analysis
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public LatLng unPorject(double x, double y)
+        public LatLng UnPorject(double x, double y)
         {
             var d = 180 / Math.PI;
             return new LatLng((2 * Math.Atan(Math.Exp(y / this.R)) - (Math.PI / 2)) * d, x * d / this.R);

@@ -9,5 +9,11 @@ namespace GrainInterface.Crawler
     public interface IGrain1 : IGrainWithGuidKey
     {
 
+
+
+
+
+
+
     }
 }
