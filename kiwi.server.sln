@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Image", "Engine.Image\Engine.Image.csproj", "{90A56C3D-5542-41F5-A2EE-A723B2B221BD}"
 EndProject
@@ -22,6 +22,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrainInterface.Crawler", "GrainInterface.Crawler\GrainInterface.Crawler.csproj", "{06E1EEC2-AB01-4635-A8AF-9DAA4E4009D1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrainImplement.Crawler", "GrainImplement.Crawler\GrainImplement.Crawler.csproj", "{8EFEA62A-A25E-4525-8074-9FF91FFE8FD4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Hosts.UI", "Hosts.UI", "{8D4BA31B-0A47-456F-A62A-212B4EAB247D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Host.Crawler.UI", "Host.Crawler.UI\Host.Crawler.UI.csproj", "{DAF14777-FEA5-49B3-84BA-9E7B7AE95230}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,6 +83,14 @@ Global
 		{8EFEA62A-A25E-4525-8074-9FF91FFE8FD4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8EFEA62A-A25E-4525-8074-9FF91FFE8FD4}.Release|x86.ActiveCfg = Release|Any CPU
 		{8EFEA62A-A25E-4525-8074-9FF91FFE8FD4}.Release|x86.Build.0 = Release|Any CPU
+		{DAF14777-FEA5-49B3-84BA-9E7B7AE95230}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAF14777-FEA5-49B3-84BA-9E7B7AE95230}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAF14777-FEA5-49B3-84BA-9E7B7AE95230}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DAF14777-FEA5-49B3-84BA-9E7B7AE95230}.Debug|x86.Build.0 = Debug|Any CPU
+		{DAF14777-FEA5-49B3-84BA-9E7B7AE95230}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAF14777-FEA5-49B3-84BA-9E7B7AE95230}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAF14777-FEA5-49B3-84BA-9E7B7AE95230}.Release|x86.ActiveCfg = Release|Any CPU
+		{DAF14777-FEA5-49B3-84BA-9E7B7AE95230}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -90,5 +102,9 @@ Global
 		{D7DB31C2-1869-48D8-9F03-E97B69BB0456} = {B15951D4-77C5-4D2B-A8B2-CE62EF3D02B6}
 		{06E1EEC2-AB01-4635-A8AF-9DAA4E4009D1} = {BC1B9EFA-5BE8-4978-9B74-A38A867DE7E1}
 		{8EFEA62A-A25E-4525-8074-9FF91FFE8FD4} = {9DC7D33F-252C-4833-9D41-8251022058BD}
+		{DAF14777-FEA5-49B3-84BA-9E7B7AE95230} = {8D4BA31B-0A47-456F-A62A-212B4EAB247D}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CB9A02C6-D683-48EF-8ECA-4E587D75D2F9}
 	EndGlobalSection
 EndGlobal

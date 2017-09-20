@@ -34,8 +34,8 @@ namespace Host.Crawler
         {
             hostWrapper = new OrleansHostWrapper(args);
             //功能函数初始化
-            GrainImplement.Crawler.Helper.CrawlerHelper.Inilization("mongodb://root:!admin_1@139.129.7.130:27017");
-            GrainImplement.Crawler.Helper.CrawlerHelper.Run();
+            //GrainImplement.Crawler.Helper.CrawlerHelper.Inilization("mongodb://root:!admin_1@139.129.7.130:27017");
+            //GrainImplement.Crawler.Helper.CrawlerHelper.Run();
             if (!hostWrapper.Run())
             {
                 Console.Error.WriteLine("Failed to initialize Orleans silo");

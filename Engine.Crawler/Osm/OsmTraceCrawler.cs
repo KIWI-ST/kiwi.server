@@ -102,7 +102,7 @@ namespace Engine.Crawler.Osm
         {
             CrawledPage crawledPage = e.CrawledPage;
             //数据页
-            if (crawledPage.Uri.AbsoluteUri.Contains("user") && crawledPage.Uri.AbsoluteUri.Contains("traces")&& !crawledPage.Uri.AbsoluteUri.Contains("/tag") && !crawledPage.Uri.AbsoluteUri.Contains("login?referer="))
+            if (crawledPage.Uri.AbsoluteUri.Contains("user") && crawledPage.Uri.AbsoluteUri.Contains("traces")&& !crawledPage.Uri.AbsoluteUri.Contains("/tag") && !crawledPage.Uri.AbsoluteUri.Contains("login?referer=")&& !crawledPage.Uri.AbsoluteUri.Contains("new?referer="))
             {
                 string traceId = crawledPage.Uri.Segments.Last();
                 HtmlNodeCollection collection = crawledPage.HtmlDocument.DocumentNode.SelectNodes("//tr");

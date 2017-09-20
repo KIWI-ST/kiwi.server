@@ -8,7 +8,7 @@ namespace GrainImplement.Crawler.Osm
     {
         public Task<bool> StartCrawler()
         {
-            Helper.CrawlerHelper.Run();
+            //Helper.CrawlerHelper.Run();
             return Task.FromResult(true);
         }
     }

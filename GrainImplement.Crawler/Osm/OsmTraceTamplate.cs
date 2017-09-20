@@ -10,6 +10,7 @@ namespace GrainImplement.Crawler.Osm
         //目录数据表
         protected string _tableName_OsmTrace = "OsmTrace";
 
+        int _count = 0;
         #region 数据初始化
 
         protected List<OsmTrace> _osmTraceCollection = new List<OsmTrace>();
@@ -20,7 +21,7 @@ namespace GrainImplement.Crawler.Osm
             {
                 _dataBaseName = "OSM";
                 base.Inilization(connectString);
-                _push.BuildUniqueIndex<OsmTrace>(_tableName_OsmTrace);
+                //_push.BuildUniqueIndex<OsmTrace>(_tableName_OsmTrace);
             }
             ExportFromDataBase<OsmTrace>(_tableName_OsmTrace, Callback_Category);
         }
@@ -33,6 +34,13 @@ namespace GrainImplement.Crawler.Osm
         #endregion
 
         #region 内置
+        /// <summary>
+        /// 显示当前总数
+        /// </summary>
+        public int Count
+        {
+            get { return _count; }
+        }
 
         #endregion
 
@@ -47,13 +55,13 @@ namespace GrainImplement.Crawler.Osm
             {
                 var task = await _push.PushData<OsmTrace>(_tableName_OsmTrace, osmTrace);
                 _osmTraceCollection.Add(osmTrace);
+                _count++;
                 return true;
             }
             return false;
         }
 
         #endregion
-
 
         #region 查询
 
@@ -63,7 +71,6 @@ namespace GrainImplement.Crawler.Osm
         #region 删除
 
         #endregion
-
 
         #region 修改
 
