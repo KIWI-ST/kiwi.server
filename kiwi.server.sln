@@ -27,6 +27,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Hosts.UI", "Hosts.UI", "{8D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Host.Crawler.UI", "Host.Crawler.UI\Host.Crawler.UI.csproj", "{DAF14777-FEA5-49B3-84BA-9E7B7AE95230}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.TensorFlow", "Engine.TensorFlow\Engine.TensorFlow.csproj", "{9E30567F-445F-445D-A2B7-7479961D67AD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +93,14 @@ Global
 		{DAF14777-FEA5-49B3-84BA-9E7B7AE95230}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DAF14777-FEA5-49B3-84BA-9E7B7AE95230}.Release|x86.ActiveCfg = Release|Any CPU
 		{DAF14777-FEA5-49B3-84BA-9E7B7AE95230}.Release|x86.Build.0 = Release|Any CPU
+		{9E30567F-445F-445D-A2B7-7479961D67AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E30567F-445F-445D-A2B7-7479961D67AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E30567F-445F-445D-A2B7-7479961D67AD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9E30567F-445F-445D-A2B7-7479961D67AD}.Debug|x86.Build.0 = Debug|Any CPU
+		{9E30567F-445F-445D-A2B7-7479961D67AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E30567F-445F-445D-A2B7-7479961D67AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E30567F-445F-445D-A2B7-7479961D67AD}.Release|x86.ActiveCfg = Release|Any CPU
+		{9E30567F-445F-445D-A2B7-7479961D67AD}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -103,6 +113,7 @@ Global
 		{06E1EEC2-AB01-4635-A8AF-9DAA4E4009D1} = {BC1B9EFA-5BE8-4978-9B74-A38A867DE7E1}
 		{8EFEA62A-A25E-4525-8074-9FF91FFE8FD4} = {9DC7D33F-252C-4833-9D41-8251022058BD}
 		{DAF14777-FEA5-49B3-84BA-9E7B7AE95230} = {8D4BA31B-0A47-456F-A62A-212B4EAB247D}
+		{9E30567F-445F-445D-A2B7-7479961D67AD} = {4B5B0396-A5BC-44D4-AAF4-A0037E20E77D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CB9A02C6-D683-48EF-8ECA-4E587D75D2F9}
