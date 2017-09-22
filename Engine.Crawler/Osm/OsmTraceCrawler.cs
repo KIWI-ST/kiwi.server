@@ -1,6 +1,5 @@
 ﻿using Abot.Crawler;
 using Abot.Poco;
-using ClaySharp;
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
