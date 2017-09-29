@@ -1,20 +1,34 @@
-﻿using System;
+﻿using Engine.OSM.Read;
+using NetTopologySuite.Features;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Host.Trace.UI
 {
     public partial class Main : Form
     {
+
+        IOsmReaderPBF _pOsmReaderPBF;
+
         public Main()
         {
             InitializeComponent();
+            ReadPBF();
+        }
+
+        private void ReadPBF()
+        {
+            string fpbf = System.IO.Directory.GetCurrentDirectory() + @"\DATA\central-america-latest.osm.pbf";
+            _pOsmReaderPBF = new OsmReaderPBF(fpbf);
+            _pOsmReaderPBF.OnComplete += _pOsmReaderPBF_OnComplete;
+            _pOsmReaderPBF.Read();
+        }
+
+        private void _pOsmReaderPBF_OnComplete(List<OsmSharp.OsmGeo> nodes, List<OsmSharp.OsmGeo> ways, List<OsmSharp.OsmGeo> relations)
+        {
+            var s = nodes;
+
+            var sss = ways;
         }
     }
 }

@@ -23,10 +23,6 @@ namespace Engine.Crawler.Osm
         /// </summary>
        public  event TraceInfoCompleteHandler OnTraceInfoComplete;
         /// <summary>
-        /// 获取xml格式trace信息成功
-        /// </summary>
-        public event TraceDataCompleteHandler OnTraceDataComplete;
-        /// <summary>
         /// 网络爬虫
         /// </summary>
         PoliteWebCrawler _crawler;
@@ -100,8 +96,8 @@ namespace Engine.Crawler.Osm
         private void _crawler_PageCrawlCompletedAsync(object sender, PageCrawlCompletedArgs e)
         {
             CrawledPage crawledPage = e.CrawledPage;
-            //数据页
-            if (crawledPage.Uri.AbsoluteUri.Contains("user") && crawledPage.Uri.AbsoluteUri.Contains("traces")&& !crawledPage.Uri.AbsoluteUri.Contains("/tag") && !crawledPage.Uri.AbsoluteUri.Contains("login?referer=")&& !crawledPage.Uri.AbsoluteUri.Contains("new?referer="))
+            //数据页 
+            if (crawledPage.Uri.AbsoluteUri.Contains("user") && crawledPage.Uri.AbsoluteUri.Contains("traces")&& !crawledPage.Uri.AbsoluteUri.Contains("/tag") && !crawledPage.Uri.AbsoluteUri.Contains("login?referer=")&& !crawledPage.Uri.AbsoluteUri.Contains("new?referer=")&&!crawledPage.Uri.AbsoluteUri.Contains("/rss")&& !crawledPage.Uri.AbsoluteUri.Contains("/login?"))
             {
                 string traceId = crawledPage.Uri.Segments.Last();
                 HtmlNodeCollection collection = crawledPage.HtmlDocument.DocumentNode.SelectNodes("//tr");

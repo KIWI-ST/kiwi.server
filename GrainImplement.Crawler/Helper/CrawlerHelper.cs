@@ -31,7 +31,6 @@ namespace GrainImplement.Crawler.Helper
 
         public void Run()
         {
-            _osmTraceCrawler.OnTraceDataComplete += _osmTraceCrawler_OnTraceDataComplete;
             _osmTraceCrawler.OnTraceInfoComplete += _osmTraceCrawler_OnTraceInfoComplete;
             _osmTraceCrawler.Run();
         }
@@ -44,9 +43,5 @@ namespace GrainImplement.Crawler.Helper
                 OnCrawlerProgress(_osmTraceTamplate.Count, JsonConvert.SerializeObject(props));
         }
 
-        private void _osmTraceCrawler_OnTraceDataComplete(string traceId, string xmlContentText)
-        {
-
-        }
     }
 }
