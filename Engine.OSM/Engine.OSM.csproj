@@ -141,6 +141,7 @@
     <Compile Include="Read\IOsmReader.cs" />
     <Compile Include="Read\OsmReader.cs" />
     <Compile Include="Read\OsmReaderPBF.cs" />
+    <Compile Include="Template\OsmRoadTemplate.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -148,6 +149,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entity\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Engine.Mongo\Engine.Mongo.csproj">
+      <Project>{6f5ad85e-bb07-4d4f-bee1-46e10f2a91c4}</Project>
+      <Name>Engine.Mongo</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets')" />
