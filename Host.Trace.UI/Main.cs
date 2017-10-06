@@ -1,4 +1,5 @@
 ﻿using Engine.OSM.Read;
+using Engine.TensorFlow.Models;
 using NetTopologySuite.Features;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -13,7 +14,13 @@ namespace Host.Trace.UI
         public Main()
         {
             InitializeComponent();
-            ReadPBF();
+            TraceModel mode = new TraceModel();
+            mode.Run();
+        }
+
+        private void TrainTensorflow()
+        {
+          
         }
 
         private void ReadPBF()

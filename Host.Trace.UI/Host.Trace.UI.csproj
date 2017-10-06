@@ -15,7 +15,7 @@
     </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -179,6 +179,10 @@
     <ProjectReference Include="..\Engine.OSM\Engine.OSM.csproj">
       <Project>{243aa02c-fca1-4490-a3d7-192422507e9b}</Project>
       <Name>Engine.OSM</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Engine.TensorFlow\Engine.TensorFlow.csproj">
+      <Project>{9e30567f-445f-445d-a2b7-7479961d67ad}</Project>
+      <Name>Engine.TensorFlow</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
