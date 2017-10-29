@@ -35,23 +35,19 @@ namespace Engine.OSM.Read
         public void Read()
         {
             var filterWay = from osmGeo in _source where osmGeo.Type == OsmGeoType.Way select osmGeo;
-            int count = filterWay.Count();
-            foreach (var element in filterWay)
-            {
-                switch (element.Type)
-                {
-                    case OsmGeoType.Node:
-                        _nodeCollection.Add(element);
-                        break;
-                    case OsmGeoType.Way:
-                        _wayCollection.Add(element);
-                        break;
-                    case OsmGeoType.Relation:
-                        _relationCollection.Add(element);
-                        break;
-                    default:break;
-                }
+            var features = filterWay.ToFeatureSource();
+            var featureCollection = new FeatureCollection();
+            var attributesTable = new AttributesTable();
+            foreach (var feature in features)
+            { 
+                featureCollection.Add(new Feature(feature.Geometry, attributesTable));
             }
+            var header = ShapefileDataWriter.GetHeader(featureCollection.Features.First(), featureCollection.Features.Count);
+            var shapeWriter = new ShapefileDataWriter("luxembourg.shp", new GeometryFactory())
+            {
+                Header = header
+            };
+            shapeWriter.Write(featureCollection.Features);
             //读取完毕
             OnComplete(_nodeCollection,_wayCollection,_relationCollection);
         }

@@ -14,8 +14,9 @@ namespace Host.Trace.UI
         public Main()
         {
             InitializeComponent();
-            TraceModel mode = new TraceModel();
-            mode.Run();
+            ReadPBF();
+            //TraceModel mode = new TraceModel();
+            //mode.Run();
         }
 
         private void TrainTensorflow()
