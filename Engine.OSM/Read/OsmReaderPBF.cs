@@ -1,21 +1,19 @@
-﻿using NetTopologySuite.Features;
+﻿using GeoAPI.Geometries;
+using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
 using OsmSharp;
 using OsmSharp.Geo;
 using OsmSharp.Streams;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Engine.OSM.Read
+namespace Engine.GIS.Read
 {
-
-    public delegate void ReadCompleteHandle(List<OsmGeo> nodes, List<OsmGeo> ways, List<OsmGeo> relations);
-
-    public class OsmReaderPBF : OsmReader, IOsmReaderPBF
+    public class OsmReaderPBF : IOsmReaderPBF
     {
+        FileStream _steam;
 
         List<OsmGeo> _nodeCollection = new List<OsmGeo>();
 
@@ -27,21 +25,25 @@ namespace Engine.OSM.Read
 
         PBFOsmStreamSource _source;
 
-        public OsmReaderPBF(string path) : base(path)
+        public OsmReaderPBF(string path) 
         {
+            _steam = File.OpenRead(path);
             _source = new PBFOsmStreamSource(_steam);
         }
 
-        public void Read()
+        public void Read(IPolygon polygon)
         {
-            var filterWay = from osmGeo in _source where osmGeo.Type == OsmGeoType.Way select osmGeo;
-            var features = filterWay.ToFeatureSource();
+            //1.矩形区域裁剪
+            var polygonSource = _source.FilterSpatial(polygon, true);
+            //2.筛选道路数据
+            var featureSrouce = polygonSource.ToFeatureSource();
+            //3.筛选lineString类型的geometry
+            var lineFeatures = featureSrouce.Where(p => p.Geometry is LineString);
+            //4.单独存放成shp文件
             var featureCollection = new FeatureCollection();
             var attributesTable = new AttributesTable();
-            foreach (var feature in features)
-            { 
+            foreach (var feature in lineFeatures)
                 featureCollection.Add(new Feature(feature.Geometry, attributesTable));
-            }
             var header = ShapefileDataWriter.GetHeader(featureCollection.Features.First(), featureCollection.Features.Count);
             var shapeWriter = new ShapefileDataWriter("luxembourg.shp", new GeometryFactory())
             {

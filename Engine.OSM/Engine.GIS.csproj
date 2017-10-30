@@ -7,7 +7,7 @@
     <ProjectGuid>{243AA02C-FCA1-4490-A3D7-192422507E9B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Engine.OSM</RootNamespace>
+    <RootNamespace>Engine.GIS</RootNamespace>
     <AssemblyName>Engine.OSM</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -170,19 +170,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Read\IOsmReaderPBF.cs" />
-    <Compile Include="Read\IOsmReader.cs" />
-    <Compile Include="Read\OsmReader.cs" />
+    <Compile Include="Entity\IOSMReaderPBF.cs" />
+    <Compile Include="Entity\IShpReader.cs" />
     <Compile Include="Read\OsmReaderPBF.cs" />
+    <Compile Include="Read\ShpReader.cs" />
     <Compile Include="Template\OsmRoadTemplate.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Entity\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Engine.Mongo\Engine.Mongo.csproj">
       <Project>{6f5ad85e-bb07-4d4f-bee1-46e10f2a91c4}</Project>

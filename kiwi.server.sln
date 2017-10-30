@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Image", "Engine.Image\Engine.Image.csproj", "{90A56C3D-5542-41F5-A2EE-A723B2B221BD}"
 EndProject
@@ -31,7 +31,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.TensorFlow", "Engine
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Host.Trace.UI", "Host.Trace.UI\Host.Trace.UI.csproj", "{6970EE44-28B9-4D2E-8E40-64376D87E6FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.OSM", "Engine.OSM\Engine.OSM.csproj", "{243AA02C-FCA1-4490-A3D7-192422507E9B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.GIS", "Engine.OSM\Engine.GIS.csproj", "{243AA02C-FCA1-4490-A3D7-192422507E9B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
