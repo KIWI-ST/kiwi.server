@@ -39,7 +39,7 @@ namespace Host.Trace.UI
 
         private void ReadPBF(IPolygon polygon)
         {
-            string fpbf = System.IO.Directory.GetCurrentDirectory() + @"\DATA\street\australia-oceania-latest.osm.pbf";
+            string fpbf = System.IO.Directory.GetCurrentDirectory() + @"\DATA\street\target.osm.pbf";
             _pOsmReaderPBF = new OsmReaderPBF(fpbf);
             _pOsmReaderPBF.OnComplete += _pOsmReaderPBF_OnComplete;
             //

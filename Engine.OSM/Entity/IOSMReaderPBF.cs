@@ -22,6 +22,11 @@ namespace Engine.GIS
         /// <param name="value"></param>
         void Read(IPolygon polygon);
         /// <summary>
+        /// 写入裁剪后写入文件
+        /// </summary>
+        /// <param name="polygon"></param>
+        void Flush(IPolygon polygon);
+        /// <summary>
         /// 读取完成后的回调事件
         /// </summary>
         event ReadCompleteHandle OnComplete;
