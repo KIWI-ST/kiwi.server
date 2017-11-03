@@ -1,4 +1,5 @@
 ﻿using Engine.GIS;
+using Engine.GIS.Grid;
 using Engine.GIS.Read;
 using GeoAPI.Geometries;
 using NetTopologySuite.Geometries;
@@ -15,11 +16,30 @@ namespace Host.Trace.UI
         public Main()
         {
             InitializeComponent();
+            BuildGrid();
             //ReadPBF();
             //TraceModel mode = new TraceModel();
             //mode.Run();
-            ReadShp();
+            //ReadShp();
         }
+
+        private void BuildGrid()
+        {
+            WebMercatorGrid grid = new WebMercatorGrid();
+
+            List<Coordinate> coordinates = new List<Coordinate>();
+            coordinates.Add(new Coordinate(114, 30));
+            coordinates.Add(new Coordinate(115, 31));
+            Bound bound = new Bound(coordinates);
+            grid.Build(bound,14);
+            //
+            string shpPath = System.IO.Directory.GetCurrentDirectory() + @"\DATA\shp\china\gis.osm_roads_free_1.shp";
+            ShpReader shpReader = new ShpReader(shpPath);
+            shpReader.Read();
+            //
+            grid.CutShape(shpReader.GeometryCollection);
+        }
+
 
         private void TrainTensorflow()
         {
@@ -28,13 +48,8 @@ namespace Host.Trace.UI
 
         private void ReadShp()
         {
-            string shpPath = System.IO.Directory.GetCurrentDirectory() + @"\DATA\boundary\china\CHN_adm1.shp";
-            ShpReader shpReader = new ShpReader(shpPath);
-            shpReader.Read();
-            //1.获取广东省矩形边界
-            var polygon = shpReader.LoadPolygon(new Point(112, 23.5)) as IPolygon;
-            //2.裁剪pbf文件
-            ReadPBF(polygon);
+         
+
         }
 
         private void ReadPBF(IPolygon polygon)

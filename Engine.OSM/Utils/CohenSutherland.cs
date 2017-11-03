@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using GeoAPI.Geometries;
+using System.Collections.Generic;
 using System.Windows;
 
 namespace Engine.GIS.Utils
 {
-
-    public class Extents
+    class Extents
     {
         public double Left = 0;
         public double Right = 0;
@@ -35,7 +35,7 @@ namespace Engine.GIS.Utils
             return code;
         }
 
-        private static List<Point> CohenSutherlandLineClip(Point p0, Point p1, Extents extents)
+        private static List<Coordinate> CohenSutherlandLineClip(Coordinate p0, Coordinate p1, Extents extents)
         {
             double x0 = p0.X;
             double y0 = p0.Y;
@@ -109,13 +109,13 @@ namespace Engine.GIS.Utils
                 }
             }
             // return the clipped line
-            return accept ? new List<Point>(){
-                new Point(x0,y0),
-                new Point(x1, y1),
+            return accept ? new List<Coordinate>(){
+                new Coordinate(x0,y0),
+                new Coordinate(x1, y1),
             } : null;
         }
 
-        private static Extents CalucuteExtents(Point[] clipPoly)
+        private static Extents CalucuteExtents(Coordinate[] clipPoly)
         {
             double left = clipPoly[0].X;
             double top = clipPoly[0].Y;
@@ -142,16 +142,16 @@ namespace Engine.GIS.Utils
             };
         }
 
-        public static List<Point> GetIntersectedPolyline(Point[] subjectPolyline, Point[] clipPoly)
+        public static List<Coordinate> GetIntersectedPolyline(Coordinate[] subjectPolyline, Coordinate[] clipPoly)
         {
             Extents extents = CalucuteExtents(clipPoly);
 
-            List<Point> clipLines = new List<Point>();
-            for (int i = 0; i < subjectPolyline.Length; i++)
+            List<Coordinate> clipLines = new List<Coordinate>();
+            for (int i = 0; i < subjectPolyline.Length-1; i++)
             {
-                Point p0 = subjectPolyline[i];
-                Point p1 = subjectPolyline[i + 1];
-                List<Point> cliped = CohenSutherlandLineClip(p0, p1, extents);
+                Coordinate p0 = subjectPolyline[i];
+                Coordinate p1 = subjectPolyline[i + 1];
+                List<Coordinate> cliped = CohenSutherlandLineClip(p0, p1, extents);
             }
             return clipLines;
         }

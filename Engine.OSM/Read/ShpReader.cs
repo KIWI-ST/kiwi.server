@@ -16,6 +16,7 @@ namespace Engine.GIS.Read
         ShapefileReader _reader = null;
         IGeometryCollection _geometryCollection;
 
+        public IGeometryCollection GeometryCollection { get => _geometryCollection; }
 
         public ShpReader(string path)
         {
@@ -33,9 +34,10 @@ namespace Engine.GIS.Read
                              where geo.OgcGeometryType == OgcGeometryType.Polygon
                              where geo.Contains(point)
                              select geo).Single();
-
             return result;
         }
+
+
 
     }
 }
