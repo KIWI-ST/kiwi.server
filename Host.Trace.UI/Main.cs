@@ -28,12 +28,12 @@ namespace Host.Trace.UI
             WebMercatorGrid grid = new WebMercatorGrid();
 
             List<Coordinate> coordinates = new List<Coordinate>();
-            coordinates.Add(new Coordinate(114, 30));
-            coordinates.Add(new Coordinate(115, 31));
+            coordinates.Add(new Coordinate(109, 20));
+            coordinates.Add(new Coordinate(117.2, 25.6));
             Bound bound = new Bound(coordinates);
-            grid.Build(bound,14);
+            grid.Build(bound,6);
             //
-            string shpPath = System.IO.Directory.GetCurrentDirectory() + @"\DATA\shp\china\gis.osm_roads_free_1.shp";
+            string shpPath = System.IO.Directory.GetCurrentDirectory() + @"\DATA\shp\china\guangdong.shp";
             ShpReader shpReader = new ShpReader(shpPath);
             shpReader.Read();
             //

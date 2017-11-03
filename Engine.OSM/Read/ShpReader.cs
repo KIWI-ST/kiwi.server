@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NetTopologySuite.IO;
-using NetTopologySuite.IO.ShapeFile.Extended;
+﻿using GeoAPI.Geometries;
 using NetTopologySuite.Geometries;
-using GeoAPI.Geometries;
-using System.IO;
+using NetTopologySuite.IO;
+using System.Linq;
 
 namespace Engine.GIS.Read
 {

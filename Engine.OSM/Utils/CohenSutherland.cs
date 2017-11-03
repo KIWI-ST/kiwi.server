@@ -152,6 +152,8 @@ namespace Engine.GIS.Utils
                 Coordinate p0 = subjectPolyline[i];
                 Coordinate p1 = subjectPolyline[i + 1];
                 List<Coordinate> cliped = CohenSutherlandLineClip(p0, p1, extents);
+                if (cliped != null)
+                    clipLines.AddRange(cliped);
             }
             return clipLines;
         }

@@ -191,20 +191,17 @@ namespace Engine.GIS.Grid
             //2.1 转换成尺度下的pixel
             Coordinate min = LatlngToPoint(p0, zoom);
             Coordinate max = LatlngToPoint(p1, zoom);
-            //2.2 计算瓦片范围
-            int y_min = Convert.ToInt32(Math.Floor(min.Y / _tileSize));
-            int y_max = Convert.ToInt32(Math.Ceiling(max.Y / _tileSize));
-            int x_min = Convert.ToInt32(Math.Floor(min.X / _tileSize));
-            int x_max = Convert.ToInt32(Math.Floor(max.X / _tileSize));
-            //
+            //2.2 计算pixel下边界范围
+            Bound pixelBound = new Bound(new List<Coordinate>() {min,max});
+            //2.3 通过pixelbound计算range
             Bound range = new Bound(new List<Coordinate>() {
-                new Coordinate(x_min,y_min),
-                new Coordinate(x_max,y_max)
+                new Coordinate( (int)Math.Floor(pixelBound.Min.X / _tileSize), (int)Math.Floor(pixelBound.Min.Y / _tileSize)),
+                 new Coordinate( (int)Math.Ceiling(pixelBound.Max.X / _tileSize)-1, (int)Math.Ceiling(pixelBound.Max.Y / _tileSize)-1),
             });
             //2.3统计区域内瓦片的编号，边界经纬度等信息
             for (int j = Convert.ToInt32(range.Min.Y); j <= Convert.ToInt32(range.Max.Y); j++)
             {
-                for (int i = Convert.ToInt32(range.Min.X); i < Convert.ToInt32(range.Max.X); i++)
+                for (int i = Convert.ToInt32(range.Min.X); i <=Convert.ToInt32(range.Max.X); i++)
                 {
                     //反算每块瓦片的边界经纬度
                     List<Coordinate> coordinates = new List<Coordinate>();
@@ -274,7 +271,11 @@ namespace Engine.GIS.Grid
                     var tileCollection = _tileDictionary[key];
                     foreach(var tile in tileCollection)
                     {
-                        var cilpline= CohenSutherland.GetIntersectedPolyline(geometries.Coordinates, tile.Bound.ToClipPolygon());
+                        var clipLine= CohenSutherland.GetIntersectedPolyline(geometries.Coordinates, tile.Bound.ToClipPolygon());
+                        if (clipLine.Count > 0)
+                        {
+                            var s = "";
+                        }
                     }
                 }
             }
