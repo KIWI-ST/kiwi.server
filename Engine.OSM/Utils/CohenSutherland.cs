@@ -1,6 +1,7 @@
 ﻿using GeoAPI.Geometries;
 using System.Collections.Generic;
 using System.Windows;
+using Engine.GIS.Grid;
 
 namespace Engine.GIS.Utils
 {
@@ -14,146 +15,101 @@ namespace Engine.GIS.Utils
 
     class CohenSutherland
     {
-        //方位编码
-        static byte INSIDE = 0;//0000
         static byte LEFT = 1;//0001
         static byte RIGHT = 2;//0002
         static byte BOTTOM = 4;//0003
         static byte TOP = 8;//0004
 
-        private static byte ComputeOutCode(Extents extents, double x, double y)
+        private static byte Encode(double x, double y, Bound bound)
         {
-            byte code = INSIDE;
-            if (x < extents.Left)           // to the left of clip window
-                code |= LEFT;
-            else if (x > extents.Right)     // to the right of clip window
-                code |= RIGHT;
-            if (y < extents.Bottom)         // below the clip window
-                code |= BOTTOM;
-            else if (y > extents.Top)       // above the clip window
-                code |= TOP;
-            return code;
+            double xl = bound.Left,xr = bound.Right,yt = bound.Top,yb = bound.Bottom;
+            byte c = 0;
+            if (x < xl)
+                c |= LEFT;
+            if (x > xr)
+                c |= RIGHT;
+            if (y < yb)
+                c |= BOTTOM;
+            if (y > yt)
+                c |= TOP;
+            return c;
         }
 
-        private static List<Coordinate> CohenSutherlandLineClip(Coordinate p0, Coordinate p1, Extents extents)
+        private static List<Coordinate> ClipLine(Coordinate start, Coordinate end, Bound bound)
         {
-            double x0 = p0.X;
-            double y0 = p0.Y;
-            double x1 = p1.X;
-            double y1 = p1.Y;
+            double xl = bound.Left,
+                        xr = bound.Right,
+                        yt = bound.Top,
+                        yb = bound.Bottom;
             //
-            byte outcode0 = CohenSutherland.ComputeOutCode(extents, x0, y0);
-            byte outcode1 = CohenSutherland.ComputeOutCode(extents, x1, y1);
-            bool accept = false;
-            while (true)
+            List<Coordinate> coords = new List<Coordinate>();
+            double x1 = start.X, y1 = start.Y, x2 = end.X, y2 = end.Y;
+            byte code1 = Encode(x1, y1, bound);
+            byte code2 = Encode(x2, y2, bound);
+            byte code;
+            double x = 0, y = 0;
+            while (code1 != 0 || code2 != 0)
             {
-                // Bitwise OR is 0. Trivially accept and get out of loop
-                if ((outcode0 | outcode1) == 0)
+                //1.线在窗口外,返回一个空数组
+                if ((code1 & code2) != 0)
+                    return coords;
+                code = code1;
+                //找窗口外的点
+                if (code1 == 0) code = code2;
+                //点在左边
+                if ((LEFT & code) != 0)
                 {
-                    accept = true;
-                    break;
+                    x = xl;
+                    y = y1 + (y2 - y1) * (xl - x1) / (x2 - x1);
                 }
-                // Bitwise AND is not 0. Trivially reject and get out of loop
-                else if ((outcode0 & outcode1) != 0)
+                //点在右边
+                else if ((RIGHT & code) != 0)
                 {
-                    break;
+                    x = xr;
+                    y = y1 + (y2 - y1) * (xr - x1) / (x2 - x1);
+                }
+                //点在下面
+                else if ((BOTTOM & code) != 0)
+                {
+                    y = yb;
+                    x = x1 + (x2 - x1) * (yb - y1) / (y2 - y1);
+                }
+                else if ((TOP & code) != 0)
+                {
+                    y = yt;
+                    x = x1 + (x2 - x1) * (yt - y1) / (y2 - y1);
+                }
+                //
+                if (code == code1)
+                {
+                    x1 = x;
+                    y1 = y;
+                    code1 = Encode(x, y, bound);
                 }
                 else
                 {
-                    // failed both tests, so calculate the line segment to clip
-                    // from an outside point to an intersection with clip edge
-                    double x, y;
-                    // At least one endpoint is outside the clip rectangle; pick it.
-                    byte outcodeOut = (outcode0 != 0) ? outcode0 : outcode1;
-                    // Now find the intersection point;
-                    // use formulas y = y0 + slope * (x - x0), x = x0 + (1 / slope) * (y - y0)
-                    if ((outcodeOut & TOP) != 0)
-                    {   // point is above the clip rectangle
-                        x = x0 + (x1 - x0) * (extents.Top - y0) / (y1 - y0);
-                        y = extents.Top;
-                    }
-                    else if ((outcodeOut & BOTTOM) != 0)
-                    { // point is below the clip rectangle
-                        x = x0 + (x1 - x0) * (extents.Bottom - y0) / (y1 - y0);
-                        y = extents.Bottom;
-                    }
-                    else if ((outcodeOut & RIGHT) != 0)
-                    {  // point is to the right of clip rectangle
-                        y = y0 + (y1 - y0) * (extents.Right - x0) / (x1 - x0);
-                        x = extents.Right;
-                    }
-                    else if ((outcodeOut & LEFT) != 0)
-                    {   // point is to the left of clip rectangle
-                        y = y0 + (y1 - y0) * (extents.Left - x0) / (x1 - x0);
-                        x = extents.Left;
-                    }
-                    else
-                    {
-                        x = double.NaN;
-                        y = double.NaN;
-                    }
-                    // Now we move outside point to intersection point to clip
-                    // and get ready for next pass.
-                    if (outcodeOut == outcode0)
-                    {
-                        x0 = x;
-                        y0 = y;
-                        outcode0 = CohenSutherland.ComputeOutCode(extents, x0, y0);
-                    }
-                    else
-                    {
-                        x1 = x;
-                        y1 = y;
-                        outcode1 = CohenSutherland.ComputeOutCode(extents, x1, y1);
-                    }
+                    x2 = x;
+                    y2 = y;
+                    code2 = Encode(x, y, bound);
                 }
             }
-            // return the clipped line
-            return accept ? new List<Coordinate>(){
-                new Coordinate(x0,y0),
-                new Coordinate(x1, y1),
-            } : null;
-        }
-
-        private static Extents CalucuteExtents(Coordinate[] clipPoly)
-        {
-            double left = clipPoly[0].X;
-            double top = clipPoly[0].Y;
-            double right = clipPoly[0].X;
-            double bottom = clipPoly[0].Y;
             //
-            for (int i = 1; i < clipPoly.Length; i++)
-            {
-                if (left > clipPoly[i].X)
-                    left = clipPoly[i].X;
-                if (right < clipPoly[i].X)
-                    right = clipPoly[i].X;
-                if (top < clipPoly[i].Y)
-                    top = clipPoly[i].Y;
-                if (bottom > clipPoly[i].Y)
-                    bottom = clipPoly[i].Y;
-            }
-            return new Extents()
-            {
-                Left = left,
-                Top = top,
-                Right = right,
-                Bottom = bottom
-            };
+            coords.Add(new Coordinate(x1, y1));
+            coords.Add(new Coordinate(x2, y2));
+            return coords;
         }
 
-        public static List<Coordinate> GetIntersectedPolyline(Coordinate[] subjectPolyline, Coordinate[] clipPoly)
-        {
-            Extents extents = CalucuteExtents(clipPoly);
+       
 
+        public static List<Coordinate> GetIntersectedPolyline(Coordinate[] subjectPolyline, Bound bound)
+        {
             List<Coordinate> clipLines = new List<Coordinate>();
-            for (int i = 0; i < subjectPolyline.Length-1; i++)
+            for (int i = 0; i < subjectPolyline.Length - 1; i++)
             {
                 Coordinate p0 = subjectPolyline[i];
                 Coordinate p1 = subjectPolyline[i + 1];
-                List<Coordinate> cliped = CohenSutherlandLineClip(p0, p1, extents);
-                if (cliped != null)
-                    clipLines.AddRange(cliped);
+                List<Coordinate> cliped = ClipLine(p0, p1, bound);
+                clipLines.AddRange(cliped);
             }
             return clipLines;
         }

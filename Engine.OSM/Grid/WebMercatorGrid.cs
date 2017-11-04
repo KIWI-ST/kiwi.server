@@ -9,6 +9,7 @@ using System.Linq;
 using NetTopologySuite.Geometries;
 using GeoAPI.Geometries;
 using Engine.GIS.Utils;
+using System.Drawing;
 
 namespace Engine.GIS.Grid
 {
@@ -30,6 +31,14 @@ namespace Engine.GIS.Grid
         public Coordinate Min { get => _min; }
 
         public Coordinate Max { get => _max; }
+
+        public double Left { get => _left;}
+
+        public double Bottom { get => _bottom;}
+
+        public double Right { get => _right;}
+
+        public double Top { get => _top;}
 
         public Bound(List<Coordinate> coordinates)
         {
@@ -257,33 +266,68 @@ namespace Engine.GIS.Grid
 
         #region 裁剪并绘制矢量瓦片
 
-        public void CutShape(IGeometryCollection geometries)
+        public void CutShape(IGeometryCollection geometries,string outputDir)
         {
+            int idx = 0;
             //1.筛选在区域内的geometry，即与矩形相交
-            var result = from geo in geometries
-                         where geo.OgcGeometryType == OgcGeometryType.LineString
-                         select geo;
+            var result = from geo in geometries where geo.OgcGeometryType == OgcGeometryType.LineString select geo;
             //2.裁剪
-            foreach(var geometry in result)
+            foreach (var geometry in result)
             {
-                foreach(var key in _tileDictionary.Keys)
+                idx++;
+                foreach (int zoom in _tileDictionary.Keys)
                 {
-                    var tileCollection = _tileDictionary[key];
+                    var tileCollection = _tileDictionary[zoom];
                     foreach(var tile in tileCollection)
                     {
-                        var clipLine= CohenSutherland.GetIntersectedPolyline(geometries.Coordinates, tile.Bound.ToClipPolygon());
-                        if (clipLine.Count > 0)
+                        try
                         {
-                            var s = "";
+                            //2.1瓦片裁剪道路
+                            List<Coordinate> clipLine = CohenSutherland.GetIntersectedPolyline(geometry.Coordinates, tile.Bound);
+                            if (clipLine.Count == 0) continue;
+                            //2.2 绘制clipLine
+                            Bitmap bmp = new Bitmap((int)_tileSize, (int)_tileSize);
+                            Graphics g = Graphics.FromImage(bmp);
+                            Pen pen = new Pen(Color.Black, 3);
+                            //
+                            int x0 = -1000, y0 = -1000;
+                            foreach (Coordinate point in clipLine)
+                            {
+                                //2.2.1 计算点的像素坐标
+                                Coordinate pixel = LatlngToPoint(point, zoom);
+                                //
+                                double deltaX = pixel.X / _tileSize - tile.X;
+                                double deltaY = pixel.Y / _tileSize - tile.Y;
+                                int x = Convert.ToInt32(deltaX * _tileSize);
+                                int y = Convert.ToInt32(deltaY * _tileSize);
+                                if (x0 == -1000 && y0 == -1000)
+                                {
+                                    x0 = x;
+                                    y0 = y;
+                                    continue;
+                                }
+                                else
+                                {
+                                    g.DrawLine(pen, x0, y0, x, y);
+                                    x0 = x;
+                                    y0 = y;
+                                }
+                            }
+                            //2.3 保存bmp到指定路径
+                            if (!System.IO.Directory.Exists(outputDir + @"\" + zoom))
+                                System.IO.Directory.CreateDirectory(outputDir + @"\" + zoom);
+                            //根据geometry id存储，获取不到geometry的id，所以只能自定内部序号
+                            bmp.Save(outputDir + @"\" + zoom + @"\" + tile.X + "_" + tile.Y + "_" + tile.Z + "_" + idx + ".jpg");
+                        }
+                        catch
+                        {
+                            continue;
                         }
                     }
                 }
             }
-
-            
+            //
         }
-
-
         #endregion
 
     }

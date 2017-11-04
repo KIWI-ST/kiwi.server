@@ -4,6 +4,7 @@ using Engine.GIS.Read;
 using GeoAPI.Geometries;
 using NetTopologySuite.Geometries;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace Host.Trace.UI
@@ -16,11 +17,14 @@ namespace Host.Trace.UI
         public Main()
         {
             InitializeComponent();
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork += Worker_DoWork;
+            worker.RunWorkerAsync();
+        }
+
+        private void Worker_DoWork(object sender, DoWorkEventArgs e)
+        {
             BuildGrid();
-            //ReadPBF();
-            //TraceModel mode = new TraceModel();
-            //mode.Run();
-            //ReadShp();
         }
 
         private void BuildGrid()
@@ -31,13 +35,16 @@ namespace Host.Trace.UI
             coordinates.Add(new Coordinate(109, 20));
             coordinates.Add(new Coordinate(117.2, 25.6));
             Bound bound = new Bound(coordinates);
-            grid.Build(bound,6);
-            //
+            //构建尺度6格网
+            for (int i=10;i<17;i++)
+                grid.Build(bound,i);
+            //shpfile路径
             string shpPath = System.IO.Directory.GetCurrentDirectory() + @"\DATA\shp\china\guangdong.shp";
             ShpReader shpReader = new ShpReader(shpPath);
             shpReader.Read();
             //
-            grid.CutShape(shpReader.GeometryCollection);
+            string outputDir = System.IO.Directory.GetCurrentDirectory() + @"\dataset";
+            grid.CutShape(shpReader.GeometryCollection, outputDir);
         }
 
 
