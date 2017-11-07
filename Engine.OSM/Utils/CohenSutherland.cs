@@ -1,18 +1,13 @@
-﻿using GeoAPI.Geometries;
+﻿using Engine.GIS.GeoType;
+using GeoAPI.Geometries;
 using System.Collections.Generic;
-using System.Windows;
-using Engine.GIS.Grid;
 
 namespace Engine.GIS.Utils
 {
-    class Extents
-    {
-        public double Left = 0;
-        public double Right = 0;
-        public double Bottom = 0;
-        public double Top = 0;
-    }
-
+    /// <summary>
+    /// @author yellow
+    /// cohen 裁剪算法
+    /// </summary>
     class CohenSutherland
     {
         static byte LEFT = 1;//0001
@@ -98,9 +93,12 @@ namespace Engine.GIS.Utils
             coords.Add(new Coordinate(x2, y2));
             return coords;
         }
-
-       
-
+        /// <summary>
+        /// 裁剪线
+        /// </summary>
+        /// <param name="subjectPolyline"></param>
+        /// <param name="bound"></param>
+        /// <returns></returns>
         public static List<Coordinate> GetIntersectedPolyline(Coordinate[] subjectPolyline, Bound bound)
         {
             List<Coordinate> clipLines = new List<Coordinate>();

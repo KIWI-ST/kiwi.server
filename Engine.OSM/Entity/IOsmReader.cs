@@ -2,7 +2,7 @@
 using OsmSharp;
 using System.Collections.Generic;
 
-namespace Engine.GIS
+namespace Engine.GIS.Entity
 {
     /// <summary>
     /// 读取成功后的回调委托
@@ -12,7 +12,7 @@ namespace Engine.GIS
     /// <param name="relations"></param>
     public delegate void ReadCompleteHandle(List<OsmGeo> nodes, List<OsmGeo> ways, List<OsmGeo> relations);
 
-    public interface IOsmReaderPBF
+    public interface IOsmReader
     {
         /// <summary>
         /// 读取

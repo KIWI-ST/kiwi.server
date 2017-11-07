@@ -1,4 +1,5 @@
 ﻿using GeoAPI.Geometries;
+using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
 using System.Linq;
@@ -7,31 +8,30 @@ namespace Engine.GIS.Read
 {
     public class ShpReader
     {
-        ShapefileReader _reader = null;
-        IGeometryCollection _geometryCollection;
+        ShapefileDataReader _reader = null;
 
-        public IGeometryCollection GeometryCollection { get => _geometryCollection; }
+        FeatureCollection _feaures = new FeatureCollection();
+
+        public FeatureCollection FeaureCollection { get => _feaures;}
 
         public ShpReader(string path)
         {
-            _reader = new ShapefileReader(path,GeometryFactory.Default);
+            _reader = new ShapefileDataReader(path, GeometryFactory.Default);
         }
 
         public void Read()
         {
-            _geometryCollection = _reader.ReadAll();
+            var header = _reader.DbaseHeader;
+            while (_reader.Read())
+            {
+                Feature feature = new Feature { Geometry = _reader.Geometry};
+                AttributesTable attrs = new AttributesTable();
+                for (int i = 0; i < header.NumFields; i++)
+                    attrs.AddAttribute(header.Fields[i].Name, _reader.GetValue(i));
+                feature.Attributes = attrs;
+                _feaures.Add(feature);
+            }
         }
-
-        public IGeometry LoadPolygon(IPoint point)
-        {
-            var result = (from geo in _geometryCollection
-                             where geo.OgcGeometryType == OgcGeometryType.Polygon
-                             where geo.Contains(point)
-                             select geo).Single();
-            return result;
-        }
-
-
 
     }
 }

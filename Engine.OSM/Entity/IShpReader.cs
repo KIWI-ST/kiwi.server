@@ -3,8 +3,9 @@
     /// <summary>
     /// shapefile读取
     /// </summary>
-    public interface IShapeFileReader
+    public interface IShpReader
     {
         void Read();
+        void Write();
     }
 }

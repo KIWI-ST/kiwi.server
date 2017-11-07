@@ -1,8 +1,10 @@
-﻿using Engine.GIS;
+﻿using Engine.GIS.Entity;
+using Engine.GIS.GeoType;
 using Engine.GIS.Grid;
 using Engine.GIS.Read;
 using GeoAPI.Geometries;
-using NetTopologySuite.Geometries;
+using NetTopologySuite.Features;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
@@ -12,7 +14,7 @@ namespace Host.Trace.UI
     public partial class Main : Form
     {
 
-        IOsmReaderPBF _pOsmReaderPBF;
+        IOsmReader _pOsmReaderPBF;
 
         public Main()
         {
@@ -24,13 +26,14 @@ namespace Host.Trace.UI
 
         private void Worker_DoWork(object sender, DoWorkEventArgs e)
         {
-            BuildGrid();
+            //BuildGrid();
+            ReadTrace();
         }
 
         private void BuildGrid()
         {
             WebMercatorGrid grid = new WebMercatorGrid();
-
+            //
             List<Coordinate> coordinates = new List<Coordinate>();
             coordinates.Add(new Coordinate(109, 20));
             coordinates.Add(new Coordinate(117.2, 25.6));
@@ -44,9 +47,8 @@ namespace Host.Trace.UI
             shpReader.Read();
             //
             string outputDir = System.IO.Directory.GetCurrentDirectory() + @"\dataset";
-            grid.CutShape(shpReader.GeometryCollection, outputDir);
+            grid.CutShape(shpReader.FeaureCollection, outputDir);
         }
-
 
         private void TrainTensorflow()
         {
@@ -62,17 +64,46 @@ namespace Host.Trace.UI
         private void ReadPBF(IPolygon polygon)
         {
             string fpbf = System.IO.Directory.GetCurrentDirectory() + @"\DATA\street\target.osm.pbf";
-            _pOsmReaderPBF = new OsmReaderPBF(fpbf);
-            _pOsmReaderPBF.OnComplete += _pOsmReaderPBF_OnComplete;
-            //
+            _pOsmReaderPBF = new OsmReader(fpbf);
             _pOsmReaderPBF.Read(polygon);
         }
 
-        private void _pOsmReaderPBF_OnComplete(List<OsmSharp.OsmGeo> nodes, List<OsmSharp.OsmGeo> ways, List<OsmSharp.OsmGeo> relations)
+        private void ReadTrace()
         {
-            var s = nodes;
+            //获取目录下的所有轨迹
+            string dir = System.IO.Directory.GetCurrentDirectory() + @"\DATA\Trace\20121130\";
+            string[] traceDir =  System.IO.Directory.GetDirectories(dir);
+            //以此读取文件，并写入shp文件
+            for(int i = 0; i < traceDir.Length; i++)
+            {
+                string trace = traceDir[i];
+                using(System.IO.StreamReader sr = new System.IO.StreamReader(trace))
+                {
+                    string next =  sr.ReadLine();
+                    while (next != null)
+                    {
+                        if (next.Length > 0)
+                        {
+                            string[] seg = next.Split(',');
+                            string id = seg[0];
+                            string evt = seg[1];
+                            string time = seg[2];
+                            string longitude = seg[3];
+                            string latitude = seg[4];
+                            string speed = seg[5];
+                            string direction = seg[6];
+                            string status = seg[7];
+                            //
 
-            var sss = ways;
+                        }
+                        next = sr.ReadLine();
+                    }
+                }
+            }
         }
+
+
+
+
     }
 }

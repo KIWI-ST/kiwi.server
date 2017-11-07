@@ -1,124 +1,19 @@
-﻿using GeoAPI.CoordinateSystems;
+﻿using Engine.GIS.Utils;
+using GeoAPI.CoordinateSystems;
 using GeoAPI.CoordinateSystems.Transformations;
 using GeoAPI.Geometries;
+using NetTopologySuite.Geometries;
 using ProjNet.CoordinateSystems;
 using ProjNet.CoordinateSystems.Transformations;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using NetTopologySuite.Geometries;
-using GeoAPI.Geometries;
-using Engine.GIS.Utils;
 using System.Drawing;
+using System.Linq;
+using Engine.GIS.GeoType;
+using NetTopologySuite.Features;
 
 namespace Engine.GIS.Grid
 {
-
-    public class Tile
-    {
-        public int X { get; set; }
-        public int Y { get; set; }
-        public int Z { get; set; }
-        public Bound Bound { get; set; }
-    }
-
-    public class Bound
-    {
-        double _left, _bottom, _right, _top;
-
-        Coordinate _min, _max;
-
-        public Coordinate Min { get => _min; }
-
-        public Coordinate Max { get => _max; }
-
-        public double Left { get => _left;}
-
-        public double Bottom { get => _bottom;}
-
-        public double Right { get => _right;}
-
-        public double Top { get => _top;}
-
-        public Bound(List<Coordinate> coordinates)
-        {
-            foreach (Coordinate p in coordinates)
-                Extend(p);
-        }
-        /// <summary>
-        /// 计算外轮廓
-        /// </summary>
-        private void Extend(Coordinate point)
-        {
-            if (_min == null && _max == null)
-            {
-                _min = point.Clone() as Coordinate;
-                _max = point.Clone() as Coordinate;
-            }
-            else
-            {
-                _min.X = Math.Min(point.X, _min.X);
-                _max.X = Math.Max(point.X, _max.X);
-                _min.Y = Math.Min(point.Y, _min.Y);
-                _max.Y = Math.Max(point.Y, _max.Y);
-            }
-            _left = _min.X;
-            _bottom = _min.Y;
-            _right = _max.X;
-            _top = _max.Y;
-        }
-        //转换成多边形，便于裁剪计算
-        public Coordinate[] ToClipPolygon()
-        {
-            return new Coordinate[4] {
-                new Coordinate(_left,_top),
-                new Coordinate(_left,_bottom),
-                new Coordinate(_right,_bottom),
-                new Coordinate(_right,_top)
-            };
-        }
-        //转换成内判断矩形，用于筛选
-        public Polygon ToInsertPolygon()
-        {
-            Coordinate[] coordinates = new Coordinate[5] { new Coordinate(_left, _top), new Coordinate(_left, _bottom), new Coordinate(_right, _bottom), new Coordinate(_right, _top) , new Coordinate(_left, _top) };
-            LinearRing ring = new LinearRing(coordinates);
-            Polygon polygon = new Polygon(ring);
-            return polygon;
-        }
-
-    }
-
-    public class Transformation
-    {
-        double _a, _b, _c, _d;
-
-        public Transformation(double a, double b, double c, double d)
-        {
-            _a = a;
-            _b = b;
-            _c = c;
-            _d = d;
-        }
-
-        public Coordinate Transform(Coordinate point, double scale)
-        {
-            Coordinate p0 = new Coordinate();
-            p0.X = scale * (_a * point.X + _b);
-            p0.Y = scale * (_c * point.Y + _d);
-            return p0;
-        }
-
-        public Coordinate UnTransform(Coordinate point, double scale)
-        {
-            Coordinate p0 = new Coordinate();
-            p0.X = (point.X / scale - _b) / _a;
-            p0.Y = (point.Y / scale - _d) / _c;
-            return p0;
-        }
-
-    }
-
-
     /// <summary>
     /// 基于WebMercator投影的格网计算
     /// @author yellow date 2017/11/3
@@ -178,7 +73,7 @@ namespace Engine.GIS.Grid
 
         #region 格网计算
 
-        Dictionary<int, List<Tile>> _tileDictionary = new Dictionary<int, List<Tile>>();
+        Dictionary<int, List<TileElement>> _tileDictionary = new Dictionary<int, List<TileElement>>();
 
         Transformation _transformation = new Transformation(0.5 / (Math.PI * 6378137), 0.5, -0.5 / (Math.PI * 6378137), 0.5);
 
@@ -192,7 +87,7 @@ namespace Engine.GIS.Grid
             if (_tileDictionary.ContainsKey(zoom))
                 _tileDictionary[zoom].Clear();
             else
-                _tileDictionary[zoom] = new List<Tile>();
+                _tileDictionary[zoom] = new List<TileElement>();
             //1.获取坐上右下坐标
             Coordinate p0 = bound.Min;
             Coordinate p1 = bound.Max;
@@ -217,7 +112,7 @@ namespace Engine.GIS.Grid
                     coordinates.Add(PointToLatLng(new Coordinate(i * 256, j * 256), zoom));
                     coordinates.Add(PointToLatLng(new Coordinate(i * 256 + 256, j * 256 + 256), zoom));
                     //
-                    Tile tile = new Tile()
+                    TileElement tile = new TileElement()
                     {
                         X = i,
                         Y = j,
@@ -266,24 +161,20 @@ namespace Engine.GIS.Grid
 
         #region 裁剪并绘制矢量瓦片
 
-        public void CutShape(IGeometryCollection geometries,string outputDir)
+        public void CutShape(FeatureCollection featureCollection,string outputDir)
         {
-            int idx = 0;
-            //1.筛选在区域内的geometry，即与矩形相交
-            var result = from geo in geometries where geo.OgcGeometryType == OgcGeometryType.LineString select geo;
-            //2.裁剪
-            foreach (var geometry in result)
+           for(int i=0;i< featureCollection.Count; i++)
             {
-                idx++;
+                IFeature f = featureCollection[i];
                 foreach (int zoom in _tileDictionary.Keys)
                 {
                     var tileCollection = _tileDictionary[zoom];
-                    foreach(var tile in tileCollection)
+                    foreach (var tile in tileCollection)
                     {
                         try
                         {
                             //2.1瓦片裁剪道路
-                            List<Coordinate> clipLine = CohenSutherland.GetIntersectedPolyline(geometry.Coordinates, tile.Bound);
+                            List<Coordinate> clipLine = CohenSutherland.GetIntersectedPolyline(f.Geometry.Coordinates, tile.Bound);
                             if (clipLine.Count == 0) continue;
                             //2.2 绘制clipLine
                             Bitmap bmp = new Bitmap((int)_tileSize, (int)_tileSize);
@@ -317,7 +208,7 @@ namespace Engine.GIS.Grid
                             if (!System.IO.Directory.Exists(outputDir + @"\" + zoom))
                                 System.IO.Directory.CreateDirectory(outputDir + @"\" + zoom);
                             //根据geometry id存储，获取不到geometry的id，所以只能自定内部序号
-                            bmp.Save(outputDir + @"\" + zoom + @"\" + tile.X + "_" + tile.Y + "_" + tile.Z + "_" + idx + ".jpg");
+                            bmp.Save(outputDir + @"\" + zoom + @"\" + tile.X + "_" + tile.Y + "_" + tile.Z + "_" + f.Attributes.GetValues()[0] + ".jpg");
                         }
                         catch
                         {
@@ -326,7 +217,10 @@ namespace Engine.GIS.Grid
                     }
                 }
             }
-            //
+
+
+
+
         }
         #endregion
 
