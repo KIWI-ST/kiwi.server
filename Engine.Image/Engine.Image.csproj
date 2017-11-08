@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="Analysis\BitmapAndByte.cs" />
     <Compile Include="Analysis\Projection.cs" />
+    <Compile Include="Analysis\SLICO.cs" />
     <Compile Include="Analysis\Transformation.cs" />
     <Compile Include="Entity\GBand\GdalBandFactory.cs" />
     <Compile Include="Entity\GBand\GdalBandFloat32.cs" />
