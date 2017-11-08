@@ -5,7 +5,9 @@
     /// </summary>
     public interface IShpReader
     {
+        /// <summary>
+        /// shp 读取
+        /// </summary>
         void Read();
-        void Write();
     }
 }

@@ -186,7 +186,6 @@
     <Compile Include="Read\OsmReader.cs" />
     <Compile Include="Read\ShpReader.cs" />
     <Compile Include="Read\TraceReader.cs" />
-    <Compile Include="Template\OsmRoadTemplate.cs" />
     <Compile Include="Utils\CohenSutherland.cs" />
     <Compile Include="Utils\SutherlandHodgman.cs" />
     <Compile Include="Topo\VectorTailor.cs" />

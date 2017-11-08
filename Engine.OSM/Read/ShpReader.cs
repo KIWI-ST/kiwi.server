@@ -14,13 +14,12 @@ namespace Engine.GIS.Read
 
         public FeatureCollection FeaureCollection { get => _feaures;}
 
-        public ShpReader(string path)
+        /// <summary>
+        /// 显式读取shpfile
+        /// </summary>
+        public void Read(string shpfile)
         {
-            _reader = new ShapefileDataReader(path, GeometryFactory.Default);
-        }
-
-        public void Read()
-        {
+            _reader = new ShapefileDataReader(shpfile, GeometryFactory.Default);
             var header = _reader.DbaseHeader;
             while (_reader.Read())
             {
@@ -31,6 +30,19 @@ namespace Engine.GIS.Read
                 feature.Attributes = attrs;
                 _feaures.Add(feature);
             }
+        }
+
+        public void AddFeature(IGeometry geo, AttributesTable table)
+        {
+            Feature f = new Feature(geo, table);
+            _feaures.Add(f);
+        }
+
+        public void Write(string shpfile)
+        {
+            var header = ShapefileDataWriter.GetHeader(_feaures.Features.First(), _feaures.Features.Count);
+            var shapeWriter = new ShapefileDataWriter(shpfile, new GeometryFactory()){ Header = header };
+            shapeWriter.Write(_feaures.Features);
         }
 
     }

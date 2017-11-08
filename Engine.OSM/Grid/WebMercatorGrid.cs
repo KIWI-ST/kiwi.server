@@ -1,16 +1,14 @@
-﻿using Engine.GIS.Utils;
+﻿using Engine.GIS.GeoType;
+using Engine.GIS.Utils;
 using GeoAPI.CoordinateSystems;
 using GeoAPI.CoordinateSystems.Transformations;
 using GeoAPI.Geometries;
-using NetTopologySuite.Geometries;
+using NetTopologySuite.Features;
 using ProjNet.CoordinateSystems;
 using ProjNet.CoordinateSystems.Transformations;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using Engine.GIS.GeoType;
-using NetTopologySuite.Features;
 
 namespace Engine.GIS.Grid
 {
@@ -222,6 +220,7 @@ namespace Engine.GIS.Grid
 
 
         }
+
         #endregion
 
     }
