@@ -1,4 +1,4 @@
-﻿namespace Engine.GIS
+﻿namespace Engine.GIS.File
 {
     /// <summary>
     /// shapefile读取

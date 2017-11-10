@@ -1,7 +1,7 @@
-﻿using Engine.GIS.Entity;
+﻿using Engine.GIS.File;
 using Engine.GIS.GeoType;
 using Engine.GIS.Grid;
-using Engine.GIS.Read;
+using Engine.GIS.File;
 using GeoAPI.Geometries;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;

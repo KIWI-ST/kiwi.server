@@ -4,6 +4,7 @@ namespace Engine.GIS.GeoType
 {
     /// <summary>
     /// 计算投影都的像素坐标相对不同缩放层级下容器的像素坐标
+    /// @author yellow date 2017/11/9
     /// </summary>
     public class Transformation
     {

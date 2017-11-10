@@ -8,9 +8,9 @@ using OsmSharp.Streams;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Engine.GIS.Entity;
 
-namespace Engine.GIS.Read
+
+namespace Engine.GIS.File
 {
     public class OsmReader : IOsmReader
     {
@@ -28,7 +28,7 @@ namespace Engine.GIS.Read
 
         public OsmReader(string path)
         {
-            _steam = File.OpenRead(path);
+            _steam = System.IO.File.OpenRead(path);
             _source = new PBFOsmStreamSource(_steam);
         }
 

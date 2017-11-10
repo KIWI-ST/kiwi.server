@@ -4,7 +4,7 @@ using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
 using System.Linq;
 
-namespace Engine.GIS.Read
+namespace Engine.GIS.File
 {
     public class ShpReader
     {

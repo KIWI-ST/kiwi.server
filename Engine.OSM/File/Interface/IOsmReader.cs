@@ -2,7 +2,7 @@
 using OsmSharp;
 using System.Collections.Generic;
 
-namespace Engine.GIS.Entity
+namespace Engine.GIS.File
 {
     /// <summary>
     /// 读取成功后的回调委托
