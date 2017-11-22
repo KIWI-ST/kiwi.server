@@ -21,7 +21,7 @@ namespace Engine.Image.Eneity.GBand
         /// <param name="yCount"></param>
         void SetData(int bandIndex, int xCount, int yCount, Band pBand);
         /// <summary>
-        /// 获取bitmap2
+        /// 获取bitmap
         /// </summary>
         Bitmap GetBitmap();
         /// <summary>

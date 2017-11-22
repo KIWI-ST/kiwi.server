@@ -78,5 +78,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Engine.Image\Engine.Image.csproj">
+      <Project>{90a56c3d-5542-41f5-a2ee-a723b2b221bd}</Project>
+      <Name>Engine.Image</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
