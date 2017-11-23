@@ -1,13 +1,11 @@
-﻿using Engine.Image.Eneity.GLayer;
+﻿using Engine.Image;
+using Engine.Image.Eneity.GBand;
+using Engine.Image.Eneity.GLayer;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Host.Image.UI
@@ -19,16 +17,46 @@ namespace Host.Image.UI
             InitializeComponent();
         }
 
+        #region 缓存管理
+        /// <summary>
+        /// 管理全局的图像与树视图区域的缓存对应
+        /// key是图片名称或图+波段名称，值为对应的bitmap
+        /// </summary>
+        Dictionary<string, Bitmap2> _imageDic = new Dictionary<string, Bitmap2>();
+
+
+        #endregion
+
+
+        #region 界面更新
+
+        private void UpdateStatusLabel(string msg)
+        {
+            map_statusLabel.Text = msg;
+        }
+
+        private void UpdateTreeNode(TreeNode parentNode,TreeNode childrenNode)
+        {
+            parentNode.Nodes.Add(childrenNode);
+            parentNode.Expand();
+        }
+
+        private delegate void UpdateTreeNodeHandler(TreeNode parentNode, TreeNode childrenNode);
+
+        #endregion
+
         #region 顶部栏目功能按钮事件处理块
 
-        private void ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void Map_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem item = sender as ToolStripMenuItem;
             switch (item.Name)
             {
                 case "open_toolstripmenuitem"://添加图像
-                    var sss = "";
-                    
+                    ReadImage();
+                    break;
+                case "open_contextMenuStrip":
+                    ReadImage();
                     break;
                 default:
                     break;
@@ -47,22 +75,39 @@ namespace Host.Image.UI
             {
                 string fileName = Path.GetFileNameWithoutExtension(openfiledialog.FileName);
                 string extension = Path.GetExtension(openfiledialog.FileName);
-                //1.分波段读取图像并加载，开辟新的线程分波段读取数据
-
+                //1.判断图像是否已加载
+                if (map_treeView.Nodes.ContainsKey(fileName))
+                {
+                    UpdateStatusLabel("图像不能重复添加");
+                    return;
+                }
+                //2.构建TreeNode用于存储数据和结点
+                TreeNode node = new TreeNode(fileName);
+                map_treeView.Nodes.Add(node);
+                _imageDic.Add(fileName, null);
+                //3.分波段读取图像并加载，开辟新的线程分波段读取数据
+                ThreadStart s = delegate { ReadBand(openfiledialog.FileName,node); };
+                Thread t = new Thread(s);
+                t.IsBackground = true;
+                t.Start();
             }
         }
 
-        private void ReadBand(string filePath)
+        private void ReadBand(string filePath,TreeNode parentNode)
         {
+            string name = parentNode.Text;
             IGdalLayer _layer = new GdalRasterLayer();
             _layer.ReadFromFile(filePath);
-            for(int i = 0; i < _layer.BandCollection.Count; i++)
+            for (int i = 0; i < _layer.BandCollection.Count; i++)
             {
-                var band = _layer.BandCollection[i];
+                string key = name +"_波段_"+ i;
+                IGdalBand band = _layer.BandCollection[i];
+                Bitmap2 bmp2 = new Bitmap2(bmp:band.GetBitmap(),name: key, gdalBand:band,gdalLayer:_layer);
                 //获取band对应的bitmap格式图像，载入treedNode中
-                band.GetBitmap();
+                _imageDic.Add(key, bmp2);
+                TreeNode childrenNode = new TreeNode(key);
+                Invoke(new UpdateTreeNodeHandler(UpdateTreeNode), parentNode, childrenNode);
             }
-           
         }
 
 

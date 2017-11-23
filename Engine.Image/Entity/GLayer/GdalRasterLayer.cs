@@ -42,6 +42,11 @@ namespace Engine.Image.Eneity.GLayer
             }
         }
 
+        public GdalRasterLayer()
+        {
+            Gdal.AllRegister();
+        }
+
         private byte[] GetBufferByte(int _xCount, int _yCount, byte[,] byteData)
         {
             byte[] rawByteData = new byte[_xCount * _yCount];

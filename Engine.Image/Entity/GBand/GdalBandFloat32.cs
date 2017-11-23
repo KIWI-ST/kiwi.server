@@ -17,6 +17,10 @@ namespace Engine.Image.Eneity.GBand
 
         double _min, _max, _mean, _stdDev;
 
+        string _name;
+
+        public string BandName { get { return _name; } }
+
         public int BandIndex { get { return _bandIndex; } }
 
         public int Width { get { return _xCount; } }

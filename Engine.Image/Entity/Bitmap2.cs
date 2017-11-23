@@ -1,10 +1,11 @@
-﻿using System.Drawing;
-using System.Windows.Forms;
+﻿using Engine.Image.Eneity.GBand;
+using Engine.Image.Eneity.GLayer;
+using System.Drawing;
 
 namespace Engine.Image
 {
     /// <summary>
-    /// 带名称的BitMap
+    /// 带名称的BitMap,处理难应对的索引关系
     /// </summary>
     public class Bitmap2
     {
@@ -12,21 +13,17 @@ namespace Engine.Image
 
         Bitmap _bitmap;
 
-        TreeNode _treeNode;
+        IGdalLayer _gdalLayer;
 
-        public Bitmap2(Bitmap bmp, string name, TreeNode treeNode, string dec = "")
+        IGdalBand _gdalBand;
+
+        public Bitmap2(Bitmap bmp = null, string name = "", string dec = "", IGdalLayer gdalLayer = null, IGdalBand gdalBand = null)
         {
             _bitmap = bmp;
             _name = name;
             _dec = dec;
-            _treeNode = treeNode;
-        }
-        /// <summary>
-        /// 选中的树形节点
-        /// </summary>
-        public TreeNode SelectCurrent
-        {
-            get { return _treeNode; }
+            _gdalBand = gdalBand;
+            _gdalLayer = gdalLayer;
         }
         /// <summary>
         /// bitmap原始数据
