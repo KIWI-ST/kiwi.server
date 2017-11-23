@@ -1,10 +1,12 @@
 ﻿using Engine.Image;
+using Engine.Image.Analysis;
 using Engine.Image.Eneity.GBand;
 using Engine.Image.Eneity.GLayer;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -23,12 +25,21 @@ namespace Host.Image.UI
         /// key是图片名称或图+波段名称，值为对应的bitmap
         /// </summary>
         Dictionary<string, Bitmap2> _imageDic = new Dictionary<string, Bitmap2>();
-
+        /// <summary>
+        /// 当前选中的Bitmap2信息，包含图层，波段，索引等
+        /// </summary>
+        Bitmap2 _selectBmp2 = null;
 
         #endregion
 
 
         #region 界面更新
+
+        private void map_treeView_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            _selectBmp2 = _imageDic[e.Node.Text];
+            map_pictureBox.Image = _selectBmp2 == null ? null : _selectBmp2.BMP;
+        }
 
         private void UpdateStatusLabel(string msg)
         {
@@ -37,8 +48,11 @@ namespace Host.Image.UI
 
         private void UpdateTreeNode(TreeNode parentNode,TreeNode childrenNode)
         {
+            //1.更新左侧视图
             parentNode.Nodes.Add(childrenNode);
             parentNode.Expand();
+            //2.应对picture更新
+            map_pictureBox.Image = _imageDic[childrenNode.Text].BMP;
         }
 
         private delegate void UpdateTreeNodeHandler(TreeNode parentNode, TreeNode childrenNode);
@@ -46,6 +60,25 @@ namespace Host.Image.UI
         #endregion
 
         #region 顶部栏目功能按钮事件处理块
+
+        private void Algorithm_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem item = sender as ToolStripMenuItem;
+            switch (item.Name)
+            {
+                case "SLIO_toolStrip"://超像素
+                    SLICO _slico = new SLICO();
+                    int[] _klabels;
+                    int _numlabels;
+                    int K = 100;
+                    Bitmap bmp = map_pictureBox.Image as Bitmap;
+                    Bitmap imgSuperpixel = _slico.PerformSLICO_ForGivenK(ref bmp, out _klabels, out _numlabels, K, Color.Red, 10);
+                    map_pictureBox.Image = imgSuperpixel;
+                    break;
+                default:
+                    break;
+            }
+        }
 
         private void Map_Click(object sender, EventArgs e)
         {
@@ -76,13 +109,14 @@ namespace Host.Image.UI
                 string fileName = Path.GetFileNameWithoutExtension(openfiledialog.FileName);
                 string extension = Path.GetExtension(openfiledialog.FileName);
                 //1.判断图像是否已加载
-                if (map_treeView.Nodes.ContainsKey(fileName))
+                if(map_treeView.Nodes.OfType<TreeNode>().FirstOrDefault(p => p.Tag.Equals(fileName)) != null)
                 {
                     UpdateStatusLabel("图像不能重复添加");
                     return;
                 }
                 //2.构建TreeNode用于存储数据和结点
                 TreeNode node = new TreeNode(fileName);
+                node.Tag = fileName;
                 map_treeView.Nodes.Add(node);
                 _imageDic.Add(fileName, null);
                 //3.分波段读取图像并加载，开辟新的线程分波段读取数据
@@ -111,6 +145,9 @@ namespace Host.Image.UI
         }
 
 
+
         #endregion
+
+
     }
 }

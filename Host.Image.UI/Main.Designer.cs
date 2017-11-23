@@ -52,8 +52,7 @@
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.全选AToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.工具TToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.自定义CToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.选项OToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.SLIO_toolStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.帮助HToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.内容CToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.索引IToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -267,23 +266,17 @@
             // 工具TToolStripMenuItem
             // 
             this.工具TToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.自定义CToolStripMenuItem,
-            this.选项OToolStripMenuItem});
+            this.SLIO_toolStrip});
             this.工具TToolStripMenuItem.Name = "工具TToolStripMenuItem";
             this.工具TToolStripMenuItem.Size = new System.Drawing.Size(59, 21);
             this.工具TToolStripMenuItem.Text = "工具(&T)";
             // 
-            // 自定义CToolStripMenuItem
+            // SLIO_toolStrip
             // 
-            this.自定义CToolStripMenuItem.Name = "自定义CToolStripMenuItem";
-            this.自定义CToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
-            this.自定义CToolStripMenuItem.Text = "自定义(&C)";
-            // 
-            // 选项OToolStripMenuItem
-            // 
-            this.选项OToolStripMenuItem.Name = "选项OToolStripMenuItem";
-            this.选项OToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
-            this.选项OToolStripMenuItem.Text = "选项(&O)";
+            this.SLIO_toolStrip.Name = "SLIO_toolStrip";
+            this.SLIO_toolStrip.Size = new System.Drawing.Size(152, 22);
+            this.SLIO_toolStrip.Text = "超像素分割";
+            this.SLIO_toolStrip.Click += new System.EventHandler(this.Algorithm_Click);
             // 
             // 帮助HToolStripMenuItem
             // 
@@ -413,6 +406,7 @@
             this.map_treeView.Name = "map_treeView";
             this.map_treeView.Size = new System.Drawing.Size(163, 545);
             this.map_treeView.TabIndex = 0;
+            this.map_treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.map_treeView_AfterSelect);
             // 
             // tabControl2
             // 
@@ -515,8 +509,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem 全选AToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 工具TToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 自定义CToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 选项OToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem SLIO_toolStrip;
         private System.Windows.Forms.ToolStripMenuItem 帮助HToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 内容CToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 索引IToolStripMenuItem;

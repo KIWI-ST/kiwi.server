@@ -30,7 +30,7 @@ using System.Runtime.InteropServices;
 
 namespace Engine.Image.Analysis
 {
-    class SLICO
+    public class SLICO
     {
         /// <summary>
         /// PerformSLICO_ForGivenK
