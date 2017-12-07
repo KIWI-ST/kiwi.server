@@ -10,14 +10,32 @@ namespace Engine.GIS.Utils
     /// </summary>
     class CohenSutherland
     {
-        static byte LEFT = 1;//0001
-        static byte RIGHT = 2;//0002
-        static byte BOTTOM = 4;//0003
-        static byte TOP = 8;//0004
-
+        /// <summary>
+        /// 0001
+        /// </summary>
+        static byte LEFT = 1;
+        /// <summary>
+        /// 0002
+        /// </summary>
+        static byte RIGHT = 2;
+        /// <summary>
+        /// 0003
+        /// </summary>
+        static byte BOTTOM = 4;
+        /// <summary>
+        /// 0004
+        /// </summary>
+        static byte TOP = 8;
+        /// <summary>
+        /// 给当前坐标编码
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="bound"></param>
+        /// <returns></returns>
         private static byte Encode(double x, double y, Bound bound)
         {
-            double xl = bound.Left,xr = bound.Right,yt = bound.Top,yb = bound.Bottom;
+            double xl = bound.Left, xr = bound.Right, yt = bound.Top, yb = bound.Bottom;
             byte c = 0;
             if (x < xl)
                 c |= LEFT;
@@ -29,7 +47,13 @@ namespace Engine.GIS.Utils
                 c |= TOP;
             return c;
         }
-
+        /// <summary>
+        /// 裁剪线段
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <param name="bound"></param>
+        /// <returns></returns>
         private static List<Coordinate> ClipLine(Coordinate start, Coordinate end, Bound bound)
         {
             double xl = bound.Left,

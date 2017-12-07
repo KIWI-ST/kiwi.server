@@ -1,4 +1,5 @@
-﻿using Engine.Image;
+﻿using Engine.GIS.File;
+using Engine.Image;
 using Engine.Image.Analysis;
 using Engine.Image.Eneity.GBand;
 using Engine.Image.Eneity.GLayer;
@@ -32,7 +33,6 @@ namespace Host.Image.UI
 
         #endregion
 
-
         #region 界面更新
 
         private void map_treeView_AfterSelect(object sender, TreeViewEventArgs e)
@@ -46,7 +46,7 @@ namespace Host.Image.UI
             map_statusLabel.Text = msg;
         }
 
-        private void UpdateTreeNode(TreeNode parentNode,TreeNode childrenNode)
+        private void UpdateTreeNode(TreeNode parentNode, TreeNode childrenNode)
         {
             //1.更新左侧视图
             parentNode.Nodes.Add(childrenNode);
@@ -102,41 +102,60 @@ namespace Host.Image.UI
             OpenFileDialog openfiledialog = new OpenFileDialog();
             openfiledialog.Multiselect = false;
             openfiledialog.RestoreDirectory = true;
-            openfiledialog.Filter = "所有文件|*.*|IMG文件|*.img|TIF 文件|*.tif|BMP 文件|*.bmp";
+            openfiledialog.Filter = "图像文件|*.img;*.tif;*.bmp;*.jpg;*.png|矢量文件|*.shp";
             #endregion
             if (openfiledialog.ShowDialog() == DialogResult.OK)
             {
                 string fileName = Path.GetFileNameWithoutExtension(openfiledialog.FileName);
                 string extension = Path.GetExtension(openfiledialog.FileName);
-                //1.判断图像是否已加载
-                if(map_treeView.Nodes.OfType<TreeNode>().FirstOrDefault(p => p.Tag.Equals(fileName)) != null)
+                if (extension == ".tif" || extension == ".img" || extension == ".bmp" || extension == ".jpg" || extension == ".png")
                 {
-                    UpdateStatusLabel("图像不能重复添加");
-                    return;
+                    //1.判断图像是否已加载
+                    if (map_treeView.Nodes.OfType<TreeNode>().FirstOrDefault(p => p.Tag.Equals(fileName)) != null)
+                    {
+                        UpdateStatusLabel("图像不能重复添加");
+                        return;
+                    }
+                    //2.构建TreeNode用于存储数据和结点
+                    TreeNode node = new TreeNode(fileName);
+                    node.Tag = fileName;
+                    map_treeView.Nodes.Add(node);
+                    _imageDic.Add(fileName, null);
+                    //3.分波段读取图像并加载，开辟新的线程分波段读取数据
+                    ThreadStart s = delegate { ReadBand(openfiledialog.FileName, node); };
+                    Thread t = new Thread(s);
+                    t.IsBackground = true;
+                    t.Start();
                 }
-                //2.构建TreeNode用于存储数据和结点
-                TreeNode node = new TreeNode(fileName);
-                node.Tag = fileName;
-                map_treeView.Nodes.Add(node);
-                _imageDic.Add(fileName, null);
-                //3.分波段读取图像并加载，开辟新的线程分波段读取数据
-                ThreadStart s = delegate { ReadBand(openfiledialog.FileName,node); };
-                Thread t = new Thread(s);
-                t.IsBackground = true;
-                t.Start();
+                else if (extension == "shp")
+                {
+                    IShpReader pShpReader = new ShpReader(fileName);
+                    //后台读取shp并绘制到bmp
+                }
+
             }
         }
 
-        private void ReadBand(string filePath,TreeNode parentNode)
+        /// <summary>
+        /// 异步读取
+        /// </summary>
+        /// <param name="pReader"></param>
+        private void ReadFeautre(IShpReader pReader)
+        {
+
+        }
+
+
+        private void ReadBand(string filePath, TreeNode parentNode)
         {
             string name = parentNode.Text;
             IGdalLayer _layer = new GdalRasterLayer();
             _layer.ReadFromFile(filePath);
             for (int i = 0; i < _layer.BandCollection.Count; i++)
             {
-                string key = name +"_波段_"+ i;
+                string key = name + "_波段_" + i;
                 IGdalBand band = _layer.BandCollection[i];
-                Bitmap2 bmp2 = new Bitmap2(bmp:band.GetBitmap(),name: key, gdalBand:band,gdalLayer:_layer);
+                Bitmap2 bmp2 = new Bitmap2(bmp: band.GetBitmap(), name: key, gdalBand: band, gdalLayer: _layer);
                 //获取band对应的bitmap格式图像，载入treedNode中
                 _imageDic.Add(key, bmp2);
                 TreeNode childrenNode = new TreeNode(key);

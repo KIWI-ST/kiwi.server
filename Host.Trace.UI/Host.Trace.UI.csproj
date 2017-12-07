@@ -176,8 +176,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Engine.OSM\Engine.GIS.csproj">
-      <Project>{243aa02c-fca1-4490-a3d7-192422507e9b}</Project>
+    <ProjectReference Include="..\Engine.GIS\Engine.GIS.csproj">
+      <Project>{243AA02C-FCA1-4490-A3D7-192422507E9B}</Project>
       <Name>Engine.GIS</Name>
     </ProjectReference>
     <ProjectReference Include="..\Engine.TensorFlow\Engine.TensorFlow.csproj">
