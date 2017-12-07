@@ -193,27 +193,6 @@ namespace Engine.GIS.Grid
         #endregion
 
         #region 裁剪并绘制矢量瓦片
-        /// <summary>
-        /// 裁剪point
-        /// </summary>
-        private void ClipPointFeature()
-        {
-
-        }
-        /// <summary>
-        /// 裁剪线
-        /// </summary>
-        private void ClipLineFeature()
-        {
-
-        }
-        /// <summary>
-        /// 裁剪面
-        /// </summary>
-        private void ClipPolygonFeature()
-        {
-
-        }
 
         /// <summary>
         /// 按瓦片切割，一张瓦片里切割全部的矢量
@@ -241,7 +220,19 @@ namespace Engine.GIS.Grid
                             //点
                             if (f.Geometry.OgcGeometryType == OgcGeometryType.Point)
                             {
-
+                                Coordinate point = f.Geometry.Coordinate;
+                                if (tile.Bound.PointInPolygon(point))
+                                {
+                                    //2.2.1 计算点的像素坐标
+                                    Coordinate pixel = LatlngToPoint(point, zoom);
+                                    //
+                                    double deltaX = pixel.X / _tileSize - tile.X;
+                                    double deltaY = pixel.Y / _tileSize - tile.Y;
+                                    int x = Convert.ToInt32(deltaX * _tileSize);
+                                    int y = Convert.ToInt32(deltaY * _tileSize);
+                                    g.DrawLine(pen, x, x, x, y);
+                                }
+                                continue;
                             }
                             //线
                             else if (f.Geometry.OgcGeometryType == OgcGeometryType.LineString)
@@ -277,7 +268,32 @@ namespace Engine.GIS.Grid
                             //面
                             else if (f.Geometry.OgcGeometryType == OgcGeometryType.Polygon)
                             {
-
+                                List<Coordinate> clipPolygon = SutherlandHodgman.GetIntersectedPolygon(f.Geometry.Coordinates, tile.Bound);
+                                if (clipPolygon.Count < 3) continue;
+                                int x0 = -1000, y0 = -1000;
+                                //2.2 绘制clipLine
+                                foreach (Coordinate point in clipPolygon)
+                                {
+                                    //2.2.1 计算点的像素坐标
+                                    Coordinate pixel = LatlngToPoint(point, zoom);
+                                    //
+                                    double deltaX = pixel.X / _tileSize - tile.X;
+                                    double deltaY = pixel.Y / _tileSize - tile.Y;
+                                    int x = Convert.ToInt32(deltaX * _tileSize);
+                                    int y = Convert.ToInt32(deltaY * _tileSize);
+                                    if (x0 == -1000 && y0 == -1000)
+                                    {
+                                        x0 = x;
+                                        y0 = y;
+                                        continue;
+                                    }
+                                    else
+                                    {
+                                        g.DrawLine(pen, x0, y0, x, y);
+                                        x0 = x;
+                                        y0 = y;
+                                    }
+                                }
                             }
                         }
                         //2.3 保存bmp到指定路径

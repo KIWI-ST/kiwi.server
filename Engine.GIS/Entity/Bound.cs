@@ -109,5 +109,17 @@ namespace Engine.GIS.GeoType
             Polygon polygon = new Polygon(ring);
             return polygon;
         }
+        /// <summary>
+        /// 判断点是否在多边形内
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        public bool PointInPolygon(Coordinate p)
+        {
+            if (p.X <= Left || p.X >= Right || p.Y <= Bottom || p.Y >= Top)
+                return false;
+            return true;
+        }
+
     }
 }
