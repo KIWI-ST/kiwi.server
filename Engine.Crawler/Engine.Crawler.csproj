@@ -34,11 +34,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Abot, Version=1.5.1.79, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Abot.1.5.1.79\lib\net40\Abot.dll</HintPath>
+    <Reference Include="Abot, Version=1.6.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Abot.1.6.0.2\lib\net40\Abot.dll</HintPath>
     </Reference>
     <Reference Include="AngleSharp, Version=0.9.9.0, Culture=neutral, PublicKeyToken=e83494dcdc6d31ea, processorArchitecture=MSIL">
-      <HintPath>..\packages\AngleSharp.0.9.9\lib\net45\AngleSharp.dll</HintPath>
+      <HintPath>..\packages\AngleSharp.0.9.9.1\lib\net45\AngleSharp.dll</HintPath>
     </Reference>
     <Reference Include="AutoMapper, Version=6.2.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.6.2.2\lib\net45\AutoMapper.dll</HintPath>
@@ -47,7 +47,7 @@
       <HintPath>..\packages\CsQuery.1.3.4\lib\net40\CsQuery.dll</HintPath>
     </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.4.7.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Abot.1.5.1.79\lib\net40\HtmlAgilityPack.dll</HintPath>
+      <HintPath>..\packages\Abot.1.6.0.2\lib\net40\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>

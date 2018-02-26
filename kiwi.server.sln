@@ -31,8 +31,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.TensorFlow", "Engine
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Host.Trace.UI", "Host.Trace.UI\Host.Trace.UI.csproj", "{6970EE44-28B9-4D2E-8E40-64376D87E6FE}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependency", "Dependency", "{C1FE566D-A923-49C3-9507-265769C9F860}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Host.Image.UI", "Host.Image.UI\Host.Image.UI.csproj", "{1646B48F-6A20-41D0-B9BE-CA8002CB50EA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.GIS", "Engine.GIS\Engine.GIS.csproj", "{243AA02C-FCA1-4490-A3D7-192422507E9B}"
