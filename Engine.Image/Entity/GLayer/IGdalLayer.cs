@@ -27,5 +27,9 @@ namespace Engine.Image.Eneity.GLayer
         /// 保存图像
         /// </summary>
         void SaveToFile(string filePath, byte[] byteData);
+        /// <summary>
+        /// 图层名
+        /// </summary>
+        string LayerName{get;}
     }
 }

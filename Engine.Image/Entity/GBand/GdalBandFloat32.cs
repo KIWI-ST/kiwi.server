@@ -19,7 +19,7 @@ namespace Engine.Image.Eneity.GBand
 
         string _name;
 
-        public string BandName { get { return _name; } }
+        public string BandName { get { return _name; } set { _name = value; } }
 
         public int BandIndex { get { return _bandIndex; } }
 

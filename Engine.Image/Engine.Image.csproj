@@ -38,6 +38,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ColorMine, Version=1.2.0.0, Culture=neutral, PublicKeyToken=7a2c4d30138edc39, processorArchitecture=MSIL">
+      <HintPath>..\packages\ColorMine.1.2.0\lib\net45\ColorMine.dll</HintPath>
+    </Reference>
     <Reference Include="gdalconst_csharp, Version=1.0.3372.39629, Culture=neutral, PublicKeyToken=db5a52b08dc5b321, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\gdalconst_csharp.dll</HintPath>
@@ -60,6 +63,9 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -70,8 +76,9 @@
   <ItemGroup>
     <Compile Include="Analysis\BitmapAndByte.cs" />
     <Compile Include="Analysis\Projection.cs" />
-    <Compile Include="Analysis\SLICO.cs" />
+    <Compile Include="Analysis\SLIC.cs" />
     <Compile Include="Analysis\Transformation.cs" />
+    <Compile Include="Entity\Bitmap3.cs" />
     <Compile Include="Entity\GBand\GdalBandFactory.cs" />
     <Compile Include="Entity\GBand\GdalBandFloat32.cs" />
     <Compile Include="Entity\Bitmap2.cs" />

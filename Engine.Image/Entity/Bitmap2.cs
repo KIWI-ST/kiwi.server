@@ -46,5 +46,13 @@ namespace Engine.Image
         {
             get { return _dec; }
         }
+
+        public IGdalLayer GdalLayer
+        {
+            get
+            {
+                return _gdalLayer;
+            }
+        }
     }
 }

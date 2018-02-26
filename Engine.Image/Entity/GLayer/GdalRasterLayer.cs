@@ -14,6 +14,8 @@ namespace Engine.Image.Eneity.GLayer
 
         Dataset _pDataSet;
 
+        string _layerName;
+
         public Container<IGdalBand> BandCollection { get { return _bands; } }
 
         public int YSize => _pDataSet.RasterYSize;
@@ -22,6 +24,7 @@ namespace Engine.Image.Eneity.GLayer
 
         public void ReadFromFile(string filePath)
         {
+            _layerName = System.IO.Path.GetFileNameWithoutExtension(filePath);
             _pDataSet = Gdal.Open(filePath, Access.GA_ReadOnly);
             if (_pDataSet == null)
                 throw new Exception("未找到指定文件");
@@ -40,6 +43,11 @@ namespace Engine.Image.Eneity.GLayer
                 //设置Band信息
                 _bands[count - 1] = band;
             }
+        }
+
+        public string LayerName
+        {
+            get { return _layerName; }
         }
 
         public GdalRasterLayer()

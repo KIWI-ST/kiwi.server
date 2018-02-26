@@ -40,5 +40,9 @@ namespace Engine.Image.Eneity.GBand
         /// 获取byte流
         /// </summary>
         byte[] GetByteBuffer();
+        /// <summary>
+        /// 设置波段名称
+        /// </summary>
+        string BandName { get; set; }
     }
 }

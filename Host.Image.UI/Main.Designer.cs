@@ -49,6 +49,8 @@
             this.map_pictureBox = new System.Windows.Forms.PictureBox();
             this.map_contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.open_contextMenuStrip = new System.Windows.Forms.ToolStripMenuItem();
+            this.tree_contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.bandCombine_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_main)).BeginInit();
@@ -61,6 +63,7 @@
             this.tab_mapview.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.map_pictureBox)).BeginInit();
             this.map_contextMenuStrip.SuspendLayout();
+            this.tree_contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -105,7 +108,7 @@
             // SLIO_toolStrip
             // 
             this.SLIO_toolStrip.Name = "SLIO_toolStrip";
-            this.SLIO_toolStrip.Size = new System.Drawing.Size(152, 22);
+            this.SLIO_toolStrip.Size = new System.Drawing.Size(136, 22);
             this.SLIO_toolStrip.Text = "超像素分割";
             this.SLIO_toolStrip.Click += new System.EventHandler(this.Algorithm_Click);
             // 
@@ -196,7 +199,7 @@
             this.map_treeView.Name = "map_treeView";
             this.map_treeView.Size = new System.Drawing.Size(163, 545);
             this.map_treeView.TabIndex = 0;
-            this.map_treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.map_treeView_AfterSelect);
+            this.map_treeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.map_treeView_NodeMouseClick);
             // 
             // tabControl2
             // 
@@ -244,6 +247,21 @@
             this.open_contextMenuStrip.Text = "打开";
             this.open_contextMenuStrip.Click += new System.EventHandler(this.Map_Click);
             // 
+            // tree_contextMenuStrip
+            // 
+            this.tree_contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.bandCombine_ToolStripMenuItem});
+            this.tree_contextMenuStrip.Name = "tree_contextMenuStrip";
+            this.tree_contextMenuStrip.ShowImageMargin = false;
+            this.tree_contextMenuStrip.Size = new System.Drawing.Size(128, 48);
+            // 
+            // bandCombine_ToolStripMenuItem
+            // 
+            this.bandCombine_ToolStripMenuItem.Name = "bandCombine_ToolStripMenuItem";
+            this.bandCombine_ToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.bandCombine_ToolStripMenuItem.Text = "波段合成";
+            this.bandCombine_ToolStripMenuItem.Click += new System.EventHandler(this.Tree_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -270,6 +288,7 @@
             this.tab_mapview.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.map_pictureBox)).EndInit();
             this.map_contextMenuStrip.ResumeLayout(false);
+            this.tree_contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -296,6 +315,8 @@
         private System.Windows.Forms.ToolStripStatusLabel empty_statusLabel;
         private System.Windows.Forms.ContextMenuStrip map_contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem open_contextMenuStrip;
+        private System.Windows.Forms.ContextMenuStrip tree_contextMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem bandCombine_ToolStripMenuItem;
     }
 }
 
