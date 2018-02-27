@@ -51,6 +51,7 @@
             this.open_contextMenuStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.tree_contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.bandCombine_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.SLIC_Center_toolStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_main)).BeginInit();
@@ -100,7 +101,8 @@
             // 工具TToolStripMenuItem
             // 
             this.工具TToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.SLIO_toolStrip});
+            this.SLIO_toolStrip,
+            this.SLIC_Center_toolStrip});
             this.工具TToolStripMenuItem.Name = "工具TToolStripMenuItem";
             this.工具TToolStripMenuItem.Size = new System.Drawing.Size(59, 21);
             this.工具TToolStripMenuItem.Text = "工具(&T)";
@@ -108,7 +110,7 @@
             // SLIO_toolStrip
             // 
             this.SLIO_toolStrip.Name = "SLIO_toolStrip";
-            this.SLIO_toolStrip.Size = new System.Drawing.Size(136, 22);
+            this.SLIO_toolStrip.Size = new System.Drawing.Size(160, 22);
             this.SLIO_toolStrip.Text = "超像素分割";
             this.SLIO_toolStrip.Click += new System.EventHandler(this.Algorithm_Click);
             // 
@@ -253,14 +255,21 @@
             this.bandCombine_ToolStripMenuItem});
             this.tree_contextMenuStrip.Name = "tree_contextMenuStrip";
             this.tree_contextMenuStrip.ShowImageMargin = false;
-            this.tree_contextMenuStrip.Size = new System.Drawing.Size(128, 48);
+            this.tree_contextMenuStrip.Size = new System.Drawing.Size(100, 26);
             // 
             // bandCombine_ToolStripMenuItem
             // 
             this.bandCombine_ToolStripMenuItem.Name = "bandCombine_ToolStripMenuItem";
-            this.bandCombine_ToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.bandCombine_ToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
             this.bandCombine_ToolStripMenuItem.Text = "波段合成";
             this.bandCombine_ToolStripMenuItem.Click += new System.EventHandler(this.Tree_Click);
+            // 
+            // SLIC_Center_toolStrip
+            // 
+            this.SLIC_Center_toolStrip.Name = "SLIC_Center_toolStrip";
+            this.SLIC_Center_toolStrip.Size = new System.Drawing.Size(160, 22);
+            this.SLIC_Center_toolStrip.Text = "超像素特征提取";
+            this.SLIC_Center_toolStrip.Click += new System.EventHandler(this.Algorithm_Click);
             // 
             // Main
             // 
@@ -317,6 +326,7 @@
         private System.Windows.Forms.ToolStripMenuItem open_contextMenuStrip;
         private System.Windows.Forms.ContextMenuStrip tree_contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem bandCombine_ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem SLIC_Center_toolStrip;
     }
 }
 

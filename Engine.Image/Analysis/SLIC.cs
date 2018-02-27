@@ -15,12 +15,15 @@ namespace Engine.Image.Analysis
 {
     public class SLIC
     {
-
-        public static Bitmap[] Run(Bitmap bmp, double numberOfCenters, double m, Color edgeColor)
+        public static Center[] ReadCenter(string centerText)
         {
-            Bitmap3 image = new Bitmap3(bmp); ;
-            Bitmap[] processedImages = new Bitmap[2];
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<Center[]>(centerText);
+        }
 
+        public static string Run(Bitmap bmp, double numberOfCenters, double m, Color edgeColor)
+        {
+            Bitmap3 image = new Bitmap3(bmp);
+            Bitmap[] processedImages = new Bitmap[2];
             // Convert RGB TO LAB
             image.RGBtoLAB();
             // Create centers
@@ -59,15 +62,14 @@ namespace Engine.Image.Analysis
                 }
                 centers = calculateNewCenters(image, centers, labels);
             }
-            image.GetBitmap().Save(@"D:\Workspace\bmp\o.jpg");
-            image = drawAverage(image, centers, labels);
-            image.LABtoRGB();
-            processedImages[0] = image.GetBitmap(); // Segmented
-
-            image = drawEdges(image, centers, labels, edgeColor);
-            processedImages[1] = image.GetBitmap(); // Segmented with Edge
-
-            return processedImages;
+            //image.GetBitmap().Save(@"D:\Workspace\bmp\o.jpg");
+            //image = drawAverage(image, centers, labels);
+            //image.LABtoRGB();
+            //processedImages[0] = image.GetBitmap(); // Segmented
+            //image = drawEdges(image, centers, labels, edgeColor);
+            //processedImages[1] = image.GetBitmap(); // Segmented with Edge
+            string centerText = Newtonsoft.Json.JsonConvert.SerializeObject(centers);
+            return centerText;
         }
 
         private static Bitmap3 drawEdges(Bitmap3 image, Center[] centers, Bitplane labels, Color edgeColor)

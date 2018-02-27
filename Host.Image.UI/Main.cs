@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using Host.Image.UI.SettingForm;
+using Engine.Image.Entity;
 
 namespace Host.Image.UI
 {
@@ -31,6 +32,41 @@ namespace Host.Image.UI
         /// 当前选中的Bitmap2信息，包含图层，波段，索引等
         /// </summary>
         Bitmap2 _selectBmp2 = null;
+
+        #endregion
+
+        #region 算法执行
+
+        private void RunSLIC(Bitmap bmp)
+        {
+            string resultText = SLIC.Run(bmp, 3000, 3, Color.White);
+            Invoke(new SaveJsonHandler(SaveJson), resultText);
+        }
+
+        private void SaveJson(string jsonText)
+        {
+            SaveFileDialog sfg = new SaveFileDialog();
+            sfg.DefaultExt = ".json";
+            if (sfg.ShowDialog() == DialogResult.OK)
+            {
+                using (StreamWriter sw = new StreamWriter(sfg.FileName))
+                {
+                    sw.Write(jsonText);
+                }
+            }
+        }
+
+        public delegate void SaveJsonHandler(string jsonText);
+
+        private void SaveBitmap(Bitmap bmp)
+        {
+            SaveFileDialog sfg = new SaveFileDialog();
+            sfg.DefaultExt = ".jpg";
+            if (sfg.ShowDialog() == DialogResult.OK)
+            {
+                bmp.Save(sfg.FileName);
+            }
+        }
 
         #endregion
 
@@ -67,12 +103,30 @@ namespace Host.Image.UI
             {
                 case "SLIO_toolStrip"://超像素
                     Bitmap bmp = map_pictureBox.Image as Bitmap;
-                    bmp.Save(@"D:\Workspace\bmp\" + DateTime.Now.ToFileTimeUtc() + ".jpg");
-                    Bitmap[] silcoBitmaps = SLIC.Run(bmp, 1000, 3, Color.White);
-                    for (int i = 0; i < silcoBitmaps.Length; i++)
+                    ThreadStart s = delegate { RunSLIC(bmp); };
+                    Thread t = new Thread(s);
+                    t.IsBackground = true;
+                    t.Start();
+                    break;
+                case "SLIC_Center_toolStrip":
+                    OpenFileDialog opg = new OpenFileDialog();
+                    opg.Filter = "JSON文件|*.json";
+                    if (opg.ShowDialog() == DialogResult.OK)
                     {
-                        Bitmap tbmp = silcoBitmaps[i];
-                        tbmp.Save(@"D:\Workspace\bmp\" + DateTime.Now.ToFileTimeUtc() + ".jpg");
+                        using (StreamReader sr = new StreamReader(opg.FileName))
+                        {
+                            List<byte> colors = new List<byte>();
+                            Center[] centers = SLIC.ReadCenter(sr.ReadToEnd());
+                            Bitmap centerBmp = map_pictureBox.Image as Bitmap;
+                            //1.提取x,y位置的像素值
+                            for (int i = 0; i < centers.Length; i++)
+                            {
+                                var value = centerBmp.GetPixel((int)centers[i].X, (int)centers[i].Y).R;
+                                colors.Add(value);
+                            }
+                            SaveJson(Newtonsoft.Json.JsonConvert.SerializeObject(colors));
+                            //2.应用卷积计算像素值
+                        }
                     }
                     break;
                 default:
@@ -113,7 +167,7 @@ namespace Host.Image.UI
                 case "bandCombine_ToolStripMenuItem":
                     BandForm bandModal = new BandForm();
                     bandModal.GdalLayer = bmp2.GdalLayer;
-                    if(bandModal.ShowDialog() == DialogResult.OK)
+                    if (bandModal.ShowDialog() == DialogResult.OK)
                     {
                         List<int> combineIndex = bandModal.BanCombineIndex;
                         Bitmap layerBitmap = BitmapAndByte.ToRgbBitmap(
@@ -187,7 +241,6 @@ namespace Host.Image.UI
                 Invoke(new UpdateTreeNodeHandler(UpdateTreeNode), parentNode, childrenNode);
             }
         }
-
 
         private void map_treeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
