@@ -32,28 +32,28 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.map_menuStrip = new System.Windows.Forms.MenuStrip();
             this.文件FToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.open_toolstripmenuitem = new System.Windows.Forms.ToolStripMenuItem();
             this.工具TToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.SLIC_toolStripMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.SLIC_Center_toolStripMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.map_toolStrip = new System.Windows.Forms.ToolStrip();
+            this.SLIC_toolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.SLIC_Center_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.map_statusStrip = new System.Windows.Forms.StatusStrip();
             this.empty_statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.map_processBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.map_statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.splitContainer_main = new System.Windows.Forms.SplitContainer();
             this.map_tabControl = new System.Windows.Forms.TabControl();
             this.tab_treeview = new System.Windows.Forms.TabPage();
             this.map_treeView = new System.Windows.Forms.TreeView();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tab_mapview = new System.Windows.Forms.TabPage();
+            this.map_pictureBox = new System.Windows.Forms.PictureBox();
             this.map_contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.open_contextMenuStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.tree_contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.bandCombine_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.map_pictureBox = new System.Windows.Forms.PictureBox();
-            this.map_statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.SLIC_toolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.SLIC_Center_toolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.open_toolstripmenuitem = new System.Windows.Forms.ToolStripMenuItem();
-            this.SLIC_toolStripMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.SLIC_Center_toolStripMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.map_menuStrip.SuspendLayout();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
@@ -65,9 +65,9 @@
             this.tab_treeview.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tab_mapview.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.map_pictureBox)).BeginInit();
             this.map_contextMenuStrip.SuspendLayout();
             this.tree_contextMenuStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.map_pictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // map_menuStrip
@@ -91,6 +91,16 @@
             this.文件FToolStripMenuItem.Size = new System.Drawing.Size(58, 21);
             this.文件FToolStripMenuItem.Text = "文件(&F)";
             // 
+            // open_toolstripmenuitem
+            // 
+            this.open_toolstripmenuitem.Image = ((System.Drawing.Image)(resources.GetObject("open_toolstripmenuitem.Image")));
+            this.open_toolstripmenuitem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.open_toolstripmenuitem.Name = "open_toolstripmenuitem";
+            this.open_toolstripmenuitem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.open_toolstripmenuitem.Size = new System.Drawing.Size(165, 22);
+            this.open_toolstripmenuitem.Text = "打开(&O)";
+            this.open_toolstripmenuitem.Click += new System.EventHandler(this.Map_Click);
+            // 
             // 工具TToolStripMenuItem
             // 
             this.工具TToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -99,6 +109,22 @@
             this.工具TToolStripMenuItem.Name = "工具TToolStripMenuItem";
             this.工具TToolStripMenuItem.Size = new System.Drawing.Size(59, 21);
             this.工具TToolStripMenuItem.Text = "工具(&T)";
+            // 
+            // SLIC_toolStripMenu
+            // 
+            this.SLIC_toolStripMenu.Image = global::Host.Image.UI.Properties.Resources.calculator_64;
+            this.SLIC_toolStripMenu.Name = "SLIC_toolStripMenu";
+            this.SLIC_toolStripMenu.Size = new System.Drawing.Size(160, 22);
+            this.SLIC_toolStripMenu.Text = "超像素分割";
+            this.SLIC_toolStripMenu.Click += new System.EventHandler(this.Algorithm_Click);
+            // 
+            // SLIC_Center_toolStripMenu
+            // 
+            this.SLIC_Center_toolStripMenu.Image = global::Host.Image.UI.Properties.Resources.cut_64;
+            this.SLIC_Center_toolStripMenu.Name = "SLIC_Center_toolStripMenu";
+            this.SLIC_Center_toolStripMenu.Size = new System.Drawing.Size(160, 22);
+            this.SLIC_Center_toolStripMenu.Text = "超像素特征提取";
+            this.SLIC_Center_toolStripMenu.Click += new System.EventHandler(this.Algorithm_Click);
             // 
             // map_toolStrip
             // 
@@ -110,6 +136,28 @@
             this.map_toolStrip.Size = new System.Drawing.Size(887, 40);
             this.map_toolStrip.TabIndex = 1;
             this.map_toolStrip.Text = "toolStrip1";
+            // 
+            // SLIC_toolStripButton
+            // 
+            this.SLIC_toolStripButton.Image = global::Host.Image.UI.Properties.Resources.calculator_64;
+            this.SLIC_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.SLIC_toolStripButton.Name = "SLIC_toolStripButton";
+            this.SLIC_toolStripButton.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.SLIC_toolStripButton.Size = new System.Drawing.Size(48, 37);
+            this.SLIC_toolStripButton.Text = "超像素";
+            this.SLIC_toolStripButton.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.SLIC_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.SLIC_toolStripButton.Click += new System.EventHandler(this.Algorithm_Click);
+            // 
+            // SLIC_Center_toolStripButton
+            // 
+            this.SLIC_Center_toolStripButton.Image = global::Host.Image.UI.Properties.Resources.cut_64;
+            this.SLIC_Center_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.SLIC_Center_toolStripButton.Name = "SLIC_Center_toolStripButton";
+            this.SLIC_Center_toolStripButton.Size = new System.Drawing.Size(60, 37);
+            this.SLIC_Center_toolStripButton.Text = "中心提取";
+            this.SLIC_Center_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.SLIC_Center_toolStripButton.Click += new System.EventHandler(this.Algorithm_Click);
             // 
             // map_statusStrip
             // 
@@ -135,6 +183,16 @@
             this.map_processBar.Name = "map_processBar";
             this.map_processBar.Size = new System.Drawing.Size(100, 16);
             this.map_processBar.Visible = false;
+            // 
+            // map_statusLabel
+            // 
+            this.map_statusLabel.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.map_statusLabel.Image = global::Host.Image.UI.Properties.Resources.smile_64;
+            this.map_statusLabel.Name = "map_statusLabel";
+            this.map_statusLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.map_statusLabel.Size = new System.Drawing.Size(48, 17);
+            this.map_statusLabel.Text = "就绪";
+            this.map_statusLabel.ToolTipText = "指示当前工具运行状态";
             // 
             // splitContainer_main
             // 
@@ -205,6 +263,17 @@
             this.tab_mapview.Text = "地图";
             this.tab_mapview.UseVisualStyleBackColor = true;
             // 
+            // map_pictureBox
+            // 
+            this.map_pictureBox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.map_pictureBox.ContextMenuStrip = this.map_contextMenuStrip;
+            this.map_pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.map_pictureBox.Location = new System.Drawing.Point(3, 3);
+            this.map_pictureBox.Name = "map_pictureBox";
+            this.map_pictureBox.Size = new System.Drawing.Size(684, 530);
+            this.map_pictureBox.TabIndex = 0;
+            this.map_pictureBox.TabStop = false;
+            // 
             // map_contextMenuStrip
             // 
             this.map_contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -235,75 +304,6 @@
             this.bandCombine_ToolStripMenuItem.Text = "波段合成";
             this.bandCombine_ToolStripMenuItem.Click += new System.EventHandler(this.Tree_Click);
             // 
-            // map_pictureBox
-            // 
-            this.map_pictureBox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.map_pictureBox.ContextMenuStrip = this.map_contextMenuStrip;
-            this.map_pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.map_pictureBox.Location = new System.Drawing.Point(3, 3);
-            this.map_pictureBox.Name = "map_pictureBox";
-            this.map_pictureBox.Size = new System.Drawing.Size(684, 530);
-            this.map_pictureBox.TabIndex = 0;
-            this.map_pictureBox.TabStop = false;
-            // 
-            // map_statusLabel
-            // 
-            this.map_statusLabel.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.map_statusLabel.Image = global::Host.Image.UI.Properties.Resources.smile_64;
-            this.map_statusLabel.Name = "map_statusLabel";
-            this.map_statusLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.map_statusLabel.Size = new System.Drawing.Size(48, 17);
-            this.map_statusLabel.Text = "就绪";
-            this.map_statusLabel.ToolTipText = "指示当前工具运行状态";
-            // 
-            // SLIC_toolStripButton
-            // 
-            this.SLIC_toolStripButton.Image = global::Host.Image.UI.Properties.Resources.calculator_64;
-            this.SLIC_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.SLIC_toolStripButton.Name = "SLIC_toolStripButton";
-            this.SLIC_toolStripButton.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.SLIC_toolStripButton.Size = new System.Drawing.Size(48, 37);
-            this.SLIC_toolStripButton.Text = "超像素";
-            this.SLIC_toolStripButton.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.SLIC_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.SLIC_toolStripButton.Click += new System.EventHandler(this.Algorithm_Click);
-            // 
-            // SLIC_Center_toolStripButton
-            // 
-            this.SLIC_Center_toolStripButton.Image = global::Host.Image.UI.Properties.Resources.cut_64;
-            this.SLIC_Center_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.SLIC_Center_toolStripButton.Name = "SLIC_Center_toolStripButton";
-            this.SLIC_Center_toolStripButton.Size = new System.Drawing.Size(60, 37);
-            this.SLIC_Center_toolStripButton.Text = "中心提取";
-            this.SLIC_Center_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.SLIC_Center_toolStripButton.Click += new System.EventHandler(this.Algorithm_Click);
-            // 
-            // open_toolstripmenuitem
-            // 
-            this.open_toolstripmenuitem.Image = ((System.Drawing.Image)(resources.GetObject("open_toolstripmenuitem.Image")));
-            this.open_toolstripmenuitem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.open_toolstripmenuitem.Name = "open_toolstripmenuitem";
-            this.open_toolstripmenuitem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.open_toolstripmenuitem.Size = new System.Drawing.Size(165, 22);
-            this.open_toolstripmenuitem.Text = "打开(&O)";
-            this.open_toolstripmenuitem.Click += new System.EventHandler(this.Map_Click);
-            // 
-            // SLIC_toolStripMenu
-            // 
-            this.SLIC_toolStripMenu.Image = global::Host.Image.UI.Properties.Resources.calculator_64;
-            this.SLIC_toolStripMenu.Name = "SLIC_toolStripMenu";
-            this.SLIC_toolStripMenu.Size = new System.Drawing.Size(160, 22);
-            this.SLIC_toolStripMenu.Text = "超像素分割";
-            this.SLIC_toolStripMenu.Click += new System.EventHandler(this.Algorithm_Click);
-            // 
-            // SLIC_Center_toolStripMenu
-            // 
-            this.SLIC_Center_toolStripMenu.Image = global::Host.Image.UI.Properties.Resources.cut_64;
-            this.SLIC_Center_toolStripMenu.Name = "SLIC_Center_toolStripMenu";
-            this.SLIC_Center_toolStripMenu.Size = new System.Drawing.Size(160, 22);
-            this.SLIC_Center_toolStripMenu.Text = "超像素特征提取";
-            this.SLIC_Center_toolStripMenu.Click += new System.EventHandler(this.Algorithm_Click);
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -331,9 +331,9 @@
             this.tab_treeview.ResumeLayout(false);
             this.tabControl2.ResumeLayout(false);
             this.tab_mapview.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.map_pictureBox)).EndInit();
             this.map_contextMenuStrip.ResumeLayout(false);
             this.tree_contextMenuStrip.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.map_pictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

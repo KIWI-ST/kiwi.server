@@ -12,6 +12,9 @@ using System.Threading;
 using System.Windows.Forms;
 using Host.Image.UI.SettingForm;
 using Engine.Image.Entity;
+using Host.Image.UI.SettingForm.SLIC;
+using System.Data;
+using OfficeOpenXml;
 
 namespace Host.Image.UI
 {
@@ -22,7 +25,7 @@ namespace Host.Image.UI
     {
         ERROR = 0,
         NORMAL = 1,
-        WARNING =2
+        WARNING = 2
     }
 
     public partial class Main : Form
@@ -52,6 +55,49 @@ namespace Host.Image.UI
         #endregion
 
         #region 算法执行
+
+        private byte Convolution(Bitmap bmp, int centerX, int centerY, int[] mask)
+        {
+            int d = (int)Math.Sqrt(mask.Length);
+            if (centerX - d < 0 || centerY - d < 0)
+                return bmp.GetPixel(centerX, centerY).R;
+            else
+            {
+                int halfd = (int)Math.Floor(d / 2.0);
+                Rectangle rect = new Rectangle(centerX - halfd, centerY - halfd, d, d);
+                Bitmap rectBmp = bmp.Clone(rect, bmp.PixelFormat);
+                Bitmap3 bitmap3 = new Bitmap3(rectBmp);
+                double v = 0;
+                for (int i = 0; i < mask.Length; i++)
+                    v += bitmap3.Bitplane[0].GetPixel(i % d, (int)1 / d);
+                //
+                return Convert.ToByte(v / mask.Length);
+            }
+        }
+
+        private void RunCenter(List<string> fileNameCollection, Center[] centers)
+        {
+            DataTable dt = new DataTable();
+            int count = fileNameCollection.Count;
+            for (int r = 0; r <= centers.Length; r++)
+                dt.Rows.Add(dt.NewRow());
+            for (int k = 0; k < count; k++)
+            {
+                string fileName = fileNameCollection[k];
+                Bitmap bmp = new Bitmap(fileName);
+                //添加1列
+                DataColumn dc = dt.Columns.Add(System.IO.Path.GetFileNameWithoutExtension(fileName));
+                dt.Rows[0][dc] = System.IO.Path.GetFileNameWithoutExtension(fileName);
+                //1.提取x,y位置的像素值
+                for (int i = 0; i < centers.Length; i++)
+                {
+                    byte value = Convolution(bmp, (int)centers[i].X, (int)centers[i].Y, new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1 });
+                    dt.Rows[i + 1][dc] = value;
+                }
+            }
+            //
+            Invoke(new SaveExcelHandler(SaveExcel), dt);
+        }
 
         private void RunSLIC(Bitmap bmp)
         {
@@ -84,18 +130,41 @@ namespace Host.Image.UI
             }
         }
 
+        private delegate void SaveExcelHandler(DataTable dt);
+
+        private void SaveExcel(DataTable dt)
+        {
+            SaveFileDialog sfg = new SaveFileDialog();
+            sfg.DefaultExt = ".xls";
+            if (sfg.ShowDialog() == DialogResult.OK)
+            {
+                using(var excel = new ExcelPackage(new FileInfo(sfg.FileName)))
+                {
+                    var ws = excel.Workbook.Worksheets.Add("Sheet1");
+                    for(int r = 0; r < dt.Rows.Count; r++)
+                    {
+                        for(int c = 0; c < dt.Columns.Count; c++)
+                        {
+                            ws.Cells[r+1, c+1].Value = dt.Rows[r][c];
+                        }
+                    }
+                    excel.Save();
+                }
+            }
+        }
+
         #endregion
 
         #region 界面更新
 
         private void UpdateStatusLabel(string msg, STATUE_ENUM statue = STATUE_ENUM.NORMAL)
         {
-            if(statue == STATUE_ENUM.ERROR)
+            if (statue == STATUE_ENUM.ERROR)
             {
                 map_statusLabel.Image = Properties.Resources.smile_sad_64;
                 map_statusLabel.ForeColor = Color.Red;
             }
-            else if(statue == STATUE_ENUM.WARNING)
+            else if (statue == STATUE_ENUM.WARNING)
             {
                 map_statusLabel.Image = Properties.Resources.smile_sad_64;
                 map_statusLabel.ForeColor = Color.Red;
@@ -156,19 +225,20 @@ namespace Host.Image.UI
                     opg.Filter = "JSON文件|*.json";
                     if (opg.ShowDialog() == DialogResult.OK)
                     {
+                        //1.读取center中心
                         using (StreamReader sr = new StreamReader(opg.FileName))
                         {
                             List<byte> colors = new List<byte>();
                             Center[] centers = SLIC.ReadCenter(sr.ReadToEnd());
-                            Bitmap centerBmp = map_pictureBox.Image as Bitmap;
-                            //1.提取x,y位置的像素值
-                            for (int i = 0; i < centers.Length; i++)
+                            //2.设置使用图层
+                            CenterApplyForm centerApplyForm = new CenterApplyForm();
+                            if (centerApplyForm.ShowDialog() == DialogResult.OK)
                             {
-                                var value = centerBmp.GetPixel((int)centers[i].X, (int)centers[i].Y).R;
-                                colors.Add(value);
+                                ThreadStart s = delegate { RunCenter(centerApplyForm.FileNameCollection, centers); };
+                                Thread t = new Thread(s);
+                                t.IsBackground = true;
+                                t.Start();
                             }
-                            SaveJson(Newtonsoft.Json.JsonConvert.SerializeObject(colors));
-                            //2.应用卷积计算像素值
                         }
                     }
                     break;
@@ -245,7 +315,7 @@ namespace Host.Image.UI
                     //1.判断图像是否已加载
                     if (map_treeView.Nodes.OfType<TreeNode>().FirstOrDefault(p => p.Tag.Equals(fileName)) != null)
                     {
-                        UpdateStatusLabel("图像不能重复添加",STATUE_ENUM.WARNING);
+                        UpdateStatusLabel("图像不能重复添加", STATUE_ENUM.WARNING);
                         return;
                     }
                     //2.构建TreeNode用于存储数据和结点
