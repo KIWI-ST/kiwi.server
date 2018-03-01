@@ -15,14 +15,30 @@ using Engine.Image.Entity;
 
 namespace Host.Image.UI
 {
+    /// <summary>
+    /// 标识颜色
+    /// </summary>
+    public enum STATUE_ENUM
+    {
+        ERROR = 0,
+        NORMAL = 1,
+        WARNING =2
+    }
+
     public partial class Main : Form
     {
+
+        #region 初始化
+
         public Main()
         {
             InitializeComponent();
         }
 
+        #endregion
+
         #region 缓存管理
+
         /// <summary>
         /// 管理全局的图像与树视图区域的缓存对应
         /// key是图片名称或图+波段名称，值为对应的bitmap
@@ -72,8 +88,24 @@ namespace Host.Image.UI
 
         #region 界面更新
 
-        private void UpdateStatusLabel(string msg)
+        private void UpdateStatusLabel(string msg, STATUE_ENUM statue = STATUE_ENUM.NORMAL)
         {
+            if(statue == STATUE_ENUM.ERROR)
+            {
+                map_statusLabel.Image = Properties.Resources.smile_sad_64;
+                map_statusLabel.ForeColor = Color.Red;
+            }
+            else if(statue == STATUE_ENUM.WARNING)
+            {
+                map_statusLabel.Image = Properties.Resources.smile_sad_64;
+                map_statusLabel.ForeColor = Color.Red;
+            }
+            else
+            {
+                map_statusLabel.Image = Properties.Resources.smile_64;
+                map_statusLabel.ForeColor = Color.Black;
+            }
+            //
             map_statusLabel.Text = msg;
         }
 
@@ -98,17 +130,28 @@ namespace Host.Image.UI
         /// <param name="e"></param>
         private void Algorithm_Click(object sender, EventArgs e)
         {
-            ToolStripMenuItem item = sender as ToolStripMenuItem;
+            ToolStripItem item = sender as ToolStripItem;
             switch (item.Name)
             {
-                case "SLIO_toolStrip"://超像素
+                //超像素分割
+                case "SLIC_toolStripButton":
+                case "SLIC_toolStripMenu":
                     Bitmap bmp = map_pictureBox.Image as Bitmap;
-                    ThreadStart s = delegate { RunSLIC(bmp); };
-                    Thread t = new Thread(s);
-                    t.IsBackground = true;
-                    t.Start();
+                    if (bmp != null)
+                    {
+                        ThreadStart s = delegate { RunSLIC(bmp); };
+                        Thread t = new Thread(s);
+                        t.IsBackground = true;
+                        t.Start();
+                    }
+                    else
+                    {
+                        UpdateStatusLabel("未选中待计算图像，地图区域无图片", STATUE_ENUM.ERROR);
+                    }
                     break;
-                case "SLIC_Center_toolStrip":
+                //超像素中心应用
+                case "SLIC_Center_toolStripButton":
+                case "SLIC_Center_toolStripMenu":
                     OpenFileDialog opg = new OpenFileDialog();
                     opg.Filter = "JSON文件|*.json";
                     if (opg.ShowDialog() == DialogResult.OK)
@@ -202,7 +245,7 @@ namespace Host.Image.UI
                     //1.判断图像是否已加载
                     if (map_treeView.Nodes.OfType<TreeNode>().FirstOrDefault(p => p.Tag.Equals(fileName)) != null)
                     {
-                        UpdateStatusLabel("图像不能重复添加");
+                        UpdateStatusLabel("图像不能重复添加",STATUE_ENUM.WARNING);
                         return;
                     }
                     //2.构建TreeNode用于存储数据和结点
@@ -259,7 +302,6 @@ namespace Host.Image.UI
         }
 
         #endregion
-
 
     }
 }

@@ -62,6 +62,12 @@
     <Compile Include="SettingForm\BandForm.Designer.cs">
       <DependentUpon>BandForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="SettingForm\SLIC\CenterApplyForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingForm\SLIC\CenterApplyForm.Designer.cs">
+      <DependentUpon>CenterApplyForm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
@@ -73,9 +79,13 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="SettingForm\BandForm.resx">
       <DependentUpon>BandForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingForm\SLIC\CenterApplyForm.resx">
+      <DependentUpon>CenterApplyForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -100,6 +110,447 @@
       <Project>{90a56c3d-5542-41f5-a2ee-a723b2b221bd}</Project>
       <Name>Engine.Image</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\alarm_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\alarm_check_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\alarm_off_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\alarm_on_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\app_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\app_globe_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\app_lock_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\app_remove_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\arrow_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\arrow_circle_left_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\arrow_circle_right_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\arrow_down_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\arrow_left_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\arrow_right_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\arrow_up_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\attach_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\auction_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\book_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\book_bookmark_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bookmark_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bookmark_add_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\brightness_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\brush_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bulb_off_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bulb_on_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\calculator_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\calendar_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cancel_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cart_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\case_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chart_area_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chart_bar_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chart_bar_down_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chart_bar_up_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chart_bar1_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chart_down_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chart_line_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chart_pie_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chart_up_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\checkmark_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\clock_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\comment_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\comment_check_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\comment_delete_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\comment_minus_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\comment_plus_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\concole_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\contrast_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\copy_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\credit_card_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cut_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\delete_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\disk_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\display_off_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\display_on_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\document_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\document_empty_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\favorites_add_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\favorites_remove_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\film_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flag_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flag1_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flash_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\folder_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\folder_bookmark_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\folder_in_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\font_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\font_case_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\font_down_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\font_italic_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\font_p_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\font_underline_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\font_up_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\frame_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\gear_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\globe_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\hat_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\heart_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\help_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\home_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\inbox_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\info_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\key_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\keyboard_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\laptop_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\link_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\lock_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\magnifier_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\mail_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\man_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\med_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\mic_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\minus_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\money_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\moving_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\note_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\on_off_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\outbox_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\paint_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\paper_plane_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pencil_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\phone_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\photo_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\plus_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\reload_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\resize_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\rss_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ruler_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\safe_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\save_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\shopping_bag_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\smile_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\smile_sad_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sound_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\spanner_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\speaker_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\star_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\stop_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\storage_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sum_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tag_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tag_add_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tag_cancel_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tag_remove_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\trash_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\trash_mac_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tray_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tray_full_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tray_mail_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\twg_logo_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\video_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\video_forward_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\video_next_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\video_pause_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\video_play_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\video_previous_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\video_rec_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\video_rewind_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\video_stop_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\volume_down_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\volume_up_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wallet_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\warning_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\warning1_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wifi_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\zoom_in_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\zoom_out_64.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
