@@ -70,11 +70,15 @@ namespace Host.Image.UI
                 double v = 0;
                 for (int i = 0; i < mask.Length; i++)
                     v += bitmap3.Bitplane[0].GetPixel(i % d, (int)1 / d);
-                //
                 return Convert.ToByte(v / mask.Length);
             }
         }
 
+        /// <summary>
+        /// }{小萌娃记得改哟
+        /// </summary>
+        /// <param name="fileNameCollection"></param>
+        /// <param name="centers"></param>
         private void RunCenter(List<string> fileNameCollection, Center[] centers)
         {
             DataTable dt = new DataTable();
@@ -90,12 +94,9 @@ namespace Host.Image.UI
                 dt.Rows[0][dc] = System.IO.Path.GetFileNameWithoutExtension(fileName);
                 //1.提取x,y位置的像素值
                 for (int i = 0; i < centers.Length; i++)
-                {
-                    byte value = Convolution(bmp, (int)centers[i].X, (int)centers[i].Y, new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1 });
-                    dt.Rows[i + 1][dc] = value;
-                }
+                    //}{小萌娃记得改哟  new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1 } 是 3x3 mask 都是1的算子，这里可以修改 自动识别的
+                    dt.Rows[i + 1][dc] = Convolution(bmp, (int)centers[i].X, (int)centers[i].Y, new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1 });
             }
-            //
             Invoke(new SaveExcelHandler(SaveExcel), dt);
         }
 
