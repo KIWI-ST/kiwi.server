@@ -15,6 +15,7 @@ using Engine.Image.Entity;
 using Host.Image.UI.SettingForm.SLIC;
 using System.Data;
 using OfficeOpenXml;
+using Engine.Brain;
 
 namespace Host.Image.UI
 {
@@ -33,9 +34,12 @@ namespace Host.Image.UI
 
         #region 初始化
 
+        
+
         public Main()
         {
             InitializeComponent();
+            //GdalConfiguration
         }
 
         #endregion
@@ -313,7 +317,6 @@ namespace Host.Image.UI
         }
 
         #endregion
-
 
         #region UI事件相应方法
 

@@ -35,7 +35,7 @@ namespace Engine.Image.Analysis
             image.RGBtoLAB();
             // Create centers
             double S = Math.Sqrt((image.Width * image.Height) / numberOfCenters);
-            Center[] centers = createCenters(image, numberOfCenters, S);
+            Center[] centers = CreateCenters(image, numberOfCenters, S);
             Bitplane labels = new Bitplane(image.Width, image.Height);
             labels.setAllTo(-1);
 
@@ -67,13 +67,13 @@ namespace Engine.Image.Analysis
                             }
                     i++;
                 }
-                centers = calculateNewCenters(image, centers, labels);
+                centers = CalculateNewCenters(image, centers, labels);
             }
             //image.GetBitmap().Save(@"D:\Workspace\bmp\o.jpg");
             //image = drawAverage(image, centers, labels);
             //image.LABtoRGB();
             //processedImages[0] = image.GetBitmap(); // Segmented
-            image = drawEdges(image, centers, labels, edgeColor);
+            image = DrawEdges(image, centers, labels, edgeColor);
             image.LABtoRGB();
             processedImages[0] = image.GetBitmap(); // Segmented with Edge
             string centerText = Newtonsoft.Json.JsonConvert.SerializeObject(centers);
@@ -84,7 +84,7 @@ namespace Engine.Image.Analysis
             };
         }
 
-        private static Bitmap3 drawEdges(Bitmap3 image, Center[] centers, Bitplane labels, Color edgeColor)
+        private static Bitmap3 DrawEdges(Bitmap3 image, Center[] centers, Bitplane labels, Color edgeColor)
         {
             Bitplane edges = new Bitplane(image.Width, image.Height);
             Bitmap3 newImage = new Bitmap3(image.Width, image.Height, image.NumCh);
@@ -129,7 +129,7 @@ namespace Engine.Image.Analysis
             return newImage;
         }
 
-        private static Bitmap3 drawAverage(Bitmap3 image, Center[] centers, Bitplane labels)
+        private static Bitmap3 DrawAverage(Bitmap3 image, Center[] centers, Bitplane labels)
         {
             Bitmap3 newImage = new Bitmap3(image.Width, image.Height, image.NumCh);
 
@@ -145,7 +145,7 @@ namespace Engine.Image.Analysis
             return newImage;
         }
 
-        private static Center[] calculateNewCenters(Bitmap3 image, Center[] centers, Bitplane labels)
+        private static Center[] CalculateNewCenters(Bitmap3 image, Center[] centers, Bitplane labels)
         {
             Center[] newCenters = new Center[centers.Length];
 
@@ -187,7 +187,7 @@ namespace Engine.Image.Analysis
             return newCenters;
         }
 
-        private static Center[] createCenters(Bitmap3 image, double numberOfCenters, double S)
+        private static Center[] CreateCenters(Bitmap3 image, double numberOfCenters, double S)
         {
             List<Center> centers = new List<Center>();
             for (double x = S; x < image.Width - S / 2; x += S)

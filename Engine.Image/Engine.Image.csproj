@@ -26,7 +26,7 @@
     <WarningLevel>4</WarningLevel>
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
     <Prefer32Bit>false</Prefer32Bit>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -41,24 +41,24 @@
     <Reference Include="ColorMine, Version=1.2.0.0, Culture=neutral, PublicKeyToken=7a2c4d30138edc39, processorArchitecture=MSIL">
       <HintPath>..\packages\ColorMine.1.2.0\lib\net45\ColorMine.dll</HintPath>
     </Reference>
-    <Reference Include="gdalconst_csharp, Version=1.0.3372.39629, Culture=neutral, PublicKeyToken=db5a52b08dc5b321, processorArchitecture=MSIL">
+    <Reference Include="gdalconst_csharp, Version=1.0.6595.32833, Culture=neutral, PublicKeyToken=db5a52b08dc5b321, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\gdalconst_csharp.dll</HintPath>
+      <HintPath>x64\gdalconst_csharp.dll</HintPath>
     </Reference>
-    <Reference Include="gdal_csharp, Version=1.0.3372.39629, Culture=neutral, PublicKeyToken=db5a52b08dc5b321, processorArchitecture=MSIL">
+    <Reference Include="gdal_csharp, Version=1.0.6595.32832, Culture=neutral, PublicKeyToken=db5a52b08dc5b321, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\gdal_csharp.dll</HintPath>
+      <HintPath>x64\gdal_csharp.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="ogr_csharp, Version=1.0.3372.39629, Culture=neutral, PublicKeyToken=db5a52b08dc5b321, processorArchitecture=MSIL">
+    <Reference Include="ogr_csharp, Version=1.0.6595.32831, Culture=neutral, PublicKeyToken=db5a52b08dc5b321, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\ogr_csharp.dll</HintPath>
+      <HintPath>x64\ogr_csharp.dll</HintPath>
     </Reference>
-    <Reference Include="osr_csharp, Version=1.0.3372.39628, Culture=neutral, PublicKeyToken=db5a52b08dc5b321, processorArchitecture=MSIL">
+    <Reference Include="osr_csharp, Version=1.0.6595.32830, Culture=neutral, PublicKeyToken=db5a52b08dc5b321, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\osr_csharp.dll</HintPath>
+      <HintPath>x64\osr_csharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -87,8 +87,6 @@
     <Compile Include="Entity\GPoint.cs" />
     <Compile Include="Entity\GLayer\GdalRasterLayer.cs" />
     <Compile Include="Entity\XmlDescription.cs" />
-    <Compile Include="Filter\EventHandle.cs" />
-    <Compile Include="Configuration.cs" />
     <Compile Include="Entity\GBand\IGdalBand.cs" />
     <Compile Include="Entity\GLayer\IGdalLayer.cs" />
     <Compile Include="Manager.cs" />
@@ -97,7 +95,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Filter\QueryFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -108,19 +105,59 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="lib\gdal16.dll" />
-    <Content Include="lib\gdal18.dll" />
-    <Content Include="lib\gdalconst_csharp.dll" />
-    <Content Include="lib\gdalconst_wrap.dll" />
-    <Content Include="lib\gdal_csharp.dll" />
-    <Content Include="lib\gdal_wrap.dll" />
-    <Content Include="lib\ogr_csharp.dll" />
-    <Content Include="lib\ogr_wrap.dll" />
-    <Content Include="lib\osr_csharp.dll" />
-    <Content Include="lib\osr_wrap.dll" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <Content Include="x64\cairo.dll" />
+    <Content Include="x64\cfitsio.dll" />
+    <Content Include="x64\expat.dll" />
+    <Content Include="x64\freexl.dll" />
+    <Content Include="x64\fribidi.dll" />
+    <Content Include="x64\gdal202.dll" />
+    <Content Include="x64\gdalconst_csharp.dll" />
+    <Content Include="x64\gdalconst_wrap.dll" />
+    <Content Include="x64\gdal_csharp.dll" />
+    <Content Include="x64\gdal_wrap.dll" />
+    <Content Include="x64\geos.dll" />
+    <Content Include="x64\geos_c.dll" />
+    <Content Include="x64\hdf5.dll" />
+    <Content Include="x64\hdf5_cpp.dll" />
+    <Content Include="x64\hdf5_hl.dll" />
+    <Content Include="x64\hdf5_hl_cpp.dll" />
+    <Content Include="x64\hdfdll.dll" />
+    <Content Include="x64\iconv.dll" />
+    <Content Include="x64\libcurl.dll" />
+    <Content Include="x64\libeay32.dll" />
+    <Content Include="x64\libecwj2.dll" />
+    <Content Include="x64\libfcgi.dll" />
+    <Content Include="x64\libkea.dll" />
+    <Content Include="x64\libmysql.dll" />
+    <Content Include="x64\libpq.dll" />
+    <Content Include="x64\libtiff.dll" />
+    <Content Include="x64\libxml2.dll" />
+    <Content Include="x64\lti_dsdk_9.5.dll" />
+    <Content Include="x64\lti_lidar_dsdk_1.1.dll" />
+    <Content Include="x64\mapserver.dll" />
+    <Content Include="x64\mfhdfdll.dll" />
+    <Content Include="x64\msplugin_mssql2008.dll" />
+    <Content Include="x64\msplugin_oracle.dll" />
+    <Content Include="x64\msvcp140.dll" />
+    <Content Include="x64\netcdf.dll" />
+    <Content Include="x64\ogr_csharp.dll" />
+    <Content Include="x64\ogr_wrap.dll" />
+    <Content Include="x64\openjp2.dll" />
+    <Content Include="x64\osr_csharp.dll" />
+    <Content Include="x64\osr_wrap.dll" />
+    <Content Include="x64\proj.dll" />
+    <Content Include="x64\spatialite.dll" />
+    <Content Include="x64\sqlite3.dll" />
+    <Content Include="x64\ssleay32.dll" />
+    <Content Include="x64\szip.dll" />
+    <Content Include="x64\tbb.dll" />
+    <Content Include="x64\vcruntime140.dll" />
+    <Content Include="x64\xdrdll.dll" />
+    <Content Include="x64\xerces-c_3_1.dll" />
+    <Content Include="x64\zlib1.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

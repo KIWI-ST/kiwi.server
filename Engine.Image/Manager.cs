@@ -94,7 +94,7 @@ namespace Engine.Image
         /// </summary>
         /// <param name="zoomLevel"></param>
         /// <returns></returns>
-        public double scale(int zoomLevel)
+        public double Scale(int zoomLevel)
         {
             var _tilePixelUnit = 256;
             return _tilePixelUnit * Math.Pow(2, zoomLevel);
@@ -104,8 +104,8 @@ namespace Engine.Image
         {
             for (int i = 15; i < 20; i++)
             {
-                var _tlPixel = Transformation.T3857.Transform(_tLPoint, scale(i));
-                var _brPixel = Transformation.T3857.Transform(_bRPoint, scale(i));
+                var _tlPixel = Transformation.T3857.Transform(_tLPoint, Scale(i));
+                var _brPixel = Transformation.T3857.Transform(_bRPoint, Scale(i));
                 int width = Convert.ToInt32(_brPixel.X - _tlPixel.X + 1);
                 int height = Convert.ToInt32(_brPixel.Y - _tlPixel.Y + 1);
                 width = width < 1 ? 1 : width;

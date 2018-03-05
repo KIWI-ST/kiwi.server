@@ -27,7 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Hosts.UI", "Hosts.UI", "{8D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Host.Crawler.UI", "Host.Crawler.UI\Host.Crawler.UI.csproj", "{DAF14777-FEA5-49B3-84BA-9E7B7AE95230}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.TensorFlow", "Engine.TensorFlow\Engine.TensorFlow.csproj", "{9E30567F-445F-445D-A2B7-7479961D67AD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Brain", "Engine.TensorFlow\Engine.Brain.csproj", "{9E30567F-445F-445D-A2B7-7479961D67AD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Host.Trace.UI", "Host.Trace.UI\Host.Trace.UI.csproj", "{6970EE44-28B9-4D2E-8E40-64376D87E6FE}"
 EndProject
