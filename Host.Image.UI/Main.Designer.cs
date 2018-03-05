@@ -99,7 +99,7 @@
             this.open_toolstripmenuitem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
             this.open_toolstripmenuitem.Size = new System.Drawing.Size(165, 22);
             this.open_toolstripmenuitem.Text = "打开(&O)";
-            this.open_toolstripmenuitem.Click += new System.EventHandler(this.Map_Click);
+            this.open_toolstripmenuitem.Click += new System.EventHandler(this.map_function_Click);
             // 
             // 工具TToolStripMenuItem
             // 
@@ -116,7 +116,7 @@
             this.SLIC_toolStripMenu.Name = "SLIC_toolStripMenu";
             this.SLIC_toolStripMenu.Size = new System.Drawing.Size(160, 22);
             this.SLIC_toolStripMenu.Text = "超像素分割";
-            this.SLIC_toolStripMenu.Click += new System.EventHandler(this.Algorithm_Click);
+            this.SLIC_toolStripMenu.Click += new System.EventHandler(this.map_function_Click);
             // 
             // SLIC_Center_toolStripMenu
             // 
@@ -124,7 +124,7 @@
             this.SLIC_Center_toolStripMenu.Name = "SLIC_Center_toolStripMenu";
             this.SLIC_Center_toolStripMenu.Size = new System.Drawing.Size(160, 22);
             this.SLIC_Center_toolStripMenu.Text = "超像素特征提取";
-            this.SLIC_Center_toolStripMenu.Click += new System.EventHandler(this.Algorithm_Click);
+            this.SLIC_Center_toolStripMenu.Click += new System.EventHandler(this.map_function_Click);
             // 
             // map_toolStrip
             // 
@@ -147,7 +147,7 @@
             this.SLIC_toolStripButton.Text = "超像素";
             this.SLIC_toolStripButton.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.SLIC_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.SLIC_toolStripButton.Click += new System.EventHandler(this.Algorithm_Click);
+            this.SLIC_toolStripButton.Click += new System.EventHandler(this.map_function_Click);
             // 
             // SLIC_Center_toolStripButton
             // 
@@ -157,7 +157,7 @@
             this.SLIC_Center_toolStripButton.Size = new System.Drawing.Size(60, 37);
             this.SLIC_Center_toolStripButton.Text = "中心提取";
             this.SLIC_Center_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.SLIC_Center_toolStripButton.Click += new System.EventHandler(this.Algorithm_Click);
+            this.SLIC_Center_toolStripButton.Click += new System.EventHandler(this.map_function_Click);
             // 
             // map_statusStrip
             // 
@@ -287,7 +287,7 @@
             this.open_contextMenuStrip.Name = "open_contextMenuStrip";
             this.open_contextMenuStrip.Size = new System.Drawing.Size(75, 22);
             this.open_contextMenuStrip.Text = "打开";
-            this.open_contextMenuStrip.Click += new System.EventHandler(this.Map_Click);
+            this.open_contextMenuStrip.Click += new System.EventHandler(this.map_function_Click);
             // 
             // tree_contextMenuStrip
             // 
@@ -302,7 +302,7 @@
             this.bandCombine_ToolStripMenuItem.Name = "bandCombine_ToolStripMenuItem";
             this.bandCombine_ToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
             this.bandCombine_ToolStripMenuItem.Text = "波段合成";
-            this.bandCombine_ToolStripMenuItem.Click += new System.EventHandler(this.Tree_Click);
+            this.bandCombine_ToolStripMenuItem.Click += new System.EventHandler(this.map_treeView_Click);
             // 
             // Main
             // 

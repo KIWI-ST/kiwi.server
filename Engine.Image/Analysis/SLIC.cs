@@ -13,6 +13,13 @@ using Engine.Image.Entity;
 
 namespace Engine.Image.Analysis
 {
+
+    public class SLICPKG
+    {
+        public Bitmap BMP { get; set; }
+        public string CENTER { get; set; }
+    }
+
     public class SLIC
     {
         public static Center[] ReadCenter(string centerText)
@@ -20,7 +27,7 @@ namespace Engine.Image.Analysis
             return Newtonsoft.Json.JsonConvert.DeserializeObject<Center[]>(centerText);
         }
 
-        public static string Run(Bitmap bmp, double numberOfCenters, double m, Color edgeColor)
+        public static SLICPKG Run(Bitmap bmp, double numberOfCenters, double m, Color edgeColor)
         {
             Bitmap3 image = new Bitmap3(bmp);
             Bitmap[] processedImages = new Bitmap[2];
@@ -66,10 +73,15 @@ namespace Engine.Image.Analysis
             //image = drawAverage(image, centers, labels);
             //image.LABtoRGB();
             //processedImages[0] = image.GetBitmap(); // Segmented
-            //image = drawEdges(image, centers, labels, edgeColor);
-            //processedImages[1] = image.GetBitmap(); // Segmented with Edge
+            image = drawEdges(image, centers, labels, edgeColor);
+            image.LABtoRGB();
+            processedImages[0] = image.GetBitmap(); // Segmented with Edge
             string centerText = Newtonsoft.Json.JsonConvert.SerializeObject(centers);
-            return centerText;
+            //
+            return new SLICPKG() {
+                BMP = processedImages[0],
+                CENTER = centerText,
+            };
         }
 
         private static Bitmap3 drawEdges(Bitmap3 image, Center[] centers, Bitplane labels, Color edgeColor)

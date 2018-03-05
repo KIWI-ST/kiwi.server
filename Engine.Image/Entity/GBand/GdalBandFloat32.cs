@@ -63,13 +63,13 @@ namespace Engine.Image.Eneity.GBand
                 {
                     float value = _rawData[count];
                     if (value <= _min)
-                        _byteData[count % _xCount, count / _yCount] = 0;
+                        _byteData[count % _xCount, count / _xCount] = 0;
                     else if (value >= _max)
-                        _byteData[count % _xCount, count / _yCount] = 255;
+                        _byteData[count % _xCount, count / _xCount] = 255;
                     else
                     {
                         double temp = (((value - _min) / scale) * 255);
-                        _byteData[count % _xCount, count / _yCount] = Convert.ToByte(temp);
+                        _byteData[count % _xCount, count / _xCount] = Convert.ToByte(temp);
                     }
                 }
             }

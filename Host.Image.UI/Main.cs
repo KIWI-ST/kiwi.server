@@ -56,6 +56,14 @@ namespace Host.Image.UI
 
         #region 算法执行
 
+        /// <summary>
+        /// 卷积计算
+        /// </summary>
+        /// <param name="bmp"></param>
+        /// <param name="centerX"></param>
+        /// <param name="centerY"></param>
+        /// <param name="mask"></param>
+        /// <returns></returns>
         private byte Convolution(Bitmap bmp, int centerX, int centerY, int[] mask)
         {
             int d = (int)Math.Sqrt(mask.Length);
@@ -73,7 +81,6 @@ namespace Host.Image.UI
                 return Convert.ToByte(v / mask.Length);
             }
         }
-
         /// <summary>
         /// }{小萌娃记得改哟
         /// </summary>
@@ -87,6 +94,7 @@ namespace Host.Image.UI
                 dt.Rows.Add(dt.NewRow());
             for (int k = 0; k < count; k++)
             {
+                Invoke(new UpdateStatusLabelHandler(UpdateStatusLabel), "应用超像素中心计算开始，进度 " + k + "/" + fileNameCollection.Count, STATUE_ENUM.WARNING);
                 string fileName = fileNameCollection[k];
                 Bitmap bmp = new Bitmap(fileName);
                 //添加1列
@@ -99,15 +107,29 @@ namespace Host.Image.UI
             }
             Invoke(new SaveExcelHandler(SaveExcel), dt);
         }
-
+        /// <summary>
+        /// 超像素计算
+        /// </summary>
+        /// <param name="bmp"></param>
         private void RunSLIC(Bitmap bmp)
         {
-            string resultText = SLIC.Run(bmp, 3000, 3, Color.White);
-            Invoke(new SaveJsonHandler(SaveJson), resultText);
+            Invoke(new UpdateStatusLabelHandler(UpdateStatusLabel), "超像素中心计算开始...",STATUE_ENUM.WARNING);
+            SLICPKG pkg = SLIC.Run(bmp, 3000, 3, Color.White);
+            Invoke(new SaveJsonHandler(SaveJson), pkg.CENTER);
+            Invoke(new SaveBitmapHandler(SaveBitmap), pkg.BMP);
         }
 
+        #endregion
+
+        #region 界面更新
+
+        /// <summary>
+        /// 保存json结果
+        /// </summary>
+        /// <param name="jsonText"></param>
         private void SaveJson(string jsonText)
         {
+            UpdateStatusLabel("保存Json结果文件");
             SaveFileDialog sfg = new SaveFileDialog();
             sfg.DefaultExt = ".json";
             if (sfg.ShowDialog() == DialogResult.OK)
@@ -118,11 +140,13 @@ namespace Host.Image.UI
                 }
             }
         }
-
-        public delegate void SaveJsonHandler(string jsonText);
-
+        /// <summary>
+        /// 保存bmp位图结果
+        /// </summary>
+        /// <param name="bmp"></param>
         private void SaveBitmap(Bitmap bmp)
         {
+            UpdateStatusLabel("保存.jpg结果文件");
             SaveFileDialog sfg = new SaveFileDialog();
             sfg.DefaultExt = ".jpg";
             if (sfg.ShowDialog() == DialogResult.OK)
@@ -130,34 +154,35 @@ namespace Host.Image.UI
                 bmp.Save(sfg.FileName);
             }
         }
-
-        private delegate void SaveExcelHandler(DataTable dt);
-
+        /// <summary>
+        /// 保存Excel结果
+        /// </summary>
+        /// <param name="dt"></param>
         private void SaveExcel(DataTable dt)
         {
             SaveFileDialog sfg = new SaveFileDialog();
             sfg.DefaultExt = ".xls";
             if (sfg.ShowDialog() == DialogResult.OK)
             {
-                using(var excel = new ExcelPackage(new FileInfo(sfg.FileName)))
+                using (var excel = new ExcelPackage(new FileInfo(sfg.FileName)))
                 {
                     var ws = excel.Workbook.Worksheets.Add("Sheet1");
-                    for(int r = 0; r < dt.Rows.Count; r++)
+                    for (int r = 0; r < dt.Rows.Count; r++)
                     {
-                        for(int c = 0; c < dt.Columns.Count; c++)
+                        for (int c = 0; c < dt.Columns.Count; c++)
                         {
-                            ws.Cells[r+1, c+1].Value = dt.Rows[r][c];
+                            ws.Cells[r + 1, c + 1].Value = dt.Rows[r][c];
                         }
                     }
                     excel.Save();
                 }
             }
         }
-
-        #endregion
-
-        #region 界面更新
-
+        /// <summary>
+        /// 更新底部栏提示
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="statue"></param>
         private void UpdateStatusLabel(string msg, STATUE_ENUM statue = STATUE_ENUM.NORMAL)
         {
             if (statue == STATUE_ENUM.ERROR)
@@ -178,7 +203,11 @@ namespace Host.Image.UI
             //
             map_statusLabel.Text = msg;
         }
-
+        /// <summary>
+        /// 更新地图相关树视图节点内容
+        /// </summary>
+        /// <param name="parentNode"></param>
+        /// <param name="childrenNode"></param>
         private void UpdateTreeNode(TreeNode parentNode, TreeNode childrenNode)
         {
             //1.更新左侧视图
@@ -187,22 +216,123 @@ namespace Host.Image.UI
             //2.应对picture更新
             map_pictureBox.Image = _imageDic[childrenNode.Text].BMP;
         }
-
+        /// <summary>
+        /// 更新树视图委托
+        /// </summary>
+        /// <param name="parentNode"></param>
+        /// <param name="childrenNode"></param>
         private delegate void UpdateTreeNodeHandler(TreeNode parentNode, TreeNode childrenNode);
+        /// <summary>
+        ///  保存Json委托
+        /// </summary>
+        /// <param name="jsonText"></param>
+        private delegate void SaveJsonHandler(string jsonText);
+        /// <summary>
+        ///  保存位图委托
+        /// </summary>
+        /// <param name="bmp"></param>
+        private delegate void SaveBitmapHandler(Bitmap bmp);
+        /// <summary>
+        ///  保存Excel委托
+        /// </summary>
+        /// <param name="dt"></param>
+        private delegate void SaveExcelHandler(DataTable dt);
+        /// <summary>
+        /// 更新底部信息栏提示内容委托
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="statue"></param>
+        private delegate void UpdateStatusLabelHandler(string msg, STATUE_ENUM statue = STATUE_ENUM.NORMAL);
 
         #endregion
 
-        #region 顶部栏目功能按钮事件处理块
+        #region 主功能
+
         /// <summary>
-        /// 算法功能按钮
+        /// 读取图片
+        /// </summary>
+        private void ReadImage()
+        {
+            #region OpenFileDialog设置
+            OpenFileDialog openfiledialog = new OpenFileDialog();
+            openfiledialog.Multiselect = false;
+            openfiledialog.RestoreDirectory = true;
+            openfiledialog.Filter = "图像文件|*.img;*.tif;*.bmp;*.jpg;*.png|矢量文件|*.shp";
+            #endregion
+            if (openfiledialog.ShowDialog() == DialogResult.OK)
+            {
+                string fileName = Path.GetFileNameWithoutExtension(openfiledialog.FileName);
+                string extension = Path.GetExtension(openfiledialog.FileName);
+                if (extension == ".tif" || extension == ".img" || extension == ".bmp" || extension == ".jpg" || extension == ".png")
+                {
+                    //1.判断图像是否已加载
+                    if (map_treeView.Nodes.OfType<TreeNode>().FirstOrDefault(p => p.Tag.Equals(fileName)) != null)
+                    {
+                        UpdateStatusLabel("图像不能重复添加", STATUE_ENUM.WARNING);
+                        return;
+                    }
+                    //2.构建TreeNode用于存储数据和结点
+                    TreeNode node = new TreeNode(fileName);
+                    node.Tag = fileName;
+                    map_treeView.Nodes.Add(node);
+                    _imageDic.Add(fileName, null);
+                    //3.分波段读取图像并加载，开辟新的线程分波段读取数据
+                    ThreadStart s = delegate { ReadBand(openfiledialog.FileName, node); };
+                    Thread t = new Thread(s);
+                    t.IsBackground = true;
+                    t.Start();
+                }
+                else if (extension == "shp")
+                {
+                    IShpReader pShpReader = new ShpReader(fileName);
+                    //后台读取shp并绘制到bmp
+                }
+
+            }
+        }
+        /// <summary>
+        /// 波段读取
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="parentNode"></param>
+        private void ReadBand(string filePath, TreeNode parentNode)
+        {
+            string name = parentNode.Text;
+            IGdalLayer _layer = new GdalRasterLayer();
+            _layer.ReadFromFile(filePath);
+            for (int i = 0; i < _layer.BandCollection.Count; i++)
+            {
+                IGdalBand band = _layer.BandCollection[i];
+                band.BandName = name + "_波段_" + i;
+                Bitmap2 bmp2 = new Bitmap2(bmp: band.GetBitmap(), name: band.BandName, gdalBand: band, gdalLayer: _layer);
+                //获取band对应的bitmap格式图像，载入treedNode中
+                _imageDic.Add(band.BandName, bmp2);
+                TreeNode childrenNode = new TreeNode(band.BandName);
+                Invoke(new UpdateTreeNodeHandler(UpdateTreeNode), parentNode, childrenNode);
+            }
+        }
+
+        #endregion
+
+
+        #region UI事件相应方法
+
+        /// <summary>
+        /// 底图区域功能按钮
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Algorithm_Click(object sender, EventArgs e)
+        private void map_function_Click(object sender, EventArgs e)
         {
             ToolStripItem item = sender as ToolStripItem;
             switch (item.Name)
             {
+                case "open_toolstripmenuitem"://添加图像
+                    ReadImage();
+                    break;
+                case "open_contextMenuStrip":
+                    ReadImage();
+                    break;
                 //超像素分割
                 case "SLIC_toolStripButton":
                 case "SLIC_toolStripMenu":
@@ -248,31 +378,11 @@ namespace Host.Image.UI
             }
         }
         /// <summary>
-        /// 底图区域功能按钮
+        ///  树视图点击捕捉，用于邮件弹出功能栏
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Map_Click(object sender, EventArgs e)
-        {
-            ToolStripMenuItem item = sender as ToolStripMenuItem;
-            switch (item.Name)
-            {
-                case "open_toolstripmenuitem"://添加图像
-                    ReadImage();
-                    break;
-                case "open_contextMenuStrip":
-                    ReadImage();
-                    break;
-                default:
-                    break;
-            }
-        }
-        /// <summary>
-        /// 树视图区
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Tree_Click(object sender, EventArgs e)
+        private void map_treeView_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem item = sender as ToolStripMenuItem;
             Bitmap2 bmp2 = _imageDic[map_treeView.SelectedNode.Text];
@@ -298,64 +408,11 @@ namespace Host.Image.UI
                     break;
             }
         }
-
-        private void ReadImage()
-        {
-            #region OpenFileDialog设置
-            OpenFileDialog openfiledialog = new OpenFileDialog();
-            openfiledialog.Multiselect = false;
-            openfiledialog.RestoreDirectory = true;
-            openfiledialog.Filter = "图像文件|*.img;*.tif;*.bmp;*.jpg;*.png|矢量文件|*.shp";
-            #endregion
-            if (openfiledialog.ShowDialog() == DialogResult.OK)
-            {
-                string fileName = Path.GetFileNameWithoutExtension(openfiledialog.FileName);
-                string extension = Path.GetExtension(openfiledialog.FileName);
-                if (extension == ".tif" || extension == ".img" || extension == ".bmp" || extension == ".jpg" || extension == ".png")
-                {
-                    //1.判断图像是否已加载
-                    if (map_treeView.Nodes.OfType<TreeNode>().FirstOrDefault(p => p.Tag.Equals(fileName)) != null)
-                    {
-                        UpdateStatusLabel("图像不能重复添加", STATUE_ENUM.WARNING);
-                        return;
-                    }
-                    //2.构建TreeNode用于存储数据和结点
-                    TreeNode node = new TreeNode(fileName);
-                    node.Tag = fileName;
-                    map_treeView.Nodes.Add(node);
-                    _imageDic.Add(fileName, null);
-                    //3.分波段读取图像并加载，开辟新的线程分波段读取数据
-                    ThreadStart s = delegate { ReadBand(openfiledialog.FileName, node); };
-                    Thread t = new Thread(s);
-                    t.IsBackground = true;
-                    t.Start();
-                }
-                else if (extension == "shp")
-                {
-                    IShpReader pShpReader = new ShpReader(fileName);
-                    //后台读取shp并绘制到bmp
-                }
-
-            }
-        }
-
-        private void ReadBand(string filePath, TreeNode parentNode)
-        {
-            string name = parentNode.Text;
-            IGdalLayer _layer = new GdalRasterLayer();
-            _layer.ReadFromFile(filePath);
-            for (int i = 0; i < _layer.BandCollection.Count; i++)
-            {
-                IGdalBand band = _layer.BandCollection[i];
-                band.BandName = name + "_波段_" + i;
-                Bitmap2 bmp2 = new Bitmap2(bmp: band.GetBitmap(), name: band.BandName, gdalBand: band, gdalLayer: _layer);
-                //获取band对应的bitmap格式图像，载入treedNode中
-                _imageDic.Add(band.BandName, bmp2);
-                TreeNode childrenNode = new TreeNode(band.BandName);
-                Invoke(new UpdateTreeNodeHandler(UpdateTreeNode), parentNode, childrenNode);
-            }
-        }
-
+        /// <summary>
+        /// 树视图结点操作
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void map_treeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             //左键，选择图像显示
