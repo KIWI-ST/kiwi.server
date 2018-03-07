@@ -1,13 +1,8 @@
-﻿using Engine.Image.Eneity.GBand;
-using Engine.Image.Eneity.GLayer;
-using System;
+﻿using Engine.GIS.GLayer.GRasterLayer;
+using Engine.GIS.GLayer.GRasterLayer.GBand;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Host.Image.UI.SettingForm
@@ -27,11 +22,11 @@ namespace Host.Image.UI.SettingForm
             band_listView.FullRowSelect = true;
         }
 
-        private IGdalLayer _gdalLayer;
+        private GRasterLayer _gdalLayer;
 
         private List<int>_bandIndexSave = new List<int>();
 
-        public IGdalLayer GdalLayer
+        public GRasterLayer GdalLayer
         {
             set
             {
@@ -59,9 +54,11 @@ namespace Host.Image.UI.SettingForm
             ImageList imageList = new ImageList();
             for(int i = 0; i < _gdalLayer.BandCollection.Count; i++)
             {
-                IGdalBand band = _gdalLayer.BandCollection[i];
-                ListViewItem lvi = new ListViewItem();
-                lvi.ImageIndex = i;
+                IGBand band = _gdalLayer.BandCollection[i];
+                ListViewItem lvi = new ListViewItem
+                {
+                    ImageIndex = i
+                };
                 lvi.SubItems.Add(band.BandName);
                 lvi.SubItems.Add(band.Width + "x" + band.Height);
                 band_listView.Items.Add(lvi);

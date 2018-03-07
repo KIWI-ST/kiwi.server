@@ -1,9 +1,4 @@
-﻿using Engine.GIS.File;
-using Engine.Image;
-using Engine.Image.Analysis;
-using Engine.Image.Eneity.GBand;
-using Engine.Image.Eneity.GLayer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -11,11 +6,13 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using Host.Image.UI.SettingForm;
-using Engine.Image.Entity;
 using Host.Image.UI.SettingForm.SLIC;
 using System.Data;
 using OfficeOpenXml;
-using Engine.Brain;
+using Engine.GIS.Entity;
+using Engine.GIS.GLayer.GRasterLayer;
+using Engine.GIS.GLayer.GRasterLayer.GBand;
+using Engine.GIS.GOperation.Arithmetic;
 
 namespace Host.Image.UI
 {
@@ -34,7 +31,7 @@ namespace Host.Image.UI
 
         #region 初始化
 
-        
+
 
         public Main()
         {
@@ -61,31 +58,6 @@ namespace Host.Image.UI
         #region 算法执行
 
         /// <summary>
-        /// 卷积计算
-        /// </summary>
-        /// <param name="bmp"></param>
-        /// <param name="centerX"></param>
-        /// <param name="centerY"></param>
-        /// <param name="mask"></param>
-        /// <returns></returns>
-        private byte Convolution(Bitmap bmp, int centerX, int centerY, int[] mask)
-        {
-            int d = (int)Math.Sqrt(mask.Length);
-            if (centerX - d < 0 || centerY - d < 0)
-                return bmp.GetPixel(centerX, centerY).R;
-            else
-            {
-                int halfd = (int)Math.Floor(d / 2.0);
-                Rectangle rect = new Rectangle(centerX - halfd, centerY - halfd, d, d);
-                Bitmap rectBmp = bmp.Clone(rect, bmp.PixelFormat);
-                Bitmap3 bitmap3 = new Bitmap3(rectBmp);
-                double v = 0;
-                for (int i = 0; i < mask.Length; i++)
-                    v += bitmap3.Bitplane[0].GetPixel(i % d, (int)1 / d);
-                return Convert.ToByte(v / mask.Length);
-            }
-        }
-        /// <summary>
         /// }{小萌娃记得改哟
         /// </summary>
         /// <param name="fileNameCollection"></param>
@@ -107,7 +79,7 @@ namespace Host.Image.UI
                 //1.提取x,y位置的像素值
                 for (int i = 0; i < centers.Length; i++)
                     //}{小萌娃记得改哟  new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1 } 是 3x3 mask 都是1的算子，这里可以修改 自动识别的
-                    dt.Rows[i + 1][dc] = Convolution(bmp, (int)centers[i].X, (int)centers[i].Y, new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1 });
+                    dt.Rows[i + 1][dc] = GConvolution.Run(bmp, (int)centers[i].X, (int)centers[i].Y, new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1 });
             }
             Invoke(new SaveExcelHandler(SaveExcel), dt);
         }
@@ -117,8 +89,8 @@ namespace Host.Image.UI
         /// <param name="bmp"></param>
         private void RunSLIC(Bitmap bmp)
         {
-            Invoke(new UpdateStatusLabelHandler(UpdateStatusLabel), "超像素中心计算开始...",STATUE_ENUM.WARNING);
-            SLICPKG pkg = SLIC.Run(bmp, 3000, 3, Color.White);
+            Invoke(new UpdateStatusLabelHandler(UpdateStatusLabel), "超像素中心计算开始...", STATUE_ENUM.WARNING);
+            SLICPKG pkg = SuperPixelSegment.Run(bmp, 3000, 3, Color.White);
             Invoke(new SaveJsonHandler(SaveJson), pkg.CENTER);
             Invoke(new SaveBitmapHandler(SaveBitmap), pkg.BMP);
         }
@@ -134,8 +106,10 @@ namespace Host.Image.UI
         private void SaveJson(string jsonText)
         {
             UpdateStatusLabel("保存Json结果文件");
-            SaveFileDialog sfg = new SaveFileDialog();
-            sfg.DefaultExt = ".json";
+            SaveFileDialog sfg = new SaveFileDialog
+            {
+                DefaultExt = ".json"
+            };
             if (sfg.ShowDialog() == DialogResult.OK)
             {
                 using (StreamWriter sw = new StreamWriter(sfg.FileName))
@@ -151,8 +125,10 @@ namespace Host.Image.UI
         private void SaveBitmap(Bitmap bmp)
         {
             UpdateStatusLabel("保存.jpg结果文件");
-            SaveFileDialog sfg = new SaveFileDialog();
-            sfg.DefaultExt = ".jpg";
+            SaveFileDialog sfg = new SaveFileDialog
+            {
+                DefaultExt = ".jpg"
+            };
             if (sfg.ShowDialog() == DialogResult.OK)
             {
                 bmp.Save(sfg.FileName);
@@ -164,8 +140,10 @@ namespace Host.Image.UI
         /// <param name="dt"></param>
         private void SaveExcel(DataTable dt)
         {
-            SaveFileDialog sfg = new SaveFileDialog();
-            sfg.DefaultExt = ".xls";
+            SaveFileDialog sfg = new SaveFileDialog
+            {
+                DefaultExt = ".xls"
+            };
             if (sfg.ShowDialog() == DialogResult.OK)
             {
                 using (var excel = new ExcelPackage(new FileInfo(sfg.FileName)))
@@ -258,10 +236,12 @@ namespace Host.Image.UI
         private void ReadImage()
         {
             #region OpenFileDialog设置
-            OpenFileDialog openfiledialog = new OpenFileDialog();
-            openfiledialog.Multiselect = false;
-            openfiledialog.RestoreDirectory = true;
-            openfiledialog.Filter = "图像文件|*.img;*.tif;*.bmp;*.jpg;*.png|矢量文件|*.shp";
+            OpenFileDialog openfiledialog = new OpenFileDialog
+            {
+                Multiselect = false,
+                RestoreDirectory = true,
+                Filter = "图像文件|*.img;*.tif;*.bmp;*.jpg;*.png|矢量文件|*.shp"
+            };
             #endregion
             if (openfiledialog.ShowDialog() == DialogResult.OK)
             {
@@ -276,19 +256,23 @@ namespace Host.Image.UI
                         return;
                     }
                     //2.构建TreeNode用于存储数据和结点
-                    TreeNode node = new TreeNode(fileName);
-                    node.Tag = fileName;
+                    TreeNode node = new TreeNode(fileName)
+                    {
+                        Tag = fileName
+                    };
                     map_treeView.Nodes.Add(node);
                     _imageDic.Add(fileName, null);
                     //3.分波段读取图像并加载，开辟新的线程分波段读取数据
                     ThreadStart s = delegate { ReadBand(openfiledialog.FileName, node); };
-                    Thread t = new Thread(s);
-                    t.IsBackground = true;
+                    Thread t = new Thread(s)
+                    {
+                        IsBackground = true
+                    };
                     t.Start();
                 }
                 else if (extension == "shp")
                 {
-                    IShpReader pShpReader = new ShpReader(fileName);
+                    //IShpReader pShpReader = new ShpReader(fileName);
                     //后台读取shp并绘制到bmp
                 }
 
@@ -299,14 +283,13 @@ namespace Host.Image.UI
         /// </summary>
         /// <param name="filePath"></param>
         /// <param name="parentNode"></param>
-        private void ReadBand(string filePath, TreeNode parentNode)
+        private void ReadBand(string rasterFilename, TreeNode parentNode)
         {
             string name = parentNode.Text;
-            IGdalLayer _layer = new GdalRasterLayer();
-            _layer.ReadFromFile(filePath);
+            GRasterLayer _layer = new GRasterLayer(rasterFilename);
             for (int i = 0; i < _layer.BandCollection.Count; i++)
             {
-                IGdalBand band = _layer.BandCollection[i];
+                IGBand band = _layer.BandCollection[i];
                 band.BandName = name + "_波段_" + i;
                 Bitmap2 bmp2 = new Bitmap2(bmp: band.GetBitmap(), name: band.BandName, gdalBand: band, gdalLayer: _layer);
                 //获取band对应的bitmap格式图像，载入treedNode中
@@ -325,7 +308,7 @@ namespace Host.Image.UI
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void map_function_Click(object sender, EventArgs e)
+        private void Map_function_Click(object sender, EventArgs e)
         {
             ToolStripItem item = sender as ToolStripItem;
             switch (item.Name)
@@ -343,8 +326,10 @@ namespace Host.Image.UI
                     if (bmp != null)
                     {
                         ThreadStart s = delegate { RunSLIC(bmp); };
-                        Thread t = new Thread(s);
-                        t.IsBackground = true;
+                        Thread t = new Thread(s)
+                        {
+                            IsBackground = true
+                        };
                         t.Start();
                     }
                     else
@@ -355,22 +340,26 @@ namespace Host.Image.UI
                 //超像素中心应用
                 case "SLIC_Center_toolStripButton":
                 case "SLIC_Center_toolStripMenu":
-                    OpenFileDialog opg = new OpenFileDialog();
-                    opg.Filter = "JSON文件|*.json";
+                    OpenFileDialog opg = new OpenFileDialog
+                    {
+                        Filter = "JSON文件|*.json"
+                    };
                     if (opg.ShowDialog() == DialogResult.OK)
                     {
                         //1.读取center中心
                         using (StreamReader sr = new StreamReader(opg.FileName))
                         {
                             List<byte> colors = new List<byte>();
-                            Center[] centers = SLIC.ReadCenter(sr.ReadToEnd());
+                            Center[] centers = SuperPixelSegment.ReadCenter(sr.ReadToEnd());
                             //2.设置使用图层
                             CenterApplyForm centerApplyForm = new CenterApplyForm();
                             if (centerApplyForm.ShowDialog() == DialogResult.OK)
                             {
                                 ThreadStart s = delegate { RunCenter(centerApplyForm.FileNameCollection, centers); };
-                                Thread t = new Thread(s);
-                                t.IsBackground = true;
+                                Thread t = new Thread(s)
+                                {
+                                    IsBackground = true
+                                };
                                 t.Start();
                             }
                         }
@@ -385,25 +374,27 @@ namespace Host.Image.UI
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void map_treeView_Click(object sender, EventArgs e)
+        private void Map_treeView_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem item = sender as ToolStripMenuItem;
             Bitmap2 bmp2 = _imageDic[map_treeView.SelectedNode.Text];
             switch (item.Name)
             {
                 case "bandCombine_ToolStripMenuItem":
-                    BandForm bandModal = new BandForm();
-                    bandModal.GdalLayer = bmp2.GdalLayer;
+                    BandForm bandModal = new BandForm
+                    {
+                        GdalLayer = bmp2.GdalLayer
+                    };
                     if (bandModal.ShowDialog() == DialogResult.OK)
                     {
                         List<int> combineIndex = bandModal.BanCombineIndex;
-                        Bitmap layerBitmap = BitmapAndByte.ToRgbBitmap(
+                        Bitmap layerBitmap = GRGBCombine.Run(
                             bandModal.GdalLayer.BandCollection[combineIndex[0]].GetByteData(),
                             bandModal.GdalLayer.BandCollection[combineIndex[1]].GetByteData(),
                             bandModal.GdalLayer.BandCollection[combineIndex[2]].GetByteData());
-                        Bitmap2 layerBitmap2 = new Bitmap2(bmp: layerBitmap, name: bandModal.GdalLayer.LayerName, gdalLayer: bandModal.GdalLayer);
+                        Bitmap2 layerBitmap2 = new Bitmap2(bmp: layerBitmap, name: bandModal.GdalLayer.Name, gdalLayer: bandModal.GdalLayer);
                         //获取band对应的bitmap格式图像，载入treedNode中
-                        _imageDic[bandModal.GdalLayer.LayerName] = layerBitmap2;
+                        _imageDic[bandModal.GdalLayer.Name] = layerBitmap2;
                         map_pictureBox.Image = layerBitmap2.BMP;
                     }
                     break;
@@ -416,14 +407,14 @@ namespace Host.Image.UI
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void map_treeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void Map_treeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             //左键，选择图像显示
             if (e.Button == MouseButtons.Left)
             {
                 map_treeView.SelectedNode = e.Node;
                 _selectBmp2 = _imageDic[e.Node.Text];
-                map_pictureBox.Image = _selectBmp2 == null ? null : _selectBmp2.BMP;
+                map_pictureBox.Image = _selectBmp2?.BMP;
             }
             else if (e.Button == MouseButtons.Right)
             {

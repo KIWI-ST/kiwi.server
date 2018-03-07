@@ -117,15 +117,6 @@
       <Project>{243AA02C-FCA1-4490-A3D7-192422507E9B}</Project>
       <Name>Engine.GIS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Engine.Image\Engine.Image.csproj">
-      <Project>{90a56c3d-5542-41f5-a2ee-a723b2b221bd}</Project>
-      <Name>Engine.Image</Name>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </ProjectReference>
-    <ProjectReference Include="..\Engine.TensorFlow\Engine.Brain.csproj">
-      <Project>{9E30567F-445F-445D-A2B7-7479961D67AD}</Project>
-      <Name>Engine.Brain</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\alarm_64.png" />

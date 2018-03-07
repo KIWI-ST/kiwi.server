@@ -1,6 +1,6 @@
 ﻿using Engine.GIS.File;
 using Engine.GIS.GeoType;
-using Engine.GIS.Grid;
+
 using GeoAPI.Geometries;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;

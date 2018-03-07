@@ -180,7 +180,7 @@
       <Project>{243AA02C-FCA1-4490-A3D7-192422507E9B}</Project>
       <Name>Engine.GIS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Engine.TensorFlow\Engine.TensorFlow.csproj">
+    <ProjectReference Include="..\Engine.TensorFlow\Engine.Brain.csproj">
       <Project>{9e30567f-445f-445d-a2b7-7479961d67ad}</Project>
       <Name>Engine.TensorFlow</Name>
     </ProjectReference>
