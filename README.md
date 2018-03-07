@@ -4,6 +4,9 @@ base on orleans and .net framework
 ### Engine ####
 
 ### Engine.Crawler ###
+### Engine.Image ###
+>based on glda.ogr  
+you should copy x64 floder files to Debug 
 
 ### Engine.Mongo ###
 based on mongodb driver
