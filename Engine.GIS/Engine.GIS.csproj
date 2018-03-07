@@ -228,58 +228,6 @@
     <Folder Include="GOperation\Output\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="x64\cairo.dll" />
-    <Content Include="x64\cfitsio.dll" />
-    <Content Include="x64\expat.dll" />
-    <Content Include="x64\freexl.dll" />
-    <Content Include="x64\fribidi.dll" />
-    <Content Include="x64\gdal202.dll" />
-    <Content Include="x64\gdalconst_csharp.dll" />
-    <Content Include="x64\gdalconst_wrap.dll" />
-    <Content Include="x64\gdal_csharp.dll" />
-    <Content Include="x64\gdal_wrap.dll" />
-    <Content Include="x64\geos.dll" />
-    <Content Include="x64\geos_c.dll" />
-    <Content Include="x64\hdf5.dll" />
-    <Content Include="x64\hdf5_cpp.dll" />
-    <Content Include="x64\hdf5_hl.dll" />
-    <Content Include="x64\hdf5_hl_cpp.dll" />
-    <Content Include="x64\hdfdll.dll" />
-    <Content Include="x64\iconv.dll" />
-    <Content Include="x64\libcurl.dll" />
-    <Content Include="x64\libeay32.dll" />
-    <Content Include="x64\libecwj2.dll" />
-    <Content Include="x64\libfcgi.dll" />
-    <Content Include="x64\libkea.dll" />
-    <Content Include="x64\libmysql.dll" />
-    <Content Include="x64\libpq.dll" />
-    <Content Include="x64\libtiff.dll" />
-    <Content Include="x64\libxml2.dll" />
-    <Content Include="x64\lti_dsdk_9.5.dll" />
-    <Content Include="x64\lti_lidar_dsdk_1.1.dll" />
-    <Content Include="x64\mapserver.dll" />
-    <Content Include="x64\mfhdfdll.dll" />
-    <Content Include="x64\msplugin_mssql2008.dll" />
-    <Content Include="x64\msplugin_oracle.dll" />
-    <Content Include="x64\msvcp140.dll" />
-    <Content Include="x64\netcdf.dll" />
-    <Content Include="x64\ogr_csharp.dll" />
-    <Content Include="x64\ogr_wrap.dll" />
-    <Content Include="x64\openjp2.dll" />
-    <Content Include="x64\osr_csharp.dll" />
-    <Content Include="x64\osr_wrap.dll" />
-    <Content Include="x64\proj.dll" />
-    <Content Include="x64\spatialite.dll" />
-    <Content Include="x64\sqlite3.dll" />
-    <Content Include="x64\ssleay32.dll" />
-    <Content Include="x64\szip.dll" />
-    <Content Include="x64\tbb.dll" />
-    <Content Include="x64\vcruntime140.dll" />
-    <Content Include="x64\xdrdll.dll" />
-    <Content Include="x64\xerces-c_3_1.dll" />
-    <Content Include="x64\zlib1.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
