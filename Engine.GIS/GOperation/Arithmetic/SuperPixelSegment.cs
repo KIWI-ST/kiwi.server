@@ -59,7 +59,7 @@ namespace Engine.GIS.GOperation.Arithmetic
             PixelData = new double[Height, Width];
         }
 
-        public void max()
+        public void Max()
         {
             for (int y = 0; y < this.Height; ++y)
                 for (int x = 0; x < this.Width; ++x)
@@ -76,7 +76,7 @@ namespace Engine.GIS.GOperation.Arithmetic
             PixelData[y, x] = value;
         }
 
-        internal void setAllTo(double v)
+        internal void SetAllTo(double v)
         {
             for (int y = 0; y < this.Height; ++y)
                 for (int x = 0; x < this.Width; ++x)
@@ -257,12 +257,12 @@ namespace Engine.GIS.GOperation.Arithmetic
             double S = Math.Sqrt((image.Width * image.Height) / numberOfCenters);
             Center[] centers = CreateCenters(image, numberOfCenters, S);
             Bitplane labels = new Bitplane(image.Width, image.Height);
-            labels.setAllTo(-1);
+            labels.SetAllTo(-1);
 
             for (int iteration = 0; iteration < 10; iteration++)
             {
                 Bitplane lenghts = new Bitplane(image.Width, image.Height);
-                lenghts.max();
+                lenghts.Max();
 
                 int i = 0;
                 foreach (Center center in centers)

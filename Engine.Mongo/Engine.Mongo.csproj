@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6F5AD85E-BB07-4D4F-BEE1-46E10F2A91C4}</ProjectGuid>
+    <ProjectGuid>{8D006EAC-E455-4651-B9AD-BE28BECBBC9A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Engine.Mongo</RootNamespace>
     <AssemblyName>Engine.Mongo</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,7 +20,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -49,7 +47,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Buffers.4.4.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
+      <HintPath>..\packages\System.Buffers.4.4.0\lib\netstandard1.1\System.Buffers.dll</HintPath>
     </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Linq.Dynamic, Version=1.0.6132.35681, Culture=neutral, processorArchitecture=MSIL">
@@ -57,7 +55,6 @@
     </Reference>
     <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -68,6 +65,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entity\Entity.cs" />
+    <Compile Include="Entity\Interface\IDate.cs" />
+    <Compile Include="Entity\Interface\IExprie.cs" />
+    <Compile Include="Entity\Interface\Inspect.cs" />
+    <Compile Include="Entity\Interface\IVerify.cs" />
     <Compile Include="Entity\MongoEntity.cs" />
     <Compile Include="Entity\MongoEntity2.cs" />
     <Compile Include="Extend\DictionaryExtend.cs" />
@@ -75,10 +76,6 @@
     <Compile Include="Extend\ListExtend.cs" />
     <Compile Include="Extend\StringExtend.cs" />
     <Compile Include="Extend\TypeExtend.cs" />
-    <Compile Include="Entity\Interface\Inspect.cs" />
-    <Compile Include="Entity\Interface\IDate.cs" />
-    <Compile Include="Entity\Interface\IExprie.cs" />
-    <Compile Include="Entity\Interface\IVerify.cs" />
     <Compile Include="Operation\Interface\IMongoOperation.cs" />
     <Compile Include="Operation\Interface\IPullToMemoryOperation.cs" />
     <Compile Include="Operation\Interface\IPushToMongoOperation.cs" />
@@ -93,6 +90,5 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

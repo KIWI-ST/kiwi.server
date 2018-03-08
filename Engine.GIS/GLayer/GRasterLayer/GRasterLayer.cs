@@ -15,12 +15,8 @@ namespace Engine.GIS.GLayer.GRasterLayer
         /// <param name="rasterFilename"></param>
         public GRasterLayer(string rasterFilename)
         {
-            //注册初始化GDAL
-            if (!GPackage.GDAL_INITED)
-            {
-                Gdal.AllRegister();
-                GPackage.GDAL_INITED = true;
-            }
+            //注册gdal库
+            Gdal.AllRegister();
             //图层名
             _name = Path.GetFileNameWithoutExtension(rasterFilename);
             //只读方式读取图层

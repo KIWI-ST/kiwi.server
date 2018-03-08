@@ -60,11 +60,11 @@ namespace Engine.GIS.GOperation
         //web墨卡托投影
         WebMercatorProjection _projection = new WebMercatorProjection();
         //格网瓦片缓存，缩放层级 : 瓦片集合
-        Dictionary<int, List<GTile>> _tileDictionary = new Dictionary<int, List<GTile>>();
+        Dictionary<int, List<GTileElement>> _tileDictionary = new Dictionary<int, List<GTileElement>>();
         /// <summary>
         /// 格网瓦片缓存，缩放层级 : 瓦片集合
         /// </summary>
-        public Dictionary<int, List<GTile>> TileDictionary { get => _tileDictionary; }
+        public Dictionary<int, List<GTileElement>> TileDictionary { get => _tileDictionary; }
         /// <summary>
         /// web墨卡托投影
         /// </summary>
@@ -83,7 +83,7 @@ namespace Engine.GIS.GOperation
             if (_tileDictionary.ContainsKey(zoom))
                 _tileDictionary[zoom].Clear();
             else
-                _tileDictionary[zoom] = new List<GTile>();
+                _tileDictionary[zoom] = new List<GTileElement>();
             //1.获取坐上右下坐标
             Coordinate p0 = bound.Min;
             Coordinate p1 = bound.Max;
@@ -108,7 +108,7 @@ namespace Engine.GIS.GOperation
                     coordinates.Add(_projection.PointToLatLng(new Coordinate(i * 256, j * 256), zoom));
                     coordinates.Add(_projection.PointToLatLng(new Coordinate(i * 256 + 256, j * 256 + 256), zoom));
                     //
-                    GTile tile = new GTile()
+                    GTileElement tile = new GTileElement()
                     {
                         X = i,
                         Y = j,

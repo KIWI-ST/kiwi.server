@@ -4,7 +4,7 @@
     /// 瓦片
     /// @author yellow  date 2017/11/9
     /// </summary>
-    public class GTile
+    public class GTileElement
     {
         /// <summary>
         /// X 方向coordinate 编号
