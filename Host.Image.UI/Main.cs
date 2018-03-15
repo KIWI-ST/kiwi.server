@@ -1,18 +1,19 @@
-﻿using System;
+﻿using Engine.Brain.Bootstrap;
+using Engine.GIS.Entity;
+using Engine.GIS.GLayer.GRasterLayer;
+using Engine.GIS.GLayer.GRasterLayer.GBand;
+using Engine.GIS.GOperation.Arithmetic;
+using Host.Image.UI.SettingForm;
+using Host.Image.UI.SettingForm.SLIC;
+using OfficeOpenXml;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using Host.Image.UI.SettingForm;
-using Host.Image.UI.SettingForm.SLIC;
-using System.Data;
-using OfficeOpenXml;
-using Engine.GIS.Entity;
-using Engine.GIS.GLayer.GRasterLayer;
-using Engine.GIS.GLayer.GRasterLayer.GBand;
-using Engine.GIS.GOperation.Arithmetic;
 
 namespace Host.Image.UI
 {
@@ -36,6 +37,7 @@ namespace Host.Image.UI
         public Main()
         {
             InitializeComponent();
+            TensorflowBootstrap bootstrap = new TensorflowBootstrap(System.IO.Directory.GetCurrentDirectory() + @"\Modal\Tensorflow\frozen_model.pb");
             //GdalConfiguration
         }
 

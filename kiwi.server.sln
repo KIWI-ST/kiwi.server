@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.GIS", "Engine.GIS\En
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Mongo", "Engine.Mongo\Engine.Mongo.csproj", "{8D006EAC-E455-4651-B9AD-BE28BECBBC9A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Brain", "Engine.Brain\Engine.Brain.csproj", "{F1D8819A-EB82-46F4-950D-E8732586AF8E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -111,6 +113,14 @@ Global
 		{8D006EAC-E455-4651-B9AD-BE28BECBBC9A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8D006EAC-E455-4651-B9AD-BE28BECBBC9A}.Release|x86.ActiveCfg = Release|Any CPU
 		{8D006EAC-E455-4651-B9AD-BE28BECBBC9A}.Release|x86.Build.0 = Release|Any CPU
+		{F1D8819A-EB82-46F4-950D-E8732586AF8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1D8819A-EB82-46F4-950D-E8732586AF8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1D8819A-EB82-46F4-950D-E8732586AF8E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F1D8819A-EB82-46F4-950D-E8732586AF8E}.Debug|x86.Build.0 = Debug|Any CPU
+		{F1D8819A-EB82-46F4-950D-E8732586AF8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1D8819A-EB82-46F4-950D-E8732586AF8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1D8819A-EB82-46F4-950D-E8732586AF8E}.Release|x86.ActiveCfg = Release|Any CPU
+		{F1D8819A-EB82-46F4-950D-E8732586AF8E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -125,6 +135,7 @@ Global
 		{688588C8-B6A2-43FE-A7BF-272A515725BF} = {4B5B0396-A5BC-44D4-AAF4-A0037E20E77D}
 		{82B3CFC7-E05C-46D3-9E91-2F5F4495238E} = {4B5B0396-A5BC-44D4-AAF4-A0037E20E77D}
 		{8D006EAC-E455-4651-B9AD-BE28BECBBC9A} = {4B5B0396-A5BC-44D4-AAF4-A0037E20E77D}
+		{F1D8819A-EB82-46F4-950D-E8732586AF8E} = {4B5B0396-A5BC-44D4-AAF4-A0037E20E77D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CB9A02C6-D683-48EF-8ECA-4E587D75D2F9}
