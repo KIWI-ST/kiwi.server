@@ -72,6 +72,20 @@ namespace Engine.GIS.GLayer.GRasterLayer
         /// 波段集合
         /// </summary>
         public List<IGBand> BandCollection { get => _bandCollection;}
+        /// <summary>
+        /// 获取rasterLayer
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public List<byte> GetPixel(int x, int y)
+        {
+            List<byte> pixels = new List<byte>();
+            for(int i = 0; i < BandCount; i++)
+                pixels.Add(BandCollection[i].GetByteData()[x, y]);
+            return pixels;
+        }
+
         #endregion
 
     }

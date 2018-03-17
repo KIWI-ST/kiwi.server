@@ -37,7 +37,7 @@ namespace Host.Image.UI
         public Main()
         {
             InitializeComponent();
-            TensorflowBootstrap bootstrap = new TensorflowBootstrap(System.IO.Directory.GetCurrentDirectory() + @"\Modal\Tensorflow\frozen_model.pb");
+            //TensorflowBootstrap bootstrap = new TensorflowBootstrap(System.IO.Directory.GetCurrentDirectory() + @"\Modal\Tensorflow\frozen_model.pb");
             //GdalConfiguration
         }
 
@@ -315,6 +315,17 @@ namespace Host.Image.UI
             ToolStripItem item = sender as ToolStripItem;
             switch (item.Name)
             {
+                case "DL_CLASS_toolStripButton":
+                    //1.选择处理那副图像
+                    string imageName = map_treeView.SelectedNode.Text;
+                    Bitmap2 imageBitmap2 = _imageDic[imageName];
+                    GRasterLayer rasterLayer = imageBitmap2.GdalLayer;
+                    //2.获取波段
+                    var  input = rasterLayer.GetPixel(0, 0);
+                    
+                    //4.分类结存存储
+                    //5.分类结果可视化
+                    break;
                 case "open_toolstripmenuitem"://添加图像
                     ReadImage();
                     break;

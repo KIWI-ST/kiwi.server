@@ -13,11 +13,11 @@ namespace Engine.Brain.Bootstrap
             //
             using (var graph = new TFGraph())
             {
-                var model = File.ReadAllBytes(modalFilename);
+                var model = File.ReadAllBytes(modalFilename); 
                 graph.Import(new TFBuffer(model));
                 using (var session = new TFSession(graph))
                 {
-                    var tensor = ImageUtil.CreateTensorFromImageFile(@"D:\Workspace\timg.jpg", TFDataType.Float);
+                    var tensor = ImageUtil.CreateTensorFromImageFile(@"D:\coordinate_systems.jpg", TFDataType.Float);
                     //1.get runner
                     var runner = session.GetRunner();
                     var t0 =  graph["input"][0];

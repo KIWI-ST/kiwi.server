@@ -55,10 +55,10 @@
     <Compile Include="IBootstrap.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Modal\Tensorflow\graph.pb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Modal\Tensorflow\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\TensorFlowSharp.1.5.0\build\net45\TensorFlowSharp.targets" Condition="Exists('..\packages\TensorFlowSharp.1.5.0\build\net45\TensorFlowSharp.targets')" />

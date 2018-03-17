@@ -54,6 +54,7 @@
             this.open_contextMenuStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.tree_contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.bandCombine_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DL_CLASS_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.map_menuStrip.SuspendLayout();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
@@ -130,7 +131,8 @@
             // 
             this.map_toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.SLIC_toolStripButton,
-            this.SLIC_Center_toolStripButton});
+            this.SLIC_Center_toolStripButton,
+            this.DL_CLASS_toolStripButton});
             this.map_toolStrip.Location = new System.Drawing.Point(0, 25);
             this.map_toolStrip.Name = "map_toolStrip";
             this.map_toolStrip.Size = new System.Drawing.Size(887, 40);
@@ -304,6 +306,16 @@
             this.bandCombine_ToolStripMenuItem.Text = "波段合成";
             this.bandCombine_ToolStripMenuItem.Click += new System.EventHandler(this.Map_treeView_Click);
             // 
+            // DL_CLASS_toolStripButton
+            // 
+            this.DL_CLASS_toolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("DL_CLASS_toolStripButton.Image")));
+            this.DL_CLASS_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.DL_CLASS_toolStripButton.Name = "DL_CLASS_toolStripButton";
+            this.DL_CLASS_toolStripButton.Size = new System.Drawing.Size(60, 37);
+            this.DL_CLASS_toolStripButton.Text = "图像分类";
+            this.DL_CLASS_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.DL_CLASS_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -365,6 +377,7 @@
         private System.Windows.Forms.ToolStripMenuItem SLIC_Center_toolStripMenu;
         private System.Windows.Forms.ToolStripButton SLIC_toolStripButton;
         private System.Windows.Forms.ToolStripButton SLIC_Center_toolStripButton;
+        private System.Windows.Forms.ToolStripButton DL_CLASS_toolStripButton;
     }
 }
 
