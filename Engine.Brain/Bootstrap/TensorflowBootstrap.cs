@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using Engine.Brain.Utils;
+using System.IO;
 using TensorFlow;
 
 namespace Engine.Brain.Bootstrap
@@ -6,26 +7,28 @@ namespace Engine.Brain.Bootstrap
     public class TensorflowBootstrap : IBootstrap
     {
         string _modalFilename;
+        TFGraph _graph;
+        byte[] _model;
+        TFSession _session;
 
         public TensorflowBootstrap(string modalFilename)
         {
             _modalFilename = modalFilename;
-            //
-            using (var graph = new TFGraph())
-            {
-                var model = File.ReadAllBytes(modalFilename); 
-                graph.Import(new TFBuffer(model));
-                using (var session = new TFSession(graph))
-                {
-                    var tensor = ImageUtil.CreateTensorFromImageFile(@"D:\coordinate_systems.jpg", TFDataType.Float);
-                    //1.get runner
-                    var runner = session.GetRunner();
-                    var t0 =  graph["input"][0];
-                    //2.add input out put
-                    runner.AddInput(graph["input"][0], tensor).Fetch(graph["logit/output"][0]);
-                    var output = runner.Run();
-                }
-            }
+            _graph = new TFGraph();
+            _model = File.ReadAllBytes(modalFilename);
+            _graph.Import(new TFBuffer(_model));
+            _session = new TFSession(_graph);
         }
+
+        public object Classify(byte[] input, ShapeEnum shapeEnum)
+        {
+            var tensor = TensorFactory.Create(input, ShapeEnum.TEN_TEN);
+            var runner = _session.GetRunner();
+            var t0 = _graph["input"][0];
+            runner.AddInput(_graph["input"][0], tensor).Fetch(_graph["logit/output"][0]);
+            var output = runner.Run();
+            return output.GetValue(0);
+        }
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Engine.Brain.Bootstrap;
+using Engine.Brain.Utils;
 using Engine.GIS.Entity;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GLayer.GRasterLayer.GBand;
@@ -321,8 +322,10 @@ namespace Host.Image.UI
                     Bitmap2 imageBitmap2 = _imageDic[imageName];
                     GRasterLayer rasterLayer = imageBitmap2.GdalLayer;
                     //2.获取波段
-                    var  input = rasterLayer.GetPixel(0, 0);
-                    
+                    var input = rasterLayer.GetPixel(0, 0).ToArray();
+                    var model = new TensorflowBootstrap("");
+                    model.Classify(input, ShapeEnum.TEN_TEN);
+                    var result =  TensorFactory.Create(input, ShapeEnum.TEN_TEN);
                     //4.分类结存存储
                     //5.分类结果可视化
                     break;
