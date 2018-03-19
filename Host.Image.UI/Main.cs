@@ -59,6 +59,29 @@ namespace Host.Image.UI
         #endregion
 
         #region 算法执行
+        /// <summary>
+        /// 应用深度学习模型进行分类
+        /// </summary>
+        /// <param name="rasterLayer"></param>
+        private void RunClassify(GRasterLayer rasterLayer)
+        {
+            //构建结果图层，用于动态绘制
+            Bitmap bmp = new Bitmap(rasterLayer.XSize, rasterLayer.YSize);
+            string nodeName = rasterLayer.Name + "结果图层";
+            TreeNode childrenNode = new TreeNode(nodeName);
+            _imageDic.Add(nodeName, new Bitmap2(name:nodeName,bmp:bmp));
+            Invoke(new UpdateTreeNodeHandler(UpdateTreeNode), null, childrenNode);
+            //获取波段
+            var model = new TensorflowBootstrap(Directory.GetCurrentDirectory() + @"\Modal\Tensorflow\frozen_model.pb");
+            for (int i = 0; i < rasterLayer.XSize; i++)
+                for (int j = 0; j < rasterLayer.YSize; j++)
+                {
+                    float[] input = rasterLayer.GetPixelFloat(i, j).ToArray();
+                    long classified = model.Classify(input, ShapeEnum.TEN_TEN);
+                    Invoke(new PaintPointHandler(PaintPoint), bmp, i, j, Convert.ToByte(classified * 20));
+                    Invoke(new UpdateStatusLabelHandler(UpdateStatusLabel), "应用分类中，总进度："+i+"列"+j+"行", STATUE_ENUM.WARNING);
+                }
+        }
 
         /// <summary>
         /// }{小萌娃记得改哟
@@ -196,10 +219,32 @@ namespace Host.Image.UI
         private void UpdateTreeNode(TreeNode parentNode, TreeNode childrenNode)
         {
             //1.更新左侧视图
-            parentNode.Nodes.Add(childrenNode);
-            parentNode.Expand();
+            if(parentNode != null)
+            {
+                parentNode.Nodes.Add(childrenNode);
+                parentNode.Expand();
+            }
+            else
+                map_treeView.Nodes.Add(childrenNode);
             //2.应对picture更新
             map_pictureBox.Image = _imageDic[childrenNode.Text].BMP;
+        }
+        /// <summary>
+        /// 绘制图像
+        /// </summary>
+        /// <param name="bmp"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="value"></param>
+        private void PaintPoint(Bitmap bmp, int x, int y, byte value)
+        {
+            Graphics g = Graphics.FromImage(bmp);
+            Color c = Color.FromArgb(value, value, value);
+            Pen p = new Pen(c);
+            SolidBrush brush = new SolidBrush(c);
+            g.FillRectangle(brush, new Rectangle(x, y, 1, 1));
+            //g.DrawLine(Pens.Black, new Point(x, y), new Point(bmp.Width, bmp.Height));
+            map_pictureBox.Image = bmp;
         }
         /// <summary>
         /// 更新树视图委托
@@ -228,6 +273,14 @@ namespace Host.Image.UI
         /// <param name="msg"></param>
         /// <param name="statue"></param>
         private delegate void UpdateStatusLabelHandler(string msg, STATUE_ENUM statue = STATUE_ENUM.NORMAL);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bmp"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="value"></param>
+        private delegate void PaintPointHandler(Bitmap bmp, int x, int y, byte value);
 
         #endregion
 
@@ -321,13 +374,10 @@ namespace Host.Image.UI
                     string imageName = map_treeView.SelectedNode.Text;
                     Bitmap2 imageBitmap2 = _imageDic[imageName];
                     GRasterLayer rasterLayer = imageBitmap2.GdalLayer;
-                    //2.获取波段
-                    var input = rasterLayer.GetPixel(0, 0).ToArray();
-                    var model = new TensorflowBootstrap("");
-                    model.Classify(input, ShapeEnum.TEN_TEN);
-                    var result =  TensorFactory.Create(input, ShapeEnum.TEN_TEN);
-                    //4.分类结存存储
-                    //5.分类结果可视化
+                    ThreadStart clsfy_ts = delegate { RunClassify(rasterLayer); };
+                    Thread clsfy_t = new Thread(clsfy_ts);
+                    clsfy_t.IsBackground = true;
+                    clsfy_t.Start();
                     break;
                 case "open_toolstripmenuitem"://添加图像
                     ReadImage();
@@ -341,12 +391,10 @@ namespace Host.Image.UI
                     Bitmap bmp = map_pictureBox.Image as Bitmap;
                     if (bmp != null)
                     {
-                        ThreadStart s = delegate { RunSLIC(bmp); };
-                        Thread t = new Thread(s)
-                        {
-                            IsBackground = true
-                        };
-                        t.Start();
+                        ThreadStart slic_ts = delegate { RunSLIC(bmp); };
+                        Thread slic_t = new Thread(slic_ts);
+                        slic_t.IsBackground = true;
+                        slic_t.Start();
                     }
                     else
                     {

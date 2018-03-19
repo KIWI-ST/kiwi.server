@@ -20,14 +20,14 @@ namespace Engine.Brain.Bootstrap
             _session = new TFSession(_graph);
         }
 
-        public object Classify(byte[] input, ShapeEnum shapeEnum)
+        public long Classify(float[] input, ShapeEnum shapeEnum)
         {
             var tensor = TensorFactory.Create(input, ShapeEnum.TEN_TEN);
             var runner = _session.GetRunner();
             var t0 = _graph["input"][0];
             runner.AddInput(_graph["input"][0], tensor).Fetch(_graph["logit/output"][0]);
             var output = runner.Run();
-            return output.GetValue(0);
+            return output[0].Shape[0];
         }
 
     }

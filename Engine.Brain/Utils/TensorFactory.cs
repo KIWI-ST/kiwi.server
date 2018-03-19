@@ -19,25 +19,27 @@ namespace Engine.Brain.Utils
         const int W10 = 10, H10 = 10;
 
         // Convert the image in filename to a Tensor suitable as input to the Inception model.
-        public static TFTensor CreateTensorFromImageFile(byte[] contents, ShapeEnum resolution, TFDataType destinationDataType = TFDataType.Int32)
+        public static TFTensor CreateTensorFromImageFile(float[] contents, ShapeEnum resolution, TFDataType destinationDataType = TFDataType.Int32)
         {
+            var shape = new TFShape(1, 10, 10, 1);
             // DecodeJpeg uses a scalar String-valued tensor as input.
-            var tensor = TFTensor.CreateString(contents);
-            TFOutput input, output;
-            // Construct a graph to normalize the image
-            using (var graph = ConstructGraphToNormalizeImage(out input, out output, resolution, destinationDataType))
-            {
-                // Execute that graph to normalize this one image
-                using (var session = new TFSession(graph))
-                {
-                    var normalized = session.Run(
-                        inputs: new[] { input },
-                        inputValues: new[] { tensor },
-                        outputs: new[] { output });
-                    //
-                    return normalized[0];
-                }
-            }
+            var tensor = TFTensor.FromBuffer(shape, contents,0,contents.Length);
+            //TFOutput input, output;
+            //// Construct a graph to normalize the image
+            //using (var graph = ConstructGraphToNormalizeImage(out input, out output, resolution, destinationDataType))
+            //{
+            //    // Execute that graph to normalize this one image
+            //    using (var session = new TFSession(graph))
+            //    {
+            //        var normalized = session.Run(
+            //            inputs: new[] { input },
+            //            inputValues: new[] { tensor },
+            //            outputs: new[] { output });
+            //        //
+            //        return normalized[0];
+            //    }
+            //}
+            return tensor;
         }
         // The inception model takes as input the image described by a Tensor in a very
         // specific normalized format (a particular image size, shape of the input tensor,
@@ -74,8 +76,8 @@ namespace Engine.Brain.Utils
                 x: graph.Sub(
                     x: graph.ResizeBilinear(
                         images: graph.ExpandDims(
-                            input: graph.Cast(
-                                graph.DecodeJpeg(contents: input, channels: 1), DstT: TFDataType.Float),
+                              //input: graph.Cast(graph.DecodeJpeg(contents: input, channels: 1), DstT: TFDataType.Float),
+                            input: graph.Cast(input, DstT: TFDataType.Float),
                             dim: graph.Const(0, "make_batch")),
                         size: graph.Const(shapeSize, "size")),
                     y: graph.Const(Mean, "mean")),
@@ -87,7 +89,7 @@ namespace Engine.Brain.Utils
 
     public class TensorFactory
     {
-        public static TFTensor Create(byte[] input, ShapeEnum resolution)
+        public static TFTensor Create(float[] input, ShapeEnum resolution)
         {
             return ImageUtil.CreateTensorFromImageFile(input, resolution);
         }

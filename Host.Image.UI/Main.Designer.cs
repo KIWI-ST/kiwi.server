@@ -39,6 +39,7 @@
             this.map_toolStrip = new System.Windows.Forms.ToolStrip();
             this.SLIC_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.SLIC_Center_toolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.DL_CLASS_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.map_statusStrip = new System.Windows.Forms.StatusStrip();
             this.empty_statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.map_processBar = new System.Windows.Forms.ToolStripProgressBar();
@@ -54,7 +55,6 @@
             this.open_contextMenuStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.tree_contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.bandCombine_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.DL_CLASS_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.map_menuStrip.SuspendLayout();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
@@ -160,6 +160,16 @@
             this.SLIC_Center_toolStripButton.Text = "中心提取";
             this.SLIC_Center_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.SLIC_Center_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
+            // 
+            // DL_CLASS_toolStripButton
+            // 
+            this.DL_CLASS_toolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("DL_CLASS_toolStripButton.Image")));
+            this.DL_CLASS_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.DL_CLASS_toolStripButton.Name = "DL_CLASS_toolStripButton";
+            this.DL_CLASS_toolStripButton.Size = new System.Drawing.Size(60, 37);
+            this.DL_CLASS_toolStripButton.Text = "图像分类";
+            this.DL_CLASS_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.DL_CLASS_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
             // 
             // map_statusStrip
             // 
@@ -305,16 +315,6 @@
             this.bandCombine_ToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
             this.bandCombine_ToolStripMenuItem.Text = "波段合成";
             this.bandCombine_ToolStripMenuItem.Click += new System.EventHandler(this.Map_treeView_Click);
-            // 
-            // DL_CLASS_toolStripButton
-            // 
-            this.DL_CLASS_toolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("DL_CLASS_toolStripButton.Image")));
-            this.DL_CLASS_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.DL_CLASS_toolStripButton.Name = "DL_CLASS_toolStripButton";
-            this.DL_CLASS_toolStripButton.Size = new System.Drawing.Size(60, 37);
-            this.DL_CLASS_toolStripButton.Text = "图像分类";
-            this.DL_CLASS_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.DL_CLASS_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
             // 
             // Main
             // 
