@@ -1,4 +1,5 @@
 ﻿using Engine.Brain.Utils;
+using System;
 using System.IO;
 using TensorFlow;
 
@@ -27,7 +28,8 @@ namespace Engine.Brain.Bootstrap
             var t0 = _graph["input"][0];
             runner.AddInput(_graph["input"][0], tensor).Fetch(_graph["logit/output"][0]);
             var output = runner.Run();
-            return output[0].Shape[0];
+            long[] reslut = output[0].GetValue(jagged: false) as long[];
+            return reslut[0];
         }
 
     }
