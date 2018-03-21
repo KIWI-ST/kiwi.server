@@ -55,6 +55,8 @@
             this.open_contextMenuStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.tree_contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.bandCombine_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.Export_Bitmap_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.map_menuStrip.SuspendLayout();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
@@ -87,7 +89,9 @@
             // 文件FToolStripMenuItem
             // 
             this.文件FToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.open_toolstripmenuitem});
+            this.open_toolstripmenuitem,
+            this.toolStripMenuItem1,
+            this.Export_Bitmap_ToolStripMenuItem});
             this.文件FToolStripMenuItem.Name = "文件FToolStripMenuItem";
             this.文件FToolStripMenuItem.Size = new System.Drawing.Size(58, 21);
             this.文件FToolStripMenuItem.Text = "文件(&F)";
@@ -98,7 +102,7 @@
             this.open_toolstripmenuitem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.open_toolstripmenuitem.Name = "open_toolstripmenuitem";
             this.open_toolstripmenuitem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.open_toolstripmenuitem.Size = new System.Drawing.Size(165, 22);
+            this.open_toolstripmenuitem.Size = new System.Drawing.Size(180, 22);
             this.open_toolstripmenuitem.Text = "打开(&O)";
             this.open_toolstripmenuitem.Click += new System.EventHandler(this.Map_function_Click);
             // 
@@ -316,6 +320,18 @@
             this.bandCombine_ToolStripMenuItem.Text = "波段合成";
             this.bandCombine_ToolStripMenuItem.Click += new System.EventHandler(this.Map_treeView_Click);
             // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(177, 6);
+            // 
+            // Export_Bitmap_ToolStripMenuItem
+            // 
+            this.Export_Bitmap_ToolStripMenuItem.Name = "Export_Bitmap_ToolStripMenuItem";
+            this.Export_Bitmap_ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.Export_Bitmap_ToolStripMenuItem.Text = "导出图片";
+            this.Export_Bitmap_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -378,6 +394,8 @@
         private System.Windows.Forms.ToolStripButton SLIC_toolStripButton;
         private System.Windows.Forms.ToolStripButton SLIC_Center_toolStripButton;
         private System.Windows.Forms.ToolStripButton DL_CLASS_toolStripButton;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem Export_Bitmap_ToolStripMenuItem;
     }
 }
 

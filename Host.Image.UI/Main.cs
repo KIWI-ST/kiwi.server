@@ -151,14 +151,10 @@ namespace Host.Image.UI
         private void SaveBitmap(Bitmap bmp)
         {
             UpdateStatusLabel("保存.jpg结果文件");
-            SaveFileDialog sfg = new SaveFileDialog
-            {
-                DefaultExt = ".jpg"
-            };
+            SaveFileDialog sfg = new SaveFileDialog();
+            sfg.DefaultExt = ".jpg";
             if (sfg.ShowDialog() == DialogResult.OK)
-            {
                 bmp.Save(sfg.FileName);
-            }
         }
         /// <summary>
         /// 保存Excel结果
@@ -369,6 +365,11 @@ namespace Host.Image.UI
             ToolStripItem item = sender as ToolStripItem;
             switch (item.Name)
             {
+                case "Export_Bitmap_ToolStripMenuItem":
+                    Bitmap saveBmp = map_pictureBox.Image as Bitmap;
+                    SaveBitmap(saveBmp);
+                    //导出图片
+                    break;
                 case "DL_CLASS_toolStripButton":
                     //1.选择处理那副图像
                     string imageName = map_treeView.SelectedNode.Text;
