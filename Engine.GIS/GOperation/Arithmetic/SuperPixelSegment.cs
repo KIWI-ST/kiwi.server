@@ -10,7 +10,8 @@ namespace Engine.GIS.GOperation.Arithmetic
 
     public class SLICPKG
     {
-        public Bitmap BMP { get; set; }
+        public Bitmap Average { get; set; }
+        public Bitmap Edge { get; set; }
         public string CENTER { get; set; }
     }
 
@@ -296,11 +297,16 @@ namespace Engine.GIS.GOperation.Arithmetic
             image = DrawEdges(image, centers, labels, edgeColor);
             image.LABtoRGB();
             processedImages[0] = image.GetBitmap(); // Segmented with Edge
+            image = DrawAverage(image, centers, labels);
+            image.LABtoRGB();
+            processedImages[1] = image.GetBitmap();
+
             string centerText = Newtonsoft.Json.JsonConvert.SerializeObject(centers);
             //
             return new SLICPKG()
             {
-                BMP = processedImages[0],
+                Edge = processedImages[0],
+                Average = processedImages[1],
                 CENTER = centerText,
             };
         }

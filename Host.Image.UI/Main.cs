@@ -118,7 +118,8 @@ namespace Host.Image.UI
             Invoke(new UpdateStatusLabelHandler(UpdateStatusLabel), "超像素中心计算开始...", STATUE_ENUM.WARNING);
             SLICPKG pkg = SuperPixelSegment.Run(bmp, 3000, 3, Color.White);
             Invoke(new SaveJsonHandler(SaveJson), pkg.CENTER);
-            Invoke(new SaveBitmapHandler(SaveBitmap), pkg.BMP);
+            Invoke(new SaveBitmapHandler(SaveBitmap), pkg.Edge);
+            Invoke(new SaveBitmapHandler(SaveBitmap), pkg.Average);
         }
 
         #endregion
