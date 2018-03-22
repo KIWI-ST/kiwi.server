@@ -33,6 +33,8 @@
             this.map_menuStrip = new System.Windows.Forms.MenuStrip();
             this.文件FToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.open_toolstripmenuitem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.Export_Bitmap_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.工具TToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SLIC_toolStripMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.SLIC_Center_toolStripMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -55,8 +57,6 @@
             this.open_contextMenuStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.tree_contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.bandCombine_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-            this.Export_Bitmap_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.map_menuStrip.SuspendLayout();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
@@ -102,9 +102,21 @@
             this.open_toolstripmenuitem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.open_toolstripmenuitem.Name = "open_toolstripmenuitem";
             this.open_toolstripmenuitem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.open_toolstripmenuitem.Size = new System.Drawing.Size(180, 22);
+            this.open_toolstripmenuitem.Size = new System.Drawing.Size(165, 22);
             this.open_toolstripmenuitem.Text = "打开(&O)";
             this.open_toolstripmenuitem.Click += new System.EventHandler(this.Map_function_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(162, 6);
+            // 
+            // Export_Bitmap_ToolStripMenuItem
+            // 
+            this.Export_Bitmap_ToolStripMenuItem.Name = "Export_Bitmap_ToolStripMenuItem";
+            this.Export_Bitmap_ToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.Export_Bitmap_ToolStripMenuItem.Text = "导出图片";
+            this.Export_Bitmap_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
             // 工具TToolStripMenuItem
             // 
@@ -319,18 +331,6 @@
             this.bandCombine_ToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
             this.bandCombine_ToolStripMenuItem.Text = "波段合成";
             this.bandCombine_ToolStripMenuItem.Click += new System.EventHandler(this.Map_treeView_Click);
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(177, 6);
-            // 
-            // Export_Bitmap_ToolStripMenuItem
-            // 
-            this.Export_Bitmap_ToolStripMenuItem.Name = "Export_Bitmap_ToolStripMenuItem";
-            this.Export_Bitmap_ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.Export_Bitmap_ToolStripMenuItem.Text = "导出图片";
-            this.Export_Bitmap_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
             // Main
             // 

@@ -77,6 +77,12 @@
     <Compile Include="SettingForm\BandForm.Designer.cs">
       <DependentUpon>BandForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="SettingForm\DLClassifyForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingForm\DLClassifyForm.Designer.cs">
+      <DependentUpon>DLClassifyForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="SettingForm\SLIC\CenterApplyForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -98,6 +104,9 @@
     </Compile>
     <EmbeddedResource Include="SettingForm\BandForm.resx">
       <DependentUpon>BandForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingForm\DLClassifyForm.resx">
+      <DependentUpon>DLClassifyForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingForm\SLIC\CenterApplyForm.resx">
       <DependentUpon>CenterApplyForm.cs</DependentUpon>

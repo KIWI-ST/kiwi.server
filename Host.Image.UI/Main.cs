@@ -63,26 +63,32 @@ namespace Host.Image.UI
         /// 应用深度学习模型进行分类
         /// </summary>
         /// <param name="rasterLayer"></param>
-        private void RunClassify(GRasterLayer rasterLayer)
+        private void RunClassify(GRasterLayer rasterLayer,bool useSLIC,string pbName,string centerName,string labelName)
         {
-            //构建结果图层，用于动态绘制
-            Bitmap bmp = new Bitmap(rasterLayer.XSize, rasterLayer.YSize);
-            string nodeName = rasterLayer.Name + "结果图层";
-            TreeNode childrenNode = new TreeNode(nodeName);
-            _imageDic.Add(nodeName, new Bitmap2(name:nodeName,bmp:bmp));
-            Invoke(new UpdateTreeNodeHandler(UpdateTreeNode), null, childrenNode);
-            //获取波段
-            var model = new TensorflowBootstrap(Directory.GetCurrentDirectory() + @"\Modal\Tensorflow\frozen_model.pb");
-            for (int i = 0; i < rasterLayer.XSize; i++)
-                for (int j = 0; j < rasterLayer.YSize; j++)
+                if (!useSLIC)
                 {
-                    float[] input = rasterLayer.GetPixelFloat(i, j).ToArray();
-                    long classified = model.Classify(input, ShapeEnum.TEN_TEN);
-                    Invoke(new PaintPointHandler(PaintPoint), bmp, i, j, Convert.ToByte(classified * 20));
-                    Invoke(new UpdateStatusLabelHandler(UpdateStatusLabel), "应用分类中，总进度："+i+"列"+j+"行", STATUE_ENUM.WARNING);
+                    //构建结果图层，用于动态绘制
+                    Bitmap bmp = new Bitmap(rasterLayer.XSize, rasterLayer.YSize);
+                    string nodeName = rasterLayer.Name + "结果图层";
+                    TreeNode childrenNode = new TreeNode(nodeName);
+                    _imageDic.Add(nodeName, new Bitmap2(name: nodeName, bmp: bmp));
+                    Invoke(new UpdateTreeNodeHandler(UpdateTreeNode), null, childrenNode);
+                    //获取波段
+                    var model = new TensorflowBootstrap(pbName);
+                    for (int i = 0; i < rasterLayer.XSize; i++)
+                        for (int j = 0; j < rasterLayer.YSize; j++)
+                        {
+                            float[] input = rasterLayer.GetPixelFloat(i, j).ToArray();
+                            long classified = model.Classify(input, ShapeEnum.TEN_TEN);
+                            Invoke(new PaintPointHandler(PaintPoint), bmp, i, j, Convert.ToByte(classified * 20));
+                            Invoke(new UpdateStatusLabelHandler(UpdateStatusLabel), "应用分类中，总进度：" + i + "列" + j + "行", STATUE_ENUM.WARNING);
+                        }
+                }
+                else
+                {
+                    //基于slic的超像素绘制方法
                 }
         }
-
         /// <summary>
         /// }{小萌娃记得改哟
         /// </summary>
@@ -121,7 +127,6 @@ namespace Host.Image.UI
             Invoke(new SaveBitmapHandler(SaveBitmap), pkg.Edge);
             Invoke(new SaveBitmapHandler(SaveBitmap), pkg.Average);
         }
-
         #endregion
 
         #region 界面更新
@@ -372,14 +377,26 @@ namespace Host.Image.UI
                     //导出图片
                     break;
                 case "DL_CLASS_toolStripButton":
-                    //1.选择处理那副图像
-                    string imageName = map_treeView.SelectedNode.Text;
-                    Bitmap2 imageBitmap2 = _imageDic[imageName];
-                    GRasterLayer rasterLayer = imageBitmap2.GdalLayer;
-                    ThreadStart clsfy_ts = delegate { RunClassify(rasterLayer); };
-                    Thread clsfy_t = new Thread(clsfy_ts);
-                    clsfy_t.IsBackground = true;
-                    clsfy_t.Start();
+                    if (map_treeView.SelectedNode == null)
+                    {
+                        UpdateStatusLabel("请选择一副图像或者一个图层后，进行分类操作", STATUE_ENUM.ERROR);
+                        return;
+                    }
+                    else
+                    {
+                        DLClassifyForm dlclassify = new DLClassifyForm();
+                        if (dlclassify.ShowDialog() == DialogResult.OK)
+                        {
+                            //1.选择处理那副图像
+                            string imageName = map_treeView.SelectedNode.Text;
+                            Bitmap2 imageBitmap2 = _imageDic[imageName];
+                            GRasterLayer rasterLayer = imageBitmap2.GdalLayer;
+                            ThreadStart clsfy_ts = delegate { RunClassify(rasterLayer,dlclassify.UseSLIC,dlclassify.PBName,dlclassify.CenterName,dlclassify.LabelName); };
+                            Thread clsfy_t = new Thread(clsfy_ts);
+                            clsfy_t.IsBackground = true;
+                            clsfy_t.Start();
+                        }
+                    }
                     break;
                 case "open_toolstripmenuitem"://添加图像
                     ReadImage();
