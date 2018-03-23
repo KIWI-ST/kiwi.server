@@ -43,7 +43,7 @@ namespace Host.Image.UI.SettingForm
             opg.Filter = "超像素边界|*.json";
             if (opg.ShowDialog() == DialogResult.OK)
             {
-                textBox2.Text = opg.FileName;
+                textBox3.Text = opg.FileName;
             }
         }
 

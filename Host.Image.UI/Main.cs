@@ -102,12 +102,16 @@ namespace Host.Image.UI
                         Center center = centers[i];
                         float[] input = rasterLayer.GetPixelFloat((int)center.X, (int)center.Y).ToArray();
                         long classified = model.Classify(input, shapeEuum);
-                        center.L = classified;
-                        center.A = classified;
-                        center.B = classified;
+                        center.L = classified*20;
+                        center.A = classified* 20;
+                        center.B = classified* 20;
+                        Invoke(new UpdateStatusLabelHandler(UpdateStatusLabel), "已处理第"+i+"/"+centers.Length+"个中心", STATUE_ENUM.WARNING);
                     }
-                    bmp = SuperPixelSegment.DrawAverage(bmp, centers, labels);
-                }  
+                    //遍历图片进行绘制
+                    for (int i = 0; i < rasterLayer.XSize; i++)
+                        for (int j = 0; j < rasterLayer.YSize; j++)
+                            Invoke(new PaintPointHandler(PaintPoint), bmp, i, j, Convert.ToByte(centers[(int)Math.Floor(labels.GetPixel(i, j))].L));
+                }
             }
         }
         /// <summary>
@@ -270,6 +274,13 @@ namespace Host.Image.UI
             //g.DrawLine(Pens.Black, new Point(x, y), new Point(bmp.Width, bmp.Height));
             map_pictureBox.Image = bmp;
         }
+
+        private void PaintBitmap(Bitmap bmp,string nodeName)
+        {
+            _imageDic[nodeName].BMP = bmp;
+            map_pictureBox.Image = bmp;
+        }
+
         /// <summary>
         /// 更新树视图委托
         /// </summary>
@@ -305,6 +316,12 @@ namespace Host.Image.UI
         /// <param name="y"></param>
         /// <param name="value"></param>
         private delegate void PaintPointHandler(Bitmap bmp, int x, int y, byte value);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bmp"></param>
+        /// <param name="nodeName"></param>
+        private delegate void PaintBitmapHandler(Bitmap bmp, string nodeName);
 
         #endregion
 

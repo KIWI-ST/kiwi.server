@@ -55,6 +55,9 @@ namespace Engine.GIS.GOperation.Arithmetic
                     SetPixel(x, y, bitplane.GetPixel(x, y));
         }
 
+        public Bitplane()
+        { }
+
         public Bitplane(int w, int h)
         {
             Width = w;
@@ -340,7 +343,10 @@ namespace Engine.GIS.GOperation.Arithmetic
 
         public static Bitmap DrawAverage(Bitmap bmp,Center[] centers,Bitplane labels)
         {
-            return null;
+            Bitmap3 bmp3 = new Bitmap3(bmp);
+            Bitmap3 result = DrawAverage(bmp3, centers, labels);
+            //result.LABtoRGB();
+            return result.GetBitmap();
         }
 
         private static Bitmap3 DrawEdges(Bitmap3 image, Center[] centers, Bitplane labels, Color edgeColor)

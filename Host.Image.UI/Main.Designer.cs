@@ -179,7 +179,7 @@
             // 
             // DL_CLASS_toolStripButton
             // 
-            this.DL_CLASS_toolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("DL_CLASS_toolStripButton.Image")));
+            this.DL_CLASS_toolStripButton.Image = global::Host.Image.UI.Properties.Resources.chart_bar1_64;
             this.DL_CLASS_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.DL_CLASS_toolStripButton.Name = "DL_CLASS_toolStripButton";
             this.DL_CLASS_toolStripButton.Size = new System.Drawing.Size(60, 37);

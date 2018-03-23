@@ -28,6 +28,7 @@ namespace Engine.GIS.Entity
         public Bitmap BMP
         {
             get { return _bitmap; }
+            set { _bitmap = value; }
         }
         /// <summary>
         /// 图片名
