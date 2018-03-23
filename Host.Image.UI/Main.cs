@@ -85,7 +85,7 @@ namespace Host.Image.UI
                     {
                         float[] input = rasterLayer.GetPixelFloat(i, j).ToArray();
                         long classified = model.Classify(input, shapeEuum);
-                        Invoke(new PaintPointHandler(PaintPoint), bmp, i, j, Convert.ToByte(classified * 20));
+                        Invoke(new PaintPointHandler(PaintPoint), bmp, i, j, Convert.ToByte(classified * 15));
                         Invoke(new UpdateStatusLabelHandler(UpdateStatusLabel), "应用分类中，总进度：" + i + "列" + j + "行", STATUE_ENUM.WARNING);
                     }
             }
@@ -103,9 +103,9 @@ namespace Host.Image.UI
                         Center center = centers[i];
                         float[] input = rasterLayer.GetPixelFloatWidthConv((int)center.X, (int)center.Y, mask).ToArray();
                         long classified = model.Classify(input, shapeEuum);
-                        center.L = classified*20;
-                        center.A = classified* 20;
-                        center.B = classified* 20;
+                        center.L = classified*15;
+                        center.A = classified* 15;
+                        center.B = classified* 15;
                         Invoke(new UpdateStatusLabelHandler(UpdateStatusLabel), "已处理第"+i+"/"+centers.Length+"个中心", STATUE_ENUM.WARNING);
                     }
                     //遍历图片进行绘制
