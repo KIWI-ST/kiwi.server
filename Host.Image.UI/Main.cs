@@ -97,10 +97,11 @@ namespace Host.Image.UI
                 {
                     Center[] centers = SuperPixelSegment.ReadCenter(sr_center.ReadToEnd());
                     Bitplane labels = SuperPixelSegment.ReadLabel(sr_label.ReadToEnd());
+                    int[] mask = new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1 };
                     for (int i = 0; i < centers.Length; i++)
                     {
                         Center center = centers[i];
-                        float[] input = rasterLayer.GetPixelFloat((int)center.X, (int)center.Y).ToArray();
+                        float[] input = rasterLayer.GetPixelFloatWidthConv((int)center.X, (int)center.Y, mask).ToArray();
                         long classified = model.Classify(input, shapeEuum);
                         center.L = classified*20;
                         center.A = classified* 20;
@@ -118,7 +119,7 @@ namespace Host.Image.UI
         /// }{小萌娃记得改哟
         /// </summary>
         /// <param name="fileNameCollection"></param>
-        /// <param name="centers"></param>
+        /// <param name="centers"></param>loul
         private void RunCenter(List<string> fileNameCollection, Center[] centers)
         {
             DataTable dt = new DataTable();
