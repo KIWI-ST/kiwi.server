@@ -7,9 +7,12 @@ using System.Runtime.InteropServices;
 
 namespace Engine.GIS.GOperation.Arithmetic
 {
-
-    public class SLICPKG
+    /// <summary>
+    /// slic结果包
+    /// </summary>
+    public class SlicPackage
     {
+        public string Label { get; set; }
         public Bitmap Average { get; set; }
         public Bitmap Edge { get; set; }
         public string CENTER { get; set; }
@@ -35,7 +38,7 @@ namespace Engine.GIS.GOperation.Arithmetic
         }
     }
 
-    class Bitplane
+    public class Bitplane
     {
         public int Width { get; set; }
         public int Height { get; set; }
@@ -243,12 +246,33 @@ namespace Engine.GIS.GOperation.Arithmetic
 
     public class SuperPixelSegment
     {
+        /// <summary>
+        /// 读取中心
+        /// </summary>
+        /// <param name="centerText"></param>
+        /// <returns></returns>
         public static Center[] ReadCenter(string centerText)
         {
             return Newtonsoft.Json.JsonConvert.DeserializeObject<Center[]>(centerText);
         }
-
-        public static SLICPKG Run(Bitmap bmp, double numberOfCenters, double m, Color edgeColor)
+        /// <summary>
+        /// 读取Label
+        /// </summary>
+        /// <param name="labelText"></param>
+        /// <returns></returns>
+        public static Bitplane ReadLabel(string labelText)
+        {
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<Bitplane>(labelText);
+        }
+        /// <summary>
+        /// slic计算
+        /// </summary>
+        /// <param name="bmp"></param>
+        /// <param name="numberOfCenters"></param>
+        /// <param name="m"></param>
+        /// <param name="edgeColor"></param>
+        /// <returns></returns>
+        public static SlicPackage Run(Bitmap bmp, double numberOfCenters, double m, Color edgeColor)
         {
             Bitmap3 image = new Bitmap3(bmp);
             Bitmap[] processedImages = new Bitmap[2];
@@ -300,15 +324,23 @@ namespace Engine.GIS.GOperation.Arithmetic
             image = DrawAverage(image, centers, labels);
             image.LABtoRGB();
             processedImages[1] = image.GetBitmap();
-
+            //center
             string centerText = Newtonsoft.Json.JsonConvert.SerializeObject(centers);
-            //
-            return new SLICPKG()
+            //label
+            string labelText = Newtonsoft.Json.JsonConvert.SerializeObject(labels);
+
+            return new SlicPackage()
             {
+                Label = labelText,
                 Edge = processedImages[0],
                 Average = processedImages[1],
                 CENTER = centerText,
             };
+        }
+
+        public static Bitmap DrawAverage(Bitmap bmp,Center[] centers,Bitplane labels)
+        {
+            return null;
         }
 
         private static Bitmap3 DrawEdges(Bitmap3 image, Center[] centers, Bitplane labels, Color edgeColor)

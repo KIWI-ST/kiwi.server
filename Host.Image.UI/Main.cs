@@ -33,13 +33,9 @@ namespace Host.Image.UI
 
         #region 初始化
 
-
-
         public Main()
         {
             InitializeComponent();
-            //TensorflowBootstrap bootstrap = new TensorflowBootstrap(System.IO.Directory.GetCurrentDirectory() + @"\Modal\Tensorflow\frozen_model.pb");
-            //GdalConfiguration
         }
 
         #endregion
@@ -63,31 +59,56 @@ namespace Host.Image.UI
         /// 应用深度学习模型进行分类
         /// </summary>
         /// <param name="rasterLayer"></param>
-        private void RunClassify(GRasterLayer rasterLayer,bool useSLIC,string pbName,string centerName,string labelName)
+        private void RunClassify(GRasterLayer rasterLayer, bool useSLIC, string pbName, string centerName, string labelName)
         {
-                if (!useSLIC)
+            //判断图层结构，选用不同的tensor输入
+            ShapeEnum shapeEuum;
+            if (rasterLayer.BandCount == 130)
+                shapeEuum = ShapeEnum.THIRTEEN_TEN;
+            else if (rasterLayer.BandCount == 100)
+                shapeEuum = ShapeEnum.TEN_TEN;
+            else
+                shapeEuum = ShapeEnum.TEN_TEN;
+            //构建结果图层，用于动态绘制
+            Bitmap bmp = new Bitmap(rasterLayer.XSize, rasterLayer.YSize);
+            string nodeName = rasterLayer.Name + "结果图层";
+            TreeNode childrenNode = new TreeNode(nodeName);
+            _imageDic.Add(nodeName, new Bitmap2(name: nodeName, bmp: bmp));
+            Invoke(new UpdateTreeNodeHandler(UpdateTreeNode), null, childrenNode);
+            //获取波段
+            TensorflowBootstrap model = new TensorflowBootstrap(pbName);
+            //判断是否基于超像素
+            if (!useSLIC)
+            {
+                for (int i = 0; i < rasterLayer.XSize; i++)
+                    for (int j = 0; j < rasterLayer.YSize; j++)
+                    {
+                        float[] input = rasterLayer.GetPixelFloat(i, j).ToArray();
+                        long classified = model.Classify(input, shapeEuum);
+                        Invoke(new PaintPointHandler(PaintPoint), bmp, i, j, Convert.ToByte(classified * 20));
+                        Invoke(new UpdateStatusLabelHandler(UpdateStatusLabel), "应用分类中，总进度：" + i + "列" + j + "行", STATUE_ENUM.WARNING);
+                    }
+            }
+            else
+            {
+                //基于slic的超像素绘制方法
+                using (StreamReader sr_center = new StreamReader(centerName))
+                    using(StreamReader sr_label = new StreamReader(labelName))
                 {
-                    //构建结果图层，用于动态绘制
-                    Bitmap bmp = new Bitmap(rasterLayer.XSize, rasterLayer.YSize);
-                    string nodeName = rasterLayer.Name + "结果图层";
-                    TreeNode childrenNode = new TreeNode(nodeName);
-                    _imageDic.Add(nodeName, new Bitmap2(name: nodeName, bmp: bmp));
-                    Invoke(new UpdateTreeNodeHandler(UpdateTreeNode), null, childrenNode);
-                    //获取波段
-                    var model = new TensorflowBootstrap(pbName);
-                    for (int i = 0; i < rasterLayer.XSize; i++)
-                        for (int j = 0; j < rasterLayer.YSize; j++)
-                        {
-                            float[] input = rasterLayer.GetPixelFloat(i, j).ToArray();
-                            long classified = model.Classify(input, ShapeEnum.TEN_TEN);
-                            Invoke(new PaintPointHandler(PaintPoint), bmp, i, j, Convert.ToByte(classified * 20));
-                            Invoke(new UpdateStatusLabelHandler(UpdateStatusLabel), "应用分类中，总进度：" + i + "列" + j + "行", STATUE_ENUM.WARNING);
-                        }
-                }
-                else
-                {
-                    //基于slic的超像素绘制方法
-                }
+                    Center[] centers = SuperPixelSegment.ReadCenter(sr_center.ReadToEnd());
+                    Bitplane labels = SuperPixelSegment.ReadLabel(sr_label.ReadToEnd());
+                    for (int i = 0; i < centers.Length; i++)
+                    {
+                        Center center = centers[i];
+                        float[] input = rasterLayer.GetPixelFloat((int)center.X, (int)center.Y).ToArray();
+                        long classified = model.Classify(input, shapeEuum);
+                        center.L = classified;
+                        center.A = classified;
+                        center.B = classified;
+                    }
+                    bmp = SuperPixelSegment.DrawAverage(bmp, centers, labels);
+                }  
+            }
         }
         /// <summary>
         /// }{小萌娃记得改哟
@@ -122,8 +143,9 @@ namespace Host.Image.UI
         private void RunSLIC(Bitmap bmp)
         {
             Invoke(new UpdateStatusLabelHandler(UpdateStatusLabel), "超像素中心计算开始...", STATUE_ENUM.WARNING);
-            SLICPKG pkg = SuperPixelSegment.Run(bmp, 3000, 3, Color.White);
+            SlicPackage pkg = SuperPixelSegment.Run(bmp, 10000, 3, Color.White);
             Invoke(new SaveJsonHandler(SaveJson), pkg.CENTER);
+            Invoke(new SaveJsonHandler(SaveJson), pkg.Label);
             Invoke(new SaveBitmapHandler(SaveBitmap), pkg.Edge);
             Invoke(new SaveBitmapHandler(SaveBitmap), pkg.Average);
         }
@@ -221,7 +243,7 @@ namespace Host.Image.UI
         private void UpdateTreeNode(TreeNode parentNode, TreeNode childrenNode)
         {
             //1.更新左侧视图
-            if(parentNode != null)
+            if (parentNode != null)
             {
                 parentNode.Nodes.Add(childrenNode);
                 parentNode.Expand();
@@ -391,7 +413,7 @@ namespace Host.Image.UI
                             string imageName = map_treeView.SelectedNode.Text;
                             Bitmap2 imageBitmap2 = _imageDic[imageName];
                             GRasterLayer rasterLayer = imageBitmap2.GdalLayer;
-                            ThreadStart clsfy_ts = delegate { RunClassify(rasterLayer,dlclassify.UseSLIC,dlclassify.PBName,dlclassify.CenterName,dlclassify.LabelName); };
+                            ThreadStart clsfy_ts = delegate { RunClassify(rasterLayer, dlclassify.UseSLIC, dlclassify.PBName, dlclassify.CenterName, dlclassify.LabelName); };
                             Thread clsfy_t = new Thread(clsfy_ts);
                             clsfy_t.IsBackground = true;
                             clsfy_t.Start();
