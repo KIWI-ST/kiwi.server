@@ -12,8 +12,8 @@ you should copy x64 floder files to Debug
 based on mongodb driver
 
 ### Engine.Brain ###
->combined with [kiwi.brain](https://github.com/axmand/kiwi.brain)
->model(.pb) created by training and freezeing object(freeze_object.py). it can be used in Engine.Brain's BootStrap Class.
+>combined with [kiwi.brain](https://github.com/axmand/kiwi.brain).</br>
+>model(.pb) created by training and freezeing object(freeze_object.py),which can be used in Engine.Brain's BootStrap Class.
 
 ### Grain ###
 based on Orleans
