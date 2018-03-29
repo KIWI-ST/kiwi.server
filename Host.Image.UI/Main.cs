@@ -67,6 +67,8 @@ namespace Host.Image.UI
                 shapeEuum = ShapeEnum.THIRTEEN_TEN;
             else if (rasterLayer.BandCount == 100)
                 shapeEuum = ShapeEnum.TEN_TEN;
+            else if (rasterLayer.BandCount == 64)
+                shapeEuum = ShapeEnum.EIGHT_EIGHT;
             else
                 shapeEuum = ShapeEnum.TEN_TEN;
             //构建结果图层，用于动态绘制

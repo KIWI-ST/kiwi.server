@@ -23,7 +23,7 @@ namespace Engine.Brain.Bootstrap
 
         public long Classify(float[] input, ShapeEnum shapeEnum)
         {
-            var tensor = TensorFactory.Create(input, ShapeEnum.TEN_TEN);
+            var tensor = TensorFactory.Create(input, shapeEnum);
             var runner = _session.GetRunner();
             var t0 = _graph["input"][0];
             runner.AddInput(_graph["input"][0], tensor).Fetch(_graph["logit/output"][0]);
