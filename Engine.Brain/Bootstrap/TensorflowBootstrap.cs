@@ -1,5 +1,4 @@
 ﻿using Engine.Brain.Utils;
-using System;
 using System.IO;
 using TensorFlow;
 
@@ -20,6 +19,10 @@ namespace Engine.Brain.Bootstrap
             _graph.Import(new TFBuffer(_model));
             _session = new TFSession(_graph);
         }
+
+        public TFGraph Graph { get => _graph;}
+
+        public string ModalFilename { get => _modalFilename; }
 
         public long Classify(float[] input, ShapeEnum shapeEnum)
         {
