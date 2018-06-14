@@ -31,5 +31,12 @@ namespace Core.GIS.GEntity
         /// </summary>
         /// <returns></returns>
         Bitmap GetBitmap();
+        /// <summary>
+        /// 卷积操作
+        /// </summary>
+        /// <param name="centerX"></param>
+        /// <param name="centerY"></param>
+        /// <param name="mask"></param>
+        byte Convolution(int centerX, int centerY, int[] mask);
     }
 }

@@ -1,22 +1,5 @@
 ﻿namespace Core.GIS.GEntity
 {
-
-    public class GRgb
-    {
-
-    }
-
-    public class GLab
-    {
-
-    }
-
-    public class GXyz
-    {
-
-    }
-
-
     public class Bitplane
     {
         public int Width { get; set; }

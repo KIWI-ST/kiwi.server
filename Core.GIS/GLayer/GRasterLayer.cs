@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Core.GIS.GEntity;
+using OSGeo.GDAL;
 using System.Collections.Generic;
-using System.Text;
+using System.IO;
 
 namespace Core.GIS.GLayer
 {
@@ -93,8 +94,8 @@ namespace Core.GIS.GLayer
             List<float> pixels = new List<float>();
             for (int i = 0; i < BandCount; i++)
             {
-                Bitmap bandBmp = BandCollection[i].GetBitmap();
-                byte v = GConvolution.Run(bandBmp, x, y, mask);
+                IGBand band = BandCollection[i];
+                byte v = band.Convolution(x, y, mask);
                 pixels.Add(v);
             }
             return pixels;
