@@ -4,7 +4,10 @@ using System.Text;
 
 namespace Core.RL.DQN
 {
-    class DQN
+    /// <summary>
+    /// 构建dqn模型
+    /// </summary>
+    public class DQN
     {
     }
 }
