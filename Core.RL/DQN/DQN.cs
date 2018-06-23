@@ -9,5 +9,15 @@ namespace Core.RL.DQN
     /// </summary>
     public class DQN
     {
+
+        Environment _env;
+
+        public DQN()
+        {
+
+        }
+
+
+
     }
 }

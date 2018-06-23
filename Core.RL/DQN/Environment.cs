@@ -13,5 +13,31 @@ namespace Core.RL.DQN
     /// </summary>
     public class Environment
     {
+        /// <summary>
+        /// 构建环境
+        /// </summary>
+        public Environment()
+        {
+
+        }
+        /// <summary>
+        /// 执行下一步操作
+        /// 返回：操作后的环境s'和当前的reward
+        /// </summary>
+        public double[] Step(string action)
+        {
+
+            return null;
+        }
+        /// <summary>
+        /// 重设环境
+        /// </summary>
+        public void Reset()
+        {
+
+        }
+
     }
+
+
 }

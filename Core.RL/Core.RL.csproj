@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Core.DL\Core.DL.csproj" />
+    <ProjectReference Include="..\Core.GIS\Core.GIS.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,5 @@
 ﻿using Core.DL.Entity;
 using Microsoft.ML;
-using Microsoft.ML.Data;
 using Microsoft.ML.Trainers;
 using Microsoft.ML.Transforms;
 using System;
