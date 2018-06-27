@@ -17,11 +17,11 @@ namespace Core.RL.DQN
         /// <summary>
         /// 小麦
         /// </summary>
-        WHEAT=2,
+        WHEAT = 2,
         /// <summary>
         /// 烟草
         /// </summary>
-        TOBACCO=3
+        TOBACCO = 3
     }
 
     /// <summary>
@@ -33,9 +33,18 @@ namespace Core.RL.DQN
     /// </summary>
     public class Environment
     {
-
+        /// <summary>
+        /// 被观察样本的根目录
+        /// </summary>
         string _dir;
-
+        /// <summary>
+        /// 二级目录
+        /// </summary>
+        string[] _categories;
+        /// <summary>
+        /// 样本存储集合
+        /// </summary>
+        Dictionary<string, string[]> _sampleDictionary;
         /// <summary>
         /// 构建环境
         /// 样本存放格式形如：
@@ -52,11 +61,11 @@ namespace Core.RL.DQN
             //样本根目录
             _dir = sampleDirectory;
             //获取样本分类目录
-            string[] categories = Directory.GetDirectories(sampleDirectory);
+            _categories = Directory.GetDirectories(sampleDirectory);
             //样本集合
-            Dictionary<string, string[]> sampleDictionary = new Dictionary<string, string[]>();
+            _sampleDictionary = new Dictionary<string, string[]>();
             //初始化环境
-            InitEnv(categories, sampleDictionary);
+            InitEnv(_categories, _sampleDictionary);
         }
         /// <summary>
         /// 构建样本字典
@@ -64,7 +73,8 @@ namespace Core.RL.DQN
         private void InitEnv(string[] categories, Dictionary<string, string[]> sampleDictionary)
         {
             //构建dictory目录树
-            Array.ForEach(categories, p => {
+            Array.ForEach(categories, p =>
+            {
                 //1.获取样本目录
                 string dir = _dir + @"\" + p;
                 //2.获取样本全集
@@ -74,6 +84,23 @@ namespace Core.RL.DQN
             });
         }
         /// <summary>
+        /// 随机观察分类操作，并获取reward
+        /// </summary>
+        private double[] AccessEnv()
+        {
+            //类别索引
+            int classIndex = new Random().Next(_categories.Length);
+            //样本索引
+            int sampleIndex = new Random().Next(_sampleDictionary[_categories[classIndex]].Length);
+            //样本文件地址
+            string sampleFile = _dir + @"\" + _categories[classIndex] + @"\" + _sampleDictionary[_categories[classIndex]][sampleIndex];
+            //构建样本输入环境s和辅助参考计算reward的class
+            //1.读取灰度图，存储成byte[]
+            //2.使用卷积，获取特征数据
+            return new double[2] { 0, 0 };
+        }
+
+        /// <summary>
         /// 执行下一步操作
         /// 返回：操作后的环境s'和当前的reward
         /// 1. 根据当前的s计算reward
@@ -82,17 +109,11 @@ namespace Core.RL.DQN
         public double[] Step(EAction action)
         {
             //1.
+            //string s =
+
 
             //2.
-
             return null;
-        }
-        /// <summary>
-        /// 重设环境
-        /// </summary>
-        public void Reset()
-        {
-
         }
 
     }
