@@ -4,7 +4,7 @@ using TensorFlow;
 
 namespace Engine.Brain.Bootstrap
 {
-    public class TensorflowBootstrap : IBootstrap
+    public class TensorflowBootstrap 
     {
         string _modalFilename;
         TFGraph _graph;

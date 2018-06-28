@@ -10,10 +10,15 @@ namespace Core.RL.DQN
     public class DQN
     {
 
-        Environment _env;
+        DEnv _env;
+
+        int maxMemoryLen = 512;
+
+        int epoches = 2000;
 
         public DQN()
         {
+
 
         }
 
