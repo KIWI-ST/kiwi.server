@@ -16,6 +16,8 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 
+using TensorFlow;
+
 namespace Host.Image.UI
 {
     /// <summary>
@@ -36,6 +38,7 @@ namespace Host.Image.UI
         public Main()
         {
             InitializeComponent();
+            test();
         }
 
         #endregion
@@ -95,7 +98,7 @@ namespace Host.Image.UI
             {
                 //基于slic的超像素绘制方法
                 using (StreamReader sr_center = new StreamReader(centerName))
-                    using(StreamReader sr_label = new StreamReader(labelName))
+                using (StreamReader sr_label = new StreamReader(labelName))
                 {
                     Center[] centers = SuperPixelSegment.ReadCenter(sr_center.ReadToEnd());
                     Bitplane labels = SuperPixelSegment.ReadLabel(sr_label.ReadToEnd());
@@ -105,10 +108,10 @@ namespace Host.Image.UI
                         Center center = centers[i];
                         float[] input = rasterLayer.GetPixelFloatWidthConv((int)center.X, (int)center.Y, mask).ToArray();
                         long classified = model.Classify(input, shapeEuum);
-                        center.L = classified*15;
-                        center.A = classified* 15;
-                        center.B = classified* 15;
-                        Invoke(new UpdateStatusLabelHandler(UpdateStatusLabel), "已处理第"+i+"/"+centers.Length+"个中心", STATUE_ENUM.WARNING);
+                        center.L = classified * 15;
+                        center.A = classified * 15;
+                        center.B = classified * 15;
+                        Invoke(new UpdateStatusLabelHandler(UpdateStatusLabel), "已处理第" + i + "/" + centers.Length + "个中心", STATUE_ENUM.WARNING);
                     }
                     //遍历图片进行绘制
                     for (int i = 0; i < rasterLayer.XSize; i++)
@@ -278,7 +281,7 @@ namespace Host.Image.UI
             map_pictureBox.Image = bmp;
         }
 
-        private void PaintBitmap(Bitmap bmp,string nodeName)
+        private void PaintBitmap(Bitmap bmp, string nodeName)
         {
             _imageDic[nodeName].BMP = bmp;
             map_pictureBox.Image = bmp;
@@ -550,5 +553,62 @@ namespace Host.Image.UI
 
         #endregion
 
+        void test()
+        {
+            Engine.Brain.AI.BinaryClassification bc = new Engine.Brain.AI.BinaryClassification();
+            //using (var _graph = new TFGraph())
+            //{
+            //    //学习率
+            //    var delta = _graph.Constant(0.01, new TFShape(1));
+            //    var n_features = 8 * 8;
+            //    var n_actions = 13;
+            //    //构建两层的神经网络
+            //    var s = _graph.PlaceholderV2(TFDataType.Float, new TFShape(n_features), "s");
+            //    var q_target = _graph.PlaceholderV2(TFDataType.Float, new TFShape(n_actions), "Q_target");
+            //    //
+            //    _graph.WithScope("eval_net");
+            //    var global_variables = _graph.GetGlobalVariablesInitializer();
+
+            //    var n_l1 = 10;
+            //    var w_initializer = _graph.RandomNormal(new TFShape(1), 0, 0.3);
+            //    var b_initializer = _graph.Constant(0.1, new TFShape(1));
+            //    //layer1
+            //    _graph.WithScope("l1");
+            //    var w1 = _graph.VariableV2(new TFShape(n_features, n_l1), TFDataType.Float, operName: "w1");
+            //    var b1 = _graph.VariableV2(new TFShape(1, n_l1), TFDataType.Float, operName: "b1");
+            //    var l1 = _graph.Relu(_graph.Add(_graph.MatMul(s, w1), b1));
+            //    //layer2
+            //    _graph.WithScope("l2");
+            //    var w2 = _graph.VariableV2(new TFShape(n_l1, n_actions), TFDataType.Float, operName: "w2");
+            //    var b2 = _graph.VariableV2(new TFShape(1, n_actions), TFDataType.Float, operName: "b2");
+            //    var q_eval = _graph.Add(_graph.MatMul(l1, w2), b2);
+            //    //loss
+            //    _graph.WithScope("loss");
+            //    var loss = _graph.ReduceMean(_graph.SigmoidCrossEntropyWithLogits(q_target, q_eval));
+            //    //train
+            //    var trainOp = _graph.ApplyGradientDescent(w1, loss, delta);
+            //    //
+
+
+
+            //    var W = _graph.VariableV2(TFShape.Scalar, TFDataType.Double, operName: "W");
+            //    var b = _graph.VariableV2(TFShape.Scalar, TFDataType.Double, operName: "b");
+            //    var pred = _graph.Const(true);
+
+            //    var init = _graph.Cond(pred,
+            //        () => _graph.Assign(W, _graph.Const(1.0)),
+            //        () => _graph.Assign(b, _graph.Const(-0.3)));
+
+            //    using (var session = new TFSession(_graph))
+            //    {
+            //        var devices = session.ListDevices();
+
+            //    }
+            //    //
+
+
+            //}
+
+        }
     }
 }

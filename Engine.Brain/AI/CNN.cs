@@ -25,19 +25,37 @@ namespace Engine.Brain.AI
         /// <param name="actions_num">图像分类操作（对应类别数）</param>
         public CNN(int inputWidth, int inputHeight, int actions_num)
         {
-            //初始graph
             _graph = new TFGraph();
-            //1.scope init
-            _graph.WithScope("init");
-            var shape = new TFShape(1, 8, 8, 1);
-            var x = _graph.VariableV2(shape, TFDataType.Float);
-            //2.第一层卷积
-            _graph.WithScope("Conv1");
-            var conv1 = Conv(x, 3, 1, 16, new long[] { 1, 2, 2 });
-            conv1 = Relu(conv1);
-            //3.第二次卷积
-         
         }
+
+        private void Build()
+        {
+            var s = _graph.Placeholder(TFDataType.Float, new TFShape(64), "state");
+            var q = _graph.Placeholder(TFDataType.Int32, new TFShape(13), "target");
+        }
+
+        private TFOutput Weight_Variable(TFShape shape)
+        {
+            var variable = _graph.VariableV2(shape, TFDataType.Double);
+            var initial = _graph.TruncatedNormal(variable, TFDataType.Float);
+            return variable;
+        }
+
+        private TFOutput Bias_Variable(TFShape shape)
+        {
+            var variable = _graph.VariableV2(shape, TFDataType.Double);
+            var initial = _graph.Constant(0.1, shape);
+            return variable;
+        }
+
+        /// <summary>
+        /// 定义CNN网络结构
+        /// </summary>
+        private void BuildLayer()
+        {
+
+        }
+
         /// <summary>
         /// 构建卷积操作
         /// </summary>
