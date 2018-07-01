@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TensorFlow;
 
 namespace Engine.Brain.Entity
 {
@@ -56,6 +57,15 @@ namespace Engine.Brain.Entity
             //返回一维数组，备用
             return labels;
         }
+        /// <summary>
+        /// 构建一个随机数组成的tensor
+        /// </summary>
+        /// <returns></returns>
+        public static TFTensor CreateTensorWithRandomDouble(TFShape shape)
+        {
+            return null;
+        }
+
 
     }
 }

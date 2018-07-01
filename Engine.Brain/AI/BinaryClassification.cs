@@ -30,10 +30,7 @@ namespace Engine.Brain.AI
             var W = g.VariableV2(TFShape.Scalar, TFDataType.Double, operName: "weight");
             var b = g.VariableV2(TFShape.Scalar, TFDataType.Double, operName: "bias");
             //
-            var initW = g.Assign(W, g.Const(random.NextDouble()));
-            var initb = g.Assign(b, g.Const(random.NextDouble()));
-            //
-            var output = g.Add(g.Mul(W,x), b);
+            var output = g.Add(g.Mul(x,W), b);
             //
             var loss = g.ReduceMean(g.SigmoidCrossEntropyWithLogits(output, y));
             //计算偏微分
@@ -42,17 +39,27 @@ namespace Engine.Brain.AI
 
             var optimize = new[]
           {
-                g.AssignSub(W, g.Mul(grad[0], g.Const(0.01))).Operation,
-                g.AssignSub(b, g.Mul(grad[1], g.Const(0.01))).Operation
+                g.AssignSub(W, g.Mul(grad[0], g.Const(0.1))).Operation,
+                g.AssignSub(b, g.Mul(grad[1], g.Const(0.1))).Operation
             };
             using (var sess = new TFSession(g))
             {
-                sess.GetRunner().AddTarget(initW.Operation, initb.Operation).Run();
+                //
+                var tensorW = g.Const(random.NextDouble());
+
+                //var initW = g.Assign(W, );
+                //var initb = g.Assign(b, g.Const(random.NextDouble()));
+
+                //sess.GetRunner().AddTarget(initW.Operation, initb.Operation).Run();
+
                 for (var i = 0; i < 1000; i++)
                 {
                     //
                     var tensorX = TFTensor.FromBuffer(new TFShape(10, 64), xData.ToArray(), 0, xData.Count);
                     var tensorY = TFTensor.FromBuffer(new TFShape(10, 1), yData.ToArray(), 0, yData.Count);
+
+                    var value2 = tensorX.GetValue();
+
                     //
                     var result = sess.GetRunner()
                    .AddInput(x, tensorX)
