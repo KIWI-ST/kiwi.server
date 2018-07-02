@@ -10,11 +10,11 @@ namespace Engine.Brain.AI
         public BinaryClassification()
         {
             int batchSize = 20;
-            int featureCount = 2;
+            int featureCount = 8 * 8;
             int predCount = 1;
 
-            var xData = Samples.CreateInputs(count:20,dimension:2);
-            var yData = Samples.CreateLabels(count:20);
+            var xData = Samples.CreateInputs(count: batchSize, dimension: featureCount);
+            var yData = Samples.CreateLabels(count: batchSize);
 
             var random = new Random();
             //
@@ -29,50 +29,48 @@ namespace Engine.Brain.AI
             var W = g.VariableV2(new TFShape(featureCount, batchSize), TFDataType.Double, operName: "weight");
             var b = g.VariableV2(new TFShape(batchSize), TFDataType.Double, operName: "bias");
             //
-            var y = g.Add(g.MatMul(x,W), b);    //预测结果
+            var y = g.Add(g.MatMul(x, W), b);    //预测结果
             //
             //var cross_entropy = g.Neg(g.ReduceSum(g.Mul(y_, g.Log(y))));
-            var cross_entropy = g.ReduceMean(g.Square(g.Sub(y, y_)));
+            //计算loss基于交叉熵
+            var cross_entropy = g.Neg(g.ReduceSum(g.Mul(y_, g.Log(y))));
+            //计算cost
+            var cost = g.ReduceMean(cross_entropy);
             //计算偏微分
+            var grad = g.AddGradients(new TFOutput[] { cost }, new TFOutput[] { W, b });
 
-            var grad = g.AddGradients(new TFOutput[] { cross_entropy }, new TFOutput[] { W, b });
-
-            var optimize = new[]
-          {
+            var optimize = new[]{
                 g.AssignSub(W, g.Mul(grad[0], g.Const(0.01))).Operation,
                 g.AssignSub(b, g.Mul(grad[1], g.Const(0.01))).Operation
             };
 
             using (var sess = new TFSession(g))
             {
-                //
                 var tensorW = g.Const(random.NextDouble());
-                //
-                var initW = g.Assign(W,g.Const(Samples.CreateTensorWithRandomDouble(new TFShape(featureCount, batchSize))));
+                var initW = g.Assign(W, g.Const(Samples.CreateTensorWithRandomDouble(new TFShape(featureCount, batchSize))));
                 var initb = g.Assign(b, g.Const(Samples.CreateTensorWithRandomDouble(new TFShape(batchSize))));
-
+                //
                 sess.GetRunner().AddTarget(initW.Operation, initb.Operation).Run();
-
+                //
                 for (var i = 0; i < 100000; i++)
                 {
                     //
                     var tensorX = TFTensor.FromBuffer(new TFShape(batchSize, featureCount), xData.ToArray(), 0, xData.Count);
                     var tensorY = TFTensor.FromBuffer(new TFShape(batchSize, predCount), yData.ToArray(), 0, yData.Count);
-
+                    //
                     var value2 = tensorX.GetValue();
-
                     //
                     var result = sess.GetRunner()
                    .AddInput(x, tensorX)
                    .AddInput(y_, tensorY)
                    .AddTarget(optimize)
-                   .Fetch(cross_entropy, W, b).Run();
+                   .Fetch(cost, W, b, y).Run();
                     //
                     var t_loss = result[0].GetValue();
                     var t_w = result[1].GetValue();
                     var t_b = result[2].GetValue();
+                    var t_y = result[3].GetValue();
                 }
-                var ssss = "";
             }
         }
 
