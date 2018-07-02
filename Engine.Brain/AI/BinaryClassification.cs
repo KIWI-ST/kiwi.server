@@ -1,9 +1,5 @@
 ﻿using Engine.Brain.Entity;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TensorFlow;
 
 namespace Engine.Brain.AI
@@ -13,10 +9,13 @@ namespace Engine.Brain.AI
 
         public BinaryClassification()
         {
-            var xData = Samples.CreateInputs();
-            var yData = Samples.CreateLabels();
-            int featureCount = 8 * 8;
+            int batchSize = 20;
+            int featureCount = 2;
             int predCount = 1;
+
+            var xData = Samples.CreateInputs(count:20,dimension:2);
+            var yData = Samples.CreateLabels(count:20);
+
             var random = new Random();
             //
             //var inputs = Samples.CreateInputs();
@@ -25,53 +24,55 @@ namespace Engine.Brain.AI
             var g = new TFGraph();
             //占位
             var x = g.Placeholder(TFDataType.Double, new TFShape(-1, featureCount));
-            var y = g.Placeholder(TFDataType.Double, new TFShape(-1, predCount));
+            var y_ = g.Placeholder(TFDataType.Double, new TFShape(-1, predCount)); //实际结果
             //
-            var W = g.VariableV2(TFShape.Scalar, TFDataType.Double, operName: "weight");
-            var b = g.VariableV2(TFShape.Scalar, TFDataType.Double, operName: "bias");
+            var W = g.VariableV2(new TFShape(featureCount, batchSize), TFDataType.Double, operName: "weight");
+            var b = g.VariableV2(new TFShape(batchSize), TFDataType.Double, operName: "bias");
             //
-            var output = g.Add(g.Mul(x,W), b);
+            var y = g.Add(g.MatMul(x,W), b);    //预测结果
             //
-            var loss = g.ReduceMean(g.SigmoidCrossEntropyWithLogits(output, y));
+            //var cross_entropy = g.Neg(g.ReduceSum(g.Mul(y_, g.Log(y))));
+            var cross_entropy = g.ReduceMean(g.Square(g.Sub(y, y_)));
             //计算偏微分
-            var grad = g.AddGradients(new TFOutput[] { loss }, new TFOutput[] { W, b });
-            //
+
+            var grad = g.AddGradients(new TFOutput[] { cross_entropy }, new TFOutput[] { W, b });
 
             var optimize = new[]
           {
-                g.AssignSub(W, g.Mul(grad[0], g.Const(0.1))).Operation,
-                g.AssignSub(b, g.Mul(grad[1], g.Const(0.1))).Operation
+                g.AssignSub(W, g.Mul(grad[0], g.Const(0.01))).Operation,
+                g.AssignSub(b, g.Mul(grad[1], g.Const(0.01))).Operation
             };
+
             using (var sess = new TFSession(g))
             {
                 //
                 var tensorW = g.Const(random.NextDouble());
+                //
+                var initW = g.Assign(W,g.Const(Samples.CreateTensorWithRandomDouble(new TFShape(featureCount, batchSize))));
+                var initb = g.Assign(b, g.Const(Samples.CreateTensorWithRandomDouble(new TFShape(batchSize))));
 
-                //var initW = g.Assign(W, );
-                //var initb = g.Assign(b, g.Const(random.NextDouble()));
+                sess.GetRunner().AddTarget(initW.Operation, initb.Operation).Run();
 
-                //sess.GetRunner().AddTarget(initW.Operation, initb.Operation).Run();
-
-                for (var i = 0; i < 1000; i++)
+                for (var i = 0; i < 100000; i++)
                 {
                     //
-                    var tensorX = TFTensor.FromBuffer(new TFShape(10, 64), xData.ToArray(), 0, xData.Count);
-                    var tensorY = TFTensor.FromBuffer(new TFShape(10, 1), yData.ToArray(), 0, yData.Count);
+                    var tensorX = TFTensor.FromBuffer(new TFShape(batchSize, featureCount), xData.ToArray(), 0, xData.Count);
+                    var tensorY = TFTensor.FromBuffer(new TFShape(batchSize, predCount), yData.ToArray(), 0, yData.Count);
 
                     var value2 = tensorX.GetValue();
 
                     //
                     var result = sess.GetRunner()
                    .AddInput(x, tensorX)
-                   .AddInput(y, tensorY)
+                   .AddInput(y_, tensorY)
                    .AddTarget(optimize)
-                   .Fetch(loss, W, b).Run();
+                   .Fetch(cross_entropy, W, b).Run();
                     //
                     var t_loss = result[0].GetValue();
                     var t_w = result[1].GetValue();
                     var t_b = result[2].GetValue();
                 }
-
+                var ssss = "";
             }
         }
 

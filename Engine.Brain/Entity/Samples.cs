@@ -25,7 +25,7 @@ namespace Engine.Brain.Entity
                 var input = new List<double>();
                 for (int j = 0; j < dimension; j++)
                 {
-                    var num = random.Next(255);
+                    var num = random.Next(10);
                     input.Add(num);
                 }
                 inputs.Add(input);
@@ -63,9 +63,17 @@ namespace Engine.Brain.Entity
         /// <returns></returns>
         public static TFTensor CreateTensorWithRandomDouble(TFShape shape)
         {
-            return null;
+            var random = new Random();
+            var dimensions = shape.NumDimensions;
+            int length = 1;
+            List<double> array = new List<double>();
+            for (var i = 0; i < dimensions; i++)
+                length *= Convert.ToInt32(shape[i]);
+            for (var i = 0; i < length; i++)
+                array.Add(random.NextDouble());
+            var tensor = TFTensor.FromBuffer(shape, array.ToArray(), 0, array.Count);
+            return tensor;
         }
-
 
     }
 }
