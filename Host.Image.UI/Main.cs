@@ -555,60 +555,22 @@ namespace Host.Image.UI
 
         void test()
         {
-            Engine.Brain.AI.BinaryClassification bc = new Engine.Brain.AI.BinaryClassification();
-            //using (var _graph = new TFGraph())
-            //{
-            //    //学习率
-            //    var delta = _graph.Constant(0.01, new TFShape(1));
-            //    var n_features = 8 * 8;
-            //    var n_actions = 13;
-            //    //构建两层的神经网络
-            //    var s = _graph.PlaceholderV2(TFDataType.Float, new TFShape(n_features), "s");
-            //    var q_target = _graph.PlaceholderV2(TFDataType.Float, new TFShape(n_actions), "Q_target");
-            //    //
-            //    _graph.WithScope("eval_net");
-            //    var global_variables = _graph.GetGlobalVariablesInitializer();
-
-            //    var n_l1 = 10;
-            //    var w_initializer = _graph.RandomNormal(new TFShape(1), 0, 0.3);
-            //    var b_initializer = _graph.Constant(0.1, new TFShape(1));
-            //    //layer1
-            //    _graph.WithScope("l1");
-            //    var w1 = _graph.VariableV2(new TFShape(n_features, n_l1), TFDataType.Float, operName: "w1");
-            //    var b1 = _graph.VariableV2(new TFShape(1, n_l1), TFDataType.Float, operName: "b1");
-            //    var l1 = _graph.Relu(_graph.Add(_graph.MatMul(s, w1), b1));
-            //    //layer2
-            //    _graph.WithScope("l2");
-            //    var w2 = _graph.VariableV2(new TFShape(n_l1, n_actions), TFDataType.Float, operName: "w2");
-            //    var b2 = _graph.VariableV2(new TFShape(1, n_actions), TFDataType.Float, operName: "b2");
-            //    var q_eval = _graph.Add(_graph.MatMul(l1, w2), b2);
-            //    //loss
-            //    _graph.WithScope("loss");
-            //    var loss = _graph.ReduceMean(_graph.SigmoidCrossEntropyWithLogits(q_target, q_eval));
-            //    //train
-            //    var trainOp = _graph.ApplyGradientDescent(w1, loss, delta);
-            //    //
+            //Engine.Brain.AI.BinaryClassification bc = new Engine.Brain.AI.BinaryClassification();
+            using (var g = new TFGraph())
+            {
 
 
+                var a = g.Const(2);
+                var b = g.Const(3);
+                var add = g.Add(a, b);
+                var mul = g.Mul(a, b);
 
-            //    var W = _graph.VariableV2(TFShape.Scalar, TFDataType.Double, operName: "W");
-            //    var b = _graph.VariableV2(TFShape.Scalar, TFDataType.Double, operName: "b");
-            //    var pred = _graph.Const(true);
-
-            //    var init = _graph.Cond(pred,
-            //        () => _graph.Assign(W, _graph.Const(1.0)),
-            //        () => _graph.Assign(b, _graph.Const(-0.3)));
-
-            //    using (var session = new TFSession(_graph))
-            //    {
-            //        var devices = session.ListDevices();
-
-            //    }
-            //    //
-
-
-            //}
-
+                using (var session = new TFSession(g))
+                {
+                    var result1 = session.GetRunner().Run(add).GetValue();
+                    var result2 = session.GetRunner().Run(mul).GetValue();
+                }
+            }
         }
     }
 }
