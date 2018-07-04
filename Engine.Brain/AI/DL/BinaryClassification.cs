@@ -6,7 +6,9 @@ namespace Engine.Brain.AI
 {
     public class BinaryClassification
     {
-
+        /// <summary>
+        /// https://github.com/bytedeco/javacpp-presets/blob/master/tensorflow/samples/src/main/java/org/bytedeco/javacpp/samples/tensorflow/CarPricePredictionExample.java
+        /// </summary>
         public BinaryClassification()
         {
             int batchSize = 20;

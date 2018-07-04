@@ -55,7 +55,6 @@
     <Compile Include="AI\DL\CNN.cs" />
     <Compile Include="AI\RL\DQN.cs" />
     <Compile Include="AI\RL\DEnv.cs" />
-    <Compile Include="AI\DL\NerualNetwork.cs" />
     <Compile Include="Entity\Samples.cs" />
     <Compile Include="Entity\TensorflowBootstrap.cs" />
     <Compile Include="Extend\ListExtend.cs" />
