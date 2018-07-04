@@ -46,12 +46,16 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="TensorFlowSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TensorFlowSharp.1.7.0\lib\net461\TensorFlowSharp.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AI\BinaryClassification.cs" />
-    <Compile Include="AI\CNN.cs" />
-    <Compile Include="AI\DQN.cs" />
-    <Compile Include="AI\DEnv.cs" />
+    <Compile Include="AI\DL\BinaryClassification.cs" />
+    <Compile Include="AI\DL\CNN.cs" />
+    <Compile Include="AI\RL\DQN.cs" />
+    <Compile Include="AI\RL\DEnv.cs" />
+    <Compile Include="AI\DL\NerualNetwork.cs" />
     <Compile Include="Entity\Samples.cs" />
     <Compile Include="Entity\TensorflowBootstrap.cs" />
     <Compile Include="Extend\ListExtend.cs" />
@@ -62,11 +66,12 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\TensorFlowSharp\TensorFlowSharp.csproj">
-      <Project>{5e217f33-ac51-4b85-be54-1130dfe88e83}</Project>
-      <Name>TensorFlowSharp</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\TensorFlowSharp.1.7.0\build\net45\TensorFlowSharp.targets" Condition="Exists('..\packages\TensorFlowSharp.1.7.0\build\net45\TensorFlowSharp.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\TensorFlowSharp.1.7.0\build\net45\TensorFlowSharp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\TensorFlowSharp.1.7.0\build\net45\TensorFlowSharp.targets'))" />
+  </Target>
 </Project>

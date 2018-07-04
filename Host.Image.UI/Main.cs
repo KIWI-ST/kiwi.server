@@ -16,8 +16,6 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 
-using TensorFlow;
-
 namespace Host.Image.UI
 {
     /// <summary>
@@ -555,22 +553,9 @@ namespace Host.Image.UI
 
         void test()
         {
-            //Engine.Brain.AI.BinaryClassification bc = new Engine.Brain.AI.BinaryClassification();
-            using (var g = new TFGraph())
-            {
+            Engine.Brain.AI.BinaryClassification bc = new Engine.Brain.AI.BinaryClassification();
 
-
-                var a = g.Const(2);
-                var b = g.Const(3);
-                var add = g.Add(a, b);
-                var mul = g.Mul(a, b);
-
-                using (var session = new TFSession(g))
-                {
-                    var result1 = session.GetRunner().Run(add).GetValue();
-                    var result2 = session.GetRunner().Run(mul).GetValue();
-                }
-            }
+ 
         }
     }
 }

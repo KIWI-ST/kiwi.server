@@ -582,10 +582,6 @@
       <Project>{82b3cfc7-e05c-46d3-9e91-2f5f4495238e}</Project>
       <Name>Engine.GIS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TensorFlowSharp\TensorFlowSharp.csproj">
-      <Project>{5e217f33-ac51-4b85-be54-1130dfe88e83}</Project>
-      <Name>TensorFlowSharp</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
