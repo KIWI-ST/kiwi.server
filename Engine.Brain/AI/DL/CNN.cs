@@ -33,8 +33,6 @@ namespace Engine.Brain.AI
         /// </summary>
         TFGraph _graph;
         /// <summary>
-        /// reference:
-        /// https://blog.csdn.net/xukaiwen_2016/article/details/70880694
         /// </summary>
         /// <param name="inputWidth">输入图像的宽</param>
         /// <param name="inputHeight">输入图像的高</param>
@@ -51,10 +49,13 @@ namespace Engine.Brain.AI
             //dropout operation
             _keep = _graph.PlaceholderV2(TFDataType.Double, TFShape.Scalar);
             //The sparse matrix eigenvector is obtained by processing _s
-            BuildCnnLayer(_s);
+            BuildCNNLayer(_s);
         }
-
-        private void BuildCnnLayer(TFOutput x)
+        /// <summary>
+        /// https://blog.csdn.net/xukaiwen_2016/article/details/70880694
+        /// </summary>
+        /// <param name="x"></param>
+        private void BuildCNNLayer(TFOutput x)
         {
             //uniformization bit data
             var normalX = _graph.Mul(x, _graph.Const(1 / 255));
@@ -87,39 +88,24 @@ namespace Engine.Brain.AI
             //optimize gradent descent
             var optimize = new[]{
                 _graph.AssignSub(w1, _graph.Mul(grad[0], _graph.Const(0.01))).Operation,
-                _graph.AssignSub(w1, _graph.Mul(grad[0], _graph.Const(0.01))).Operation,
-                _graph.AssignSub(w1, _graph.Mul(grad[0], _graph.Const(0.01))).Operation,
-                _graph.AssignSub(w1, _graph.Mul(grad[0], _graph.Const(0.01))).Operation,
-                _graph.AssignSub(w1, _graph.Mul(grad[0], _graph.Const(0.01))).Operation,
-                _graph.AssignSub(w1, _graph.Mul(grad[0], _graph.Const(0.01))).Operation,
+                _graph.AssignSub(b1, _graph.Mul(grad[1], _graph.Const(0.01))).Operation,
+                _graph.AssignSub(w2, _graph.Mul(grad[2], _graph.Const(0.01))).Operation,
+                _graph.AssignSub(b2, _graph.Mul(grad[3], _graph.Const(0.01))).Operation,
+                _graph.AssignSub(wfc1, _graph.Mul(grad[4], _graph.Const(0.01))).Operation,
+                _graph.AssignSub(bfc1, _graph.Mul(grad[5], _graph.Const(0.01))).Operation,
+                _graph.AssignSub(wfc2, _graph.Mul(grad[6], _graph.Const(0.01))).Operation,
+                _graph.AssignSub(bfc2, _graph.Mul(grad[7], _graph.Const(0.01))).Operation,
             };
-            //convolution：lowpass filtering
         }
-
-        private void Build()
-        {
-            var s = _graph.Placeholder(TFDataType.Float, new TFShape(64), "state");
-            var q = _graph.Placeholder(TFDataType.Int32, new TFShape(13), "target");
-        }
-
-        private TFOutput Weight_Variable(TFShape shape)
-        {
-            var variable = _graph.VariableV2(shape, TFDataType.Double);
-            var initial = _graph.TruncatedNormal(variable, TFDataType.Float);
-            return variable;
-        }
-
-        private TFOutput Bias_Variable(TFShape shape)
-        {
-            var variable = _graph.VariableV2(shape, TFDataType.Double);
-            var initial = _graph.Constant(0.1, shape);
-            return variable;
-        }
-
         /// <summary>
-        /// 定义CNN网络结构
+        /// Initialization variable
         /// </summary>
-        private void BuildLayer()
+        private void Initial()
+        {
+
+        }
+
+        public void Train()
         {
 
         }
@@ -141,27 +127,6 @@ namespace Engine.Brain.AI
             return _graph.Conv2D(x, filter, strides, "SAME");
         }
         /// <summary>
-        /// Relu操作
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="leakiness"></param>
-        /// <returns></returns>
-        private TFOutput Relu(TFOutput x, double leakiness = 0.0)
-        {
-            _graph.WithScope("Relu");
-            //写法1,使用条件判断
-            var c = _graph.Const(0);
-            var condition = _graph.Less(x, c);
-            return _graph.Where(condition, c, x);
-            //写法2，直接relu
-            //return _graph.Relu(x);
-        }
-
-        private long[] Stride_arr(long stride)
-        {
-            return new long[] { 1, stride, stride, 1 };
-        }
-        /// <summary>
         /// 池化卷积结果（conv2d）池化层采用kernel大小为2*2，步数也为2，周围补0，取最大值。数据量缩小了4倍
         /// </summary>
         /// <param name="x"></param>
@@ -169,7 +134,5 @@ namespace Engine.Brain.AI
         {
             return _graph.MaxPool(x, new long[] { 1, 2, 2, 1 }, new long[] { 1, 2, 2, 1 }, "SAME");
         }
-
-
     }
 }
