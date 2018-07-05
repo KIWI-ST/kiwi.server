@@ -49,7 +49,10 @@ namespace Engine.Brain.AI
             //dropout operation
             _keep = _graph.PlaceholderV2(TFDataType.Double, TFShape.Scalar);
             //The sparse matrix eigenvector is obtained by processing _s
-            BuildCNNLayer(_s);
+            //1.reshape _s  with unlimit count/1 brand
+            var _s_image = _graph.Reshape(_s, _graph.VariableV2(new TFShape(-1, inputWidth,inputHeight ,1), TFDataType.Double));
+            //2.build  cnn layer
+            BuildCNNLayer(_s_image);
         }
         /// <summary>
         /// https://blog.csdn.net/xukaiwen_2016/article/details/70880694
@@ -79,13 +82,14 @@ namespace Engine.Brain.AI
             var wfc2 = _graph.VariableV2(new TFShape(1024, 10), TFDataType.Double);
             var bfc2 = _graph.VariableV2(new TFShape(10), TFDataType.Double);
             var _y_ = _graph.Softmax(_graph.Add(_graph.MatMul(convfc1_dropout, wfc2), bfc2));
+
             //loss function
             var corss_entropy = _graph.Neg(_graph.ReduceSum(_graph.Mul(_r, _graph.Log(_y_))));
-            //gradent descent
+            //gradient descent
             var grad = _graph.AddGradients(new TFOutput[] { corss_entropy }, new TFOutput[] {
                 w1,b1,w2,b2,wfc1,bfc1,wfc2,bfc2
             });
-            //optimize gradent descent
+            //optimize gradient descent
             var optimize = new[]{
                 _graph.AssignSub(w1, _graph.Mul(grad[0], _graph.Const(0.01))).Operation,
                 _graph.AssignSub(b1, _graph.Mul(grad[1], _graph.Const(0.01))).Operation,
