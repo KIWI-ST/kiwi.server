@@ -33,6 +33,10 @@ namespace Engine.Brain.AI
         /// </summary>
         TFGraph _graph;
         /// <summary>
+        /// 全局session
+        /// </summary>
+        TFSession _session;
+        /// <summary>
         /// </summary>
         /// <param name="inputWidth">输入图像的宽</param>
         /// <param name="inputHeight">输入图像的高</param>
@@ -102,13 +106,15 @@ namespace Engine.Brain.AI
             };
         }
         /// <summary>
-        /// Initialization variable
+        /// Initialization variable by random value
         /// </summary>
-        private void Initial()
+        private void InitialVariable()
         {
-
+            _session = new TFSession(_graph);
         }
-
+        /// <summary>
+        /// 加入训练
+        /// </summary>
         public void Train()
         {
 

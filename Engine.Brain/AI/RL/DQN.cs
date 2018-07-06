@@ -44,6 +44,7 @@ namespace Engine.Brain.AI
             var wfc2 = _graph.VariableV2(new TFShape(1024, 10), TFDataType.Double);
             var bfc2 = _graph.VariableV2(new TFShape(10), TFDataType.Double);
             var _y_ = _graph.Softmax(_graph.Add(_graph.MatMul(convfc1_dropout, wfc2), bfc2));
+            //
 
         }
 
