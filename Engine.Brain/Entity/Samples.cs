@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using TensorFlow;
 
 namespace Engine.Brain.Entity
@@ -7,23 +8,29 @@ namespace Engine.Brain.Entity
     public class Samples
     {
 
-
+        public static float[] ToOneHot(int hotIndex,int hotLength)
+        {
+            float[] oneHot = new float[hotLength];
+            for(int i = 0; i < hotLength; i++)
+                oneHot[i] = i == (hotIndex - 1) ? 1 : 0;
+            return oneHot;
+        }
 
         /// <summary>
         /// 随机构建训练样本
         /// </summary>
-        /// <param name="dimension">样本 features count</param>
-        /// <param name="count">样本数量</param>
+        /// <param name="oneDimensionCount">样本 features count</param>
+        /// <param name="batchaSize">样本数量</param>
         /// <returns></returns>
-        public static List<double> CreateInputs(int dimension = 64, int count = 10)
+        public static List<float> CreateInputs(int oneDimensionCount = 64, int batchaSize = 15)
         {
-            var inputs = new List<List<double>>();
+            var inputs = new List<List<float>>();
             var random = new Random();
             //构建指定feature数目的多样本集合
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < batchaSize; i++)
             {
-                var input = new List<double>();
-                for (int j = 0; j < dimension; j++)
+                var input = new List<float>();
+                for (int j = 0; j < oneDimensionCount; j++)
                 {
                     var num = random.Next(10);
                     input.Add(num);
@@ -31,7 +38,7 @@ namespace Engine.Brain.Entity
                 inputs.Add(input);
             }
             //转换成一纬数组
-            var outputs = new List<double>();
+            var outputs = new List<float>();
             inputs.ForEach(p =>
             {
                 outputs.AddRange(p);
@@ -40,37 +47,42 @@ namespace Engine.Brain.Entity
             return outputs;
         }
         /// <summary>
-        /// 
+        /// 构建10个长度的oneHot编码结果样本集
         /// </summary>
-        /// <param name="count">样本数量</param>
+        /// <param name="batchSzie">样本数量</param>
         /// <returns></returns>
-        public static List<double> CreateLabels(int count = 10)
+        public static List<float> CreateLabels(int batchSzie = 15, int oneHot = 10)
         {
-            var labels = new List<double>();
+            var inputs = new List<float[]>();
             var random = new Random();
             //构建多样本的输出label
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < batchSzie; i++)
             {
                 var label = random.Next(10);
-                labels.Add(label);
+                inputs.Add(ToOneHot(label,oneHot));
             }
+            var outputs = new List<float>();
+            inputs.ForEach(p =>
+            {
+                outputs.AddRange(p);
+            });
             //返回一维数组，备用
-            return labels;
+            return outputs;
         }
         /// <summary>
         /// 构建一个随机数组成的tensor
         /// </summary>
         /// <returns></returns>
-        public static TFTensor CreateTensorWithRandomDouble(TFShape shape)
+        public static TFTensor CreateTensorWithRandomFloat(TFShape shape)
         {
             var random = new Random();
             var dimensions = shape.NumDimensions;
             int length = 1;
-            List<double> array = new List<double>();
+            List<float> array = new List<float>();
             for (var i = 0; i < dimensions; i++)
                 length *= Convert.ToInt32(shape[i]);
             for (var i = 0; i < length; i++)
-                array.Add(random.NextDouble());
+                array.Add((float)random.NextDouble());
             var tensor = TFTensor.FromBuffer(shape, array.ToArray(), 0, array.Count);
             return tensor;
         }

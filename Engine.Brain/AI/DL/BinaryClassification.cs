@@ -15,8 +15,8 @@ namespace Engine.Brain.AI
             int featureCount = 8 * 8;
             int predCount = 1;
 
-            var xData = Samples.CreateInputs(count: batchSize, dimension: featureCount);
-            var yData = Samples.CreateLabels(count: batchSize);
+            var xData = Samples.CreateInputs(batchaSize: batchSize, oneDimensionCount: featureCount);
+            var yData = Samples.CreateLabels(batchSzie: batchSize);
 
             var random = new Random();
 
@@ -59,11 +59,11 @@ namespace Engine.Brain.AI
             using (var sess = new TFSession(g))
             {
                 var tensorW = g.Const(random.NextDouble());
-                var initW1 = g.Assign(W1, g.Const(Samples.CreateTensorWithRandomDouble(new TFShape(featureCount, batchSize))));
-                var initb1 = g.Assign(b1, g.Const(Samples.CreateTensorWithRandomDouble(new TFShape(batchSize))));
+                var initW1 = g.Assign(W1, g.Const(Samples.CreateTensorWithRandomFloat(new TFShape(featureCount, batchSize))));
+                var initb1 = g.Assign(b1, g.Const(Samples.CreateTensorWithRandomFloat(new TFShape(batchSize))));
                 //
-                var initW2 = g.Assign(W2, g.Const(Samples.CreateTensorWithRandomDouble(new TFShape(batchSize, 15))));
-                var initb2 = g.Assign(b2, g.Const(Samples.CreateTensorWithRandomDouble(new TFShape(15))));
+                var initW2 = g.Assign(W2, g.Const(Samples.CreateTensorWithRandomFloat(new TFShape(batchSize, 15))));
+                var initb2 = g.Assign(b2, g.Const(Samples.CreateTensorWithRandomFloat(new TFShape(15))));
                 //
                 sess.GetRunner().AddTarget(initW1.Operation, initb1.Operation, initW2.Operation, initb2.Operation).Run();
                 //
@@ -102,8 +102,8 @@ namespace Engine.Brain.AI
             int featureCount = 8 * 8;
             int predCount = 1;
 
-            var xData = Samples.CreateInputs(count: batchSize, dimension: featureCount);
-            var yData = Samples.CreateLabels(count: batchSize);
+            var xData = Samples.CreateInputs(batchaSize: batchSize, oneDimensionCount: featureCount);
+            var yData = Samples.CreateLabels(batchSzie: batchSize);
 
             var random = new Random();
             //
@@ -136,8 +136,8 @@ namespace Engine.Brain.AI
             using (var sess = new TFSession(g))
             {
                 var tensorW = g.Const(random.NextDouble());
-                var initW = g.Assign(W, g.Const(Samples.CreateTensorWithRandomDouble(new TFShape(featureCount, batchSize))));
-                var initb = g.Assign(b, g.Const(Samples.CreateTensorWithRandomDouble(new TFShape(batchSize))));
+                var initW = g.Assign(W, g.Const(Samples.CreateTensorWithRandomFloat(new TFShape(featureCount, batchSize))));
+                var initb = g.Assign(b, g.Const(Samples.CreateTensorWithRandomFloat(new TFShape(batchSize))));
                 //
                 sess.GetRunner().AddTarget(initW.Operation, initb.Operation).Run();
                 //

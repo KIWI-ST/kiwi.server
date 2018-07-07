@@ -14,6 +14,8 @@ namespace Engine.Brain.AI
         /// 
         /// </summary>
         TFGraph _graph;
+        TFOutput _s;
+        TFOutput y_hat;
         /// <summary>
         /// 
         /// </summary>
@@ -23,19 +25,25 @@ namespace Engine.Brain.AI
         /// </summary>
         public DQN(int inputWidth, int inputHeight, int actions_num)
         {
+            _s = _graph.PlaceholderV2(TFDataType.Double, new TFShape(-1, _inputWidth * _inputHeight), "state");
+            var _a = _graph.PlaceholderV2(TFDataType.Double, new TFShape(-1, _actions_num), "action");
             //
-             _inputWidth = inputHeight;
+            _inputWidth = inputHeight;
              _inputHeight = inputHeight;
              _actions_num = actions_num;
             //initialization graph
             _graph = new TFGraph();
+            //calculate image feature vector by convolution
+            TFOutput img_input = BuildCNNLayer();
+            //concat tensor to one dimension
+            TFOutput inputs = _graph.ConcatV2(new TFOutput[] { img_input,_a },new TFOutput());
+            //
+
         }
 
-        private TFOutput BuilCNNLayer()
+        private TFOutput BuildCNNLayer()
         {
             //define graph0
-            var _s = _graph.PlaceholderV2(TFDataType.Double, new TFShape(-1, _inputWidth * _inputHeight), "state");
-            var _a = _graph.PlaceholderV2(TFDataType.Double, new TFShape(-1, _actions_num), "action");
             var _keep = _graph.PlaceholderV2(TFDataType.Double, TFShape.Scalar);
             //reshape _s
             var x = _graph.Reshape(_s, _graph.VariableV2(new TFShape(-1, _inputWidth, _inputHeight, 1), TFDataType.Double));
@@ -44,24 +52,35 @@ namespace Engine.Brain.AI
             //convolution layer 1
             var w1 = _graph.VariableV2(new TFShape(5, 5, 1, 32), TFDataType.Double);
             var b1 = _graph.VariableV2(new TFShape(32), TFDataType.Double);
-            var conv1 = _graph.Relu(_graph.Add(Conv2d(normalX, w1), b1));
-            var pool1 = MaxPool(conv1);
+            var c1 = _graph.Relu(_graph.Add(Conv2d(normalX, w1), b1));
+            var p1 = MaxPool(c1);
             //convolution layer 2
             var w2 = _graph.VariableV2(new TFShape(5, 5, 32, 64), TFDataType.Double);
             var b2 = _graph.VariableV2(new TFShape(64), TFDataType.Double);
-            var conv2 = _graph.Relu(_graph.Add(Conv2d(pool1, w2), b2));
-            var pool2 = MaxPool(conv2);
+            var c2 = _graph.Relu(_graph.Add(Conv2d(p1, w2), b2));
+            var p2 = MaxPool(c2);
             //full connection layer
-            var wfc1 = _graph.VariableV2(new TFShape(7 * 7 * 64, 1024), TFDataType.Double);
-            var bfc1 = _graph.VariableV2(new TFShape(1024), TFDataType.Double);
-            var pool2_flat = _graph.Reshape(pool2, _graph.VariableV2(new TFShape(-1, 7 * 7 * 64), TFDataType.Double));
-            var convfc1 = _graph.Relu(_graph.Add(Conv2d(pool2_flat, wfc1), bfc1));
-            var convfc1_dropout = _graph.Dropout(convfc1, _keep);
+            var w3 = _graph.VariableV2(new TFShape(7 * 7 * 64, 1024), TFDataType.Double);
+            var b3 = _graph.VariableV2(new TFShape(1024), TFDataType.Double);
+            var p3 = _graph.Reshape(p2, _graph.VariableV2(new TFShape(-1, 7 * 7 * 64), TFDataType.Double));
+            var c3 = _graph.Relu(_graph.Add(Conv2d(p3, w3), b3));
+            var c3_dropout = _graph.Dropout(c3, _keep);
             //output layer
-            var wfc2 = _graph.VariableV2(new TFShape(1024, 10), TFDataType.Double);
-            var bfc2 = _graph.VariableV2(new TFShape(10), TFDataType.Double);
-            var _y_ = _graph.Softmax(_graph.Add(_graph.MatMul(convfc1_dropout, wfc2), bfc2));
-            return _y_;
+            var w4 = _graph.VariableV2(new TFShape(1024, 10), TFDataType.Double);
+            var b4 = _graph.VariableV2(new TFShape(10), TFDataType.Double);
+            y_hat = _graph.Softmax(_graph.Add(_graph.MatMul(c3_dropout, w4), b4));
+            //prediction of feature vector
+            return y_hat;
+        }
+
+
+        /// <summary>
+        /// 增加初始化操作
+        /// </summary>
+        /// <param name="operation"></param>
+        private void IncreateInitOperation(TFOperation operation)
+        {
+
         }
 
 

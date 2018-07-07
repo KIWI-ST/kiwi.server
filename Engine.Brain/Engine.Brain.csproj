@@ -36,6 +36,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
@@ -47,12 +48,13 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="TensorFlowSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\TensorFlowSharp.1.7.0\lib\net461\TensorFlowSharp.dll</HintPath>
+      <HintPath>..\packages\TensorFlowSharp.1.8.0-pre1\lib\net461\TensorFlowSharp.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AI\DL\BinaryClassification.cs" />
     <Compile Include="AI\DL\CNN.cs" />
+    <Compile Include="AI\DL\Model.cs" />
     <Compile Include="AI\RL\DQN.cs" />
     <Compile Include="AI\RL\DEnv.cs" />
     <Compile Include="Entity\Samples.cs" />
@@ -66,11 +68,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\TensorFlowSharp.1.7.0\build\net45\TensorFlowSharp.targets" Condition="Exists('..\packages\TensorFlowSharp.1.7.0\build\net45\TensorFlowSharp.targets')" />
+  <Import Project="..\packages\TensorFlowSharp.1.8.0-pre1\build\net45\TensorFlowSharp.targets" Condition="Exists('..\packages\TensorFlowSharp.1.8.0-pre1\build\net45\TensorFlowSharp.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\TensorFlowSharp.1.7.0\build\net45\TensorFlowSharp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\TensorFlowSharp.1.7.0\build\net45\TensorFlowSharp.targets'))" />
+    <Error Condition="!Exists('..\packages\TensorFlowSharp.1.8.0-pre1\build\net45\TensorFlowSharp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\TensorFlowSharp.1.8.0-pre1\build\net45\TensorFlowSharp.targets'))" />
   </Target>
 </Project>
