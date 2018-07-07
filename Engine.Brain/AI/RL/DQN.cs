@@ -10,18 +10,35 @@ namespace Engine.Brain.AI
 {
     public class DQN
     {
+        /// <summary>
+        /// 
+        /// </summary>
         TFGraph _graph;
-
+        /// <summary>
+        /// 
+        /// </summary>
+        int _inputWidth, _inputHeight, _actions_num;
         /// <summary>
         /// 
         /// </summary>
         public DQN(int inputWidth, int inputHeight, int actions_num)
         {
-            var _s = _graph.PlaceholderV2(TFDataType.Double, new TFShape(-1, inputHeight * inputWidth), "state");
-            var _a = _graph.PlaceholderV2(TFDataType.Double, new TFShape(-1, actions_num), "action");
+            //
+             _inputWidth = inputHeight;
+             _inputHeight = inputHeight;
+             _actions_num = actions_num;
+            //initialization graph
+            _graph = new TFGraph();
+        }
+
+        private TFOutput BuilCNNLayer()
+        {
+            //define graph0
+            var _s = _graph.PlaceholderV2(TFDataType.Double, new TFShape(-1, _inputWidth * _inputHeight), "state");
+            var _a = _graph.PlaceholderV2(TFDataType.Double, new TFShape(-1, _actions_num), "action");
             var _keep = _graph.PlaceholderV2(TFDataType.Double, TFShape.Scalar);
             //reshape _s
-            var x = _graph.Reshape(_s, _graph.VariableV2(new TFShape(-1, inputWidth, inputHeight, 1), TFDataType.Double));
+            var x = _graph.Reshape(_s, _graph.VariableV2(new TFShape(-1, _inputWidth, _inputHeight, 1), TFDataType.Double));
             //uniformization bit data
             var normalX = _graph.Mul(x, _graph.Const(1 / 255));
             //convolution layer 1
@@ -44,9 +61,9 @@ namespace Engine.Brain.AI
             var wfc2 = _graph.VariableV2(new TFShape(1024, 10), TFDataType.Double);
             var bfc2 = _graph.VariableV2(new TFShape(10), TFDataType.Double);
             var _y_ = _graph.Softmax(_graph.Add(_graph.MatMul(convfc1_dropout, wfc2), bfc2));
-            //
-
+            return _y_;
         }
+
 
         private TFOutput Conv2d(TFOutput x, TFOutput filter, string scopeName = "Conv2d")
         {
