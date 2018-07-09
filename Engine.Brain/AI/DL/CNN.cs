@@ -116,14 +116,14 @@ namespace Engine.Brain.AI
             //init variables 
             _inits = new[]
             {
-                _graph.Assign(w1, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(5,5,1,32)),TFDataType.Float)).Operation,
-                _graph.Assign(b1, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(32)),TFDataType.Float)).Operation,
-                _graph.Assign(w2, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(5,5,32,64)),TFDataType.Float)).Operation,
-                _graph.Assign(b2, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(64)),TFDataType.Float)).Operation,
-                 _graph.Assign(w3, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(7 * 7 * 64,1024)),TFDataType.Float)).Operation,
-                _graph.Assign(b3, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(1024)),TFDataType.Float)).Operation,
-                _graph.Assign(w4, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(1024,10)),TFDataType.Float)).Operation,
-                _graph.Assign(b4, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(10)),TFDataType.Float)).Operation,
+                _graph.Assign(w1, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(5,5,1,32)))).Operation,
+                _graph.Assign(b1, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(32)))).Operation,
+                _graph.Assign(w2, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(5,5,32,64)))).Operation,
+                _graph.Assign(b2, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(64)))).Operation,
+                 _graph.Assign(w3, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(7 * 7 * 64,1024)))).Operation,
+                _graph.Assign(b3, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(1024)))).Operation,
+                _graph.Assign(w4, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(1024,10)))).Operation,
+                _graph.Assign(b4, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(10)))).Operation,
             };
             //optimize gradient descent
             _optimize = new[]{
@@ -189,7 +189,7 @@ namespace Engine.Brain.AI
 
         private TFOutput ReShapeInput(params long[] shapes)
         {
-            var shape = _graph.Shape(_graph.VariableV2(new TFShape(shapes), TFDataType.Float));
+            var shape = _graph.Shape(_graph.Placeholder(TFDataType.Float, new TFShape(shapes)));
             return shape;
         }
 
@@ -198,27 +198,22 @@ namespace Engine.Brain.AI
             var graph = new TFGraph();
 
             var x = graph.Placeholder(TFDataType.Float, new TFShape(-1, 100));
-
-            var y = graph.Placeholder(TFDataType.Int32, new TFShape( new long[] { -1, 10, 10, 1 }));
-
-            y = graph.Reshape(x, y);
-         
+            var shape = graph.Shape(x);
+            //var shape = graph.VariableShape(,TFDataType.Int32);
+            //https://github.com/tensorflow/tensorflow/blob/be29b0cda3a596a95c2357103a7cd1489c731fcd/tensorflow/core/ops/array_ops_test.cc#L819
+            var y2 = graph.Reshape(x, shape).Operation;
 
             using (var session = new TFSession(graph))
             {
 
                 TFTensor tensor = Samples.CreateTensorWithRandomFloat(new TFShape(10, 100));
-
-                var result = session.GetRunner().AddInput(x, Samples.CreateTensorWithRandomFloat(new TFShape(5, 100)))
-                    .Fetch(y)
-                    .Run();
-
-               // var s1 = session.GetRunner().Run(x).GetValue();
-
                 
+                var runner = session.GetRunner();
+                //runner.AddInput(x, tensor).Fetch(y2, shape);
 
+                //var s1 = runner.Run();
 
-
+                //var s2 = runner.Run(y2).GetValue();
 
             }
 
