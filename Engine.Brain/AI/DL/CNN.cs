@@ -193,31 +193,5 @@ namespace Engine.Brain.AI
             return shape;
         }
 
-        public void Test()
-        {
-            var graph = new TFGraph();
-
-            var x = graph.Placeholder(TFDataType.Float, new TFShape(-1, 100));
-            var shape = graph.Shape(x);
-            //var shape = graph.VariableShape(,TFDataType.Int32);
-            //https://github.com/tensorflow/tensorflow/blob/be29b0cda3a596a95c2357103a7cd1489c731fcd/tensorflow/core/ops/array_ops_test.cc#L819
-            var y2 = graph.Reshape(x, shape).Operation;
-
-            using (var session = new TFSession(graph))
-            {
-
-                TFTensor tensor = Samples.CreateTensorWithRandomFloat(new TFShape(10, 100));
-                
-                var runner = session.GetRunner();
-                //runner.AddInput(x, tensor).Fetch(y2, shape);
-
-                //var s1 = runner.Run();
-
-                //var s2 = runner.Run(y2).GetValue();
-
-            }
-
-        }
-
     }
 }
