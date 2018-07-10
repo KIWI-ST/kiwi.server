@@ -556,7 +556,7 @@ namespace Host.Image.UI
             //Engine.Brain.AI.BinaryClassification bc = new Engine.Brain.AI.BinaryClassification();
             Engine.Brain.AI.CNN cnn = new Engine.Brain.AI.CNN(28,28,10);
             //cnn.Train(1, 28, 28);
-            cnn.Test();
+            //cnn.Test();
 
         }
     }

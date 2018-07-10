@@ -9,9 +9,9 @@ namespace Engine.Brain.AI.RL
     public class DNet
     {
         //runner
-        TFSession _session;
+        private TFSession _session;
         //calcute graph
-        TFGraph _graph;
+        private TFGraph _graph;
         //定义第一层网络的输出特征为10
         readonly int n_eval_l1_outfeature = 10;
         /// <summary>
