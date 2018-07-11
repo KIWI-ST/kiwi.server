@@ -71,7 +71,7 @@ namespace Engine.Brain.AI.RL
         /// <summary>
         /// train model
         /// </summary>
-        public void Learn()
+        public void Train()
         {
 
         }
