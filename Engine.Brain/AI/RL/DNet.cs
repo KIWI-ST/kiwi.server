@@ -55,8 +55,18 @@ namespace Engine.Brain.AI.RL
                 _graph.AssignSub(w2, _graph.Mul(grad[2], _graph.Const(0.01f,TFDataType.Float))).Operation,
                 _graph.AssignSub(b2, _graph.Mul(grad[3], _graph.Const(0.01f,TFDataType.Float))).Operation,
             };
-            //
+            //inital varibales
+            Initialize(inits);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        private void Initialize(TFOperation[] operations)
+        {
+            //init session
             _session = new TFSession(_graph);
+            _session.GetRunner().AddTarget(operations);
+            _session.GetRunner().Run();
         }
         /// <summary>
         /// 增加学习记忆区
@@ -75,5 +85,14 @@ namespace Engine.Brain.AI.RL
         {
 
         }
+        /// <summary>
+        /// 预测
+        /// </summary>
+        /// <returns></returns>
+        public double Predict(double[] state)
+        {
+            return 1;
+        }
+
     }
 }
