@@ -1,4 +1,5 @@
 ﻿using Engine.Brain.Entity;
+using System;
 using TensorFlow;
 
 namespace Engine.Brain.AI.RL
@@ -12,6 +13,10 @@ namespace Engine.Brain.AI.RL
         private TFSession _session;
         //calcute graph
         private TFGraph _graph;
+        //
+        private TFOutput _input;
+        //predict output value
+        private TFOutput _output;
         //定义第一层网络的输出特征为10
         readonly int n_eval_l1_outfeature = 10;
         /// <summary>
@@ -24,16 +29,18 @@ namespace Engine.Brain.AI.RL
             //calcute graph
             _graph = new TFGraph();
             //input
-            var x1 = _graph.Placeholder(TFDataType.Float, new TFShape(-1, n_features));
+            _input = _graph.Placeholder(TFDataType.Float, new TFShape(-1, n_features));
             var y1 = _graph.Placeholder(TFDataType.Float, new TFShape(-1, n_actions));
             //layer1
             var w1 = _graph.VariableV2(new TFShape(n_features, n_eval_l1_outfeature), TFDataType.Float);
             var b1 = _graph.VariableV2(new TFShape(1, n_eval_l1_outfeature), TFDataType.Float);
-            var l1 = _graph.Relu(_graph.Add(_graph.MatMul(x1, w1), b1));
+            var l1 = _graph.Relu(_graph.Add(_graph.MatMul(_input, w1), b1));
             //layer2
             var w2 = _graph.VariableV2(new TFShape(n_eval_l1_outfeature, n_actions), TFDataType.Float);
             var b2 = _graph.VariableV2(new TFShape(1, n_actions), TFDataType.Float);
             var l2 = _graph.Relu(_graph.Add(_graph.MatMul(l1, w2), b2));
+            //predict value
+            _output = l2;
             //loss and train
             var corss_entropy = _graph.Neg(_graph.ReduceSum(_graph.Mul(y1, _graph.Log(l2))));
             //calute gradient 
@@ -43,10 +50,10 @@ namespace Engine.Brain.AI.RL
             });
             //init variables
             var inits = new[]{
-                _graph.Assign(w1, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(5,5,1,32)))).Operation,
-                _graph.Assign(b1, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(32)))).Operation,
-                _graph.Assign(w2, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(5,5,32,64)))).Operation,
-                _graph.Assign(b2, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(64)))).Operation,
+                _graph.Assign(w1, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(64,10)))).Operation,
+                _graph.Assign(b1, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(1,10)))).Operation,
+                _graph.Assign(w2, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(10,10)))).Operation,
+                _graph.Assign(b2, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(1,10)))).Operation,
             };
             //optimize gradient descent
             var optimize = new[]{
@@ -65,8 +72,7 @@ namespace Engine.Brain.AI.RL
         {
             //init session
             _session = new TFSession(_graph);
-            _session.GetRunner().AddTarget(operations);
-            _session.GetRunner().Run();
+            _session.GetRunner().AddTarget(operations).Run();
         }
         /// <summary>
         /// 增加学习记忆区
@@ -89,9 +95,11 @@ namespace Engine.Brain.AI.RL
         /// 预测
         /// </summary>
         /// <returns></returns>
-        public double Predict(double[] state)
+        public object Predict(TFTensor tensor)
         {
-            return 1;
+            var result = _session.GetRunner().AddInput(_input, tensor).Fetch(_output).Run();
+            var predict = result[0].GetValue();
+            return predict;
         }
 
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Engine.Brain.Entity;
+using System.Collections.Generic;
 using TensorFlow;
 
 namespace Engine.Brain.AI.RL
@@ -85,18 +86,26 @@ namespace Engine.Brain.AI.RL
 
         public void Learn()
         {
+            //样本格式
             const int batchSize = 10;
-
-
-            if (memoryCount > memoryCapacity)
+            //特征个数
+            const int featureCount = 64;
+            //构建memory
+            if (memoryCount < memoryCapacity)
             {
-
+                var inputs = Samples.CreateInputs(oneDimensionCount:featureCount,batchSize:batchSize);
+                var labels = Samples.CreateLabels();
+                var tensor = Samples.CreateTensorWithRandomFloat(new TFShape(10, 64));
+                var q_eval = evalNet.Predict(tensor);                                                                            
             }
-
             //1.从memeory生成随机批次的训练数据
             //2.使用Eval网络计算 q_eval,q_next
-            //3.q_target
+            //q_next is the target NeuralNetwork
+            var q_next = targetNet.Predict(null);
+            //根据输入的batchsize，构建二维表，用于计算cost
+            var q_real = targetNet.Predict(null); 
             //4.从memory得到reward
+
         }
 
 

@@ -144,7 +144,7 @@ namespace Engine.Brain.AI
         {
             using (_session = new TFSession(_graph))
             {
-                var xData = Samples.CreateInputs(batchaSize: batchSize, oneDimensionCount: width * height);
+                var xData = Samples.CreateInputs(batchSize: batchSize, oneDimensionCount: width * height);
                 var yData = Samples.CreateLabels(batchSzie: batchSize);
 
                 TFTensor tensorX = TFTensor.FromBuffer(new TFShape(batchSize, width * height), xData.ToArray(), 0, xData.Count);

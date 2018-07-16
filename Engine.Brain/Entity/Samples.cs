@@ -20,14 +20,14 @@ namespace Engine.Brain.Entity
         /// 随机构建训练样本
         /// </summary>
         /// <param name="oneDimensionCount">样本 features count</param>
-        /// <param name="batchaSize">样本数量</param>
+        /// <param name="batchSize">样本数量</param>
         /// <returns></returns>
-        public static List<float> CreateInputs(int oneDimensionCount = 64, int batchaSize = 15)
+        public static List<float> CreateInputs(int oneDimensionCount = 64, int batchSize = 15)
         {
             var inputs = new List<List<float>>();
             var random = new Random();
             //构建指定feature数目的多样本集合
-            for (int i = 0; i < batchaSize; i++)
+            for (int i = 0; i < batchSize; i++)
             {
                 var input = new List<float>();
                 for (int j = 0; j < oneDimensionCount; j++)

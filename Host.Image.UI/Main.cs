@@ -1,4 +1,5 @@
-﻿using Engine.Brain.Bootstrap;
+﻿using Engine.Brain.AI.RL;
+using Engine.Brain.Bootstrap;
 using Engine.Brain.Utils;
 using Engine.GIS.Entity;
 using Engine.GIS.GLayer.GRasterLayer;
@@ -553,10 +554,9 @@ namespace Host.Image.UI
 
         void test()
         {
-            //Engine.Brain.AI.BinaryClassification bc = new Engine.Brain.AI.BinaryClassification();
-            Engine.Brain.AI.CNN cnn = new Engine.Brain.AI.CNN(28,28,10);
-            //cnn.Train(1, 28, 28);
-            //cnn.Test();
+            //构建输入feature 8x8，action 为10种类的dqn网
+            DQN dqn = new DQN(8,8,10);
+            dqn.Learn();
 
         }
     }

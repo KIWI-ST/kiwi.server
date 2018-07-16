@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Engine.Brain.Entity;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -85,6 +86,7 @@ namespace Engine.Brain.AI
             //2.
             return null;
         }
+
 
     }
 }
