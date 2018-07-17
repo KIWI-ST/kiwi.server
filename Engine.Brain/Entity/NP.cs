@@ -7,6 +7,25 @@ namespace Engine.Brain.Entity
 {
     public class NP
     {
+        /// <summary>
+        /// 归一化
+        /// </summary>
+        /// <param name="inputs"></param>
+        /// <returns></returns>
+        public static float[] Normalize(byte[] inputs)
+        {
+            int count = inputs.Length;
+            float[] normal = new float[inputs.Length];
+            for (int i = 0; i < count; i++)
+                normal[i] = inputs[i] / 255.0f;
+            return normal;
+        }
+        /// <summary>
+        /// onehot编码
+        /// </summary>
+        /// <param name="hotIndex"></param>
+        /// <param name="hotLength"></param>
+        /// <returns></returns>
         public static float[] ToOneHot(int hotIndex, int hotLength)
         {
             float[] oneHot = new float[hotLength];
@@ -14,7 +33,6 @@ namespace Engine.Brain.Entity
                 oneHot[i] = i == (hotIndex - 1) ? 1 : 0;
             return oneHot;
         }
-
         /// <summary>
         /// 随机构建训练样本
         /// </summary>
