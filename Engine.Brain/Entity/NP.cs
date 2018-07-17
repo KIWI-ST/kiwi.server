@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
+using System.Linq;
 using TensorFlow;
 
 namespace Engine.Brain.Entity
 {
-    public class Samples
+    public class NP
     {
-
-        public static float[] ToOneHot(int hotIndex,int hotLength)
+        public static float[] ToOneHot(int hotIndex, int hotLength)
         {
             float[] oneHot = new float[hotLength];
-            for(int i = 0; i < hotLength; i++)
+            for (int i = 0; i < hotLength; i++)
                 oneHot[i] = i == (hotIndex - 1) ? 1 : 0;
             return oneHot;
         }
@@ -59,7 +58,7 @@ namespace Engine.Brain.Entity
             for (int i = 0; i < batchSzie; i++)
             {
                 var label = random.Next(10);
-                inputs.Add(ToOneHot(label,oneHot));
+                inputs.Add(ToOneHot(label, oneHot));
             }
             var outputs = new List<float>();
             inputs.ForEach(p =>
@@ -86,6 +85,10 @@ namespace Engine.Brain.Entity
             var tensor = TFTensor.FromBuffer(shape, array.ToArray(), 0, array.Count);
             return tensor;
         }
-
+        public static int Argmax(float[] inputs)
+        {
+            float max = inputs.Max();
+            return Array.IndexOf(inputs, max);
+        }
     }
 }

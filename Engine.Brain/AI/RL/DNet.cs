@@ -50,10 +50,10 @@ namespace Engine.Brain.AI.RL
             });
             //init variables
             var inits = new[]{
-                _graph.Assign(w1, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(64,10)))).Operation,
-                _graph.Assign(b1, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(1,10)))).Operation,
-                _graph.Assign(w2, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(10,10)))).Operation,
-                _graph.Assign(b2, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(1,10)))).Operation,
+                _graph.Assign(w1, _graph.Const(NP.CreateTensorWithRandomFloat(new TFShape(64,10)))).Operation,
+                _graph.Assign(b1, _graph.Const(NP.CreateTensorWithRandomFloat(new TFShape(1,10)))).Operation,
+                _graph.Assign(w2, _graph.Const(NP.CreateTensorWithRandomFloat(new TFShape(10,10)))).Operation,
+                _graph.Assign(b2, _graph.Const(NP.CreateTensorWithRandomFloat(new TFShape(1,10)))).Operation,
             };
             //optimize gradient descent
             var optimize = new[]{

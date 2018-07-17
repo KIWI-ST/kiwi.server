@@ -116,14 +116,14 @@ namespace Engine.Brain.AI
             //init variables 
             _inits = new[]
             {
-                _graph.Assign(w1, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(5,5,1,32)))).Operation,
-                _graph.Assign(b1, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(32)))).Operation,
-                _graph.Assign(w2, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(5,5,32,64)))).Operation,
-                _graph.Assign(b2, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(64)))).Operation,
-                 _graph.Assign(w3, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(7 * 7 * 64,1024)))).Operation,
-                _graph.Assign(b3, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(1024)))).Operation,
-                _graph.Assign(w4, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(1024,10)))).Operation,
-                _graph.Assign(b4, _graph.Const(Samples.CreateTensorWithRandomFloat(new TFShape(10)))).Operation,
+                _graph.Assign(w1, _graph.Const(NP.CreateTensorWithRandomFloat(new TFShape(5,5,1,32)))).Operation,
+                _graph.Assign(b1, _graph.Const(NP.CreateTensorWithRandomFloat(new TFShape(32)))).Operation,
+                _graph.Assign(w2, _graph.Const(NP.CreateTensorWithRandomFloat(new TFShape(5,5,32,64)))).Operation,
+                _graph.Assign(b2, _graph.Const(NP.CreateTensorWithRandomFloat(new TFShape(64)))).Operation,
+                 _graph.Assign(w3, _graph.Const(NP.CreateTensorWithRandomFloat(new TFShape(7 * 7 * 64,1024)))).Operation,
+                _graph.Assign(b3, _graph.Const(NP.CreateTensorWithRandomFloat(new TFShape(1024)))).Operation,
+                _graph.Assign(w4, _graph.Const(NP.CreateTensorWithRandomFloat(new TFShape(1024,10)))).Operation,
+                _graph.Assign(b4, _graph.Const(NP.CreateTensorWithRandomFloat(new TFShape(10)))).Operation,
             };
             //optimize gradient descent
             _optimize = new[]{
@@ -144,8 +144,8 @@ namespace Engine.Brain.AI
         {
             using (_session = new TFSession(_graph))
             {
-                var xData = Samples.CreateInputs(batchSize: batchSize, oneDimensionCount: width * height);
-                var yData = Samples.CreateLabels(batchSzie: batchSize);
+                var xData = NP.CreateInputs(batchSize: batchSize, oneDimensionCount: width * height);
+                var yData = NP.CreateLabels(batchSzie: batchSize);
 
                 TFTensor tensorX = TFTensor.FromBuffer(new TFShape(batchSize, width * height), xData.ToArray(), 0, xData.Count);
                 TFTensor tensorY = TFTensor.FromBuffer(new TFShape(batchSize, 10), yData.ToArray(), 0, yData.Count);
