@@ -16,21 +16,19 @@ namespace Engine.Brain.AI.RL
         private TFGraph _graph;
         //输入参数1，features
         private TFOutput _input_features;
-        //输入参数2，action
-        private TFOutput _input_actions;
         //输入参数3，[可选] 实际q值
         private TFOutput _input_qvalue;
         //输出参数，prediction
         private TFOutput _output_qvalue;
-        //loss
-        private TFOutput _corss_entropy;
         //
         private TFOperation[] _optimize;
-        //
-        private List<float> _history;
-
-        TFOutput _cost, w1, b1, w2, b2, w3, b3;
+        TFOutput _w1, _b1, _w2, _b2, _w3, _b3, _w4, _b4;
+        TFOutput _l1, _l2, _l3, _l4;
+        TFOutput _loss, _backprop;
         TFOutput[] _grad;
+
+        public List<float> History { get; }
+
         /// <summary>
         /// 
         /// </summary>
@@ -39,52 +37,76 @@ namespace Engine.Brain.AI.RL
         public DNet(int n_features, int n_actions)
         {
             //
-            _history = new List<float>();
+            History = new List<float>();
             //calcute graph
             _graph = new TFGraph();
             //input
             _input_features = _graph.Placeholder(TFDataType.Float, new TFShape(-1, n_features + n_actions));
             _input_qvalue = _graph.Placeholder(TFDataType.Float, new TFShape(-1, 1));
             //layer1
-            w1 = _graph.VariableV2(new TFShape(n_features + n_actions, n_actions), TFDataType.Float);
-            b1 = _graph.VariableV2(new TFShape(1, n_actions), TFDataType.Float);
-            var l1 = _graph.Relu(_graph.Add(_graph.MatMul(_input_features, w1), b1));
+            _w1 = _graph.VariableV2(new TFShape(n_features + n_actions, n_actions), TFDataType.Float);
+            _b1 = _graph.VariableV2(new TFShape(1, n_actions), TFDataType.Float);
+            _l1 = _graph.Sigmoid(_graph.Add(_graph.MatMul(_input_features, _w1), _b1));
             //layer2
-            w2 = _graph.VariableV2(new TFShape(n_actions, n_actions), TFDataType.Float);
-            b2 = _graph.VariableV2(new TFShape(1, n_actions), TFDataType.Float);
-            var l2 = _graph.Relu(_graph.Add(_graph.MatMul(l1, w2), b2));
+            _w2 = _graph.VariableV2(new TFShape(n_actions, n_actions), TFDataType.Float);
+            _b2 = _graph.VariableV2(new TFShape(1, n_actions), TFDataType.Float);
+            _l2 = _graph.Sigmoid(_graph.Add(_graph.MatMul(_l1, _w2), _b2));
             //layer3
-            w3 = _graph.VariableV2(new TFShape(n_actions, 1), TFDataType.Float);
-            b3 = _graph.VariableV2(new TFShape(1, 1), TFDataType.Float);
-            var l3 = _graph.Relu(_graph.Add(_graph.MatMul(l2, w3), b3));
+            _w3 = _graph.VariableV2(new TFShape(n_actions, n_actions / 2), TFDataType.Float);
+            _b3 = _graph.VariableV2(new TFShape(1, n_actions / 2), TFDataType.Float);
+            _l3 = _graph.Sigmoid(_graph.Add(_graph.MatMul(_l2, _w3), _b3));
+            //layer4 
+            _w4 = _graph.VariableV2(new TFShape(n_actions / 2, 1), TFDataType.Float);
+            _b4 = _graph.VariableV2(new TFShape(1, 1), TFDataType.Float);
+            _l4 = _graph.Sigmoid(_graph.Add(_graph.MatMul(_l3, _w4), _b4));
             //calcute reward
-            _output_qvalue = l2;
+            _output_qvalue = _l4;
             //loss and train
-            //(_loss, _backprop) = _graph.SoftmaxCrossEntropyWithLogits(l3, _input_qvalue);
-            _cost = _graph.ReduceMean(_graph.Neg(_graph.ReduceSum(_graph.Mul(_input_qvalue, _graph.Log(l3)))));
+            _loss = _graph.Neg(_graph.ReduceSum(_graph.Mul(_input_qvalue, _graph.Log(_l4))));
             //calute gradient 
-            _grad = _graph.AddGradients(new TFOutput[] { _cost }, new TFOutput[] {
-                w1,b1,
-                w2,b2,
-                w3,b3
+            _grad = _graph.AddGradients(new TFOutput[] { _loss }, new TFOutput[] {
+                _w1,_b1,
+                _w2,_b2,
+                _w3,_b3,
+                _w4,_b4
             });
             //init variables
             var inits = new[]{
-                _graph.Assign(w1, _graph.Const(NP.CreateTensorWithRandomFloat(new TFShape(n_features+n_actions,n_actions)))).Operation,
-                _graph.Assign(b1, _graph.Const(NP.CreateTensorWithRandomFloat(new TFShape(1,n_actions)))).Operation,
-                _graph.Assign(w2, _graph.Const(NP.CreateTensorWithRandomFloat(new TFShape(n_actions,n_actions)))).Operation,
-                _graph.Assign(b2, _graph.Const(NP.CreateTensorWithRandomFloat(new TFShape(1,n_actions)))).Operation,
-                _graph.Assign(w3, _graph.Const(NP.CreateTensorWithRandomFloat(new TFShape(n_actions,1)))).Operation,
-                _graph.Assign(b3, _graph.Const(NP.CreateTensorWithRandomFloat(new TFShape(1,1)))).Operation,
+                 _graph.Assign(_w1, _graph.Const(NP.CreateTensorWithRandomNormalFloat(new TFShape(n_features+n_actions,n_actions)))).Operation,
+                _graph.Assign(_b1, _graph.Const(NP.CreateTensorWithRandomNormalFloat(new TFShape(1,n_actions)))).Operation,
+                _graph.Assign(_w2, _graph.Const(NP.CreateTensorWithRandomNormalFloat(new TFShape(n_actions,n_actions)))).Operation,
+                _graph.Assign(_b2, _graph.Const(NP.CreateTensorWithRandomNormalFloat(new TFShape(1,n_actions)))).Operation,
+                _graph.Assign(_w3, _graph.Const(NP.CreateTensorWithRandomNormalFloat(new TFShape(n_actions,n_actions/2)))).Operation,
+                _graph.Assign(_b3, _graph.Const(NP.CreateTensorWithRandomNormalFloat(new TFShape(1,n_actions/2)))).Operation,
+                _graph.Assign(_w4, _graph.Const(NP.CreateTensorWithRandomNormalFloat(new TFShape(n_actions/2,1)))).Operation,
+                _graph.Assign(_b4, _graph.Const(NP.CreateTensorWithRandomNormalFloat(new TFShape(1,1)))).Operation,
             };
             //optimize gradient descent
             _optimize = new[]{
-                _graph.AssignSub(w1, _graph.Mul(_grad[0], _graph.Const(0.0001f,TFDataType.Float))).Operation,
-                _graph.AssignSub(b1, _graph.Mul(_grad[1], _graph.Const(0.0001f,TFDataType.Float))).Operation,
-                _graph.AssignSub(w2, _graph.Mul(_grad[2], _graph.Const(0.0001f,TFDataType.Float))).Operation,
-                _graph.AssignSub(b2, _graph.Mul(_grad[3], _graph.Const(0.0001f,TFDataType.Float))).Operation,
-                _graph.AssignSub(w3, _graph.Mul(_grad[4], _graph.Const(0.0001f,TFDataType.Float))).Operation,
-                _graph.AssignSub(b3, _graph.Mul(_grad[5], _graph.Const(0.0001f,TFDataType.Float))).Operation,
+                _graph.ApplyGradientDescent(_w1,_graph.Const(0.01f),_grad[0]).Operation,
+                _graph.ApplyGradientDescent(_b1,_graph.Const(0.01f),_grad[1]).Operation,
+                _graph.ApplyGradientDescent(_w2,_graph.Const(0.01f),_grad[2]).Operation,
+                _graph.ApplyGradientDescent(_b2,_graph.Const(0.01f),_grad[3]).Operation,
+                _graph.ApplyGradientDescent(_w3,_graph.Const(0.01f),_grad[4]).Operation,
+                _graph.ApplyGradientDescent(_b3,_graph.Const(0.01f),_grad[5]).Operation,
+                _graph.ApplyGradientDescent(_w4,_graph.Const(0.01f),_grad[6]).Operation,
+                _graph.ApplyGradientDescent(_b4,_graph.Const(0.01f),_grad[7]).Operation,
+                //_graph.Cond(_graph.IsNan(_loss),()=>_graph.Assign(_w1,_w1),()=>_graph.AssignSub(_w1, _graph.Mul(_grad[0], _graph.Const(0.00001f,TFDataType.Float)))).Operation,
+                //_graph.Cond(_graph.IsNan(_loss),()=>_graph.Assign(_b1,_b1),()=>_graph.AssignSub(_b1, _graph.Mul(_grad[1], _graph.Const(0.00001f,TFDataType.Float)))).Operation,
+                //_graph.Cond(_graph.IsNan(_loss),()=>_graph.Assign(_w2,_w2),()=>_graph.AssignSub(_w2, _graph.Mul(_grad[2], _graph.Const(0.00001f,TFDataType.Float)))).Operation,
+                //_graph.Cond(_graph.IsNan(_loss),()=>_graph.Assign(_b2,_b2),()=>_graph.AssignSub(_b2, _graph.Mul(_grad[3], _graph.Const(0.00001f,TFDataType.Float)))).Operation,
+                //_graph.Cond(_graph.IsNan(_loss),()=>_graph.Assign(_w3,_w3),()=>_graph.AssignSub(_w3, _graph.Mul(_grad[4], _graph.Const(0.00001f,TFDataType.Float)))).Operation,
+                //_graph.Cond(_graph.IsNan(_loss),()=>_graph.Assign(_b3,_b3),()=>_graph.AssignSub(_b3, _graph.Mul(_grad[5], _graph.Const(0.00001f,TFDataType.Float)))).Operation,
+                //_graph.Cond(_graph.IsNan(_loss),()=>_graph.Assign(_w4,_w4),()=>_graph.AssignSub(_w4, _graph.Mul(_grad[6], _graph.Const(0.00001f,TFDataType.Float)))).Operation,
+                //_graph.Cond(_graph.IsNan(_loss),()=>_graph.Assign(_b4,_b4),()=>_graph.AssignSub(_b4, _graph.Mul(_grad[7], _graph.Const(0.00001f,TFDataType.Float)))).Operation,
+                // _graph.AssignSub(_w1, _graph.Mul(_grad[0], _graph.Const(0.01f,TFDataType.Float))).Operation,
+                //_graph.AssignSub(_b1, _graph.Mul(_grad[1], _graph.Const(0.01f,TFDataType.Float))).Operation,
+                //_graph.AssignSub(_w2, _graph.Mul(_grad[2], _graph.Const(0.01f,TFDataType.Float))).Operation,
+                //_graph.AssignSub(_b2, _graph.Mul(_grad[3], _graph.Const(0.01f,TFDataType.Float))).Operation,
+                //_graph.AssignSub(_w3, _graph.Mul(_grad[4], _graph.Const(0.01f,TFDataType.Float))).Operation,
+                //_graph.AssignSub(_b3, _graph.Mul(_grad[5], _graph.Const(0.01f,TFDataType.Float))).Operation,
+                //_graph.AssignSub(_w4, _graph.Mul(_grad[6], _graph.Const(0.01f,TFDataType.Float))).Operation,
+                //_graph.AssignSub(_b4, _graph.Mul(_grad[7], _graph.Const(0.01f,TFDataType.Float))).Operation,
             };
             //inital varibales
             Initialize(inits);
@@ -99,36 +121,61 @@ namespace Engine.Brain.AI.RL
             _session.GetRunner().AddTarget(operations).Run();
         }
         /// <summary>
-        /// 增加学习记忆区
-        /// </summary>
-        /// <param name="state"></param>
-        /// <param name="action"></param>
-        /// <param name="reward"></param>
-        public void History(int state, int action, int reward)
-        {
-
-        }
-        /// <summary>
         /// train model
         /// </summary>
         public void Train(TFTensor input_feature_tensor, TFTensor input_qvalue_tensor)
         {
-            for (int i = 0; i < 1000; i++)
+            //input output
+            var input = input_feature_tensor.GetValue();
+            var output = input_qvalue_tensor.GetValue();
+            for (int i = 0; i < 50000; i++)
             {
-                //var result = _session.GetRunner().AddInput(_input_features, input_feature_tensor).AddInput(_input_qvalue, input_qvalue_tensor).AddTarget(_optimize).Fetch(_loss,_backprop).Run();
-                var result = _session.GetRunner().AddInput(_input_features, input_feature_tensor).AddInput(_input_qvalue, input_qvalue_tensor).AddTarget(_optimize).Fetch(_cost).Fetch(_grad).Run();
+                //
+                var variables = _session.GetRunner().Fetch(_w1, _b1, _w2, _b2, _w3, _b3, _w4, _b4).Run();
+                var w1 = variables[0].GetValue();
+                var b1 = variables[1].GetValue();
+                var w2 = variables[2].GetValue();
+                var b2 = variables[3].GetValue();
+                var w3 = variables[4].GetValue();
+                var b3 = variables[5].GetValue();
+                var w4 = variables[6].GetValue();
+                var b4 = variables[7].GetValue();
+                //var result = _session.GetRunner().AddInput(_input_features, input_feature_tensor).AddInput(_input_qvalue, input_qvalue_tensor).AddTarget(_optimize).Fetch(_loss).Fetch(_grad).Fetch(_l1,_l2,_l3,_l4,_backprop).Run();
+                var result = _session.GetRunner().
+                    AddInput(_input_features, input_feature_tensor).
+                    AddInput(_input_qvalue, input_qvalue_tensor).
+                    AddTarget(_optimize).
+                    Fetch(_loss).
+                    Fetch(_l1, _l2, _l3, _l4).
+                    Fetch(_grad).
+                    Run();
+                //
                 var loss = result[0].GetValue();
-                _history.Add((float)loss);
+                //
+                var l1 = result[1].GetValue();
+                var l2 = result[2].GetValue();
+                var l3 = result[3].GetValue();
+                var l4 = result[4].GetValue();
+                //
+                var gard1 = result[5].GetValue();
+                var gard2 = result[6].GetValue();
+                var gard3 = result[7].GetValue();
+                var gard4 = result[8].GetValue();
+                var gard5 = result[9].GetValue();
+                var gard6 = result[10].GetValue();
+                var gard7 = result[11].GetValue();
+                var gard8 = result[12].GetValue();
+                //
+                History.Add((float)loss);
             }
-            Console.Write(_history);
         }
         /// <summary>
         /// 预测
         /// </summary>
         /// <returns></returns>
-        public object Predict(TFTensor feature_tensor, TFTensor action_tensor)
+        public object Predict(TFTensor feature_tensor)
         {
-            var result = _session.GetRunner().AddInput(_input_features, feature_tensor).AddInput(_input_actions, action_tensor).Fetch(_output_qvalue).Run();
+            var result = _session.GetRunner().AddInput(_input_features, feature_tensor).Fetch(_output_qvalue).Run();
             var predict = result[0].GetValue();
             return predict;
         }

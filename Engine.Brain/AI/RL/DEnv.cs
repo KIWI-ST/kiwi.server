@@ -72,7 +72,7 @@ namespace Engine.Brain.AI
             Array.ForEach(categories, categoryDir =>
             {
                 //获取样本全集
-                string[] samples = Directory.GetFiles(categoryDir,"*.jpeg");
+                string[] samples = Directory.GetFiles(categoryDir, "*.jpeg");
                 //载入字典
                 sampleDictionary.Add(categoryDir, samples);
             });
@@ -97,7 +97,7 @@ namespace Engine.Brain.AI
             //归一化
             float[] noraml = NP.Normalize(raw);
             //得到样本reward
-            float reawrd = action == classIndex ? 1f : -1f;
+            float reawrd = action == classIndex ? 1.0f : 0.01f;
             //数据打包返回
             return new DRaw()
             {

@@ -17,7 +17,7 @@ namespace Engine.Brain.Entity
             int count = inputs.Length;
             float[] normal = new float[inputs.Length];
             for (int i = 0; i < count; i++)
-                normal[i] = inputs[i] / 255.0f;
+                normal[i] = inputs[i] / 128f - 1;
             return normal;
         }
         /// <summary>
@@ -90,7 +90,7 @@ namespace Engine.Brain.Entity
         /// 构建一个随机数组成的tensor
         /// </summary>
         /// <returns></returns>
-        public static TFTensor CreateTensorWithRandomFloat(TFShape shape)
+        public static TFTensor CreateTensorWithRandomNormalFloat(TFShape shape)
         {
             var random = new Random();
             var dimensions = shape.NumDimensions;
@@ -99,9 +99,25 @@ namespace Engine.Brain.Entity
             for (var i = 0; i < dimensions; i++)
                 length *= Convert.ToInt32(shape[i]);
             for (var i = 0; i < length; i++)
-                array.Add((float)random.NextDouble());
+            {
+                float normal = Normal(random.NextDouble(), random.NextDouble());
+                array.Add(normal);
+            }
             var tensor = TFTensor.FromBuffer(shape, array.ToArray(), 0, array.Count);
             return tensor;
+        }
+        /// <summary>
+        /// 标准正态分部期望0，方差1
+        /// </summary>
+        /// <param name="u1"></param>
+        /// <param name="u2"></param>
+        /// <param name="e">期望，</param>
+        /// <param name="d">方差</param>
+        /// <returns></returns>
+        public static float Normal(double u1, double u2, double e = 0, double d = 1)
+        {
+            double result = e + Math.Sqrt(d) * Math.Sqrt((-2) * (Math.Log(u1) / Math.Log(Math.E))) * Math.Cos(2 * Math.PI * u2);
+            return (float)result;
         }
 
         public static int Argmax(float[] inputs)
@@ -120,10 +136,10 @@ namespace Engine.Brain.Entity
             int dim0 = inputs.GetLength(0);
             int dim1 = inputs.GetLength(1);
             int[] output = new int[dim0];
-            for (int i=0;i< dim0; i++)
+            for (int i = 0; i < dim0; i++)
             {
                 float[] arr = new float[dim1];
-                for(int j = 0; j < dim1; j++)
+                for (int j = 0; j < dim1; j++)
                     arr[j] = inputs[i, j];
                 output[i] = Argmax(arr);
             }
