@@ -14,6 +14,10 @@ namespace Engine.Brain.AI
         /// </summary>
         public float[] State { get; set; }
         /// <summary>
+        /// one-hot vector
+        /// </summary>
+        public float[] Action { get; set; }
+        /// <summary>
         /// reward
         /// </summary>
         public float Reward { get; set; }
@@ -28,6 +32,10 @@ namespace Engine.Brain.AI
         /// 二级目录
         /// </summary>
         string[] _categories;
+        /// <summary>
+        /// 分类个数，对应action
+        /// </summary>
+        private int _classes_num;
         /// <summary>
         /// 样本存储集合
         /// </summary>
@@ -59,11 +67,12 @@ namespace Engine.Brain.AI
         /// </summary>
         private void InitEnv(string[] categories, Dictionary<string, string[]> sampleDictionary)
         {
+            _classes_num = _categories.Length;
             //构建dictory目录树
             Array.ForEach(categories, categoryDir =>
             {
                 //获取样本全集
-                string[] samples = Directory.GetFiles(categoryDir);
+                string[] samples = Directory.GetFiles(categoryDir,"*.jpeg");
                 //载入字典
                 sampleDictionary.Add(categoryDir, samples);
             });
@@ -78,7 +87,7 @@ namespace Engine.Brain.AI
         {
             //1.随机获取一次观察结果
             //类别索引
-            int classIndex = new Random().Next(_categories.Length);
+            int classIndex = new Random().Next(_classes_num);
             //样本索引
             int sampleIndex = new Random().Next(_sampleDictionary[_categories[classIndex]].Length);
             //样本文件地址
@@ -93,6 +102,7 @@ namespace Engine.Brain.AI
             return new DRaw()
             {
                 State = noraml,
+                Action = NP.ToOneHot(action, _classes_num),
                 Reward = reawrd,
             };
         }

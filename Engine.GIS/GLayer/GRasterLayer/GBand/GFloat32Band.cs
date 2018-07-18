@@ -94,8 +94,9 @@ namespace Engine.GIS.GLayer.GRasterLayer.GBand
         public byte[] GetByteBuffer()
         {
             byte[] rawByteData = new byte[_xCount * _yCount];
+            byte[,] byteData = GetByteData();
             for (int count = 0; count < _rawData.Length; count++)
-                rawByteData[count] = _byteData[count % _xCount, count / _xCount];
+                rawByteData[count] = byteData[count % _xCount, count / _xCount];
             return rawByteData;
         }
         /// <summary>

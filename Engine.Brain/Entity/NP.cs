@@ -103,10 +103,32 @@ namespace Engine.Brain.Entity
             var tensor = TFTensor.FromBuffer(shape, array.ToArray(), 0, array.Count);
             return tensor;
         }
+
         public static int Argmax(float[] inputs)
         {
             float max = inputs.Max();
             return Array.IndexOf(inputs, max);
         }
+        /// <summary>
+        /// 非一维数组无法引用Array.Copy
+        /// 可考虑转为one dim 
+        /// </summary>
+        /// <param name="inputs"></param>
+        /// <returns></returns>
+        public static int[] Argmax(float[,] inputs)
+        {
+            int dim0 = inputs.GetLength(0);
+            int dim1 = inputs.GetLength(1);
+            int[] output = new int[dim0];
+            for (int i=0;i< dim0; i++)
+            {
+                float[] arr = new float[dim1];
+                for(int j = 0; j < dim1; j++)
+                    arr[j] = inputs[i, j];
+                output[i] = Argmax(arr);
+            }
+            return output;
+        }
+
     }
 }

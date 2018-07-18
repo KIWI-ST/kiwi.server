@@ -1,4 +1,5 @@
-﻿using Engine.Brain.AI.RL;
+﻿using Engine.Brain.AI;
+using Engine.Brain.AI.RL;
 using Engine.Brain.Bootstrap;
 using Engine.Brain.Utils;
 using Engine.GIS.Entity;
@@ -554,10 +555,25 @@ namespace Host.Image.UI
 
         void test()
         {
+            const int class_num = 11;
+            const int feature_num = 64;
+            Random random = new Random();
             //构建输入feature 8x8，action 为10种类的dqn网
-            DQN dqn = new DQN(8,8,10);
-            dqn.Learn();
+            DEnv env = new DEnv(@"C:\Users\81596\Desktop\To_PPang");
+            DQN dqn = new DQN(feature_num, class_num, env);
+            //为dqn增加记忆
+            for(int i = 0; i < dqn.MemoryCapacity; i++)
+            {
+                int action = random.Next(class_num);
+                int action_ = random.Next(class_num);
+                DRaw raw = env.Step(action);
+                DRaw raw_ = env.Step(action_);
+                dqn.Remember(raw.State, raw.Action, raw.Reward, raw_.State);
+            }
+            //}{尝试计算qvalue
+            //迭代计算q值，作为输入
 
+            dqn.Learn();
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Engine.Brain.AI.RL
     {
         public float[] STATE { get; set; }
         public float[] STATE_ { get; set; }
-        public int Action { get; set; }
+        public float[] Action { get; set; }
         public float Reward { get; set; }
     }
 
@@ -27,7 +27,7 @@ namespace Engine.Brain.AI.RL
         /// <summary>
         /// 记忆区
         /// </summary>
-        private List<Memory> _memory = new List<Memory>();
+        private List<Memory> _memoryList = new List<Memory>();
         /// <summary>
         /// 记忆库容量
         /// </summary>
@@ -49,29 +49,41 @@ namespace Engine.Brain.AI.RL
         /// </summary>
         private DNet _targetNet;
         /// <summary>
+        /// 环境地质
+        /// </summary>
+        private DEnv _env;
+
+        public int MemoryCapacity => _memoryCapacity;
+
+        int _featuresNumber;
+
+        int _actionsNumber;
+
+        /// <summary>
         /// 
         /// </summary>
-        public DQN(int inputWidth, int inputHeight, int actions_num)
+        /// <param name="features_num">环境要素个数</param>
+        /// <param name="actions_num">操作枚举</param>
+        public DQN(int features_num, int actions_num,DEnv env)
         {
-            var n_features = inputHeight * inputWidth;
-            var n_actions = actions_num;
-            _evalNet = new DNet(n_features, n_actions);
-            _targetNet = new DNet(n_features, n_actions);
-            //1.增加记忆库记忆
-            //2.训练
+            _actionsNumber = actions_num;
+            _featuresNumber = features_num;
+            _evalNet = new DNet(_featuresNumber, _actionsNumber);
+            _targetNet = new DNet(_featuresNumber, _actionsNumber);
+            _env = env;
         }
         /// <summary>
         /// 
         /// </summary>
-        public void Remember(float[] s,int a, float r, float[] s_)
+        public void Remember(float[] state,float[] action, float reward, float[] state_)
         {
             //预学习N步，记录在memory里
-            _memory.Add(new Memory()
+            _memoryList.Add(new Memory()
             {
-                STATE = s,
-                STATE_ = s_,
-                Action = a,
-                Reward = r
+                STATE = state,
+                STATE_ = state_,
+                Action = action,
+                Reward = reward
             });
             //记忆计数+1
             _memoryCount++;
@@ -80,44 +92,54 @@ namespace Engine.Brain.AI.RL
         /// 输出每一个 state 对应的q值
         /// </summary>
         /// <returns></returns>
-        public float ChooseAction(float[] state)
+        public int[] ChooseAction(float[] state,float[] action)
         {
-            TFShape shape = new TFShape(1, state.Length);
-            TFTensor tensor = TFTensor.FromBuffer(shape, state, 0, state.Length);
-            float[] predicts =(float[]) _evalNet.Predict(tensor);
+            TFTensor feature_tensor = TFTensor.FromBuffer(new TFShape(1, state.Length), state, 0, state.Length);
+            TFTensor action_tensor = TFTensor.FromBuffer(new TFShape(1, action.Length), action, 0, action.Length);
+            float[,] predicts =(float[,]) _evalNet.Predict(feature_tensor, action_tensor);
             //模拟argmax
-            float predict =  NP.Argmax(predicts);
+            int[] predict =  NP.Argmax(predicts);
             //使用eval net计算action结果
             return predict;
         }
 
-        private List<double[]> RandomMakeBatch()
+        private void MakeBatch(out TFTensor input_features_tensor, out TFTensor input_qvalue_tensor, int batchSize)
         {
-            return null;
+           var index =  new Random().Next(_memoryCapacity - batchSize);
+           var list = _memoryList.GetRange(index, batchSize);
+            //feature input
+            float[] input_features = new float[batchSize * (_featuresNumber+_actionsNumber)];
+            //qvalue input
+            float[] input_qValue = new float[batchSize];
+            //写入偏移位
+            int offset = 0;
+            for(int i = 0; i < batchSize; i++)
+            {
+                //input features assign
+                Array.ConstrainedCopy(list[i].STATE, 0, input_features, offset, _featuresNumber);
+                offset += _featuresNumber;
+                //input actions assign
+                Array.ConstrainedCopy(list[i].Action, 0, input_features, offset, _actionsNumber);
+                offset += _actionsNumber;
+                //input qvalue assign
+                input_qValue[i] = list[i].Reward;
+            }
+            input_features_tensor = TFTensor.FromBuffer(new TFShape(batchSize, _featuresNumber + _actionsNumber), input_features, 0, input_features.Length);
+            input_qvalue_tensor = TFTensor.FromBuffer(new TFShape(batchSize,1), input_qValue, 0, input_qValue.Length);
         }
 
-        public void Learn()
+        /// <summary>
+        /// 批次训练
+        /// </summary>
+        /// <param name="batchSize"></param>
+        public void Learn(int batchSize = 20)
         {
-            //样本格式
-            const int batchSize = 10;
-            //特征个数
-            const int featureCount = 64;
-            //构建memory
-            if (_memoryCount < _memoryCapacity)
-            {
-                var inputs = NP.CreateInputs(oneDimensionCount:featureCount,batchSize:batchSize);
-                var labels = NP.CreateLabels();
-                var tensor = NP.CreateTensorWithRandomFloat(new TFShape(10, 64));
-                var q_eval = _evalNet.Predict(tensor);                                                                            
-            }
-            //1.从memeory生成随机批次的训练数据
-            //2.使用Eval网络计算 q_eval,q_next
-            //q_next is the target NeuralNetwork
-            var q_next = _targetNet.Predict(null);
-            //根据输入的batchsize，构建二维表，用于计算cost
-            var q_real = _targetNet.Predict(null); 
-            //4.从memory得到reward
-
+            //1.从memory里获取batchSize个训练样本
+            TFTensor input_features_tensor, input_qvalue_tensor;
+            MakeBatch(out input_features_tensor, out input_qvalue_tensor, batchSize);
+            //2.训练evalNet
+            //3.查看计数，超过_learnInterval，则同步evalNet和targetNet
+            _evalNet.Train(input_features_tensor, input_qvalue_tensor);
         }
 
 
