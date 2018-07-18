@@ -46,19 +46,23 @@ namespace Engine.Brain.AI.RL
             //layer1
             _w1 = _graph.VariableV2(new TFShape(n_features + n_actions, n_actions), TFDataType.Float);
             _b1 = _graph.VariableV2(new TFShape(1, n_actions), TFDataType.Float);
-            _l1 = _graph.Sigmoid(_graph.Add(_graph.MatMul(_input_features, _w1), _b1));
+            var y1 = _graph.Add(_graph.MatMul(_input_features, _w1), _b1);
+            _l1 = _graph.Sigmoid(y1);
             //layer2
             _w2 = _graph.VariableV2(new TFShape(n_actions, n_actions), TFDataType.Float);
             _b2 = _graph.VariableV2(new TFShape(1, n_actions), TFDataType.Float);
-            _l2 = _graph.Sigmoid(_graph.Add(_graph.MatMul(_l1, _w2), _b2));
+            var y2 = _graph.Add(_graph.MatMul(_l1, _w2), _b2);
+            _l2 = _graph.Sigmoid(y2);
             //layer3
             _w3 = _graph.VariableV2(new TFShape(n_actions, n_actions / 2), TFDataType.Float);
             _b3 = _graph.VariableV2(new TFShape(1, n_actions / 2), TFDataType.Float);
-            _l3 = _graph.Sigmoid(_graph.Add(_graph.MatMul(_l2, _w3), _b3));
+            var y3 = _graph.Add(_graph.MatMul(_l2, _w3), _b3);
+            _l3 = _graph.Sigmoid(y3);
             //layer4 
             _w4 = _graph.VariableV2(new TFShape(n_actions / 2, 1), TFDataType.Float);
             _b4 = _graph.VariableV2(new TFShape(1, 1), TFDataType.Float);
-            _l4 = _graph.Sigmoid(_graph.Add(_graph.MatMul(_l3, _w4), _b4));
+            var y4 = _graph.Add(_graph.MatMul(_l3, _w4), _b4);
+            _l4 = _graph.Sigmoid(y4);
             //calcute reward
             _output_qvalue = _l4;
             //loss and train
@@ -128,7 +132,7 @@ namespace Engine.Brain.AI.RL
             //input output
             var input = input_feature_tensor.GetValue();
             var output = input_qvalue_tensor.GetValue();
-            for (int i = 0; i < 50000; i++)
+            for (int i = 0; i < 10000; i++)
             {
                 //
                 var variables = _session.GetRunner().Fetch(_w1, _b1, _w2, _b2, _w3, _b3, _w4, _b4).Run();

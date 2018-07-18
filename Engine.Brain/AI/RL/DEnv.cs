@@ -97,7 +97,7 @@ namespace Engine.Brain.AI
             //归一化
             float[] noraml = NP.Normalize(raw);
             //得到样本reward
-            float reawrd = action == classIndex ? 1.0f : 0.01f;
+            float reawrd = action == classIndex ? 1.0f : 0.1f;
             //数据打包返回
             return new DRaw()
             {
@@ -105,6 +105,26 @@ namespace Engine.Brain.AI
                 Action = NP.ToOneHot(action, _classes_num),
                 Reward = reawrd,
             };
+            ////1.随机获取一次观察结果
+            ////类别索引
+            //int classIndex = new Random().Next(_classes_num);
+            ////样本索引
+            //int sampleIndex = new Random().Next(_sampleDictionary[_categories[classIndex]].Length);
+            ////样本文件地址
+            //string sampleFile = _sampleDictionary[_categories[classIndex]][sampleIndex];
+            //GRasterLayer rasterLayer = new GRasterLayer(sampleFile);
+            //byte[] raw = rasterLayer.BandCollection[0].GetByteBuffer();
+            ////归一化
+            //float[] noraml = NP.Normalize(raw);
+            ////得到样本reward
+            //float reawrd = action == classIndex ? 1.0f : 0.1f;
+            ////数据打包返回
+            //return new DRaw()
+            //{
+            //    State = noraml,
+            //    Action = NP.ToOneHot(action, _classes_num),
+            //    Reward = reawrd,
+            //};
         }
 
     }

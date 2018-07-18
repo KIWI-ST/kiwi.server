@@ -17,7 +17,7 @@ namespace Engine.Brain.Entity
             int count = inputs.Length;
             float[] normal = new float[inputs.Length];
             for (int i = 0; i < count; i++)
-                normal[i] = inputs[i] / 128f - 1;
+                normal[i] = inputs[i] / 255f;
             return normal;
         }
         /// <summary>

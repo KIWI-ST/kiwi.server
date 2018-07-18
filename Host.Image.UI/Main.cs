@@ -555,7 +555,7 @@ namespace Host.Image.UI
 
         void test()
         {
-            const int class_num = 11;
+            const int class_num = 3;
             const int feature_num = 64;
             Random random = new Random();
             //构建输入feature 8x8，action 为10种类的dqn网
