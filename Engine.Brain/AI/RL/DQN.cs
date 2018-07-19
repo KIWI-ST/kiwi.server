@@ -1,6 +1,8 @@
-﻿using Engine.Brain.Entity;
+﻿using Engine.Brain.AI.RL.Env;
+using Engine.Brain.Entity;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TensorFlow;
 
 namespace Engine.Brain.AI.RL
@@ -45,12 +47,8 @@ namespace Engine.Brain.AI.RL
         /// 目标网络
         /// </summary>
         private DNet _targetNet;
-        /// <summary>
-        /// 环境地质
-        /// </summary>
-        private DEnv _env;
 
-        public int MemoryCapacity { get; } = 200;
+        public int MemoryCapacity { get; } = 3000;
 
         int _featuresNumber;
 
@@ -61,13 +59,12 @@ namespace Engine.Brain.AI.RL
         /// </summary>
         /// <param name="features_num">环境要素个数</param>
         /// <param name="actions_num">操作枚举</param>
-        public DQN(int features_num, int actions_num, DEnv env)
+        public DQN(int features_num, int actions_num)
         {
             _actionsNumber = actions_num;
             _featuresNumber = features_num;
             _evalNet = new DNet(_featuresNumber, _actionsNumber);
             _targetNet = new DNet(_featuresNumber, _actionsNumber);
-            _env = env;
         }
         /// <summary>
         /// 
@@ -107,14 +104,20 @@ namespace Engine.Brain.AI.RL
         /// <param name="batchSize"></param>
         private void MakeBatch(out TFTensor input_features_tensor, out TFTensor input_qvalue_tensor, int batchSize)
         {
-            var index = new Random().Next(MemoryCapacity - batchSize);
-            var list = _memoryList.GetRange(index, batchSize);
+            //随机从记忆里抽取batchSize个样本
+            var list = new List<Memory>();
+            for(int i = 0; i < batchSize; i++)
+            {
+                var index = new Random().Next(MemoryCapacity);
+                list.Add(_memoryList[index]);
+            }
             //feature input
             float[] input_features = new float[batchSize * (_featuresNumber + _actionsNumber)];
             //qvalue input
             float[] input_qValue = new float[batchSize];
             //写入偏移位
             int offset = 0;
+            //
             for (int i = 0; i < batchSize; i++)
             {
                 //input features assign
@@ -133,17 +136,27 @@ namespace Engine.Brain.AI.RL
         /// 批次训练
         /// </summary>
         /// <param name="batchSize"></param>
-        public void Learn(int batchSize = 5)
+        public void Learn(int batchSize = 10)
         {
             //1.从memory里获取batchSize个训练样本
             TFTensor input_features_tensor, input_qvalue_tensor;
             //2.训练evalNet
             //3.查看计数，超过_learnInterval，则同步evalNet和targetNet
-            MakeBatch(out input_features_tensor, out input_qvalue_tensor, batchSize);
-            _evalNet.Train(input_features_tensor, input_qvalue_tensor);
+            for(int i = 0; i < 1000; i++)
+            {
+                MakeBatch(out input_features_tensor, out input_qvalue_tensor, batchSize);
+                _evalNet.Train(input_features_tensor, input_qvalue_tensor);
+            }
             var s = _evalNet.History;
-            MakeBatch(out input_features_tensor, out input_qvalue_tensor, batchSize);
-            var s23 =_evalNet.Predict(input_features_tensor);
+
+    
+
+            for(int i = 0; i < 50; i++)
+            {
+                MakeBatch(out input_features_tensor, out input_qvalue_tensor, batchSize);
+                var s23 = _evalNet.Predict(input_features_tensor);
+            }
+          
         }
 
     }

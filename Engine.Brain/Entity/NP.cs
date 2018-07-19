@@ -21,6 +21,19 @@ namespace Engine.Brain.Entity
             return normal;
         }
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="inputs"></param>
+        /// <returns></returns>
+        public static float[] Normalize(float[] inputs,float max)
+        {
+            int count = inputs.Length;
+            float[] normal = new float[inputs.Length];
+            for (int i = 0; i < count; i++)
+                normal[i] = inputs[i] / max;
+            return normal;
+        }
+        /// <summary>
         /// onehot编码
         /// </summary>
         /// <param name="hotIndex"></param>

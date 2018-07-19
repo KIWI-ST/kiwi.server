@@ -4,26 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Engine.Brain.AI
+namespace Engine.Brain.AI.RL.Env
 {
-
-    public class DRaw
-    {
-        /// <summary>
-        /// state数据
-        /// </summary>
-        public float[] State { get; set; }
-        /// <summary>
-        /// one-hot vector
-        /// </summary>
-        public float[] Action { get; set; }
-        /// <summary>
-        /// reward
-        /// </summary>
-        public float Reward { get; set; }
-    }
-
-    public class DEnv
+    /// <summary>
+    /// 以文件目录为环境的
+    /// environment
+    /// </summary>
+    public class DFileEnv
     {  /// <summary>
        /// 被观察样本的根目录
        /// </summary>
@@ -51,7 +38,7 @@ namespace Engine.Brain.AI
         ///    /       \       \
         /// 样本a 样本b  样本c
         /// </summary>
-        public DEnv(string sampleDirectory)
+        public DFileEnv(string sampleDirectory)
         {
             //样本根目录
             _dir = sampleDirectory;
@@ -95,36 +82,16 @@ namespace Engine.Brain.AI
             GRasterLayer rasterLayer = new GRasterLayer(sampleFile);
             byte[] raw = rasterLayer.BandCollection[0].GetByteBuffer();
             //归一化
-            float[] noraml = NP.Normalize(raw);
+            float[] normal = NP.Normalize(raw);
             //得到样本reward
-            float reawrd = action == classIndex ? 1.0f : 0.1f;
+            float reward = action == classIndex ? 1.0f : 0.1f;
             //数据打包返回
             return new DRaw()
             {
-                State = noraml,
+                State = normal,
                 Action = NP.ToOneHot(action, _classes_num),
-                Reward = reawrd,
+                Reward = reward,
             };
-            ////1.随机获取一次观察结果
-            ////类别索引
-            //int classIndex = new Random().Next(_classes_num);
-            ////样本索引
-            //int sampleIndex = new Random().Next(_sampleDictionary[_categories[classIndex]].Length);
-            ////样本文件地址
-            //string sampleFile = _sampleDictionary[_categories[classIndex]][sampleIndex];
-            //GRasterLayer rasterLayer = new GRasterLayer(sampleFile);
-            //byte[] raw = rasterLayer.BandCollection[0].GetByteBuffer();
-            ////归一化
-            //float[] noraml = NP.Normalize(raw);
-            ////得到样本reward
-            //float reawrd = action == classIndex ? 1.0f : 0.1f;
-            ////数据打包返回
-            //return new DRaw()
-            //{
-            //    State = noraml,
-            //    Action = NP.ToOneHot(action, _classes_num),
-            //    Reward = reawrd,
-            //};
         }
 
     }

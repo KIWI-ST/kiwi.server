@@ -5,12 +5,13 @@ using System.Drawing;
 
 namespace Engine.GIS.GLayer.GRasterLayer.GBand
 {
-    public class GFloat32Band:GBitmap, IGBand
+    public class GFloat32Band : GBitmap, IGBand
     {
         //band 序号
         int _bandIndex;
         //byte数值
         float[] _rawData;
+        byte[,] _rawByteData;
         //二维byte数值
         byte[,] _byteData;
         //宽，高
@@ -36,6 +37,26 @@ namespace Engine.GIS.GLayer.GRasterLayer.GBand
             _rawData = new float[_xCount * _yCount];
             pBand.ReadRaster(0, 0, _xCount, _yCount, _rawData, _xCount, _yCount, 0, 0);
         }
+
+        public byte GetRawPixel(int x, int y)
+        {
+            if (_rawByteData != null)
+                return _rawByteData[x, y];
+            _rawByteData = new byte[_xCount, _yCount];
+            for (int count = 0; count < _rawData.Length; count++)
+            {
+                _rawByteData[count % _xCount, count / _xCount] = Convert.ToByte(_rawData[count]);
+            }
+            return _rawByteData[x, y];
+        }
+
+        public double StdDev { get { return _stdDev; } }
+
+        public double Mean { get { return _mean; } }
+
+        public double Min { get { return _min; } }
+
+        public double Max { get { return _max; } }
         /// <summary>
         /// 波段图层名
         /// </summary>
@@ -52,6 +73,8 @@ namespace Engine.GIS.GLayer.GRasterLayer.GBand
         /// 图像高度
         /// </summary>
         public int Height { get { return _yCount; } }
+
+
         /// <summary>
         /// 图像byte二维数组
         /// </summary>
@@ -110,8 +133,6 @@ namespace Engine.GIS.GLayer.GRasterLayer.GBand
             Bitmap bitmap = ToGrayBitmap(GetByteData(), Width, Height);
             return bitmap;
         }
-
-
 
     }
 }

@@ -12,6 +12,21 @@ namespace Engine.GIS.GLayer.GRasterLayer.GBand
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        byte GetRawPixel(int x, int y);
+        /// <summary>
+        /// 最小值
+        /// </summary>
+        double Min { get; }
+        /// <summary>
+        /// 最大值
+        /// </summary>
+        double Max { get; }
+        /// <summary>
+        /// 
+        /// </summary>
         string BandName { get; set; }
         /// <summary>
         ///  图像宽度

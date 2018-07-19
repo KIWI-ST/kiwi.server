@@ -1,5 +1,4 @@
-﻿using Engine.Brain.AI;
-using Engine.Brain.AI.RL;
+﻿using Engine.Brain.AI.RL;
 using Engine.Brain.Bootstrap;
 using Engine.Brain.Utils;
 using Engine.GIS.Entity;
@@ -44,7 +43,10 @@ namespace Host.Image.UI
         #endregion
 
         #region 缓存管理
-
+        /// <summary>
+        /// raster layer
+        /// </summary>
+        Dictionary<string, GRasterLayer> _rasterDic = new Dictionary<string, GRasterLayer>();
         /// <summary>
         /// 管理全局的图像与树视图区域的缓存对应
         /// key是图片名称或图+波段名称，值为对应的bitmap
@@ -390,6 +392,7 @@ namespace Host.Image.UI
         {
             string name = parentNode.Text;
             GRasterLayer _layer = new GRasterLayer(rasterFilename);
+            _rasterDic.Add(_layer.Name, _layer);
             for (int i = 0; i < _layer.BandCollection.Count; i++)
             {
                 IGBand band = _layer.BandCollection[i];
@@ -493,6 +496,28 @@ namespace Host.Image.UI
                         }
                     }
                     break;
+                    //强化学习模型训练入口
+                case "DQN_toolStripButton":
+                    DQNForm dqnForm = new DQNForm();
+                    dqnForm.RasterDic = _rasterDic;
+                    if (dqnForm.ShowDialog() == DialogResult.OK)
+                    {
+                        string keyFeature = dqnForm.SelectedFeatureRasterLayer;
+                        string keyLabel = dqnForm.SelectedLabelRasterLayer;
+                        //
+                        DImageEnv env = new DImageEnv(_rasterDic[keyFeature], _rasterDic[keyLabel]);
+                        DQN dqn = new DQN(env.FeatureNum, env.ActionNum);
+                        for(int i = 0; i < dqn.MemoryCapacity; i++)
+                        {
+                            int action = new Random().Next(env.ActionNum);
+                            int action_ = new Random().Next(env.ActionNum);
+                            var memory = env.Step(action);
+                            var memory_ = env.Step(action_);
+                            dqn.Remember(memory.State, memory.Action, memory.Reward, memory_.State);
+                        }
+                        dqn.Learn();
+                    }
+                    break;
                 default:
                     break;
             }
@@ -555,25 +580,26 @@ namespace Host.Image.UI
 
         void test()
         {
-            const int class_num = 3;
-            const int feature_num = 64;
-            Random random = new Random();
-            //构建输入feature 8x8，action 为10种类的dqn网
-            DEnv env = new DEnv(@"C:\Users\81596\Desktop\To_PPang");
-            DQN dqn = new DQN(feature_num, class_num, env);
-            //为dqn增加记忆
-            for(int i = 0; i < dqn.MemoryCapacity; i++)
-            {
-                int action = random.Next(class_num);
-                int action_ = random.Next(class_num);
-                DRaw raw = env.Step(action);
-                DRaw raw_ = env.Step(action_);
-                dqn.Remember(raw.State, raw.Action, raw.Reward, raw_.State);
-            }
-            //}{尝试计算qvalue
-            //迭代计算q值，作为输入
+            //const int class_num = 3;
+            //const int feature_num = 64;
+            //Random random = new Random();
+            ////构建输入feature 8x8，action 为10种类的dqn网
+            //DEnv env = new DEnv(@"C:\Users\81596\Desktop\To_PPang");
+            //DQN dqn = new DQN(feature_num, class_num, env);
+            ////为dqn增加记忆
+            //for(int i = 0; i < dqn.MemoryCapacity; i++)
+            //{
+            //    int action = random.Next(class_num);
+            //    int action_ = random.Next(class_num);
+            //    DRaw raw = env.Step(action);
+            //    DRaw raw_ = env.Step(action_);
+            //    dqn.Remember(raw.State, raw.Action, raw.Reward, raw_.State);
+            //}
+            ////}{尝试计算qvalue
+            ////迭代计算q值，作为输入
 
-            dqn.Learn();
+            //dqn.Learn();
         }
+
     }
 }
