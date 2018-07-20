@@ -14,6 +14,7 @@ namespace Engine.Brain.AI.RL
         public float[] STATE { get; set; }
         public float[] STATE_ { get; set; }
         public float[] Action { get; set; }
+        public float Q { get; set; }
         public float Reward { get; set; }
     }
 
@@ -36,9 +37,22 @@ namespace Engine.Brain.AI.RL
         /// </summary>
         private int _memoryCount = 0;
         /// <summary>
+        /// 一轮学习长度
+        /// </summary>
+        readonly int Epoches = 2000;
+        /// <summary>
         /// 应用学习结果，观察步骤间隔
         /// </summary>
-        readonly int _learnInterval = 300;
+        readonly int EveryCopyStep = 128;
+
+        readonly int BatchSize = 64;
+
+        readonly int Forward = 512;
+
+        float alpah = 0.5f;
+
+        float gamma = 0;
+
         /// <summary>
         /// 评估网络
         /// </summary>
@@ -54,22 +68,25 @@ namespace Engine.Brain.AI.RL
 
         int _actionsNumber;
 
+        IDEnv _env;
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="features_num">环境要素个数</param>
         /// <param name="actions_num">操作枚举</param>
-        public DQN(int features_num, int actions_num)
+        public DQN(IDEnv env)
         {
-            _actionsNumber = actions_num;
-            _featuresNumber = features_num;
+            _env = env;
+            _actionsNumber = _env.ActionNum;
+            _featuresNumber = _env.FeatureNum;
             _evalNet = new DNet(_featuresNumber, _actionsNumber);
             _targetNet = new DNet(_featuresNumber, _actionsNumber);
         }
         /// <summary>
         /// 
         /// </summary>
-        public void Remember(float[] state, float[] action, float reward, float[] state_)
+        public void Remember(float[] state, float[] action,  float q, float reward, float[] state_)
         {
             //预学习N步，记录在memory里
             _memoryList.Add(new Memory()
@@ -77,6 +94,7 @@ namespace Engine.Brain.AI.RL
                 STATE = state,
                 STATE_ = state_,
                 Action = action,
+                Q = q,
                 Reward = reward
             });
             //记忆计数+1
@@ -117,6 +135,7 @@ namespace Engine.Brain.AI.RL
             float[] input_qValue = new float[batchSize];
             //写入偏移位
             int offset = 0;
+            float q = 0f;
             //
             for (int i = 0; i < batchSize; i++)
             {
@@ -127,36 +146,77 @@ namespace Engine.Brain.AI.RL
                 Array.ConstrainedCopy(list[i].Action, 0, input_features, offset, _actionsNumber);
                 offset += _actionsNumber;
                 //input qvalue assign
-                input_qValue[i] = list[i].Reward;
+                input_qValue[i] = (1-alpah)*list[i].Reward + alpah*(list[i].Q + gamma * q);
             }
             input_features_tensor = TFTensor.FromBuffer(new TFShape(batchSize, _featuresNumber + _actionsNumber), input_features, 0, input_features.Length);
             input_qvalue_tensor = TFTensor.FromBuffer(new TFShape(batchSize, 1), input_qValue, 0, input_qValue.Length);
         }
+
+        public float EpsilonCalcute(int step, float ep_min = 0.01f,float ep_max = 1f,float ep_decay= 0.0001f,int eps_total = 1000)
+        {
+            return Math.Max(ep_min, ep_max - (ep_max - ep_min) * step / eps_total);
+        }
+
+        public (int action,float q) EpsilonGreedy(int step,float[] state)
+        {
+            var epsion = EpsilonCalcute(step);
+            if((float)new Random().NextDouble()<epsion)
+                return (_env.RandomAction(),0);
+            else
+            {
+                int count = _featuresNumber + _actionsNumber;
+                float[] input_feature = new float[count];
+                int offset = 0;
+                Array.ConstrainedCopy(state, 0, input_feature, offset, _featuresNumber);
+                offset += _featuresNumber;
+                Array.ConstrainedCopy(_env.DummyActions, 0, input_feature, offset, _env.DummyActions.Length);
+                TFTensor feature_tensor = TFTensor.FromBuffer(new TFShape(1, count), input_feature, 0, count);
+                float[,] predicts = (float[,])_evalNet.Predict(feature_tensor);
+                //模拟argmax
+                int[] predict = NP.Argmax(predicts);
+                //使用eval net计算action结果
+                float[] qs = NP.Max(predicts);
+                return (predict[0], qs[0]);
+            }
+        }
+
+        /// <summary>
+        /// 经验回放
+        /// </summary>
+        /// <returns></returns>
+        public float Replay()
+        {
+            return 0.0f;
+        }
+
         /// <summary>
         /// 批次训练
         /// </summary>
         /// <param name="batchSize"></param>
-        public void Learn(int batchSize = 10)
+        public void Learn()
         {
-            //1.从memory里获取batchSize个训练样本
-            TFTensor input_features_tensor, input_qvalue_tensor;
-            //2.训练evalNet
-            //3.查看计数，超过_learnInterval，则同步evalNet和targetNet
-            for(int i = 0; i < 1000; i++)
+            float[] state = _env.Reset();
+            for(int e=0;e< Epoches; e++)
             {
-                MakeBatch(out input_features_tensor, out input_qvalue_tensor, batchSize);
-                _evalNet.Train(input_features_tensor, input_qvalue_tensor);
+                float totalRewards = 0;
+                for(int step = 0; step < Forward; step++)
+                {
+                    float loss;
+                    int action;float q, eps;
+                    //对状态进行epsilon_greedy选择
+                    (action, q) = EpsilonGreedy(step, state);
+                    eps = EpsilonCalcute(e);
+                    //play
+                    float[] nextState;float reward;
+                    (nextState, reward) = _env.Step(action);
+                    //加入要经验记忆中
+                    Remember(state, NP.ToOneHot(action,_env.ActionNum), q, reward, nextState);
+                    //
+                    loss = Replay();
+                    totalRewards += reward;
+                    state = nextState;
+                }
             }
-            var s = _evalNet.History;
-
-    
-
-            for(int i = 0; i < 50; i++)
-            {
-                MakeBatch(out input_features_tensor, out input_qvalue_tensor, batchSize);
-                var s23 = _evalNet.Predict(input_features_tensor);
-            }
-          
         }
 
     }

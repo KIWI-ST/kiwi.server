@@ -158,6 +158,25 @@ namespace Engine.Brain.Entity
             }
             return output;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="inputs"></param>
+        /// <returns></returns>
+        public static float[] Max(float[,] inputs)
+        {
+            int dim0 = inputs.GetLength(0);
+            int dim1 = inputs.GetLength(1);
+            float[] output = new float[dim0];
+            for (int i = 0; i < dim0; i++)
+            {
+                float[] arr = new float[dim1];
+                for (int j = 0; j < dim1; j++)
+                    arr[j] = inputs[i, j];
+                output[i] = arr.Max();
+            }
+            return output;
+        }
 
     }
 }

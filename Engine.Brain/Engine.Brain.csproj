@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="AI\DL\CNN.cs" />
     <Compile Include="AI\RL\DRaw.cs" />
+    <Compile Include="AI\RL\IEnv.cs" />
     <Compile Include="AI\RL\Env\DImageEnv.cs" />
     <Compile Include="AI\RL\DNet.cs" />
     <Compile Include="AI\RL\DQN.cs" />

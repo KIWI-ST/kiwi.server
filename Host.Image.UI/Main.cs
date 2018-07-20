@@ -505,16 +505,8 @@ namespace Host.Image.UI
                         string keyFeature = dqnForm.SelectedFeatureRasterLayer;
                         string keyLabel = dqnForm.SelectedLabelRasterLayer;
                         //
-                        DImageEnv env = new DImageEnv(_rasterDic[keyFeature], _rasterDic[keyLabel]);
-                        DQN dqn = new DQN(env.FeatureNum, env.ActionNum);
-                        for(int i = 0; i < dqn.MemoryCapacity; i++)
-                        {
-                            int action = new Random().Next(env.ActionNum);
-                            int action_ = new Random().Next(env.ActionNum);
-                            var memory = env.Step(action);
-                            var memory_ = env.Step(action_);
-                            dqn.Remember(memory.State, memory.Action, memory.Reward, memory_.State);
-                        }
+                        IDEnv env = new DImageEnv(_rasterDic[keyFeature], _rasterDic[keyLabel]);
+                        DQN dqn = new DQN(env);
                         dqn.Learn();
                     }
                     break;
