@@ -33,7 +33,7 @@
             this.map_menuStrip = new System.Windows.Forms.MenuStrip();
             this.文件FToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.open_toolstripmenuitem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.main_toolStripMenuItem = new System.Windows.Forms.ToolStripSeparator();
             this.Export_Bitmap_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.工具TToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SLIC_toolStripMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -41,6 +41,8 @@
             this.map_toolStrip = new System.Windows.Forms.ToolStrip();
             this.SLIC_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.SLIC_Center_toolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.DQN_toolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.main_toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.DL_CLASS_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.map_statusStrip = new System.Windows.Forms.StatusStrip();
             this.empty_statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
@@ -52,13 +54,13 @@
             this.map_treeView = new System.Windows.Forms.TreeView();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tab_mapview = new System.Windows.Forms.TabPage();
-            this.map_pictureBox = new System.Windows.Forms.PictureBox();
+            this.map_splitContainer = new System.Windows.Forms.SplitContainer();
             this.map_contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.open_contextMenuStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.tree_contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.bandCombine_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.DQN_toolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.map_pictureBox = new System.Windows.Forms.PictureBox();
+            this.map_listBox = new System.Windows.Forms.ListBox();
             this.map_menuStrip.SuspendLayout();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
@@ -70,9 +72,13 @@
             this.tab_treeview.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tab_mapview.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.map_pictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.map_splitContainer)).BeginInit();
+            this.map_splitContainer.Panel1.SuspendLayout();
+            this.map_splitContainer.Panel2.SuspendLayout();
+            this.map_splitContainer.SuspendLayout();
             this.map_contextMenuStrip.SuspendLayout();
             this.tree_contextMenuStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.map_pictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // map_menuStrip
@@ -94,7 +100,7 @@
             // 
             this.文件FToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.open_toolstripmenuitem,
-            this.toolStripMenuItem1,
+            this.main_toolStripMenuItem,
             this.Export_Bitmap_ToolStripMenuItem});
             this.文件FToolStripMenuItem.Name = "文件FToolStripMenuItem";
             this.文件FToolStripMenuItem.Size = new System.Drawing.Size(69, 24);
@@ -106,19 +112,19 @@
             this.open_toolstripmenuitem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.open_toolstripmenuitem.Name = "open_toolstripmenuitem";
             this.open_toolstripmenuitem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.open_toolstripmenuitem.Size = new System.Drawing.Size(194, 26);
+            this.open_toolstripmenuitem.Size = new System.Drawing.Size(216, 26);
             this.open_toolstripmenuitem.Text = "打开(&O)";
             this.open_toolstripmenuitem.Click += new System.EventHandler(this.Map_function_Click);
             // 
-            // toolStripMenuItem1
+            // main_toolStripMenuItem
             // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(191, 6);
+            this.main_toolStripMenuItem.Name = "main_toolStripMenuItem";
+            this.main_toolStripMenuItem.Size = new System.Drawing.Size(213, 6);
             // 
             // Export_Bitmap_ToolStripMenuItem
             // 
             this.Export_Bitmap_ToolStripMenuItem.Name = "Export_Bitmap_ToolStripMenuItem";
-            this.Export_Bitmap_ToolStripMenuItem.Size = new System.Drawing.Size(194, 26);
+            this.Export_Bitmap_ToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
             this.Export_Bitmap_ToolStripMenuItem.Text = "导出图片";
             this.Export_Bitmap_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
@@ -154,7 +160,7 @@
             this.SLIC_toolStripButton,
             this.SLIC_Center_toolStripButton,
             this.DQN_toolStripButton,
-            this.toolStripSeparator1,
+            this.main_toolStripSeparator,
             this.DL_CLASS_toolStripButton});
             this.map_toolStrip.Location = new System.Drawing.Point(0, 28);
             this.map_toolStrip.Name = "map_toolStrip";
@@ -183,6 +189,21 @@
             this.SLIC_Center_toolStripButton.Text = "中心提取";
             this.SLIC_Center_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.SLIC_Center_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
+            // 
+            // DQN_toolStripButton
+            // 
+            this.DQN_toolStripButton.Image = global::Host.Image.UI.Properties.Resources.laptop_64;
+            this.DQN_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.DQN_toolStripButton.Name = "DQN_toolStripButton";
+            this.DQN_toolStripButton.Size = new System.Drawing.Size(73, 44);
+            this.DQN_toolStripButton.Text = "强化学习";
+            this.DQN_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.DQN_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
+            // 
+            // main_toolStripSeparator
+            // 
+            this.main_toolStripSeparator.Name = "main_toolStripSeparator";
+            this.main_toolStripSeparator.Size = new System.Drawing.Size(6, 47);
             // 
             // DL_CLASS_toolStripButton
             // 
@@ -236,7 +257,7 @@
             this.splitContainer_main.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.splitContainer_main.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer_main.Location = new System.Drawing.Point(0, 75);
-            this.splitContainer_main.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.splitContainer_main.Margin = new System.Windows.Forms.Padding(4);
             this.splitContainer_main.Name = "splitContainer_main";
             // 
             // splitContainer_main.Panel1
@@ -247,7 +268,7 @@
             // 
             this.splitContainer_main.Panel2.Controls.Add(this.tabControl2);
             this.splitContainer_main.Size = new System.Drawing.Size(1183, 716);
-            this.splitContainer_main.SplitterDistance = 241;
+            this.splitContainer_main.SplitterDistance = 240;
             this.splitContainer_main.SplitterWidth = 5;
             this.splitContainer_main.TabIndex = 3;
             // 
@@ -256,20 +277,20 @@
             this.map_tabControl.Controls.Add(this.tab_treeview);
             this.map_tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.map_tabControl.Location = new System.Drawing.Point(0, 0);
-            this.map_tabControl.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.map_tabControl.Margin = new System.Windows.Forms.Padding(4);
             this.map_tabControl.Name = "map_tabControl";
             this.map_tabControl.SelectedIndex = 0;
-            this.map_tabControl.Size = new System.Drawing.Size(237, 712);
+            this.map_tabControl.Size = new System.Drawing.Size(236, 712);
             this.map_tabControl.TabIndex = 0;
             // 
             // tab_treeview
             // 
             this.tab_treeview.Controls.Add(this.map_treeView);
             this.tab_treeview.Location = new System.Drawing.Point(4, 25);
-            this.tab_treeview.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tab_treeview.Margin = new System.Windows.Forms.Padding(4);
             this.tab_treeview.Name = "tab_treeview";
-            this.tab_treeview.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.tab_treeview.Size = new System.Drawing.Size(229, 683);
+            this.tab_treeview.Padding = new System.Windows.Forms.Padding(4);
+            this.tab_treeview.Size = new System.Drawing.Size(228, 683);
             this.tab_treeview.TabIndex = 0;
             this.tab_treeview.Text = "视图";
             this.tab_treeview.UseVisualStyleBackColor = true;
@@ -278,9 +299,9 @@
             // 
             this.map_treeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.map_treeView.Location = new System.Drawing.Point(4, 4);
-            this.map_treeView.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.map_treeView.Margin = new System.Windows.Forms.Padding(4);
             this.map_treeView.Name = "map_treeView";
-            this.map_treeView.Size = new System.Drawing.Size(221, 675);
+            this.map_treeView.Size = new System.Drawing.Size(220, 675);
             this.map_treeView.TabIndex = 0;
             this.map_treeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.Map_treeView_NodeMouseClick);
             // 
@@ -289,35 +310,42 @@
             this.tabControl2.Controls.Add(this.tab_mapview);
             this.tabControl2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl2.Location = new System.Drawing.Point(0, 0);
-            this.tabControl2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabControl2.Margin = new System.Windows.Forms.Padding(4);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(933, 712);
+            this.tabControl2.Size = new System.Drawing.Size(934, 712);
             this.tabControl2.TabIndex = 0;
             // 
             // tab_mapview
             // 
-            this.tab_mapview.Controls.Add(this.map_pictureBox);
+            this.tab_mapview.Controls.Add(this.map_splitContainer);
             this.tab_mapview.Location = new System.Drawing.Point(4, 25);
-            this.tab_mapview.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tab_mapview.Margin = new System.Windows.Forms.Padding(4);
             this.tab_mapview.Name = "tab_mapview";
-            this.tab_mapview.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.tab_mapview.Size = new System.Drawing.Size(925, 683);
+            this.tab_mapview.Padding = new System.Windows.Forms.Padding(4);
+            this.tab_mapview.Size = new System.Drawing.Size(926, 683);
             this.tab_mapview.TabIndex = 1;
             this.tab_mapview.Text = "地图";
             this.tab_mapview.UseVisualStyleBackColor = true;
             // 
-            // map_pictureBox
+            // map_splitContainer
             // 
-            this.map_pictureBox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.map_pictureBox.ContextMenuStrip = this.map_contextMenuStrip;
-            this.map_pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.map_pictureBox.Location = new System.Drawing.Point(4, 4);
-            this.map_pictureBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.map_pictureBox.Name = "map_pictureBox";
-            this.map_pictureBox.Size = new System.Drawing.Size(917, 675);
-            this.map_pictureBox.TabIndex = 0;
-            this.map_pictureBox.TabStop = false;
+            this.map_splitContainer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.map_splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.map_splitContainer.Location = new System.Drawing.Point(4, 4);
+            this.map_splitContainer.Name = "map_splitContainer";
+            this.map_splitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // map_splitContainer.Panel1
+            // 
+            this.map_splitContainer.Panel1.Controls.Add(this.map_pictureBox);
+            // 
+            // map_splitContainer.Panel2
+            // 
+            this.map_splitContainer.Panel2.Controls.Add(this.map_listBox);
+            this.map_splitContainer.Size = new System.Drawing.Size(918, 675);
+            this.map_splitContainer.SplitterDistance = 440;
+            this.map_splitContainer.TabIndex = 1;
             // 
             // map_contextMenuStrip
             // 
@@ -351,20 +379,25 @@
             this.bandCombine_ToolStripMenuItem.Text = "波段合成";
             this.bandCombine_ToolStripMenuItem.Click += new System.EventHandler(this.Map_treeView_Click);
             // 
-            // DQN_toolStripButton
+            // map_pictureBox
             // 
-            this.DQN_toolStripButton.Image = global::Host.Image.UI.Properties.Resources.laptop_64;
-            this.DQN_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.DQN_toolStripButton.Name = "DQN_toolStripButton";
-            this.DQN_toolStripButton.Size = new System.Drawing.Size(73, 44);
-            this.DQN_toolStripButton.Text = "强化学习";
-            this.DQN_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.DQN_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
+            this.map_pictureBox.ContextMenuStrip = this.map_contextMenuStrip;
+            this.map_pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.map_pictureBox.Location = new System.Drawing.Point(0, 0);
+            this.map_pictureBox.Name = "map_pictureBox";
+            this.map_pictureBox.Size = new System.Drawing.Size(914, 436);
+            this.map_pictureBox.TabIndex = 0;
+            this.map_pictureBox.TabStop = false;
             // 
-            // toolStripSeparator1
+            // map_listBox
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 47);
+            this.map_listBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.map_listBox.FormattingEnabled = true;
+            this.map_listBox.ItemHeight = 15;
+            this.map_listBox.Location = new System.Drawing.Point(0, 0);
+            this.map_listBox.Name = "map_listBox";
+            this.map_listBox.Size = new System.Drawing.Size(914, 227);
+            this.map_listBox.TabIndex = 0;
             // 
             // Main
             // 
@@ -376,7 +409,7 @@
             this.Controls.Add(this.map_toolStrip);
             this.Controls.Add(this.map_menuStrip);
             this.MainMenuStrip = this.map_menuStrip;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "图像处理可视化工具";
@@ -394,9 +427,13 @@
             this.tab_treeview.ResumeLayout(false);
             this.tabControl2.ResumeLayout(false);
             this.tab_mapview.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.map_pictureBox)).EndInit();
+            this.map_splitContainer.Panel1.ResumeLayout(false);
+            this.map_splitContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.map_splitContainer)).EndInit();
+            this.map_splitContainer.ResumeLayout(false);
             this.map_contextMenuStrip.ResumeLayout(false);
             this.tree_contextMenuStrip.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.map_pictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -417,7 +454,6 @@
         private System.Windows.Forms.TabControl tabControl2;
         private System.Windows.Forms.TabPage tab_mapview;
         private System.Windows.Forms.TreeView map_treeView;
-        private System.Windows.Forms.PictureBox map_pictureBox;
         private System.Windows.Forms.ToolStripProgressBar map_processBar;
         private System.Windows.Forms.ToolStripStatusLabel map_statusLabel;
         private System.Windows.Forms.ToolStripStatusLabel empty_statusLabel;
@@ -429,10 +465,13 @@
         private System.Windows.Forms.ToolStripButton SLIC_toolStripButton;
         private System.Windows.Forms.ToolStripButton SLIC_Center_toolStripButton;
         private System.Windows.Forms.ToolStripButton DL_CLASS_toolStripButton;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripSeparator main_toolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem Export_Bitmap_ToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton DQN_toolStripButton;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripSeparator main_toolStripSeparator;
+        private System.Windows.Forms.SplitContainer map_splitContainer;
+        private System.Windows.Forms.PictureBox map_pictureBox;
+        private System.Windows.Forms.ListBox map_listBox;
     }
 }
 

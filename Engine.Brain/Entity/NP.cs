@@ -132,7 +132,11 @@ namespace Engine.Brain.Entity
             double result = e + Math.Sqrt(d) * Math.Sqrt((-2) * (Math.Log(u1) / Math.Log(Math.E))) * Math.Cos(2 * Math.PI * u2);
             return (float)result;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="inputs"></param>
+        /// <returns></returns>
         public static int Argmax(float[] inputs)
         {
             float max = inputs.Max();
@@ -176,6 +180,32 @@ namespace Engine.Brain.Entity
                 output[i] = arr.Max();
             }
             return output;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="inputs"></param>
+        /// <returns></returns>
+        public static float[] Pad(float[,] inputs)
+        {
+            int dim0 = inputs.GetLength(0);
+            int dim1 = inputs.GetLength(1);
+            float[] outputs = new float[dim0 * dim1];
+            for (int i = 0; i < dim0; i++)
+                for (int j = 0; j < dim1; j++)
+                    outputs[i * dim1 + j] = inputs[i, j];
+            return outputs;
+        }
+
+        public static float CalcuteAccuracy(float[,] predict,float[,] label)
+        {
+            int dim0 = predict.GetLength(0);
+            int dim1 = predict.GetLength(1);
+            float right = 0f;
+            for (int i = 0; i < dim0; i++)
+                for (int j = 0; j < dim1; j++)
+                    right += Math.Abs(predict[i, j] - label[i, j]) < 0.1f ? 1f : 0f;
+            return right / (dim0 * dim1);
         }
 
     }

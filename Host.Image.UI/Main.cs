@@ -1,5 +1,6 @@
 ﻿using Engine.Brain.AI.RL;
 using Engine.Brain.Bootstrap;
+using Engine.Brain.Entity;
 using Engine.Brain.Utils;
 using Engine.GIS.Entity;
 using Engine.GIS.GLayer.GRasterLayer;
@@ -161,6 +162,33 @@ namespace Host.Image.UI
             Invoke(new SaveBitmapHandler(SaveBitmap), pkg.Edge);
             Invoke(new SaveBitmapHandler(SaveBitmap), pkg.Average);
         }
+
+        private void RunDQN(GRasterLayer featureRasterLayer,GRasterLayer labelRasterLayer)
+        {
+            IDEnv env = new DImageEnv(featureRasterLayer, labelRasterLayer);
+            DQN dqn = new DQN(env);
+            dqn.OnLearningLossEventHandler += Dqn_OnLearningLossEventHandler;
+            dqn.Learn();
+            //
+            Bitmap bmp = new Bitmap(featureRasterLayer.XSize, featureRasterLayer.YSize);
+            //应用dqn对图像分类
+            for (int i =0;i<featureRasterLayer.XSize;i++)
+                for(int j = 0; j < featureRasterLayer.YSize; j++)
+                {
+                    float[] raw = featureRasterLayer.GetPixelFloat(i,j).ToArray();
+                    float[] normal = NP.Normalize(raw, 255f);
+                    int action = dqn.ChooseAction(normal);
+                    Invoke(new PaintPointHandler(PaintPoint), bmp, i, j, Convert.ToByte(action * 10));
+                }
+        }
+
+        private void Dqn_OnLearningLossEventHandler(float loss,float totalReward,float accuracy)
+        {
+            accuracy = accuracy * 100;
+            string msg = string.Format("loss:{0},reward:{1},accuracy:{2}%", loss,totalReward,accuracy);
+            Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), msg);
+        }
+
         #endregion
 
         #region 界面更新
@@ -266,6 +294,15 @@ namespace Host.Image.UI
             map_pictureBox.Image = _imageDic[childrenNode.Text].BMP;
         }
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="msg"></param>
+        private void UpdateMapListBox(string msg)
+        {
+            map_listBox.Items.Add(msg);
+            map_listBox.SelectedIndex = map_listBox.Items.Count - 1;
+        }
+        /// <summary>
         /// 绘制图像
         /// </summary>
         /// <param name="bmp"></param>
@@ -289,6 +326,11 @@ namespace Host.Image.UI
             map_pictureBox.Image = bmp;
         }
 
+        /// <summary>
+        /// 更新listbox区域显示内容
+        /// </summary>
+        /// <param name="msg"></param>
+        private delegate void UpdateMapListBoxHandler(string msg);
         /// <summary>
         /// 更新树视图委托
         /// </summary>
@@ -487,16 +529,14 @@ namespace Host.Image.UI
                             if (centerApplyForm.ShowDialog() == DialogResult.OK)
                             {
                                 ThreadStart s = delegate { RunCenter(centerApplyForm.FileNameCollection, centers); };
-                                Thread t = new Thread(s)
-                                {
-                                    IsBackground = true
-                                };
+                                Thread t = new Thread(s);
+                                t.IsBackground = true;
                                 t.Start();
                             }
                         }
                     }
                     break;
-                    //强化学习模型训练入口
+                    //强化学习模型训练入口 
                 case "DQN_toolStripButton":
                     DQNForm dqnForm = new DQNForm();
                     dqnForm.RasterDic = _rasterDic;
@@ -504,16 +544,17 @@ namespace Host.Image.UI
                     {
                         string keyFeature = dqnForm.SelectedFeatureRasterLayer;
                         string keyLabel = dqnForm.SelectedLabelRasterLayer;
-                        //
-                        IDEnv env = new DImageEnv(_rasterDic[keyFeature], _rasterDic[keyLabel]);
-                        DQN dqn = new DQN(env);
-                        dqn.Learn();
+                        ThreadStart s = delegate { RunDQN(_rasterDic[keyFeature], _rasterDic[keyLabel]); };
+                        Thread t = new Thread(s);
+                        t.IsBackground = true;
+                        t.Start();
                     }
                     break;
                 default:
                     break;
             }
         }
+
         /// <summary>
         ///  树视图点击捕捉，用于邮件弹出功能栏
         /// </summary>

@@ -27,7 +27,7 @@ namespace Engine.Brain.AI.RL
             FeatureNum = featureRasterLayer.BandCount;
             ActionNum = Convert.ToInt32(_labelRasterLayer.BandCollection[0].Max);
             DummyActions = NP.ToOneHot(1, ActionNum);
-            (_current_x,_current_y,_c_classIndex) = Observe();
+            (_current_x,_current_y,_current_classindex) = Observe();
         }
         public float[] DummyActions { get; }
         /// <summary>
