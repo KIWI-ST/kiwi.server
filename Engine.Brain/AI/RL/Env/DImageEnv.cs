@@ -11,6 +11,8 @@ namespace Engine.Brain.AI.RL
     {
         private GRasterLayer _featureRasterLayer, _labelRasterLayer;
 
+        int seed = 0;
+
         int _current_x, _current_y, _current_classindex;
 
         int _c_x, _c_y, _c_classIndex;
@@ -65,6 +67,16 @@ namespace Engine.Brain.AI.RL
         public int RandomAction()
         {
             return new Random().Next(ActionNum);
+        }
+
+        private void FitAction(int action)
+        {
+            int x, y;
+            float classIndex = -1.0f;
+            do {
+                (x, y, classIndex) = Observe();
+            } while (classIndex != action);
+
         }
 
         public (float[] state, float reward) Step(int action)

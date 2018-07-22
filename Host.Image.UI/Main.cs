@@ -177,7 +177,8 @@ namespace Host.Image.UI
                 {
                     float[] raw = featureRasterLayer.GetPixelFloat(i,j).ToArray();
                     float[] normal = NP.Normalize(raw, 255f);
-                    int action = dqn.ChooseAction(normal);
+                    int action;float q;
+                    (action,q) = dqn.ChooseAction(normal);
                     Invoke(new PaintPointHandler(PaintPoint), bmp, i, j, Convert.ToByte(action * 10));
                 }
         }
