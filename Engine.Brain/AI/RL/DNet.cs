@@ -12,6 +12,12 @@ namespace Engine.Brain.AI.RL
     /// </summary>
     public class DNet
     {
+
+        private int n_features, n_actions;
+
+        public List<float> History { get; }
+
+        #region 神经网络相关
         public TFOutput _w1, _b1, _w2, _b2, _w3, _b3, _w4, _b4;
         //runner
         private TFSession _session;
@@ -23,15 +29,16 @@ namespace Engine.Brain.AI.RL
         private TFOutput _input_qvalue;
         //输出参数，prediction
         private TFOutput _output_qvalue;
-        //
+        //中间操作，梯度修正
         TFOperation[] _optimize;
+        //中间操作，输出层 l1,l2,l3,l4
         TFOutput _l1, _l2, _l3, _l4;
+        //loss
         TFOutput _loss;
+        //梯度修正
         TFOutput[] _grad;
+        #endregion
 
-        public List<float> History { get; }
-
-        int n_features, n_actions;
         /// <summary>
         /// 
         /// </summary>
@@ -41,6 +48,7 @@ namespace Engine.Brain.AI.RL
         {
             //
             n_features = features_num;
+            //
             n_actions = actions_num;
             //
             History = new List<float>();
@@ -50,7 +58,7 @@ namespace Engine.Brain.AI.RL
             _input_features = _graph.Placeholder(TFDataType.Float, new TFShape(-1, n_features + n_actions));
             _input_qvalue = _graph.Placeholder(TFDataType.Float, new TFShape(-1, 1));
             //layer1
-            _w1 = _graph.VariableV2(new TFShape(n_features + n_actions, n_actions), TFDataType.Float,operName:"w1");
+            _w1 = _graph.VariableV2(new TFShape(n_features + n_actions, n_actions), TFDataType.Float, operName: "w1");
             _b1 = _graph.VariableV2(new TFShape(1, n_actions), TFDataType.Float, operName: "b1");
             _l1 = _graph.Add(_graph.MatMul(_input_features, _w1), _b1);
             //_l1 = _graph.Relu(y1, operName: "l1");
@@ -121,10 +129,6 @@ namespace Engine.Brain.AI.RL
         /// </summary>
         public float Train(TFTensor input_feature_tensor, TFTensor input_qvalue_tensor)
         {
-            //input output
-            var input = input_feature_tensor.GetValue();
-            var output = input_qvalue_tensor.GetValue();
-            //var result = _session.GetRunner().AddInput(_input_features, input_feature_tensor).AddInput(_input_qvalue, input_qvalue_tensor).AddTarget(_optimize).Fetch(_loss).Fetch(_grad).Fetch(_l1,_l2,_l3,_l4,_backprop).Run();
             var result = _session.GetRunner().
                 AddInput(_input_features, input_feature_tensor).
                 AddInput(_input_qvalue, input_qvalue_tensor).
@@ -133,25 +137,9 @@ namespace Engine.Brain.AI.RL
                 Fetch(_l1, _l2, _l3, _l4).
                 Fetch(_grad).
                 Run();
-            //
-            var loss = result[0].GetValue();
-            //
-            var l1 = result[1].GetValue();
-            var l2 = result[2].GetValue();
-            var l3 = result[3].GetValue();
-            var l4 = result[4].GetValue();
-            //
-            var gard1 = result[5].GetValue();
-            var gard2 = result[6].GetValue();
-            var gard3 = result[7].GetValue();
-            var gard4 = result[8].GetValue();
-            var gard5 = result[9].GetValue();
-            var gard6 = result[10].GetValue();
-            var gard7 = result[11].GetValue();
-            var gard8 = result[12].GetValue();
-            //
-            History.Add((float)loss);
-            return (float)loss;
+            float loss = (float)result[0].GetValue();
+            History.Add(loss);
+            return loss;
         }
         /// <summary>
         /// 预测
@@ -207,9 +195,6 @@ namespace Engine.Brain.AI.RL
 
             return (w1, b1, w2, b2, w3, b3, w4, b4);
         }
-
-
-
         /// <summary>
         /// save model
         /// </summary>

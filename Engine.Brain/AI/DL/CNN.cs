@@ -13,7 +13,6 @@ namespace Engine.Brain.AI
     /// </summary>
     public class CNN
     {
-        float learningRate = 0.01f;
         /// <summary>
         /// loss function
         /// </summary>
@@ -34,10 +33,6 @@ namespace Engine.Brain.AI
         /// dropout操作，减少过拟合，其实就是降低上一层某些输入的权重scale，甚至置为0，升高某些输入的权值，甚至置为2，防止评测曲线出现震荡，个人觉得样本较少时很必要
         /// </summary>
         TFOutput _keep;
-        /// <summary>
-        /// 
-        /// </summary>
-        TFOutput _r;
         /// <summary>
         /// 
         /// </summary>

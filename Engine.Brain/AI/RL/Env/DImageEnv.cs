@@ -1,15 +1,20 @@
 ﻿using Engine.Brain.Entity;
 using Engine.GIS.GLayer.GRasterLayer;
 using System;
+using System.Collections.Generic;
+using System.Drawing;
 
 namespace Engine.Brain.AI.RL
 {
+    
     /// <summary>
-    /// 
+    ///  图片分类学习环境
     /// </summary>
     public class DImageEnv : IDEnv
     {
         private GRasterLayer _featureRasterLayer, _labelRasterLayer;
+
+        Dictionary<int, List<Point>> _memory = new Dictionary<int, List<Point>>();
 
         int seed = 0;
 
@@ -29,7 +34,7 @@ namespace Engine.Brain.AI.RL
             FeatureNum = featureRasterLayer.BandCount;
             ActionNum = Convert.ToInt32(_labelRasterLayer.BandCollection[0].Max);
             DummyActions = NP.ToOneHot(1, ActionNum);
-            (_current_x,_current_y,_current_classindex) = Observe();
+            (_current_x, _current_y, _current_classindex) = Observe();
         }
         public float[] DummyActions { get; }
         /// <summary>
@@ -46,7 +51,8 @@ namespace Engine.Brain.AI.RL
             //1.随机从label层获取一次观察结果
             x = new Random().Next(_labelRasterLayer.XSize - 1);
             y = new Random().Next(_labelRasterLayer.YSize - 1);
-            classIndex = (int)_labelRasterLayer.BandCollection[0].GetRawPixel(x, y);
+            //2.读取label,得到此输入对应的 action(1-11)-1
+            classIndex = _labelRasterLayer.BandCollection[0].GetRawPixel(x, y)-1;
         }
 
         public float[] Reset()
@@ -60,7 +66,12 @@ namespace Engine.Brain.AI.RL
             do
             {
                 RandomAccessEnv(out x, out y, out classIndex);
-            } while (classIndex == 0);
+                if (_memory.ContainsKey(classIndex))
+                    _memory[classIndex].Add(new Point(x, y));
+                else
+                    _memory.Add(classIndex, new List<Point>() { new Point(x, y) });
+            } while (classIndex == -1);
+            //
             return (x, y, classIndex);
         }
 
@@ -69,21 +80,11 @@ namespace Engine.Brain.AI.RL
             return new Random().Next(ActionNum);
         }
 
-        private void FitAction(int action)
-        {
-            int x, y;
-            float classIndex = -1.0f;
-            do {
-                (x, y, classIndex) = Observe();
-            } while (classIndex != action);
-
-        }
-
         public (float[] state, float reward) Step(int action)
         {
             if (action == -1)
             {
-                (_c_x,_c_y,_c_classIndex) = (_current_x,_current_y,_current_classindex);
+                (_c_x, _c_y, _c_classIndex) = (_current_x, _current_y, _current_classindex);
                 (_current_x, _current_y, _current_classindex) = Observe();
                 float[] raw = _featureRasterLayer.GetPixelFloat(_c_x, _c_y).ToArray();
                 float[] normal = NP.Normalize(raw, 255f);
@@ -95,6 +96,7 @@ namespace Engine.Brain.AI.RL
                 (_current_x, _current_y, _current_classindex) = Observe();
                 float[] raw = _featureRasterLayer.GetPixelFloat(_current_x, _current_y).ToArray();
                 float[] normal = NP.Normalize(raw, 255f);
+                seed++;
                 return (normal, reward);
             }
         }

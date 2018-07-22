@@ -43,7 +43,7 @@ namespace Engine.Brain.Entity
         {
             float[] oneHot = new float[hotLength];
             for (int i = 0; i < hotLength; i++)
-                oneHot[i] = i == (hotIndex - 1) ? 1 : 0;
+                oneHot[i] = i == hotIndex ? 1 : 0;
             return oneHot;
         }
         /// <summary>
@@ -161,6 +161,16 @@ namespace Engine.Brain.Entity
                 output[i] = Argmax(arr);
             }
             return output;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="inputs"></param>
+        /// <returns></returns>
+        public static float Max(float[] inputs)
+        {
+            float max = inputs.Max();
+            return max;
         }
         /// <summary>
         /// 
