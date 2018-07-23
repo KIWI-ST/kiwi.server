@@ -17,6 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using TensorFlow;
 
 namespace Host.Image.UI
 {
@@ -614,6 +615,8 @@ namespace Host.Image.UI
 
         void test()
         {
+
+
             //const int class_num = 3;
             //const int feature_num = 64;
             //Random random = new Random();

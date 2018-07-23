@@ -1,4 +1,5 @@
 ﻿using Engine.Brain.Entity;
+using Engine.Brain.Extend;
 using Engine.GIS.GLayer.GRasterLayer;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Drawing;
 
 namespace Engine.Brain.AI.RL
 {
-    
+
     /// <summary>
     ///  图片分类学习环境
     /// </summary>
@@ -16,11 +17,11 @@ namespace Engine.Brain.AI.RL
 
         Dictionary<int, List<Point>> _memory = new Dictionary<int, List<Point>>();
 
-        int seed = 0;
+        int _seed = 0;
 
         int _current_x, _current_y, _current_classindex;
 
-        int _c_x, _c_y, _c_classIndex;
+        int _c_x = 0, _c_y = 0, _c_classIndex = -1;
 
         /// <summary>
         /// 指定观察的图像，和样本所在的层位置
@@ -34,7 +35,8 @@ namespace Engine.Brain.AI.RL
             FeatureNum = featureRasterLayer.BandCount;
             ActionNum = Convert.ToInt32(_labelRasterLayer.BandCollection[0].Max);
             DummyActions = NP.ToOneHot(1, ActionNum);
-            (_current_x, _current_y, _current_classindex) = Observe();
+            Prepare();
+            (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
         }
         public float[] DummyActions { get; }
         /// <summary>
@@ -45,34 +47,69 @@ namespace Engine.Brain.AI.RL
         /// number of features
         /// </summary>
         public int FeatureNum { get; }
-
-        private void RandomAccessEnv(out int x, out int y, out int classIndex)
+        /// <summary>
+        /// 顺序学习环境样本
+        /// </summary>
+        /// <returns></returns>
+        private (int x,int y,int classIndex) SequentialAccessEnv()
         {
-            //1.随机从label层获取一次观察结果
-            x = new Random().Next(_labelRasterLayer.XSize - 1);
-            y = new Random().Next(_labelRasterLayer.YSize - 1);
-            //2.读取label,得到此输入对应的 action(1-11)-1
-            classIndex = _labelRasterLayer.BandCollection[0].GetRawPixel(x, y)-1;
+            int _x, _y;
+            int _value;
+            do
+            {
+                (_x, _y, _value) = _labelRasterLayer.BandCollection[0].Next();
+            } while (_value == 0);
+            return (_x, _y, _value - 1);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public float[] Reset()
         {
+            Prepare();
+            (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
             return Step(-1).state;
         }
-
-        private (int x, int y, int classIndex) Observe()
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Prepare()
         {
             int x, y, classIndex;
             do
             {
-                RandomAccessEnv(out x, out y, out classIndex);
+                (x, y, classIndex) = SequentialAccessEnv();
                 if (_memory.ContainsKey(classIndex))
                     _memory[classIndex].Add(new Point(x, y));
                 else
                     _memory.Add(classIndex, new List<Point>() { new Point(x, y) });
-            } while (classIndex == -1);
-            //
-            return (x, y, classIndex);
+            } while (classIndex != -2);
+            //移除-2
+            _memory.Remove(-2);
+            //绘制统计结果
+            //Bitmap bmp = new Bitmap(_labelRasterLayer.XSize, _labelRasterLayer.YSize);
+            //Graphics g = Graphics.FromImage(bmp);
+            //Brush[] burshes = new Brush[] { Brushes.Red, Brushes.Yellow, Brushes.Blue, Brushes.White, Brushes.Azure, Brushes.Beige, Brushes.Bisque, Brushes.Black, Brushes.BlanchedAlmond, Brushes.Blue, Brushes.BlueViolet, Brushes.Brown, Brushes.BurlyWood, Brushes.CadetBlue, Brushes.Chartreuse, Brushes.Chocolate, Brushes.Coral };
+            //foreach (var element in _memory)
+            //{
+            //    Brush bursh = burshes[element.Key];
+            //    foreach(var p in element.Value)
+            //    {
+            //        g.FillRectangle(bursh, p.X,p.Y, 1, 1);
+            //    }
+            //}
+            //bmp.Save(@"D:\1.jpg");
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private (int x, int y,int classIndex) RandomAccessMemory()
+        {
+            int classIndex = new Random().Next(ActionNum);
+            Point p = _memory[classIndex].RandomTake();
+            return (p.X, p.Y, classIndex);
         }
 
         public int RandomAction()
@@ -85,7 +122,7 @@ namespace Engine.Brain.AI.RL
             if (action == -1)
             {
                 (_c_x, _c_y, _c_classIndex) = (_current_x, _current_y, _current_classindex);
-                (_current_x, _current_y, _current_classindex) = Observe();
+                (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
                 float[] raw = _featureRasterLayer.GetPixelFloat(_c_x, _c_y).ToArray();
                 float[] normal = NP.Normalize(raw, 255f);
                 return (normal, 0f);
@@ -93,10 +130,10 @@ namespace Engine.Brain.AI.RL
             else
             {
                 float reward = action == _current_classindex ? 1.0f : -1.0f;
-                (_current_x, _current_y, _current_classindex) = Observe();
+                (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
                 float[] raw = _featureRasterLayer.GetPixelFloat(_current_x, _current_y).ToArray();
                 float[] normal = NP.Normalize(raw, 255f);
-                seed++;
+                _seed++;
                 return (normal, reward);
             }
         }

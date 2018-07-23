@@ -38,6 +38,27 @@ namespace Engine.GIS.GLayer.GRasterLayer.GBand
             pBand.ReadRaster(0, 0, _xCount, _yCount, _rawData, _xCount, _yCount, 0, 0);
         }
 
+        int _cursor = 0;
+        /// <summary>
+        /// 游标方式读取图像值
+        /// </summary>
+        /// <returns>返回未拉伸的原始图像值</returns>
+        public (int x, int y,int value) Next()
+        {
+            if (_cursor == _xCount * _yCount - 1)
+                return (-1, -1, -1);
+            int x = _cursor % _xCount;
+            int y = _cursor / _xCount;
+            int value = GetRawPixel(x, y);
+            _cursor++;
+            return (x, y, value);
+        }
+        /// <summary>
+        /// 获取未拉伸的图像值
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public byte GetRawPixel(int x, int y)
         {
             if (_rawByteData != null)

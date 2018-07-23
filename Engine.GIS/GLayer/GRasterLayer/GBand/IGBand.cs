@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 
 namespace Engine.GIS.GLayer.GRasterLayer.GBand
 {
     public interface IGBand
     {
+        /// <summary>
+        /// 游标方式读取band pixel value
+        /// </summary>
+        /// <returns>未拉伸值（原始图像值）</returns>
+        (int x, int y, int value) Next();
         /// <summary>
         /// 
         /// </summary>

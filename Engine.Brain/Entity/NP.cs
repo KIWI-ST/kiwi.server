@@ -207,7 +207,16 @@ namespace Engine.Brain.Entity
             return outputs;
         }
 
-        public static float CalcuteAccuracy(float[,] predict,float[,] label)
+        public static float CalcuteAccuracy(float[] predict, float[] label)
+        {
+            int count = predict.Length;
+            float right = 0f;
+            for(int i=0;i<count;i++)
+                right+= Math.Abs(predict[i] - label[i]) < 0.1f ? 1f : 0f;
+            return right / count;
+        }
+
+            public static float CalcuteAccuracy(float[,] predict,float[,] label)
         {
             int dim0 = predict.GetLength(0);
             int dim1 = predict.GetLength(1);

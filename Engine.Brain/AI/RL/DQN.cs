@@ -1,4 +1,5 @@
 ﻿using Engine.Brain.Entity;
+using Engine.Brain.Extend;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,15 +43,12 @@ namespace Engine.Brain.AI.RL
         /// 观察环境
         /// </summary>
         private IDEnv _env;
-  
-        //记忆长度
-        readonly int _memoryCapacity = 500;
+
+        readonly int _everycopy = 128;
         //学习轮次
-        readonly int _epoches = 100;
-        //应用学习结果，观察步骤间隔
-        readonly int _everyCopyStep = 128;
+        readonly int _epoches = 300;
         //一次学习样本数
-        readonly int _batchSize = 64;
+        readonly int _batchSize = 32;
         //一轮学习次数
         readonly int _forward = 512;
         //q值积累权重
@@ -61,7 +59,7 @@ namespace Engine.Brain.AI.RL
         readonly int _featuresNumber;
         //输入action长度
         readonly int _actionsNumber;
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -83,13 +81,6 @@ namespace Engine.Brain.AI.RL
         /// </summary>
         public void Remember(float[] state, float[] action, float q, float reward, float[] state_)
         {
-            //移除溢出memory
-            if (_memoryList.Count > _memoryCapacity)
-            {
-                var list = _memoryList.Where(p => p.Reward > 0.5).ToList();
-                int randomIndex = new Random().Next(_memoryCapacity);
-                _memoryList.RemoveAt(randomIndex);
-            }
             //预学习N步，记录在memory里
             _memoryList.Add(new Memory()
             {
@@ -104,8 +95,10 @@ namespace Engine.Brain.AI.RL
         /// 输出每一个 state 对应的 action 值
         /// </summary>
         /// <returns></returns>
-        public (int action,float q) ChooseAction(float[] state)
+        public (int action, float q) ChooseAction(float[] state, DNet net = null)
         {
+            //默认使用actorNet
+            net = net == null ? _actorNet : net;
             float[] input = new float[_featuresNumber + _actionsNumber];
             Array.ConstrainedCopy(state, 0, input, 0, _featuresNumber);
             float[] arrays = new float[_actionsNumber];
@@ -114,10 +107,19 @@ namespace Engine.Brain.AI.RL
                 float[] action = NP.ToOneHot(i, _actionsNumber);
                 Array.ConstrainedCopy(action, 0, input, _featuresNumber, _actionsNumber);
                 TFTensor input_tensor = TFTensor.FromBuffer(new TFShape(1, _featuresNumber + _actionsNumber), input, 0, input.Length);
-                float[,] predicts = (float[,])_actorNet.Predict(input_tensor);
+                float[,] predicts = (float[,])net.Predict(input_tensor);
                 arrays[i] = predicts[0, 0];
             }
-            return (NP.Argmax(arrays),NP.Max(arrays));
+            return (NP.Argmax(arrays), NP.Max(arrays));
+        }
+        //随机抽取样本
+        private List<Memory> CreateRawDataBatch(int batchSize)
+        {
+            int count = _memoryList.Count;
+            List<Memory> list = new List<Memory>();
+            for (int i = 0; i < batchSize; i++)
+                list.Add(_memoryList.RandomTake());
+            return list;
         }
         /// <summary>
         /// 
@@ -125,18 +127,12 @@ namespace Engine.Brain.AI.RL
         /// <param name="input_features_tensor"></param>
         /// <param name="input_qvalue_tensor"></param>
         /// <param name="batchSize"></param>
-        private (TFTensor input_features_tensor, TFTensor input_qvalue_tensor) MakeBatch(int batchSize)
+        private (TFTensor input_features_tensor, TFTensor input_qvalue_tensor) MakeBatch(List<Memory> list)
         {
+            //batchSize个样本
+            int batchSize = list.Count;
             //
             TFTensor input_features_tensor, input_qvalue_tensor;
-            //随机从记忆里抽取batchSize个样本
-            var list = new List<Memory>();
-            int count = _memoryList.Count;
-            for (int i = 0; i < batchSize; i++)
-            {
-                var index = new Random().Next(count);
-                list.Add(_memoryList[index]);
-            }
             //feature input
             float[] input_features = new float[batchSize * (_featuresNumber + _actionsNumber)];
             //qvalue input
@@ -187,9 +183,9 @@ namespace Engine.Brain.AI.RL
                 return (_env.RandomAction(), 0);
             else
             {
-                int action;float q;
+                int action; float q;
                 (action, q) = ChooseAction(state);
-                return (action,q);
+                return (action, q);
             }
         }
         /// <summary>
@@ -200,14 +196,55 @@ namespace Engine.Brain.AI.RL
         {
             if (_memoryList.Count < _batchSize)
                 return (-10000.0f, 0f);
+            //batch of memory
+            List<Memory> rawBatchList = CreateRawDataBatch(_batchSize);
+            //create input tensor
             TFTensor input_feature_tensor, input_qvalue_tensor;
-            (input_feature_tensor, input_qvalue_tensor) = MakeBatch(_batchSize);
+            (input_feature_tensor, input_qvalue_tensor) = MakeBatch(rawBatchList);
             //loss计算
             float loss = _criticNet.Train(input_feature_tensor, input_qvalue_tensor);
+            //}{debug
+            var prediction = _criticNet.Predict(input_feature_tensor);
             //使用函数判断精度
             float[,] predict = (float[,])_actorNet.Predict(input_feature_tensor);
-            float accuracy = NP.CalcuteAccuracy(predict, (float[,])input_qvalue_tensor.GetValue());
+            List<Memory> accuracyList = _memoryList.Where(p => p.Reward == 1.0f).ToList();
+            float accuracy = Accuracy(accuracyList);
             return (loss, accuracy);
+        }
+        /// <summary>
+        /// 计算分类精度
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        private float Accuracy(List<Memory> list)
+        {
+            int count = list.Count;
+            float[] labels = new float[count];
+            float[] actions = new float[count];
+            for (int i = 0; i < list.Count; i++)
+            {
+                actions[i] = ChooseAction(list[i].STATE).action;
+                labels[i] = NP.Argmax(list[i].Action);
+            }
+            var accuracy = NP.CalcuteAccuracy(labels, actions);
+            return accuracy;
+        }
+        /// <summary>
+        /// 预存储记忆
+        /// </summary>
+        /// <param name="rememberSize"></param>
+        public void PreRemember(int rememberSize = 256)
+        {
+            float[] state = _env.Reset();
+            for (int i = 0; i < rememberSize; i++)
+            {
+                int action = _env.RandomAction();
+                float[] nextState;
+                float reward;
+                (nextState, reward) = _env.Step(action);
+                Remember(state, NP.ToOneHot(action, _env.ActionNum), 0, reward, nextState);
+                state = nextState;
+            }
         }
         /// <summary>
         /// 批次训练
@@ -215,26 +252,28 @@ namespace Engine.Brain.AI.RL
         /// <param name="batchSize"></param>
         public void Learn()
         {
+            PreRemember(_forward);
             float[] state = _env.Reset();
             for (int e = 0; e < _epoches; e++)
             {
                 float totalRewards = 0;
                 for (int step = 0; step < _forward; step++)
                 {
-                    float loss, accuracy,q;
-                    int action; 
+                    float loss, accuracy, q, reward;
+                    int action;
                     //对状态进行epsilon_greedy选择
                     (action, q) = EpsilonGreedy(step, state);
                     //play
-                    float[] nextState; float reward;
+                    float[] nextState;
                     (nextState, reward) = _env.Step(action);
                     //加入要经验记忆中
                     Remember(state, NP.ToOneHot(action, _env.ActionNum), q, reward, nextState);
+                    //
                     (loss, accuracy) = Replay();
-                    totalRewards += reward;
                     state = nextState;
-                    //拷贝模型参数
-                    if (step % _everyCopyStep == 0)
+                    totalRewards += reward;
+                    //
+                    if (step % _everycopy == 0)
                         _actorNet.Accept(_criticNet);
                     OnLearningLossEventHandler?.Invoke(loss, totalRewards, accuracy);
                 }

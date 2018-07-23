@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 
+
 namespace Engine.GIS.GLayer.GRasterLayer
 {
     public class GRasterLayer
@@ -20,60 +21,52 @@ namespace Engine.GIS.GLayer.GRasterLayer
             //注册gdal库
             Gdal.AllRegister();
             //图层名
-            _name = Path.GetFileNameWithoutExtension(rasterFilename);
+            Name = Path.GetFileNameWithoutExtension(rasterFilename);
             //只读方式读取图层
-            _pDataSet = Gdal.Open(rasterFilename, Access.GA_ReadOnly);
+            PDataSet = Gdal.Open(rasterFilename, Access.GA_ReadOnly);
             //波段数目
-            _bandCount = _pDataSet.RasterCount;
+            BandCount = PDataSet.RasterCount;
             //读取band
-            _bandCollection = new List<IGBand>();
-            for(int i = 1; i <= _bandCount; i++)
+            BandCollection = new List<IGBand>();
+            for (int i = 1; i <= BandCount; i++)
             {
-                Band pBand = _pDataSet.GetRasterBand(i);
-                _pDataType = pBand.DataType;
-                if(_pDataType == DataType.GDT_Float32 || _pDataType == DataType.GDT_Byte)
-                    _bandCollection.Add(new GFloat32Band(pBand));
+                Band pBand = PDataSet.GetRasterBand(i);
+                PDataType = pBand.DataType;
+                if (PDataType == DataType.GDT_Float32 || PDataType == DataType.GDT_Byte)
+                    BandCollection.Add(new GFloat32Band(pBand));
             }
         }
+
         #region 属性字段
-        //波段格式
-        DataType _pDataType;
-        //波段集合
-        List<IGBand> _bandCollection;
-        //图层名，和文件名一致
-        string _name;
-        //波段层数
-        int _bandCount;
-        // GDAL Dataset
-        Dataset _pDataSet;
+
         /// <summary>
         /// height
         /// </summary>
-        public int YSize { get => _pDataSet.RasterYSize; }
+        public int YSize { get => PDataSet.RasterYSize; }
         /// <summary>
         /// width
         /// </summary>
-        public int XSize { get => _pDataSet.RasterXSize; }
+        public int XSize { get => PDataSet.RasterXSize; }
         /// <summary>
         /// RasterLayer 图层名
         /// </summary>
-        public string Name { get => _name; }
+        public string Name { get; }
         /// <summary>
         /// GDAL Dataset
         /// </summary>
-        public Dataset PDataSet { get => _pDataSet;}
+        public Dataset PDataSet { get; }
         /// <summary>
         /// 波段层数
         /// </summary>
-        public int BandCount { get => _bandCount;}
+        public int BandCount { get; }
         /// <summary>
         /// 图层类型
         /// </summary>
-        public DataType PDataType { get => _pDataType;}
+        public DataType PDataType { get; }
         /// <summary>
         /// 波段集合
         /// </summary>
-        public List<IGBand> BandCollection { get => _bandCollection;}
+        public List<IGBand> BandCollection { get; }
         /// <summary>
         /// 获取rasterLayer
         /// </summary>
@@ -83,7 +76,7 @@ namespace Engine.GIS.GLayer.GRasterLayer
         public List<float> GetPixelFloat(int x, int y)
         {
             List<float> pixels = new List<float>();
-            for(int i = 0; i < BandCount; i++)
+            for (int i = 0; i < BandCount; i++)
                 pixels.Add(BandCollection[i].GetByteData()[x, y]);
             return pixels;
         }
@@ -93,7 +86,7 @@ namespace Engine.GIS.GLayer.GRasterLayer
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public List<float> GetPixelFloatWidthConv(int x, int y,int[] mask)
+        public List<float> GetPixelFloatWidthConv(int x, int y, int[] mask)
         {
             List<float> pixels = new List<float>();
             for (int i = 0; i < BandCount; i++)
@@ -108,5 +101,4 @@ namespace Engine.GIS.GLayer.GRasterLayer
         #endregion
 
     }
-
 }

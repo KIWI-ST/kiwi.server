@@ -58,33 +58,29 @@ namespace Engine.Brain.AI.RL
             _input_features = _graph.Placeholder(TFDataType.Float, new TFShape(-1, n_features + n_actions));
             _input_qvalue = _graph.Placeholder(TFDataType.Float, new TFShape(-1, 1));
             //layer1
-            _w1 = _graph.VariableV2(new TFShape(n_features + n_actions, n_actions), TFDataType.Float, operName: "w1");
-            _b1 = _graph.VariableV2(new TFShape(1, n_actions), TFDataType.Float, operName: "b1");
-            _l1 = _graph.Add(_graph.MatMul(_input_features, _w1), _b1);
-            //_l1 = _graph.Relu(y1, operName: "l1");
+            _w1 = _graph.VariableV2(new TFShape(n_features + n_actions, n_actions), TFDataType.Float);
+            _b1 = _graph.VariableV2(new TFShape(1, n_actions), TFDataType.Float);
+            _l1 = _graph.Selu(_graph.Add(_graph.MatMul(_input_features, _w1), _b1));
             //layer2
             _w2 = _graph.VariableV2(new TFShape(n_actions, n_actions), TFDataType.Float);
             _b2 = _graph.VariableV2(new TFShape(1, n_actions), TFDataType.Float);
-            _l2 = _graph.Add(_graph.MatMul(_l1, _w2), _b2);
-            //_l2 = _graph.Relu(y2);
+            _l2 = _graph.Selu(_graph.Add(_graph.MatMul(_l1, _w2), _b2));
             //layer3
             _w3 = _graph.VariableV2(new TFShape(n_actions, n_actions / 2), TFDataType.Float);
             _b3 = _graph.VariableV2(new TFShape(1, n_actions / 2), TFDataType.Float);
-            _l3 = _graph.Add(_graph.MatMul(_l2, _w3), _b3);
-            //_l3 = _graph.Relu(y3);
+            _l3 = _graph.Selu(_graph.Add(_graph.MatMul(_l2, _w3), _b3));
             //layer4 
             _w4 = _graph.VariableV2(new TFShape(n_actions / 2, 1), TFDataType.Float);
             _b4 = _graph.VariableV2(new TFShape(1, 1), TFDataType.Float);
-            _l4 = _graph.Add(_graph.MatMul(_l3, _w4), _b4);
-            //_l4 = _graph.Relu(y4);
+            _l4 = _graph.Selu(_graph.Add(_graph.MatMul(_l3, _w4), _b4));
             //calcute reward
             _output_qvalue = _l4;
             //loss and train
-            //_loss = _graph.Neg(_graph.ReduceSum(_graph.Mul(_input_qvalue, _graph.Log(_l4))));
-            _loss = _graph.ReduceMean(_graph.Abs(_graph.Sub(_input_qvalue, _l4)));
-            //_loss = _graph.ReduceMean(_graph.SquaredDifference(_input_qvalue, _l4));
+            //_loss = _graph.Neg(_graph.ReduceMean(_graph.ReduceSum(_graph.Mul(_input_qvalue, _graph.Log(_l4)))));
+            //_loss = _graph.ReduceMean(_graph.Sub(_input_qvalue, _l4));
+            _loss = _graph.ReduceMean(_graph.SquaredDifference(_input_qvalue, _l4));
             //calute gradient 
-            _grad = _graph.AddGradients(new TFOutput[] { _loss }, new TFOutput[] {
+            _grad = _graph.AddGradients(new TFOutput[] {_loss }, new TFOutput[] {
                 _w1,_b1,
                 _w2,_b2,
                 _w3,_b3,
@@ -103,24 +99,23 @@ namespace Engine.Brain.AI.RL
             };
             //optimize gradient descent
             _optimize = new[]{
-                _graph.ApplyGradientDescent(_w1,_graph.Const(0.001f),_grad[0]).Operation,
-                _graph.ApplyGradientDescent(_b1,_graph.Const(0.001f),_grad[1]).Operation,
-                _graph.ApplyGradientDescent(_w2,_graph.Const(0.001f),_grad[2]).Operation,
-                _graph.ApplyGradientDescent(_b2,_graph.Const(0.001f),_grad[3]).Operation,
-                _graph.ApplyGradientDescent(_w3,_graph.Const(0.001f),_grad[4]).Operation,
-                _graph.ApplyGradientDescent(_b3,_graph.Const(0.001f),_grad[5]).Operation,
-                _graph.ApplyGradientDescent(_w4,_graph.Const(0.001f),_grad[6]).Operation,
-                _graph.ApplyGradientDescent(_b4,_graph.Const(0.001f),_grad[7]).Operation,
+                _graph.ApplyGradientDescent(_w1,_graph.Const(0.01f),_grad[0]).Operation,
+                _graph.ApplyGradientDescent(_b1,_graph.Const(0.01f),_grad[1]).Operation,
+                _graph.ApplyGradientDescent(_w2,_graph.Const(0.01f),_grad[2]).Operation,
+                _graph.ApplyGradientDescent(_b2,_graph.Const(0.01f),_grad[3]).Operation,
+                _graph.ApplyGradientDescent(_w3,_graph.Const(0.01f),_grad[4]).Operation,
+                _graph.ApplyGradientDescent(_b3,_graph.Const(0.01f),_grad[5]).Operation,
+                _graph.ApplyGradientDescent(_w4,_graph.Const(0.01f),_grad[6]).Operation,
+                _graph.ApplyGradientDescent(_b4,_graph.Const(0.01f),_grad[7]).Operation,
             };
             //inital varibales
             Initialize(inits);
         }
         /// <summary>
-        /// 
+        /// init session
         /// </summary>
         private void Initialize(TFOperation[] operations)
         {
-            //init session
             _session = new TFSession(_graph);
             _session.GetRunner().AddTarget(operations).Run();
         }
@@ -129,16 +124,19 @@ namespace Engine.Brain.AI.RL
         /// </summary>
         public float Train(TFTensor input_feature_tensor, TFTensor input_qvalue_tensor)
         {
-            var result = _session.GetRunner().
-                AddInput(_input_features, input_feature_tensor).
-                AddInput(_input_qvalue, input_qvalue_tensor).
-                AddTarget(_optimize).
-                Fetch(_loss).
-                Fetch(_l1, _l2, _l3, _l4).
-                Fetch(_grad).
-                Run();
-            float loss = (float)result[0].GetValue();
-            History.Add(loss);
+            float loss;
+            do
+            {
+                var result = _session.GetRunner().
+                    AddInput(_input_features, input_feature_tensor).
+                    AddInput(_input_qvalue, input_qvalue_tensor).
+                    AddTarget(_optimize).
+                    Fetch(_loss).
+                    Fetch(_l1, _l2, _l3, _l4).
+                    Fetch(_grad).
+                    Run();
+                loss = (float)result[0].GetValue();
+            } while (loss > 0.1);
             return loss;
         }
         /// <summary>
