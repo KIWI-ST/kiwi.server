@@ -7,6 +7,17 @@ namespace Engine.Brain.Entity
 {
     public class NP
     {
+
+        public static int Random(int maxValue)
+        {
+            return new Random(Guid.NewGuid().GetHashCode()).Next(0, maxValue);
+        }
+
+        public static double Random()
+        {
+            return new Random(Guid.NewGuid().GetHashCode()).NextDouble();
+        }
+
         /// <summary>
         /// 归一化
         /// </summary>
@@ -55,14 +66,13 @@ namespace Engine.Brain.Entity
         public static List<float> CreateInputs(int oneDimensionCount = 64, int batchSize = 15)
         {
             var inputs = new List<List<float>>();
-            var random = new Random();
             //构建指定feature数目的多样本集合
             for (int i = 0; i < batchSize; i++)
             {
                 var input = new List<float>();
                 for (int j = 0; j < oneDimensionCount; j++)
                 {
-                    var num = random.Next(10);
+                    var num = NP.Random(10);
                     input.Add(num);
                 }
                 inputs.Add(input);
@@ -84,11 +94,10 @@ namespace Engine.Brain.Entity
         public static List<float> CreateLabels(int batchSzie = 15, int oneHot = 10)
         {
             var inputs = new List<float[]>();
-            var random = new Random();
             //构建多样本的输出label
             for (int i = 0; i < batchSzie; i++)
             {
-                var label = random.Next(10);
+                var label = NP.Random(10);
                 inputs.Add(ToOneHot(label, oneHot));
             }
             var outputs = new List<float>();
@@ -105,7 +114,6 @@ namespace Engine.Brain.Entity
         /// <returns></returns>
         public static TFTensor CreateTensorWithRandomNormalFloat(TFShape shape)
         {
-            var random = new Random();
             var dimensions = shape.NumDimensions;
             int length = 1;
             List<float> array = new List<float>();
@@ -113,7 +121,7 @@ namespace Engine.Brain.Entity
                 length *= Convert.ToInt32(shape[i]);
             for (var i = 0; i < length; i++)
             {
-                float normal = Normal(random.NextDouble(), random.NextDouble());
+                float normal = Normal(NP.Random(), NP.Random());
                 array.Add(normal);
             }
             var tensor = TFTensor.FromBuffer(shape, array.ToArray(), 0, array.Count);

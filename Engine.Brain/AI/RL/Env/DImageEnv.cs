@@ -107,14 +107,14 @@ namespace Engine.Brain.AI.RL
         /// <returns></returns>
         private (int x, int y,int classIndex) RandomAccessMemory()
         {
-            int classIndex = new Random().Next(ActionNum);
+            int classIndex = NP.Random(ActionNum);
             Point p = _memory[classIndex].RandomTake();
             return (p.X, p.Y, classIndex);
         }
 
         public int RandomAction()
         {
-            return new Random().Next(ActionNum);
+            return NP.Random(ActionNum);
         }
 
         public (float[] state, float reward) Step(int action)

@@ -80,7 +80,7 @@ namespace Engine.Brain.AI.RL
             //_loss = _graph.ReduceMean(_graph.Sub(_input_qvalue, _l4));
             _loss = _graph.ReduceMean(_graph.SquaredDifference(_input_qvalue, _l4));
             //calute gradient 
-            _grad = _graph.AddGradients(new TFOutput[] {_loss }, new TFOutput[] {
+            _grad = _graph.AddGradients(new TFOutput[] { _loss }, new TFOutput[] {
                 _w1,_b1,
                 _w2,_b2,
                 _w3,_b3,
@@ -125,6 +125,7 @@ namespace Engine.Brain.AI.RL
         public float Train(TFTensor input_feature_tensor, TFTensor input_qvalue_tensor)
         {
             float loss;
+            float _lastLoss;
             do
             {
                 var result = _session.GetRunner().
@@ -138,6 +139,16 @@ namespace Engine.Brain.AI.RL
                 loss = (float)result[0].GetValue();
             } while (loss > 0.1);
             return loss;
+            //var result = _session.GetRunner().
+            //    AddInput(_input_features, input_feature_tensor).
+            //    AddInput(_input_qvalue, input_qvalue_tensor).
+            //    AddTarget(_optimize).
+            //    Fetch(_loss).
+            //    Fetch(_l1, _l2, _l3, _l4).
+            //    Fetch(_grad).
+            //    Run();
+            //var loss = (float)result[0].GetValue();
+            //return loss;
         }
         /// <summary>
         /// 预测

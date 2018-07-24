@@ -44,9 +44,12 @@ namespace Engine.Brain.AI.RL
         /// </summary>
         private IDEnv _env;
 
+        //memory容量
+        readonly int _memoryCapacity = 800;
+        //拷贝net参数
         readonly int _everycopy = 128;
         //学习轮次
-        readonly int _epoches = 300;
+        readonly int _epoches = 200;
         //一次学习样本数
         readonly int _batchSize = 32;
         //一轮学习次数
@@ -77,10 +80,13 @@ namespace Engine.Brain.AI.RL
             _criticNet = new DNet(_featuresNumber, _actionsNumber);
         }
         /// <summary>
-        /// 
+        /// 控制记忆容量
         /// </summary>
         public void Remember(float[] state, float[] action, float q, float reward, float[] state_)
         {
+            int count = _memoryList.Count;
+            if (count >= _memoryCapacity)
+                _memoryList.RandomRemove();
             //预学习N步，记录在memory里
             _memoryList.Add(new Memory()
             {
@@ -252,7 +258,7 @@ namespace Engine.Brain.AI.RL
         /// <param name="batchSize"></param>
         public void Learn()
         {
-            PreRemember(_forward);
+            PreRemember(_memoryCapacity);
             float[] state = _env.Reset();
             for (int e = 0; e < _epoches; e++)
             {
