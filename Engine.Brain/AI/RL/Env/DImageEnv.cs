@@ -53,8 +53,7 @@ namespace Engine.Brain.AI.RL
         /// <returns></returns>
         private (int x,int y,int classIndex) SequentialAccessEnv()
         {
-            int _x, _y;
-            int _value;
+            int _x, _y,_value;
             do
             {
                 (_x, _y, _value) = _labelRasterLayer.BandCollection[0].Next();
@@ -67,8 +66,6 @@ namespace Engine.Brain.AI.RL
         /// <returns></returns>
         public float[] Reset()
         {
-            Prepare();
-            (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
             return Step(-1).state;
         }
         /// <summary>

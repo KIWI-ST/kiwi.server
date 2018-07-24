@@ -39,7 +39,6 @@ namespace Host.Image.UI
         public Main()
         {
             InitializeComponent();
-            test();
         }
 
         #endregion
@@ -164,7 +163,7 @@ namespace Host.Image.UI
             Invoke(new SaveBitmapHandler(SaveBitmap), pkg.Average);
         }
 
-        private void RunDQN(GRasterLayer featureRasterLayer,GRasterLayer labelRasterLayer)
+        private void RunDQN(GRasterLayer featureRasterLayer, GRasterLayer labelRasterLayer)
         {
             IDEnv env = new DImageEnv(featureRasterLayer, labelRasterLayer);
             DQN dqn = new DQN(env);
@@ -173,21 +172,22 @@ namespace Host.Image.UI
             //
             Bitmap bmp = new Bitmap(featureRasterLayer.XSize, featureRasterLayer.YSize);
             //应用dqn对图像分类
-            for (int i =0;i<featureRasterLayer.XSize;i++)
-                for(int j = 0; j < featureRasterLayer.YSize; j++)
+            for (int i = 0; i < featureRasterLayer.XSize; i++)
+                for (int j = 0; j < featureRasterLayer.YSize; j++)
                 {
-                    float[] raw = featureRasterLayer.GetPixelFloat(i,j).ToArray();
+                    float[] raw = featureRasterLayer.GetPixelFloat(i, j).ToArray();
                     float[] normal = NP.Normalize(raw, 255f);
-                    int action;float q;
-                    (action,q) = dqn.ChooseAction(normal);
+                    int action; float q;
+                    (action, q) = dqn.ChooseAction(normal);
                     Invoke(new PaintPointHandler(PaintPoint), bmp, i, j, Convert.ToByte(action * 10));
                 }
         }
 
-        private void Dqn_OnLearningLossEventHandler(float loss,float totalReward,float accuracy)
+        private void Dqn_OnLearningLossEventHandler(float loss, float totalReward, float accuracy, float progress, string epochesTime)
         {
-            accuracy = accuracy * 100;
-            string msg = string.Format("loss:{0},reward:{1},accuracy:{2}%", loss,totalReward,accuracy);
+            accuracy *= 100;
+            progress *= 100;
+            string msg = string.Format("time:{0},progress:{1}%;loss:{2},reward:{3},accuracy:{4}%", epochesTime, progress, loss, totalReward, accuracy);
             Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), msg);
         }
 
@@ -538,7 +538,7 @@ namespace Host.Image.UI
                         }
                     }
                     break;
-                    //强化学习模型训练入口 
+                //强化学习模型训练入口 
                 case "DQN_toolStripButton":
                     DQNForm dqnForm = new DQNForm();
                     dqnForm.RasterDic = _rasterDic;
@@ -612,31 +612,6 @@ namespace Host.Image.UI
         }
 
         #endregion
-
-        void test()
-        {
-
-
-            //const int class_num = 3;
-            //const int feature_num = 64;
-            //Random random = new Random();
-            ////构建输入feature 8x8，action 为10种类的dqn网
-            //DEnv env = new DEnv(@"C:\Users\81596\Desktop\To_PPang");
-            //DQN dqn = new DQN(feature_num, class_num, env);
-            ////为dqn增加记忆
-            //for(int i = 0; i < dqn.MemoryCapacity; i++)
-            //{
-            //    int action = random.Next(class_num);
-            //    int action_ = random.Next(class_num);
-            //    DRaw raw = env.Step(action);
-            //    DRaw raw_ = env.Step(action_);
-            //    dqn.Remember(raw.State, raw.Action, raw.Reward, raw_.State);
-            //}
-            ////}{尝试计算qvalue
-            ////迭代计算q值，作为输入
-
-            //dqn.Learn();
-        }
 
     }
 }

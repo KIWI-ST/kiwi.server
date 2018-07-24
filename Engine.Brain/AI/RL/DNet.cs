@@ -78,7 +78,8 @@ namespace Engine.Brain.AI.RL
             //loss and train
             //_loss = _graph.Neg(_graph.ReduceMean(_graph.ReduceSum(_graph.Mul(_input_qvalue, _graph.Log(_l4)))));
             //_loss = _graph.ReduceMean(_graph.Sub(_input_qvalue, _l4));
-            _loss = _graph.ReduceMean(_graph.SquaredDifference(_input_qvalue, _l4));
+            //_loss = _graph.ReduceMean(_graph.SquaredDifference(_input_qvalue, _l4));
+            _loss = _graph.ReduceMean(_graph.Mul(_graph.Const(0.5f), _graph.Square(_graph.Sub(_input_qvalue, _l4))));
             //calute gradient 
             _grad = _graph.AddGradients(new TFOutput[] { _loss }, new TFOutput[] {
                 _w1,_b1,
@@ -124,31 +125,30 @@ namespace Engine.Brain.AI.RL
         /// </summary>
         public float Train(TFTensor input_feature_tensor, TFTensor input_qvalue_tensor)
         {
-            float loss;
-            float _lastLoss;
-            do
-            {
-                var result = _session.GetRunner().
-                    AddInput(_input_features, input_feature_tensor).
-                    AddInput(_input_qvalue, input_qvalue_tensor).
-                    AddTarget(_optimize).
-                    Fetch(_loss).
-                    Fetch(_l1, _l2, _l3, _l4).
-                    Fetch(_grad).
-                    Run();
-                loss = (float)result[0].GetValue();
-            } while (loss > 0.1);
-            return loss;
-            //var result = _session.GetRunner().
-            //    AddInput(_input_features, input_feature_tensor).
-            //    AddInput(_input_qvalue, input_qvalue_tensor).
-            //    AddTarget(_optimize).
-            //    Fetch(_loss).
-            //    Fetch(_l1, _l2, _l3, _l4).
-            //    Fetch(_grad).
-            //    Run();
-            //var loss = (float)result[0].GetValue();
+            //float loss;
+            //do
+            //{
+            //    var result = _session.GetRunner().
+            //        AddInput(_input_features, input_feature_tensor).
+            //        AddInput(_input_qvalue, input_qvalue_tensor).
+            //        AddTarget(_optimize).
+            //        Fetch(_loss).
+            //        Fetch(_l1, _l2, _l3, _l4).
+            //        Fetch(_grad).
+            //        Run();
+            //    loss = (float)result[0].GetValue();
+            //} while (loss > 0.1);
             //return loss;
+            var result = _session.GetRunner().
+                AddInput(_input_features, input_feature_tensor).
+                AddInput(_input_qvalue, input_qvalue_tensor).
+                AddTarget(_optimize).
+                Fetch(_loss).
+                Fetch(_l1, _l2, _l3, _l4).
+                Fetch(_grad).
+                Run();
+            var loss = (float)result[0].GetValue();
+            return loss;
         }
         /// <summary>
         /// 预测

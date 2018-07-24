@@ -7,7 +7,14 @@ using TensorFlow;
 
 namespace Engine.Brain.AI.RL
 {
-    public delegate void UpdateLearningLossHandler(float loss, float totalReward, float accuracy);
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="loss">loss value</param>
+    /// <param name="totalReward">rewards</param>
+    /// <param name="accuracy">train accuracy</param>
+    /// <param name="epochesTime"></param>
+    public delegate void UpdateLearningLossHandler(float loss, float totalReward, float accuracy,float progress,string epochesTime);
 
     public class Memory
     {
@@ -85,7 +92,7 @@ namespace Engine.Brain.AI.RL
         public void Remember(float[] state, float[] action, float q, float reward, float[] state_)
         {
             int count = _memoryList.Count;
-            if (count >= _memoryCapacity)
+            if(count >= _memoryCapacity)
                 _memoryList.RandomRemove();
             //预学习N步，记录在memory里
             _memoryList.Add(new Memory()
@@ -262,27 +269,25 @@ namespace Engine.Brain.AI.RL
             float[] state = _env.Reset();
             for (int e = 0; e < _epoches; e++)
             {
-                float totalRewards = 0;
+                DateTime now = DateTime.Now;
+                float loss = 0, accuracy = 0, totalRewards = 0;
                 for (int step = 0; step < _forward; step++)
                 {
-                    float loss, accuracy, q, reward;
-                    int action;
                     //对状态进行epsilon_greedy选择
-                    (action, q) = EpsilonGreedy(step, state);
+                    var (action, q) = EpsilonGreedy(step, state);
                     //play
-                    float[] nextState;
-                    (nextState, reward) = _env.Step(action);
+                    var (nextState, reward) = _env.Step(action);
                     //加入要经验记忆中
                     Remember(state, NP.ToOneHot(action, _env.ActionNum), q, reward, nextState);
                     //
-                    (loss, accuracy) = Replay();
+                    (loss, accuracy )= Replay();
                     state = nextState;
                     totalRewards += reward;
                     //
                     if (step % _everycopy == 0)
                         _actorNet.Accept(_criticNet);
-                    OnLearningLossEventHandler?.Invoke(loss, totalRewards, accuracy);
                 }
+                OnLearningLossEventHandler?.Invoke(loss, totalRewards,accuracy, (float)e / _epoches,(DateTime.Now - now).ToString());
             }
         }
 
