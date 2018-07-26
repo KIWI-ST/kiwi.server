@@ -17,11 +17,9 @@ namespace Engine.Brain.AI.RL
 
         Dictionary<int, List<Point>> _memory = new Dictionary<int, List<Point>>();
 
-        int _seed = 0;
-
         int _current_x, _current_y, _current_classindex;
 
-        int _c_x = 0, _c_y = 0, _c_classIndex = -1;
+        int _c_x = 0, _c_y = 0, _c_classIndex = -9999;
 
         /// <summary>
         /// 指定观察的图像，和样本所在的层位置
@@ -33,11 +31,10 @@ namespace Engine.Brain.AI.RL
             _featureRasterLayer = featureRasterLayer;
             _labelRasterLayer = labelRasterLayer;
             FeatureNum = featureRasterLayer.BandCount;
-            ActionNum = Convert.ToInt32(_labelRasterLayer.BandCollection[0].Max -_labelRasterLayer.BandCollection[0].Min)+1;
+            ActionNum = Convert.ToInt32(_labelRasterLayer.BandCollection[0].Max - _labelRasterLayer.BandCollection[0].Min);
             Prepare();
             (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
         }
-        public float[] DummyActions { get; }
         /// <summary>
         /// number of actions
         /// </summary>
@@ -57,7 +54,7 @@ namespace Engine.Brain.AI.RL
             {
                 (_x, _y, _value) = _labelRasterLayer.BandCollection[0].Next();
             } while (_value == 0);
-            return (_x, _y, _value);
+            return (_x, _y, _value - 1);
         }
         /// <summary>
         /// 
@@ -80,9 +77,9 @@ namespace Engine.Brain.AI.RL
                     _memory[classIndex].Add(new Point(x, y));
                 else
                     _memory.Add(classIndex, new List<Point>() { new Point(x, y) });
-            } while (classIndex != -9999);
+            } while (classIndex != -10000);
             //remove empty value
-            _memory.Remove(-9999);
+            _memory.Remove(-10000);
         }
         /// <summary>
         /// 
@@ -90,7 +87,7 @@ namespace Engine.Brain.AI.RL
         /// <returns></returns>
         private (int x, int y, int classIndex) RandomAccessMemory()
         {
-            int classIndex = NP.Random(ActionNum,1);
+            int classIndex = NP.Random(ActionNum);
             Point p = _memory[classIndex].RandomTake();
             return (p.X, p.Y, classIndex);
         }
@@ -112,7 +109,7 @@ namespace Engine.Brain.AI.RL
 
         public int RandomAction()
         {
-            return NP.Random(ActionNum,1);
+            return NP.Random(ActionNum);
         }
 
         public (float[] state, float reward) Step(int action)

@@ -18,10 +18,6 @@ namespace Engine.Brain.AI.RL
         /// <returns></returns>
         (List<float[]> states, int[] labels) RandomEval(int batchSize = 64);
         /// <summary>
-        /// const action of 1
-        /// </summary>
-        float[] DummyActions { get; }
-        /// <summary>
         /// number of actions
         /// </summary>
         int ActionNum { get; }

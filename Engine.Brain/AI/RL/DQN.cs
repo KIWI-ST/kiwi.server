@@ -51,9 +51,8 @@ namespace Engine.Brain.AI.RL
         /// 观察环境
         /// </summary>
         private IDEnv _env;
-
-        //memory容量
-        readonly int _memoryCapacity = 256;
+        //
+        readonly int _memoryCapacity = 500;
         //拷贝net参数
         readonly int _everycopy = 128;
         //学习轮次
@@ -93,7 +92,7 @@ namespace Engine.Brain.AI.RL
         /// </summary>
         public void Remember(float[] state, float[] action, float q, float reward, float[] state_)
         {
-            //容量上限
+            //容量上限,取消容量上限限制
             if (_memoryList.Count >= _memoryCapacity)
                 _memoryList.RandomRemove();
             //预学习N步，记录在memory里
@@ -110,10 +109,9 @@ namespace Engine.Brain.AI.RL
         /// 输出每一个 state 对应的 action 值
         /// </summary>
         /// <returns></returns>
-        public (int action, float q) ChooseAction(float[] state, DNet net = null)
+        public (int action, float q) ChooseAction(float[] state)
         {
             //默认使用actorNet
-            net = net ?? _actorNet;
             int offset = 0;
             float[] input = new float[(_featuresNumber + _actionsNumber)*_actionsNumber];
             for(int i = 0; i < _actionsNumber; i++)
@@ -124,7 +122,7 @@ namespace Engine.Brain.AI.RL
                 offset += _actionsNumber;
             }
             TFTensor input_tensor = TFTensor.FromBuffer(new TFShape(_actionsNumber, _featuresNumber + _actionsNumber), input, 0, input.Length);
-            float[,] predicts = (float[,])net.Predict(input_tensor);
+            float[,] predicts = (float[,])_actorNet.Predict(input_tensor);
             float[] array = NP.Pad(predicts);
             input_tensor.Dispose();
             return (NP.Argmax(array), NP.Max(array));
@@ -136,7 +134,6 @@ namespace Engine.Brain.AI.RL
         /// <returns></returns>
         private List<Memory> CreateRawDataBatch(int batchSize)
         {
-            int count = _memoryList.Count;
             List<Memory> list = new List<Memory>();
             for (int i = 0; i < batchSize; i++)
                 list.Add(_memoryList.RandomTake());
@@ -229,7 +226,7 @@ namespace Engine.Brain.AI.RL
         /// <returns></returns>
         private float Accuracy()
         {
-            const int batchSize = 64;
+            const int batchSize = 128;
             var (states, rawLabels) = _env.RandomEval(batchSize);
             float[] actions = new float[batchSize];
             float[] labels = new float[batchSize];
@@ -245,15 +242,13 @@ namespace Engine.Brain.AI.RL
         /// 预存储记忆
         /// </summary>
         /// <param name="rememberSize"></param>
-        public void PreRemember(int rememberSize = 256)
+        public void PreRemember(int rememberSize)
         {
             float[] state = _env.Reset();
             for (int i = 0; i < rememberSize; i++)
             {
                 int action = _env.RandomAction();
-                float[] nextState;
-                float reward;
-                (nextState, reward) = _env.Step(action);
+                var (nextState, reward) = _env.Step(action);
                 Remember(state, NP.ToOneHot(action, _env.ActionNum), 0, reward, nextState);
                 state = nextState;
             }
@@ -264,7 +259,7 @@ namespace Engine.Brain.AI.RL
         /// <param name="batchSize"></param>
         public void Learn()
         {
-            PreRemember(_batchSize);
+            PreRemember(_memoryCapacity);
             float[] state = _env.Step(-1).state;
             for (int e = 0; e <= _epoches; e++)
             {
