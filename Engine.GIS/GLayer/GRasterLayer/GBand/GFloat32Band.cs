@@ -46,7 +46,7 @@ namespace Engine.GIS.GLayer.GRasterLayer.GBand
         public (int x, int y,int value) Next()
         {
             if (_cursor == _xCount * _yCount - 1)
-                return (-1, -1, -1);
+                return (-1, -1, -9999);
             int x = _cursor % _xCount;
             int y = _cursor / _xCount;
             int value = GetRawPixel(x, y);

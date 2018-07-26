@@ -33,8 +33,7 @@ namespace Engine.Brain.AI.RL
             _featureRasterLayer = featureRasterLayer;
             _labelRasterLayer = labelRasterLayer;
             FeatureNum = featureRasterLayer.BandCount;
-            ActionNum = Convert.ToInt32(_labelRasterLayer.BandCollection[0].Max);
-            DummyActions = NP.ToOneHot(1, ActionNum);
+            ActionNum = Convert.ToInt32(_labelRasterLayer.BandCollection[0].Max -_labelRasterLayer.BandCollection[0].Min)+1;
             Prepare();
             (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
         }
@@ -51,14 +50,14 @@ namespace Engine.Brain.AI.RL
         /// 顺序学习环境样本
         /// </summary>
         /// <returns></returns>
-        private (int x,int y,int classIndex) SequentialAccessEnv()
+        private (int x, int y, int classIndex) SequentialAccessEnv()
         {
-            int _x, _y,_value;
+            int _x, _y, _value;
             do
             {
                 (_x, _y, _value) = _labelRasterLayer.BandCollection[0].Next();
             } while (_value == 0);
-            return (_x, _y, _value - 1);
+            return (_x, _y, _value);
         }
         /// <summary>
         /// 
@@ -81,35 +80,22 @@ namespace Engine.Brain.AI.RL
                     _memory[classIndex].Add(new Point(x, y));
                 else
                     _memory.Add(classIndex, new List<Point>() { new Point(x, y) });
-            } while (classIndex != -2);
-            //移除-2
-            _memory.Remove(-2);
-            //绘制统计结果
-            //Bitmap bmp = new Bitmap(_labelRasterLayer.XSize, _labelRasterLayer.YSize);
-            //Graphics g = Graphics.FromImage(bmp);
-            //Brush[] burshes = new Brush[] { Brushes.Red, Brushes.Yellow, Brushes.Blue, Brushes.White, Brushes.Azure, Brushes.Beige, Brushes.Bisque, Brushes.Black, Brushes.BlanchedAlmond, Brushes.Blue, Brushes.BlueViolet, Brushes.Brown, Brushes.BurlyWood, Brushes.CadetBlue, Brushes.Chartreuse, Brushes.Chocolate, Brushes.Coral };
-            //foreach (var element in _memory)
-            //{
-            //    Brush bursh = burshes[element.Key];
-            //    foreach(var p in element.Value)
-            //    {
-            //        g.FillRectangle(bursh, p.X,p.Y, 1, 1);
-            //    }
-            //}
-            //bmp.Save(@"D:\1.jpg");
+            } while (classIndex != -9999);
+            //remove empty value
+            _memory.Remove(-9999);
         }
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        private (int x, int y,int classIndex) RandomAccessMemory()
+        private (int x, int y, int classIndex) RandomAccessMemory()
         {
-            int classIndex = NP.Random(ActionNum);
+            int classIndex = NP.Random(ActionNum,1);
             Point p = _memory[classIndex].RandomTake();
             return (p.X, p.Y, classIndex);
         }
 
-        public (List<float[]> states,int[] labels) RandomEval(int batchSize = 64)
+        public (List<float[]> states, int[] labels) RandomEval(int batchSize = 64)
         {
             List<float[]> states = new List<float[]>();
             int[] labels = new int[batchSize];
@@ -119,14 +105,14 @@ namespace Engine.Brain.AI.RL
                 float[] raw = _featureRasterLayer.GetPixelFloat(x, y).ToArray();
                 float[] normal = NP.Normalize(raw, 255f);
                 states.Add(normal);
-                labels[i] = classIndex; 
+                labels[i] = classIndex;
             }
             return (states, labels);
         }
 
         public int RandomAction()
         {
-            return NP.Random(ActionNum);
+            return NP.Random(ActionNum,1);
         }
 
         public (float[] state, float reward) Step(int action)
@@ -145,7 +131,6 @@ namespace Engine.Brain.AI.RL
                 (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
                 float[] raw = _featureRasterLayer.GetPixelFloat(_current_x, _current_y).ToArray();
                 float[] normal = NP.Normalize(raw, 255f);
-                _seed++;
                 return (normal, reward);
             }
         }

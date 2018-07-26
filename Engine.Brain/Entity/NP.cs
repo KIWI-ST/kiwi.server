@@ -8,9 +8,9 @@ namespace Engine.Brain.Entity
     public class NP
     {
 
-        public static int Random(int maxValue)
+        public static int Random(int maxValue,int minValue = 0)
         {
-            return new Random(Guid.NewGuid().GetHashCode()).Next(0, maxValue);
+            return new Random(Guid.NewGuid().GetHashCode()).Next(minValue, maxValue);
         }
 
         public static double Random()

@@ -17,47 +17,13 @@ namespace Engine.Brain.AI.RL
     /// <param name="epochesTime"></param>
     public delegate void UpdateLearningLossHandler(float loss, float totalReward, float accuracy,float progress,string epochesTime);
 
-    public class Memory:IDisposable
+    public class Memory
     {
         public float[] STATE { get; set; }
         public float[] STATE_ { get; set; }
         public float[] Action { get; set; }
         public float Q { get; set; }
         public float Reward { get; set; }
-
-        #region IDisposable Support
-        private bool disposedValue = false; // 要检测冗余调用
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    STATE = null;
-                    STATE_ = null;
-                    Action = null;
-                }
-                disposedValue = true;
-            }
-        }
-
-        // TODO: 仅当以上 Dispose(bool disposing) 拥有用于释放未托管资源的代码时才替代终结器。
-        // ~Memory() {
-        //   // 请勿更改此代码。将清理代码放入以上 Dispose(bool disposing) 中。
-        //   Dispose(false);
-        // }
-
-        // 添加此代码以正确实现可处置模式。
-        public void Dispose()
-        {
-            // 请勿更改此代码。将清理代码放入以上 Dispose(bool disposing) 中。
-            Dispose(true);
-            // TODO: 如果在以上内容中替代了终结器，则取消注释以下行。
-            // GC.SuppressFinalize(this);
-        }
-        #endregion
-
     }
 
     /// <summary>
@@ -127,8 +93,9 @@ namespace Engine.Brain.AI.RL
         /// </summary>
         public void Remember(float[] state, float[] action, float q, float reward, float[] state_)
         {
+            //容量上限
             if (_memoryList.Count >= _memoryCapacity)
-                _memoryList.RandomDispose();
+                _memoryList.RandomRemove();
             //预学习N步，记录在memory里
             _memoryList.Add(new Memory()
             {
@@ -262,7 +229,7 @@ namespace Engine.Brain.AI.RL
         /// <returns></returns>
         private float Accuracy()
         {
-            const int batchSize = 128;
+            const int batchSize = 64;
             var (states, rawLabels) = _env.RandomEval(batchSize);
             float[] actions = new float[batchSize];
             float[] labels = new float[batchSize];
@@ -297,7 +264,7 @@ namespace Engine.Brain.AI.RL
         /// <param name="batchSize"></param>
         public void Learn()
         {
-            PreRemember(_memoryCapacity);
+            PreRemember(_batchSize);
             float[] state = _env.Step(-1).state;
             for (int e = 0; e <= _epoches; e++)
             {

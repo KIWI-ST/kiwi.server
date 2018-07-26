@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using TensorFlow;
-using static TensorFlow.TFSession;
 
 namespace Engine.Brain.AI.RL
 {
@@ -18,9 +17,9 @@ namespace Engine.Brain.AI.RL
         public List<float> History { get; }
 
         #region 神经网络相关
-
+        
+        //variables
         public TFOutput _w1, _b1, _w2, _b2, _w3, _b3, _w4, _b4;
-
         //calcute graph
         private TFGraph _graph;
         //session
@@ -61,8 +60,8 @@ namespace Engine.Brain.AI.RL
             //
             n_features = features_num;
             n_actions = actions_num;
-            _hidden_unit_1_ = actions_num;
-            _hidden_unit_2 = actions_num;
+            _hidden_unit_1_ = n_actions;
+            _hidden_unit_2 = n_actions;
             _hidden_unit_3 = n_actions / 2;
             _hidden_unit_4 = 1;
             //calcute graph
@@ -89,9 +88,6 @@ namespace Engine.Brain.AI.RL
             //calcute reward
             _output_qvalue = _l4;
             //loss and train
-            //_loss = _graph.Neg(_graph.ReduceMean(_graph.ReduceSum(_graph.Mul(_input_qvalue, _graph.Log(_l4)))));
-            //_loss = _graph.ReduceMean(_graph.Sub(_input_qvalue, _l4));
-            //_loss = _graph.ReduceMean(_graph.SquaredDifference(_input_qvalue, _l4));
             _loss = _graph.ReduceMean(_graph.Mul(_graph.Const(0.5f), _graph.Square(_graph.Sub(_input_qvalue, _l4))));
             //calute gradient 
             _grad = _graph.AddGradients(new TFOutput[] {_loss }, new TFOutput[] {
@@ -117,7 +113,7 @@ namespace Engine.Brain.AI.RL
             _graph.AddInitVariable(_graph.Assign(_w3, _graph.Const(TFTensor.FromBuffer(new TFShape(_hidden_unit_2, _hidden_unit_3), _w3_, 0, _w3_.Length))).Operation);
             _graph.AddInitVariable(_graph.Assign(_b3, _graph.Const(TFTensor.FromBuffer(new TFShape(1, _hidden_unit_3), _b3_, 0, _b3_.Length))).Operation);
             _graph.AddInitVariable(_graph.Assign(_w4, _graph.Const(TFTensor.FromBuffer(new TFShape(_hidden_unit_3, _hidden_unit_4), _w4_, 0, _w4_.Length))).Operation);
-            _graph.AddInitVariable(_graph.Assign(_b4, _graph.Const(TFTensor.FromBuffer(new TFShape(1, _hidden_unit_4), _w4_, 0, _w4_.Length))).Operation);
+            _graph.AddInitVariable(_graph.Assign(_b4, _graph.Const(TFTensor.FromBuffer(new TFShape(1, _hidden_unit_4), _b4_, 0, _b4_.Length))).Operation);
             //optimize gradient descent
             _optimize = new[]{
                 _graph.ApplyGradientDescent(_w1,_graph.Const(0.01f),_grad[0]).Operation,
@@ -214,7 +210,7 @@ namespace Engine.Brain.AI.RL
                 _graph.Assign(_w3, _graph.Const(TFTensor.FromBuffer(new TFShape(_hidden_unit_2, _hidden_unit_3), _w3_, 0, _w3_.Length))).Operation,
                 _graph.Assign(_b3, _graph.Const(TFTensor.FromBuffer(new TFShape(1, _hidden_unit_3), _b3_, 0, _b3_.Length))).Operation,
                 _graph.Assign(_w4, _graph.Const(TFTensor.FromBuffer(new TFShape(_hidden_unit_3, _hidden_unit_4), _w4_, 0, _w4_.Length))).Operation,
-                _graph.Assign(_b4, _graph.Const(TFTensor.FromBuffer(new TFShape(1, _hidden_unit_4), _w4_, 0, _w4_.Length))).Operation
+                _graph.Assign(_b4, _graph.Const(TFTensor.FromBuffer(new TFShape(1, _hidden_unit_4), _b4_, 0, _b4_.Length))).Operation
             };
             _session.GetRunner().AddTarget(operations).Run();
         }
