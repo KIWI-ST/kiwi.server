@@ -3,6 +3,7 @@ using Engine.Brain.Extend;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using TensorFlow;
 
 namespace Engine.Brain.AI.RL
@@ -90,11 +91,11 @@ namespace Engine.Brain.AI.RL
         //拷贝net参数
         readonly int _everycopy = 128;
         //学习轮次
-        readonly int _epoches = 500;
+        readonly int _epoches = 2000;
         //一次学习样本数
         readonly int _batchSize = 32;
         //一轮学习次数
-        readonly int _forward = 256;
+        readonly int _forward = 512;
         //q值积累权重
         readonly float _alpah = 0.5f;
         //q值印象权重
@@ -110,6 +111,7 @@ namespace Engine.Brain.AI.RL
         /// <param name="env"></param>
         public DQN(IDEnv env)
         {
+            //environment
             _env = env;
             //
             _actionsNumber = _env.ActionNum;
@@ -191,6 +193,7 @@ namespace Engine.Brain.AI.RL
             float[] input_qValue = new float[batchSize];
             //写入偏移位
             int offset = 0;
+            //q value
             float q = 0f;
             //
             for (int i = 0; i < batchSize; i++)
@@ -234,8 +237,7 @@ namespace Engine.Brain.AI.RL
                 return (_env.RandomAction(), 0);
             else
             {
-                int action; float q;
-                (action, q) = ChooseAction(state);
+                var (action, q) = ChooseAction(state);
                 return (action, q);
             }
         }
@@ -243,20 +245,15 @@ namespace Engine.Brain.AI.RL
         /// 经验回放
         /// </summary>
         /// <returns></returns>
-        public float Replay()
+        public (float loss,TimeSpan span) Replay()
         {
-            if (_memoryList.Count < _batchSize)
-                return -10000.0f;
+            DateTime now = DateTime.Now;
             //batch of memory
             List<Memory> rawBatchList = CreateRawDataBatch(_batchSize);
-            //create input tensor
-            TFTensor input_feature_tensor, input_qvalue_tensor;
-            (input_feature_tensor, input_qvalue_tensor) = MakeBatch(rawBatchList);
+            var (input_feature_tensor, input_qvalue_tensor) = MakeBatch(rawBatchList);
             //loss计算
             float loss = _criticNet.Train(input_feature_tensor, input_qvalue_tensor);
-            input_feature_tensor.Dispose();
-            input_qvalue_tensor.Dispose();
-            return loss;
+            return (loss,DateTime.Now-now);
         }
         /// <summary>
         /// 计算分类精度
@@ -265,7 +262,7 @@ namespace Engine.Brain.AI.RL
         /// <returns></returns>
         private float Accuracy()
         {
-            const int batchSize = 32;
+            const int batchSize = 128;
             var (states, rawLabels) = _env.RandomEval(batchSize);
             float[] actions = new float[batchSize];
             float[] labels = new float[batchSize];
@@ -306,16 +303,17 @@ namespace Engine.Brain.AI.RL
             {
                 DateTime now = DateTime.Now;
                 float loss = 0, accuracy = 0, totalRewards = 0;
-                for (int step = 0; step < _forward; step++)
+                for (int step = 0; step <=_forward; step++)
                 {
+                    TimeSpan span;
                     //对状态进行epsilon_greedy选择
                     var (action, q) = EpsilonGreedy(step, state);
                     //play
                     var (nextState, reward) = _env.Step(action);
-                    //加入要经验记忆中
                     Remember(state, NP.ToOneHot(action, _env.ActionNum), q, reward, nextState);
+                    //train
+                    (loss, span)= Replay();
                     //
-                    loss = Replay();
                     state = nextState;
                     totalRewards += reward;
                     //
@@ -323,7 +321,7 @@ namespace Engine.Brain.AI.RL
                         _actorNet.Accept(_criticNet);
                 }
                 accuracy = Accuracy();
-                OnLearningLossEventHandler?.Invoke(loss, totalRewards, accuracy, (float)e / _epoches, (DateTime.Now - now).ToString());
+                OnLearningLossEventHandler?.Invoke(loss, totalRewards, accuracy, (float)e / _epoches, (DateTime.Now - now).TotalSeconds.ToString());
             }
         }
 

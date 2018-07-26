@@ -116,7 +116,7 @@ namespace Engine.Brain.AI.RL
             for (int i = 0; i < batchSize; i++)
             {
                 var (x, y, classIndex) = RandomAccessMemory();
-                float[] raw = _featureRasterLayer.GetPixelFloat(_current_x, _current_y).ToArray();
+                float[] raw = _featureRasterLayer.GetPixelFloat(x, y).ToArray();
                 float[] normal = NP.Normalize(raw, 255f);
                 states.Add(normal);
                 labels[i] = classIndex; 

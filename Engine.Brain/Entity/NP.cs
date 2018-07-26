@@ -36,7 +36,7 @@ namespace Engine.Brain.Entity
         /// </summary>
         /// <param name="inputs"></param>
         /// <returns></returns>
-        public static float[] Normalize(float[] inputs,float max)
+        public static float[] Normalize(float[] inputs, float max)
         {
             int count = inputs.Length;
             float[] normal = new float[inputs.Length];
@@ -107,6 +107,18 @@ namespace Engine.Brain.Entity
             });
             //返回一维数组，备用
             return outputs;
+        }
+        /// <summary>
+        /// 生成符合正态分部的随机数组
+        /// </summary>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public static float[] CreateRandomNormalFloat(int length)
+        {
+            float[] arry = new float[length];
+            for(int i = 0; i < length; i++)
+                arry[i] = Normal(NP.Random(), NP.Random());
+            return arry;
         }
         /// <summary>
         /// 构建一个随机数组成的tensor

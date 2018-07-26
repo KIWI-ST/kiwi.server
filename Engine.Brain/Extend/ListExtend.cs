@@ -36,5 +36,18 @@ namespace Engine.Brain.Extend
             list.RemoveAt(index);
         }
 
+        public static T Next<T>(this List<T> list) where T:class
+        {
+            int count = list.Count;
+            if (count > 0)
+            {
+                T item = list[0];
+                list.Remove(item);
+                return item;
+            }
+            else
+                return null;
+        }
+
     }
 }
