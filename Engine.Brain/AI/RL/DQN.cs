@@ -16,13 +16,47 @@ namespace Engine.Brain.AI.RL
     /// <param name="epochesTime"></param>
     public delegate void UpdateLearningLossHandler(float loss, float totalReward, float accuracy,float progress,string epochesTime);
 
-    public class Memory
+    public class Memory:IDisposable
     {
         public float[] STATE { get; set; }
         public float[] STATE_ { get; set; }
         public float[] Action { get; set; }
         public float Q { get; set; }
         public float Reward { get; set; }
+
+        #region IDisposable Support
+        private bool disposedValue = false; // 要检测冗余调用
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    STATE = null;
+                    STATE_ = null;
+                    Action = null;
+                }
+                disposedValue = true;
+            }
+        }
+
+        // TODO: 仅当以上 Dispose(bool disposing) 拥有用于释放未托管资源的代码时才替代终结器。
+        // ~Memory() {
+        //   // 请勿更改此代码。将清理代码放入以上 Dispose(bool disposing) 中。
+        //   Dispose(false);
+        // }
+
+        // 添加此代码以正确实现可处置模式。
+        public void Dispose()
+        {
+            // 请勿更改此代码。将清理代码放入以上 Dispose(bool disposing) 中。
+            Dispose(true);
+            // TODO: 如果在以上内容中替代了终结器，则取消注释以下行。
+            // GC.SuppressFinalize(this);
+        }
+        #endregion
+
     }
 
     /// <summary>
@@ -52,15 +86,15 @@ namespace Engine.Brain.AI.RL
         private IDEnv _env;
 
         //memory容量
-        readonly int _memoryCapacity = 800;
+        readonly int _memoryCapacity = 256;
         //拷贝net参数
         readonly int _everycopy = 128;
         //学习轮次
-        readonly int _epoches = 200;
+        readonly int _epoches = 500;
         //一次学习样本数
         readonly int _batchSize = 32;
         //一轮学习次数
-        readonly int _forward = 512;
+        readonly int _forward = 256;
         //q值积累权重
         readonly float _alpah = 0.5f;
         //q值印象权重
@@ -91,9 +125,8 @@ namespace Engine.Brain.AI.RL
         /// </summary>
         public void Remember(float[] state, float[] action, float q, float reward, float[] state_)
         {
-            int count = _memoryList.Count;
-            if(count >= _memoryCapacity)
-                _memoryList.RandomRemove();
+            if (_memoryList.Count >= _memoryCapacity)
+                _memoryList.RandomDispose();
             //预学习N步，记录在memory里
             _memoryList.Add(new Memory()
             {
@@ -111,21 +144,27 @@ namespace Engine.Brain.AI.RL
         public (int action, float q) ChooseAction(float[] state, DNet net = null)
         {
             //默认使用actorNet
-            net = net == null ? _actorNet : net;
-            float[] input = new float[_featuresNumber + _actionsNumber];
-            Array.ConstrainedCopy(state, 0, input, 0, _featuresNumber);
-            float[] arrays = new float[_actionsNumber];
-            for (int i = 0; i < _actionsNumber; i++)
+            net = net ?? _actorNet;
+            int offset = 0;
+            float[] input = new float[(_featuresNumber + _actionsNumber)*_actionsNumber];
+            for(int i = 0; i < _actionsNumber; i++)
             {
-                float[] action = NP.ToOneHot(i, _actionsNumber);
-                Array.ConstrainedCopy(action, 0, input, _featuresNumber, _actionsNumber);
-                TFTensor input_tensor = TFTensor.FromBuffer(new TFShape(1, _featuresNumber + _actionsNumber), input, 0, input.Length);
-                float[,] predicts = (float[,])net.Predict(input_tensor);
-                arrays[i] = predicts[0, 0];
+                Array.ConstrainedCopy(state, 0, input, offset, _featuresNumber);
+                offset += _featuresNumber;
+                Array.ConstrainedCopy(NP.ToOneHot(i, _actionsNumber), 0, input, offset, _actionsNumber);
+                offset += _actionsNumber;
             }
-            return (NP.Argmax(arrays), NP.Max(arrays));
+            TFTensor input_tensor = TFTensor.FromBuffer(new TFShape(_actionsNumber, _featuresNumber + _actionsNumber), input, 0, input.Length);
+            float[,] predicts = (float[,])net.Predict(input_tensor);
+            float[] array = NP.Pad(predicts);
+            input_tensor.Dispose();
+            return (NP.Argmax(array), NP.Max(array));
         }
-        //随机抽取样本
+        /// <summary>
+        /// 随机抽取样本
+        /// </summary>
+        /// <param name="batchSize"></param>
+        /// <returns></returns>
         private List<Memory> CreateRawDataBatch(int batchSize)
         {
             int count = _memoryList.Count;
@@ -167,7 +206,6 @@ namespace Engine.Brain.AI.RL
             }
             input_features_tensor = TFTensor.FromBuffer(new TFShape(batchSize, _featuresNumber + _actionsNumber), input_features, 0, input_features.Length);
             input_qvalue_tensor = TFTensor.FromBuffer(new TFShape(batchSize, 1), input_qValue, 0, input_qValue.Length);
-            //renturn tenor 
             return (input_features_tensor, input_qvalue_tensor);
         }
         /// <summary>
@@ -205,10 +243,10 @@ namespace Engine.Brain.AI.RL
         /// 经验回放
         /// </summary>
         /// <returns></returns>
-        public (float loss, float accuracy) Replay()
+        public float Replay()
         {
             if (_memoryList.Count < _batchSize)
-                return (-10000.0f, 0f);
+                return -10000.0f;
             //batch of memory
             List<Memory> rawBatchList = CreateRawDataBatch(_batchSize);
             //create input tensor
@@ -216,28 +254,25 @@ namespace Engine.Brain.AI.RL
             (input_feature_tensor, input_qvalue_tensor) = MakeBatch(rawBatchList);
             //loss计算
             float loss = _criticNet.Train(input_feature_tensor, input_qvalue_tensor);
-            //}{debug
-            var prediction = _criticNet.Predict(input_feature_tensor);
-            //使用函数判断精度
-            float[,] predict = (float[,])_actorNet.Predict(input_feature_tensor);
-            List<Memory> accuracyList = _memoryList.Where(p => p.Reward == 1.0f).ToList();
-            float accuracy = Accuracy(accuracyList);
-            return (loss, accuracy);
+            input_feature_tensor.Dispose();
+            input_qvalue_tensor.Dispose();
+            return loss;
         }
         /// <summary>
         /// 计算分类精度
         /// </summary>
         /// <param name="list"></param>
         /// <returns></returns>
-        private float Accuracy(List<Memory> list)
+        private float Accuracy()
         {
-            int count = list.Count;
-            float[] labels = new float[count];
-            float[] actions = new float[count];
-            for (int i = 0; i < list.Count; i++)
+            const int batchSize = 32;
+            var (states, rawLabels) = _env.RandomEval(batchSize);
+            float[] actions = new float[batchSize];
+            float[] labels = new float[batchSize];
+            for (int i = 0; i < batchSize; i++)
             {
-                actions[i] = ChooseAction(list[i].STATE).action;
-                labels[i] = NP.Argmax(list[i].Action);
+                actions[i] = ChooseAction(states[i]).action;
+                labels[i] = rawLabels[i];
             }
             var accuracy = NP.CalcuteAccuracy(labels, actions);
             return accuracy;
@@ -266,8 +301,8 @@ namespace Engine.Brain.AI.RL
         public void Learn()
         {
             PreRemember(_memoryCapacity);
-            float[] state = _env.Reset();
-            for (int e = 0; e < _epoches; e++)
+            float[] state = _env.Step(-1).state;
+            for (int e = 0; e <= _epoches; e++)
             {
                 DateTime now = DateTime.Now;
                 float loss = 0, accuracy = 0, totalRewards = 0;
@@ -280,14 +315,15 @@ namespace Engine.Brain.AI.RL
                     //加入要经验记忆中
                     Remember(state, NP.ToOneHot(action, _env.ActionNum), q, reward, nextState);
                     //
-                    (loss, accuracy )= Replay();
+                    loss = Replay();
                     state = nextState;
                     totalRewards += reward;
                     //
                     if (step % _everycopy == 0)
                         _actorNet.Accept(_criticNet);
                 }
-                OnLearningLossEventHandler?.Invoke(loss, totalRewards,accuracy, (float)e / _epoches,(DateTime.Now - now).ToString());
+                accuracy = Accuracy();
+                OnLearningLossEventHandler?.Invoke(loss, totalRewards, accuracy, (float)e / _epoches, (DateTime.Now - now).ToString());
             }
         }
 

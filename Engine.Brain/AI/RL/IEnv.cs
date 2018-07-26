@@ -12,6 +12,12 @@ namespace Engine.Brain.AI.RL
     public interface IDEnv
     {
         /// <summary>
+        /// 验证数据集
+        /// </summary>
+        /// <param name="batchSize"></param>
+        /// <returns></returns>
+        (List<float[]> states, int[] labels) RandomEval(int batchSize = 64);
+        /// <summary>
         /// const action of 1
         /// </summary>
         float[] DummyActions { get; }

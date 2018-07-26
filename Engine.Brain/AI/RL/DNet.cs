@@ -19,8 +19,7 @@ namespace Engine.Brain.AI.RL
 
         #region 神经网络相关
         public TFOutput _w1, _b1, _w2, _b2, _w3, _b3, _w4, _b4;
-        //runner
-        private TFSession _session;
+
         //calcute graph
         private TFGraph _graph;
         //输入参数1，features
@@ -117,29 +116,57 @@ namespace Engine.Brain.AI.RL
         /// </summary>
         private void Initialize(TFOperation[] operations)
         {
-            _session = new TFSession(_graph);
-            _session.GetRunner().AddTarget(operations).Run();
+            using (var session = new TFSession(_graph))
+            {
+                session.GetRunner().AddTarget(operations).Run();
+                Freeze(session);
+            }
+        }
+
+        float[] _w1_, _b1_, _w2_, _b2_, _w3_, _b3_, _w4_, _b4_;
+
+        public (float[] w1, float[] b1, float[] w2, float[] b2, float[] w3, float[] b3, float[] w4, float[] b4) TrainVariables
+        {
+            get { return (_w1_, _b1_, _w2_, _b2_, _w3_, _b3_, _w4_, _b4_); }
+        }
+
+        private void Freeze(TFSession session)
+        {
+            var variables = session.GetRunner().Fetch(_w1, _b1, _w2, _b2, _w3, _b3, _w4, _b4).Run();
+            _w1_ = NP.Pad((float[,])variables[0].GetValue());
+            _b1_ = NP.Pad((float[,])variables[1].GetValue());
+            _w2_ = NP.Pad((float[,])variables[2].GetValue());
+            _b2_ = NP.Pad((float[,])variables[3].GetValue());
+            _w3_ = NP.Pad((float[,])variables[4].GetValue());
+            _b3_ = NP.Pad((float[,])variables[5].GetValue());
+            _w4_ = NP.Pad((float[,])variables[6].GetValue());
+            _b4_ = NP.Pad((float[,])variables[7].GetValue());
+        }
+
+        private void UnFreeze(TFSession session)
+        {
+            var variation = new[]{
+                 _graph.Assign(_w1,_graph.Const(TFTensor.FromBuffer(new TFShape(n_features+n_actions,n_actions), _w1_, 0, _w1_.Length))).Operation,
+                 _graph.Assign(_b1,_graph.Const(TFTensor.FromBuffer(new TFShape(1,n_actions), _b1_, 0, _b1_.Length))).Operation,
+                 _graph.Assign(_w2,_graph.Const(TFTensor.FromBuffer(new TFShape(n_actions,n_actions), _w2_, 0, _w2_.Length))).Operation,
+                 _graph.Assign(_b2,_graph.Const(TFTensor.FromBuffer(new TFShape(1,n_actions), _b2_, 0, _b2_.Length))).Operation,
+                 _graph.Assign(_w3,_graph.Const(TFTensor.FromBuffer(new TFShape(n_actions,n_actions/2), _w3_, 0, _w3_.Length))).Operation,
+                 _graph.Assign(_b3,_graph.Const(TFTensor.FromBuffer(new TFShape(1,n_actions/2), _b3_, 0, _b3_.Length))).Operation,
+                 _graph.Assign(_w4,_graph.Const(TFTensor.FromBuffer(new TFShape(n_actions/2,1), _w4_, 0, _w4_.Length))).Operation,
+                _graph.Assign(_b4,_graph.Const(TFTensor.FromBuffer(new TFShape(1,1), _b4_, 0, _b4_.Length))).Operation,
+            };
+            session.GetRunner().AddTarget(variation).Run();
         }
         /// <summary>
         /// train model
         /// </summary>
         public float Train(TFTensor input_feature_tensor, TFTensor input_qvalue_tensor)
         {
-            //float loss;
-            //do
-            //{
-            //    var result = _session.GetRunner().
-            //        AddInput(_input_features, input_feature_tensor).
-            //        AddInput(_input_qvalue, input_qvalue_tensor).
-            //        AddTarget(_optimize).
-            //        Fetch(_loss).
-            //        Fetch(_l1, _l2, _l3, _l4).
-            //        Fetch(_grad).
-            //        Run();
-            //    loss = (float)result[0].GetValue();
-            //} while (loss > 0.1);
-            //return loss;
-            var result = _session.GetRunner().
+            float loss = 0.0f;
+            using (var session = new TFSession(_graph))
+            {
+                UnFreeze(session);
+                var result = session.GetRunner().
                 AddInput(_input_features, input_feature_tensor).
                 AddInput(_input_qvalue, input_qvalue_tensor).
                 AddTarget(_optimize).
@@ -147,8 +174,11 @@ namespace Engine.Brain.AI.RL
                 Fetch(_l1, _l2, _l3, _l4).
                 Fetch(_grad).
                 Run();
-            var loss = (float)result[0].GetValue();
+                loss = (float)result[0].GetValue();
+                Freeze(session);
+            }
             return loss;
+         
         }
         /// <summary>
         /// 预测
@@ -156,8 +186,13 @@ namespace Engine.Brain.AI.RL
         /// <returns></returns>
         public object Predict(TFTensor feature_tensor)
         {
-            var result = _session.GetRunner().AddInput(_input_features, feature_tensor).Fetch(_output_qvalue).Run();
-            var predict = result[0].GetValue();
+            object predict = null;
+            using (var session = new TFSession(_graph))
+            {
+                UnFreeze(session);
+                var result = session.GetRunner().AddInput(_input_features, feature_tensor).Fetch(_output_qvalue).Run();
+                predict = result[0].GetValue();
+            }
             return predict;
         }
         /// <summary>
@@ -167,42 +202,9 @@ namespace Engine.Brain.AI.RL
         /// <returns></returns>
         public void Accept(DNet sourceNet)
         {
-            //sourceNet variables
-            float[] w1, b1, w2, b2, w3, b3, w4, b4;
-            (w1, b1, w2, b2, w3, b3, w4, b4) = sourceNet.GetVariables();
-            //}{ debug print to watch
-            float[] w1_, b1_, w2_, b2_, w3_, b3_, w4_, b4_;
-            (w1_, b1_, w2_, b2_, w3_, b3_, w4_, b4_) = GetVariables();
-            //convert to TFOutput
-            var variation = new[]{
-                 _graph.Assign(_w1,_graph.Const(TFTensor.FromBuffer(new TFShape(n_features+n_actions,n_actions), w1, 0, w1.Length))).Operation,
-                 _graph.Assign(_b1,_graph.Const(TFTensor.FromBuffer(new TFShape(1,n_actions), b1, 0, b1.Length))).Operation,
-                 _graph.Assign(_w2,_graph.Const(TFTensor.FromBuffer(new TFShape(n_actions,n_actions), w2, 0, w2.Length))).Operation,
-                 _graph.Assign(_b2,_graph.Const(TFTensor.FromBuffer(new TFShape(1,n_actions), b2, 0, b2.Length))).Operation,
-                 _graph.Assign(_w3,_graph.Const(TFTensor.FromBuffer(new TFShape(n_actions,n_actions/2), w3, 0, w3.Length))).Operation,
-                 _graph.Assign(_b3,_graph.Const(TFTensor.FromBuffer(new TFShape(1,n_actions/2), b3, 0, b3.Length))).Operation,
-                 _graph.Assign(_w4,_graph.Const(TFTensor.FromBuffer(new TFShape(n_actions/2,1), w4, 0, w4.Length))).Operation,
-                _graph.Assign(_b4,_graph.Const(TFTensor.FromBuffer(new TFShape(1,1), b4, 0, b4.Length))).Operation,
-            };
-            //
-            _session.GetRunner().AddTarget(variation).Run();
-            (w1_, b1_, w2_, b2_, w3_, b3_, w4_, b4_) = GetVariables();
-        }
-
-        public (float[] w1, float[] b1, float[] w2, float[] b2, float[] w3, float[] b3, float[] w4, float[] b4) GetVariables()
-        {
-            var variables = _session.GetRunner().Fetch(_w1, _b1, _w2, _b2, _w3, _b3, _w4, _b4).Run();
-
-            float[] w1 = NP.Pad((float[,])variables[0].GetValue());
-            float[] b1 = NP.Pad((float[,])variables[1].GetValue());
-            float[] w2 = NP.Pad((float[,])variables[2].GetValue());
-            float[] b2 = NP.Pad((float[,])variables[3].GetValue());
-            float[] w3 = NP.Pad((float[,])variables[4].GetValue());
-            float[] b3 = NP.Pad((float[,])variables[5].GetValue());
-            float[] w4 = NP.Pad((float[,])variables[6].GetValue());
-            float[] b4 = NP.Pad((float[,])variables[7].GetValue());
-
-            return (w1, b1, w2, b2, w3, b3, w4, b4);
+            (_w1_, _b1_, _w2_, _b2_, _w3_, _b3_, _w4_, _b4_) = sourceNet.TrainVariables;
+            using (var session = new TFSession(_graph))
+                UnFreeze(session);
         }
         /// <summary>
         /// save model

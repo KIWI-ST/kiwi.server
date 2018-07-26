@@ -109,6 +109,21 @@ namespace Engine.Brain.AI.RL
             return (p.X, p.Y, classIndex);
         }
 
+        public (List<float[]> states,int[] labels) RandomEval(int batchSize = 64)
+        {
+            List<float[]> states = new List<float[]>();
+            int[] labels = new int[batchSize];
+            for (int i = 0; i < batchSize; i++)
+            {
+                var (x, y, classIndex) = RandomAccessMemory();
+                float[] raw = _featureRasterLayer.GetPixelFloat(_current_x, _current_y).ToArray();
+                float[] normal = NP.Normalize(raw, 255f);
+                states.Add(normal);
+                labels[i] = classIndex; 
+            }
+            return (states, labels);
+        }
+
         public int RandomAction()
         {
             return NP.Random(ActionNum);

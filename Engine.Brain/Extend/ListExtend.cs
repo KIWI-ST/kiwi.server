@@ -21,7 +21,14 @@ namespace Engine.Brain.Extend
             int index = NP.Random(list.Count);
             T item = list[index];
             return item;
-        } 
+        }
+
+        public static void RandomDispose<T>(this List<T> list) where T:IDisposable
+        {
+            T item = list[NP.Random(list.Count)];
+            list.Remove(item);
+            item.Dispose();
+        }
 
         public static void RandomRemove<T>(this List<T> list)
         {
