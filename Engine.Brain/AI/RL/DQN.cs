@@ -54,9 +54,9 @@ namespace Engine.Brain.AI.RL
         //拷贝net参数
         readonly int _everycopy = 128;
         //学习轮次
-        readonly int _epoches = 2000;
+        readonly int _epoches = 3000;
         //一次学习样本数
-        readonly int _batchSize = 32;
+        readonly int _batchSize = 30;
         //一轮学习次数
         readonly int _forward = 256;
         //q值积累权重
