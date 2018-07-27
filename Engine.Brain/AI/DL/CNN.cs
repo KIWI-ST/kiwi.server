@@ -109,17 +109,17 @@ namespace Engine.Brain.AI
                 w4,b4
             });
             //init variables 
-            _inits = new[]
-            {
-                _graph.Assign(w1, _graph.Const(NP.CreateTensorWithRandomNormalFloat(new TFShape(5,5,1,32)))).Operation,
-                _graph.Assign(b1, _graph.Const(NP.CreateTensorWithRandomNormalFloat(new TFShape(32)))).Operation,
-                _graph.Assign(w2, _graph.Const(NP.CreateTensorWithRandomNormalFloat(new TFShape(5,5,32,64)))).Operation,
-                _graph.Assign(b2, _graph.Const(NP.CreateTensorWithRandomNormalFloat(new TFShape(64)))).Operation,
-                 _graph.Assign(w3, _graph.Const(NP.CreateTensorWithRandomNormalFloat(new TFShape(7 * 7 * 64,1024)))).Operation,
-                _graph.Assign(b3, _graph.Const(NP.CreateTensorWithRandomNormalFloat(new TFShape(1024)))).Operation,
-                _graph.Assign(w4, _graph.Const(NP.CreateTensorWithRandomNormalFloat(new TFShape(1024,10)))).Operation,
-                _graph.Assign(b4, _graph.Const(NP.CreateTensorWithRandomNormalFloat(new TFShape(10)))).Operation,
-            };
+            //_inits = new[]
+            //{
+            //    _graph.Assign(w1, _graph.Const(NP.CreateTensorWithRandomNormalFloat(new TFShape(5,5,1,32)))).Operation,
+            //    _graph.Assign(b1, _graph.Const(NP.CreateTensorWithRandomNormalFloat(new TFShape(32)))).Operation,
+            //    _graph.Assign(w2, _graph.Const(NP.CreateTensorWithRandomNormalFloat(new TFShape(5,5,32,64)))).Operation,
+            //    _graph.Assign(b2, _graph.Const(NP.CreateTensorWithRandomNormalFloat(new TFShape(64)))).Operation,
+            //     _graph.Assign(w3, _graph.Const(NP.CreateTensorWithRandomNormalFloat(new TFShape(7 * 7 * 64,1024)))).Operation,
+            //    _graph.Assign(b3, _graph.Const(NP.CreateTensorWithRandomNormalFloat(new TFShape(1024)))).Operation,
+            //    _graph.Assign(w4, _graph.Const(NP.CreateTensorWithRandomNormalFloat(new TFShape(1024,10)))).Operation,
+            //    _graph.Assign(b4, _graph.Const(NP.CreateTensorWithRandomNormalFloat(new TFShape(10)))).Operation,
+            //};
             //optimize gradient descent
             _optimize = new[]{
                 _graph.AssignSub(w1, _graph.Mul(_grad[0], _graph.Const(0.01f,TFDataType.Float))).Operation,

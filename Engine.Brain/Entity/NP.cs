@@ -8,9 +8,9 @@ namespace Engine.Brain.Entity
     public class NP
     {
 
-        public static int Random(int maxValue,int minValue = 0)
+        public static int Random(int maxValue)
         {
-            return new Random(Guid.NewGuid().GetHashCode()).Next(minValue, maxValue);
+            return new Random(Guid.NewGuid().GetHashCode()).Next(0, maxValue);
         }
 
         public static double Random()
@@ -119,25 +119,6 @@ namespace Engine.Brain.Entity
             for(int i = 0; i < length; i++)
                 arry[i] = Normal(NP.Random(), NP.Random());
             return arry;
-        }
-        /// <summary>
-        /// 构建一个随机数组成的tensor
-        /// </summary>
-        /// <returns></returns>
-        public static TFTensor CreateTensorWithRandomNormalFloat(TFShape shape)
-        {
-            var dimensions = shape.NumDimensions;
-            int length = 1;
-            List<float> array = new List<float>();
-            for (var i = 0; i < dimensions; i++)
-                length *= Convert.ToInt32(shape[i]);
-            for (var i = 0; i < length; i++)
-            {
-                float normal = Normal(NP.Random(), NP.Random());
-                array.Add(normal);
-            }
-            var tensor = TFTensor.FromBuffer(shape, array.ToArray(), 0, array.Count);
-            return tensor;
         }
         /// <summary>
         /// 标准正态分部期望0，方差1

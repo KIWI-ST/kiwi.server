@@ -2,8 +2,6 @@
 using Engine.Brain.Extend;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using TensorFlow;
 
 namespace Engine.Brain.AI.RL
@@ -60,7 +58,7 @@ namespace Engine.Brain.AI.RL
         //一次学习样本数
         readonly int _batchSize = 32;
         //一轮学习次数
-        readonly int _forward = 512;
+        readonly int _forward = 256;
         //q值积累权重
         readonly float _alpah = 0.5f;
         //q值印象权重
@@ -124,7 +122,6 @@ namespace Engine.Brain.AI.RL
             TFTensor input_tensor = TFTensor.FromBuffer(new TFShape(_actionsNumber, _featuresNumber + _actionsNumber), input, 0, input.Length);
             float[,] predicts = (float[,])_actorNet.Predict(input_tensor);
             float[] array = NP.Pad(predicts);
-            input_tensor.Dispose();
             return (NP.Argmax(array), NP.Max(array));
         }
         /// <summary>
@@ -226,7 +223,7 @@ namespace Engine.Brain.AI.RL
         /// <returns></returns>
         private float Accuracy()
         {
-            const int batchSize = 128;
+            const int batchSize = 64;
             var (states, rawLabels) = _env.RandomEval(batchSize);
             float[] actions = new float[batchSize];
             float[] labels = new float[batchSize];
@@ -268,10 +265,11 @@ namespace Engine.Brain.AI.RL
                 for (int step = 0; step <=_forward; step++)
                 {
                     TimeSpan span;
-                    //对状态进行epsilon_greedy选择
+                    //choose action by epsilon_greedy
                     var (action, q) = EpsilonGreedy(step, state);
                     //play
                     var (nextState, reward) = _env.Step(action);
+                    //store state and reward
                     Remember(state, NP.ToOneHot(action, _env.ActionNum), q, reward, nextState);
                     //train
                     (loss, span)= Replay();

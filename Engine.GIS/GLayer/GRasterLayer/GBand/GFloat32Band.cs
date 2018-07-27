@@ -37,7 +37,7 @@ namespace Engine.GIS.GLayer.GRasterLayer.GBand
             _rawData = new float[_xCount * _yCount];
             pBand.ReadRaster(0, 0, _xCount, _yCount, _rawData, _xCount, _yCount, 0, 0);
         }
-
+        //游标计数
         int _cursor = 0;
         /// <summary>
         /// 游标方式读取图像值
@@ -46,7 +46,7 @@ namespace Engine.GIS.GLayer.GRasterLayer.GBand
         public (int x, int y,int value) Next()
         {
             if (_cursor == _xCount * _yCount - 1)
-                return (-1, -1, -9999);
+                return (-1, -1, -1);
             int x = _cursor % _xCount;
             int y = _cursor / _xCount;
             int value = GetRawPixel(x, y);

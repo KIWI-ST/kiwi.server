@@ -1,5 +1,4 @@
 ﻿using Engine.Brain.Entity;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using TensorFlow;
@@ -11,13 +10,8 @@ namespace Engine.Brain.AI.RL
     /// </summary>
     public class DNet
     {
-
-        private int n_features, n_actions;
-
-        public List<float> History { get; }
-
         #region 神经网络相关
-        
+
         //variables
         public TFOutput _w1, _b1, _w2, _b2, _w3, _b3, _w4, _b4;
         //calcute graph
@@ -40,18 +34,17 @@ namespace Engine.Brain.AI.RL
         TFOutput[] _grad;
         //store varibales of W and B
         float[] _w1_, _b1_, _w2_, _b2_, _w3_, _b3_, _w4_, _b4_;
-        //隐含层1
-        int _hidden_unit_1_ = 30;
-        //隐含层2
-        int _hidden_unit_2 = 15;
-        //隐含层3
-        int _hidden_unit_3 = 6;
-        //隐含层4
-        int _hidden_unit_4 = 1;
+        //隐含层
+        int _hidden_unit_1, _hidden_unit_2, _hidden_unit_3, _hidden_unit_4;
+        //learning rate
+        float learning_rate = 0.01f;
+        //feature and action count
+        private int n_features, n_actions;
 
         #endregion
+
         /// <summary>
-        /// 
+        /// construct calcute graph
         /// </summary>
         /// <param name="n_features"></param>
         /// <param name="n_actions"></param>
@@ -60,21 +53,27 @@ namespace Engine.Brain.AI.RL
             //
             n_features = features_num;
             n_actions = actions_num;
-            _hidden_unit_1_ = n_actions;
-            _hidden_unit_2 = n_actions;
-            _hidden_unit_3 = n_actions / 2;
+            //setting hidden layer
+            _hidden_unit_1 = 28;
+            _hidden_unit_2 = 14;
+            _hidden_unit_3 = 7;
             _hidden_unit_4 = 1;
+            //
+            //_hidden_unit_1 = features_num+n_actions;
+            //_hidden_unit_2 = n_actions;
+            //_hidden_unit_3 = n_actions / 2;
+            //_hidden_unit_4 = 1;
             //calcute graph
             _graph = new TFGraph();
             //input
             _input_features = _graph.Placeholder(TFDataType.Float, new TFShape(-1, n_features + n_actions));
             _input_qvalue = _graph.Placeholder(TFDataType.Float, new TFShape(-1, 1));
             //layer1
-            _w1 = _graph.VariableV2(new TFShape(n_features + n_actions, _hidden_unit_1_), TFDataType.Float);
-            _b1 = _graph.VariableV2(new TFShape(1, _hidden_unit_1_), TFDataType.Float);
+            _w1 = _graph.VariableV2(new TFShape(n_features + n_actions, _hidden_unit_1), TFDataType.Float);
+            _b1 = _graph.VariableV2(new TFShape(1, _hidden_unit_1), TFDataType.Float);
             _l1 = _graph.Selu(_graph.Add(_graph.MatMul(_input_features, _w1), _b1));
             //layer2
-            _w2 = _graph.VariableV2(new TFShape(_hidden_unit_1_, _hidden_unit_2), TFDataType.Float);
+            _w2 = _graph.VariableV2(new TFShape(_hidden_unit_1, _hidden_unit_2), TFDataType.Float);
             _b2 = _graph.VariableV2(new TFShape(1, _hidden_unit_2), TFDataType.Float);
             _l2 = _graph.Selu(_graph.Add(_graph.MatMul(_l1, _w2), _b2));
             //layer3
@@ -90,63 +89,69 @@ namespace Engine.Brain.AI.RL
             //loss and train
             _loss = _graph.ReduceMean(_graph.Mul(_graph.Const(0.5f), _graph.Square(_graph.Sub(_input_qvalue, _l4))));
             //calute gradient 
-            _grad = _graph.AddGradients(new TFOutput[] {_loss }, new TFOutput[] {
+            _grad = _graph.AddGradients(new TFOutput[] { _loss }, new TFOutput[] {
                 _w1,_b1,
                 _w2,_b2,
                 _w3,_b3,
                 _w4,_b4
             });
             //random variables of w and b
-            _w1_ = NP.CreateRandomNormalFloat((n_features + n_actions) * _hidden_unit_1_);
-            _b1_ = NP.CreateRandomNormalFloat(1 * _hidden_unit_1_);
-            _w2_ = NP.CreateRandomNormalFloat(_hidden_unit_1_ * _hidden_unit_2);
+            _w1_ = NP.CreateRandomNormalFloat((n_features + n_actions) * _hidden_unit_1);
+            _b1_ = NP.CreateRandomNormalFloat(1 * _hidden_unit_1);
+            _w2_ = NP.CreateRandomNormalFloat(_hidden_unit_1 * _hidden_unit_2);
             _b2_ = NP.CreateRandomNormalFloat(1 * _hidden_unit_2);
             _w3_ = NP.CreateRandomNormalFloat(_hidden_unit_2 * _hidden_unit_3);
             _b3_ = NP.CreateRandomNormalFloat(1 * _hidden_unit_3);
             _w4_ = NP.CreateRandomNormalFloat(_hidden_unit_3 * _hidden_unit_4);
             _b4_ = NP.CreateRandomNormalFloat(1 * _hidden_unit_4);
-            //add to initVariables
-            _graph.AddInitVariable(_graph.Assign(_w1, _graph.Const(TFTensor.FromBuffer(new TFShape(n_features + n_actions, _hidden_unit_1_), _w1_, 0, _w1_.Length))).Operation);
-            _graph.AddInitVariable(_graph.Assign(_b1, _graph.Const(TFTensor.FromBuffer(new TFShape(1, _hidden_unit_1_), _b1_, 0, _b1_.Length))).Operation);
-            _graph.AddInitVariable(_graph.Assign(_w2, _graph.Const(TFTensor.FromBuffer(new TFShape(_hidden_unit_1_, _hidden_unit_2), _w2_, 0, _w2_.Length))).Operation);
-            _graph.AddInitVariable(_graph.Assign(_b2, _graph.Const(TFTensor.FromBuffer(new TFShape(1, _hidden_unit_2), _b2_, 0, _b2_.Length))).Operation);
-            _graph.AddInitVariable(_graph.Assign(_w3, _graph.Const(TFTensor.FromBuffer(new TFShape(_hidden_unit_2, _hidden_unit_3), _w3_, 0, _w3_.Length))).Operation);
-            _graph.AddInitVariable(_graph.Assign(_b3, _graph.Const(TFTensor.FromBuffer(new TFShape(1, _hidden_unit_3), _b3_, 0, _b3_.Length))).Operation);
-            _graph.AddInitVariable(_graph.Assign(_w4, _graph.Const(TFTensor.FromBuffer(new TFShape(_hidden_unit_3, _hidden_unit_4), _w4_, 0, _w4_.Length))).Operation);
-            _graph.AddInitVariable(_graph.Assign(_b4, _graph.Const(TFTensor.FromBuffer(new TFShape(1, _hidden_unit_4), _b4_, 0, _b4_.Length))).Operation);
             //optimize gradient descent
             _optimize = new[]{
-                _graph.ApplyGradientDescent(_w1,_graph.Const(0.01f),_grad[0]).Operation,
-                _graph.ApplyGradientDescent(_b1,_graph.Const(0.01f),_grad[1]).Operation,
-                _graph.ApplyGradientDescent(_w2,_graph.Const(0.01f),_grad[2]).Operation,
-                _graph.ApplyGradientDescent(_b2,_graph.Const(0.01f),_grad[3]).Operation,
-                _graph.ApplyGradientDescent(_w3,_graph.Const(0.01f),_grad[4]).Operation,
-                _graph.ApplyGradientDescent(_b3,_graph.Const(0.01f),_grad[5]).Operation,
-                _graph.ApplyGradientDescent(_w4,_graph.Const(0.01f),_grad[6]).Operation,
-                _graph.ApplyGradientDescent(_b4,_graph.Const(0.01f),_grad[7]).Operation,
+                _graph.ApplyGradientDescent(_w1,_graph.Const(learning_rate),_grad[0]).Operation,
+                _graph.ApplyGradientDescent(_b1,_graph.Const(learning_rate),_grad[1]).Operation,
+                _graph.ApplyGradientDescent(_w2,_graph.Const(learning_rate),_grad[2]).Operation,
+                _graph.ApplyGradientDescent(_b2,_graph.Const(learning_rate),_grad[3]).Operation,
+                _graph.ApplyGradientDescent(_w3,_graph.Const(learning_rate),_grad[4]).Operation,
+                _graph.ApplyGradientDescent(_b3,_graph.Const(learning_rate),_grad[5]).Operation,
+                _graph.ApplyGradientDescent(_w4,_graph.Const(learning_rate),_grad[6]).Operation,
+                _graph.ApplyGradientDescent(_b4,_graph.Const(learning_rate),_grad[7]).Operation,
             };
             //inital varibales
             Initialize();
         }
+
+        private TFOperation[] AssignVariables()
+        {
+            var operations = new[]
+            {
+                _graph.Assign(_w1, _graph.Const(TFTensor.FromBuffer(new TFShape(n_features + n_actions, _hidden_unit_1), _w1_, 0, _w1_.Length))).Operation,
+                _graph.Assign(_b1, _graph.Const(TFTensor.FromBuffer(new TFShape(1, _hidden_unit_1), _b1_, 0, _b1_.Length))).Operation,
+                _graph.Assign(_w2, _graph.Const(TFTensor.FromBuffer(new TFShape(_hidden_unit_1, _hidden_unit_2), _w2_, 0, _w2_.Length))).Operation,
+                _graph.Assign(_b2, _graph.Const(TFTensor.FromBuffer(new TFShape(1, _hidden_unit_2), _b2_, 0, _b2_.Length))).Operation,
+                _graph.Assign(_w3, _graph.Const(TFTensor.FromBuffer(new TFShape(_hidden_unit_2, _hidden_unit_3), _w3_, 0, _w3_.Length))).Operation,
+                _graph.Assign(_b3, _graph.Const(TFTensor.FromBuffer(new TFShape(1, _hidden_unit_3), _b3_, 0, _b3_.Length))).Operation,
+                _graph.Assign(_w4, _graph.Const(TFTensor.FromBuffer(new TFShape(_hidden_unit_3, _hidden_unit_4), _w4_, 0, _w4_.Length))).Operation,
+                _graph.Assign(_b4, _graph.Const(TFTensor.FromBuffer(new TFShape(1, _hidden_unit_4), _b4_, 0, _b4_.Length))).Operation
+            };
+            return operations;
+        }
+
         /// <summary>
         /// init session
         /// </summary>
         private void Initialize()
         {
             _session = new TFSession(_graph);
-            TFOperation[] inits = _graph.GetGlobalVariablesInitializer();
-            _session.GetRunner().AddTarget(inits).Run();
+            TFOperation[] operations = AssignVariables();
+            _session.GetRunner().AddTarget(operations).Run();
         }
 
         public (float[] w1, float[] b1, float[] w2, float[] b2, float[] w3, float[] b3, float[] w4, float[] b4) TrainVariables
         {
-            get
-            {
-                Freeze();
-                return (_w1_, _b1_, _w2_, _b2_, _w3_, _b3_, _w4_, _b4_);
-            }
+            get { return (_w1_, _b1_, _w2_, _b2_, _w3_, _b3_, _w4_, _b4_); }
         }
-
+        /// <summary>
+        /// 保存参数
+        /// </summary>
         private void Freeze()
         {
             //
@@ -160,8 +165,7 @@ namespace Engine.Brain.AI.RL
             _w4_ = NP.Pad((float[,])variables[6].GetValue());
             _b4_ = NP.Pad((float[,])variables[7].GetValue());
             //
-            for (int i = 0; i < variables.Length; i++)
-                variables[i].Dispose();
+            DisposeTensor(variables);
         }
         /// <summary>
         /// train model
@@ -173,13 +177,21 @@ namespace Engine.Brain.AI.RL
             AddInput(_input_qvalue, input_qvalue_tensor).
             AddTarget(_optimize).
             Fetch(_loss).
+            Fetch(_grad).
             Run();
             var loss = (float)result[0].GetValue();
             input_feature_tensor.Dispose();
             input_qvalue_tensor.Dispose();
-            result[0].Dispose();
+            DisposeTensor(result);
             return loss;
         }
+
+        private void DisposeTensor(TFTensor[] tensors)
+        {
+            for (int i = 0; i < tensors.Length; i++)
+                tensors[i].Dispose();
+        }
+
         /// <summary>
         /// 预测
         /// </summary>
@@ -190,7 +202,7 @@ namespace Engine.Brain.AI.RL
             var result = _session.GetRunner().AddInput(_input_features, feature_tensor).Fetch(_output_qvalue).Run();
             predict = result[0].GetValue();
             feature_tensor.Dispose();
-            result[0].Dispose();
+            DisposeTensor(result);
             return predict;
         }
         /// <summary>
@@ -200,18 +212,9 @@ namespace Engine.Brain.AI.RL
         /// <returns></returns>
         public void Accept(DNet sourceNet)
         {
+            sourceNet.Freeze();
             (_w1_, _b1_, _w2_, _b2_, _w3_, _b3_, _w4_, _b4_) = sourceNet.TrainVariables;
-            TFOperation[] operations = new[]
-            {
-                _graph.Assign(_w1, _graph.Const(TFTensor.FromBuffer(new TFShape(n_features + n_actions, _hidden_unit_1_), _w1_, 0, _w1_.Length))).Operation,
-                _graph.Assign(_b1, _graph.Const(TFTensor.FromBuffer(new TFShape(1, _hidden_unit_1_), _b1_, 0, _b1_.Length))).Operation,
-                _graph.Assign(_w2, _graph.Const(TFTensor.FromBuffer(new TFShape(_hidden_unit_1_, _hidden_unit_2), _w2_, 0, _w2_.Length))).Operation,
-                _graph.Assign(_b2, _graph.Const(TFTensor.FromBuffer(new TFShape(1, _hidden_unit_2), _b2_, 0, _b2_.Length))).Operation,
-                _graph.Assign(_w3, _graph.Const(TFTensor.FromBuffer(new TFShape(_hidden_unit_2, _hidden_unit_3), _w3_, 0, _w3_.Length))).Operation,
-                _graph.Assign(_b3, _graph.Const(TFTensor.FromBuffer(new TFShape(1, _hidden_unit_3), _b3_, 0, _b3_.Length))).Operation,
-                _graph.Assign(_w4, _graph.Const(TFTensor.FromBuffer(new TFShape(_hidden_unit_3, _hidden_unit_4), _w4_, 0, _w4_.Length))).Operation,
-                _graph.Assign(_b4, _graph.Const(TFTensor.FromBuffer(new TFShape(1, _hidden_unit_4), _b4_, 0, _b4_.Length))).Operation
-            };
+            TFOperation[] operations = AssignVariables();
             _session.GetRunner().AddTarget(operations).Run();
         }
         /// <summary>

@@ -77,9 +77,9 @@ namespace Engine.Brain.AI.RL
                     _memory[classIndex].Add(new Point(x, y));
                 else
                     _memory.Add(classIndex, new List<Point>() { new Point(x, y) });
-            } while (classIndex != -10000);
+            } while (classIndex != -2);
             //remove empty value
-            _memory.Remove(-10000);
+            _memory.Remove(-2);
         }
         /// <summary>
         /// 
