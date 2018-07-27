@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TensorFlow;
 
 namespace Engine.Brain.Entity
 {
@@ -117,7 +116,7 @@ namespace Engine.Brain.Entity
         {
             float[] arry = new float[length];
             for(int i = 0; i < length; i++)
-                arry[i] = Normal(NP.Random(), NP.Random());
+                arry[i] = Normal(Random(), Random());
             return arry;
         }
         /// <summary>
