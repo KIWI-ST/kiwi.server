@@ -1,25 +1,44 @@
 # kiwi.server
-base on orleans and .net framework
+kiwi.server is a tool set that integrates gdal, tensroflow, orleans and so on... 
 
-### Engine ####
+The commonly used operations are packaged, mainly the following modules
 
-### Engine.Crawler ###
-### Engine.Image ###
->based on glda.ogr  
-you should copy x64 floder files to Debug 
-
-### Engine.Mongo ###
-based on mongodb driver
+### Engine.GIS ####
+>a little sample style api library based on gdal. 
+>new raster layer
+```c#
+        GRasterLayer _layer = new GRasterLayer(rasterFilename);
+        for (int i = 0; i < _layer.BandCollection.Count; i++)
+          IBand band = _layer.BandCollection[0];
+          band.BandName = "xxx";
+        }
+```
+>read data form GRasterLayer
+```c#
+        //get the stretch pixel values of all layers at once
+        rasterLayer.GetPixelFloat(x,y)
+        //get the raw pixel value of specified band
+        rasterLayer.BandCollection[0].GetRawPixel(x,y)
+```
 
 ### Engine.Brain ###
->combined with [kiwi.brain](https://github.com/axmand/kiwi.brain).</br>
->model(.pb) created by training and freezeing object(freeze_object.py),which can be used in Engine.Brain's BootStrap Class.
-
-### Grain ###
-based on Orleans
-
-### Host ###
-orleans application host
+>implemention of some machinelearning algorithm by tensorflowSharp 
+>DQN
+```c#
+            //can implement the "IDEnv" interface according to your own needs
+            IDEnv env = new DImageEnv(featureRasterLayer, labelRasterLayer);
+            DQN dqn = new DQN(env);
+            //report learning progress
+            dqn.OnLearningLossEventHandler += Dqn_OnLearningLossEventHandler;
+            dqn.Learn();
+```
+>use .pb model directly
+```c#
+            TensorflowBootstrap model = new TensorflowBootstrap(pbName);          
+            float[] input = rasterLayer.GetPixelFloat(i, j).ToArray();
+            //prediction
+            long classified = model.Classify(input, shapeEuum);
+```
 
 ### Host.UI ###
-based on winform application
+a winform-based user interface application 
