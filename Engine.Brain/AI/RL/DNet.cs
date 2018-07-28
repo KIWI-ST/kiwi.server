@@ -55,8 +55,8 @@ namespace Engine.Brain.AI.RL
             n_actions = actions_num;
             //setting hidden layer
             _hidden_unit_1 = n_actions;
-            _hidden_unit_2 = _hidden_unit_1/2;
-            _hidden_unit_3 = _hidden_unit_2 / 2;
+            _hidden_unit_2 = n_actions;
+            _hidden_unit_3 = n_actions / 2;
             _hidden_unit_4 = 1;
             //calcute graph
             _graph = new TFGraph();
