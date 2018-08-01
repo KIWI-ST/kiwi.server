@@ -6,9 +6,12 @@ using Engine.GIS.Entity;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GLayer.GRasterLayer.GBand;
 using Engine.GIS.GOperation.Arithmetic;
+using Host.Image.UI.PlotForm;
 using Host.Image.UI.SettingForm;
 using Host.Image.UI.SettingForm.SLIC;
 using OfficeOpenXml;
+using OxyPlot;
+using OxyPlot.Series;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -163,11 +166,28 @@ namespace Host.Image.UI
             Invoke(new SaveBitmapHandler(SaveBitmap), pkg.Average);
         }
 
+        List<DQNPlotFrom> _dqnFormList = new List<DQNPlotFrom>();
+
+        private void PaintPlotModel(PlotModel plotModel)
+        {
+            DQNPlotFrom form = new DQNPlotFrom();
+            form.SetModel(plotModel);
+            _dqnFormList.Add(form);
+            form.Show();
+        }
+
+        private void RefreshPlotModel()
+        {
+            _dqnFormList.ForEach(p => p.UpdateDarw());
+        }
+
         private void RunDQN(GRasterLayer featureRasterLayer, GRasterLayer labelRasterLayer)
         {
             IDEnv env = new DImageEnv(featureRasterLayer, labelRasterLayer);
             DQN dqn = new DQN(env);
             dqn.OnLearningLossEventHandler += Dqn_OnLearningLossEventHandler;
+            Invoke(new PaintPlotModelHandler(PaintPlotModel), dqn.LossPlotModel);
+            Invoke(new PaintPlotModelHandler(PaintPlotModel), dqn.AccuracyModel);
             dqn.Learn();
             //
             Bitmap bmp = new Bitmap(featureRasterLayer.XSize, featureRasterLayer.YSize);
@@ -189,6 +209,7 @@ namespace Host.Image.UI
             progress *= 100;
             string msg = string.Format("time:{0},progress:{1}%;loss:{2},reward:{3},accuracy:{4}%", epochesTime, progress, loss, totalReward, accuracy);
             Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), msg);
+            Invoke(new RefreshPlotModelHandler(RefreshPlotModel));
         }
 
         #endregion
@@ -374,6 +395,10 @@ namespace Host.Image.UI
         /// <param name="bmp"></param>
         /// <param name="nodeName"></param>
         private delegate void PaintBitmapHandler(Bitmap bmp, string nodeName);
+
+        private delegate void PaintPlotModelHandler(PlotModel plotModel);
+
+        private delegate void RefreshPlotModelHandler();
 
         #endregion
 

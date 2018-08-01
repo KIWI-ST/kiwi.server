@@ -1,5 +1,8 @@
 ﻿using Engine.Brain.Entity;
 using Engine.Brain.Extend;
+using OxyPlot;
+using OxyPlot.Axes;
+using OxyPlot.Series;
 using System;
 using System.Collections.Generic;
 using TensorFlow;
@@ -13,7 +16,7 @@ namespace Engine.Brain.AI.RL
     /// <param name="totalReward">rewards</param>
     /// <param name="accuracy">train accuracy</param>
     /// <param name="epochesTime"></param>
-    public delegate void UpdateLearningLossHandler(float loss, float totalReward, float accuracy,float progress,string epochesTime);
+    public delegate void UpdateLearningLossHandler(float loss, float totalReward, float accuracy, float progress, string epochesTime);
 
     public class Memory
     {
@@ -49,12 +52,12 @@ namespace Engine.Brain.AI.RL
         /// 观察环境
         /// </summary>
         private IDEnv _env;
-        //
+
         readonly int _memoryCapacity = 500;
         //拷贝net参数
         readonly int _everycopy = 128;
         //学习轮次
-        readonly int _epoches = 5000;
+        readonly int _epoches = 2000;
         //一次学习样本数
         readonly int _batchSize = 29;
         //一轮学习次数
@@ -67,6 +70,14 @@ namespace Engine.Brain.AI.RL
         readonly int _featuresNumber;
         //输入action长度
         readonly int _actionsNumber;
+        //
+        LineSeries _lossLine = new LineSeries();
+        LineSeries _accuracyLine = new LineSeries();
+        LineSeries _rewardLine = new LineSeries();
+        //
+        public PlotModel LossPlotModel { get; } = new PlotModel();
+        public PlotModel AccuracyModel { get; } = new PlotModel();
+        public PlotModel RewardModel { get; } = new PlotModel();
 
         /// <summary>
         /// 
@@ -84,15 +95,42 @@ namespace Engine.Brain.AI.RL
             _actorNet = new DNet(_featuresNumber, _actionsNumber);
             //训练
             _criticNet = new DNet(_featuresNumber, _actionsNumber);
+            //loss line
+            LossPlotModel.Series.Add(_lossLine);
+            LossPlotModel.Axes.Add(new LinearAxis(){
+                Position = AxisPosition.Bottom,
+                Minimum = 0,
+                Maximum = _epoches
+            });
+            LossPlotModel.Axes.Add(new LinearAxis(){
+                Position = AxisPosition.Left,
+                Minimum = 0,
+                Maximum = 1
+            });
+            //accuracy line
+            AccuracyModel.Series.Add(_accuracyLine);
+            AccuracyModel.Axes.Add(new LinearAxis()
+            {
+                Position = AxisPosition.Bottom,
+                Minimum = 0,
+                Maximum = _epoches
+            });
+            AccuracyModel.Axes.Add(new LinearAxis()
+            {
+                Position = AxisPosition.Left,
+                Minimum = 0,
+                Maximum = 1
+            });
+            //reward line
+            RewardModel.Series.Add(_rewardLine);
         }
         /// <summary>
         /// 控制记忆容量
         /// </summary>
         public void Remember(float[] state, float[] action, float q, float reward, float[] state_)
         {
-            //容量上限,取消容量上限限制
-            if (_memoryList.Count >= _memoryCapacity)
-                _memoryList.RandomRemove();
+            //容量上限限制
+            _memoryList.RandomRemove(_memoryCapacity);
             //预学习N步，记录在memory里
             _memoryList.Add(new Memory()
             {
@@ -111,8 +149,8 @@ namespace Engine.Brain.AI.RL
         {
             //默认使用actorNet
             int offset = 0;
-            float[] input = new float[(_featuresNumber + _actionsNumber)*_actionsNumber];
-            for(int i = 0; i < _actionsNumber; i++)
+            float[] input = new float[(_featuresNumber + _actionsNumber) * _actionsNumber];
+            for (int i = 0; i < _actionsNumber; i++)
             {
                 Array.ConstrainedCopy(state, 0, input, offset, _featuresNumber);
                 offset += _featuresNumber;
@@ -206,7 +244,7 @@ namespace Engine.Brain.AI.RL
         /// 经验回放
         /// </summary>
         /// <returns></returns>
-        public (float loss,TimeSpan span) Replay()
+        public (float loss, TimeSpan span) Replay()
         {
             DateTime now = DateTime.Now;
             //batch of memory
@@ -214,7 +252,7 @@ namespace Engine.Brain.AI.RL
             var (input_feature_tensor, input_qvalue_tensor) = MakeBatch(rawBatchList);
             //loss计算
             float loss = _criticNet.Train(input_feature_tensor, input_qvalue_tensor);
-            return (loss,DateTime.Now-now);
+            return (loss, DateTime.Now - now);
         }
         /// <summary>
         /// 计算分类精度
@@ -262,7 +300,7 @@ namespace Engine.Brain.AI.RL
             {
                 DateTime now = DateTime.Now;
                 float loss = 0, accuracy = 0, totalRewards = 0;
-                for (int step = 0; step <=_forward; step++)
+                for (int step = 0; step <= _forward; step++)
                 {
                     TimeSpan span;
                     //choose action by epsilon_greedy
@@ -272,7 +310,7 @@ namespace Engine.Brain.AI.RL
                     //store state and reward
                     Remember(state, NP.ToOneHot(action, _env.ActionNum), q, reward, nextState);
                     //train
-                    (loss, span)= Replay();
+                    (loss, span) = Replay();
                     //
                     state = nextState;
                     totalRewards += reward;
@@ -282,6 +320,9 @@ namespace Engine.Brain.AI.RL
                 }
                 accuracy = Accuracy();
                 OnLearningLossEventHandler?.Invoke(loss, totalRewards, accuracy, (float)e / _epoches, (DateTime.Now - now).TotalSeconds.ToString());
+                _lossLine.Points.Add(new DataPoint(e, loss));
+                _accuracyLine.Points.Add(new DataPoint(e, accuracy));
+                _rewardLine.Points.Add(new DataPoint(e, totalRewards));
             }
         }
 

@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core.DL\Core.DL.csproj" />
     <ProjectReference Include="..\Core.RL\Core.RL.csproj" />
   </ItemGroup>
 

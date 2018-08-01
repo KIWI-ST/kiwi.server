@@ -45,10 +45,7 @@ namespace Engine.Brain.AI
         /// 梯度修正操作
         /// </summary>
         TFOperation[] _optimize;
-        /// <summary>
-        /// 初始化操作
-        /// </summary>
-        TFOperation[] _inits;
+
         /// <summary>
         /// </summary>
         /// <param name="inputWidth">输入图像的宽</param>
@@ -77,6 +74,7 @@ namespace Engine.Brain.AI
         /// <param name="x"></param>
         private void BuildCNNLayer(TFOutput x)
         {
+            //
             //uniformization bit data
             var x_normal = _graph.Mul(x, _graph.Const(1 / 255f));
             //convolution layer 1
@@ -144,8 +142,6 @@ namespace Engine.Brain.AI
 
                 TFTensor tensorX = TFTensor.FromBuffer(new TFShape(batchSize, width * height), xData.ToArray(), 0, xData.Count);
                 TFTensor tensorY = TFTensor.FromBuffer(new TFShape(batchSize, 10), yData.ToArray(), 0, yData.Count);
-
-                _session.GetRunner().AddTarget(_inits);
 
                 var s = tensorY.GetValue();
 

@@ -8,9 +8,4 @@
     <PackageReference Include="Microsoft.ML" Version="0.2.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Core.DL\Core.DL.csproj" />
-    <ProjectReference Include="..\Core.GIS\Core.GIS.csproj" />
-  </ItemGroup>
-
 </Project>

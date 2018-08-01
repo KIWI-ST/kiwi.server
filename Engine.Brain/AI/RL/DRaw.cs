@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Engine.Brain.AI.RL
+﻿namespace Engine.Brain.AI.RL
 {
     public class DRaw
     {

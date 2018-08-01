@@ -23,10 +23,13 @@ namespace Engine.Brain.Extend
             return item;
         }
 
-        public static void RandomRemove<T>(this List<T> list)
+        public static void RandomRemove<T>(this List<T> list,int capacity)
         {
-            int index = NP.Random(list.Count);
-            list.RemoveAt(index);
+            if(list.Count>=capacity)
+            {
+                int index = NP.Random(list.Count);
+                list.RemoveAt(index);
+            }
         }
 
         public static T Next<T>(this List<T> list) where T:class
