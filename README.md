@@ -30,6 +30,9 @@ The commonly used operations are packaged, mainly the following modules
          dqn.OnLearningLossEventHandler += Dqn_OnLearningLossEventHandler;
          dqn.Learn();
 ```
+>the user interface as follow:
+![image](https://user-images.githubusercontent.com/5127112/43514772-77f87c80-95b3-11e8-9a80-20b3945c0f52.png)
+
 >use .pb model directly.
 ```c#
          TensorflowBootstrap model = new TensorflowBootstrap(pbName);          
