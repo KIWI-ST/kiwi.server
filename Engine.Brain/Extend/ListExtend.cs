@@ -32,6 +32,12 @@ namespace Engine.Brain.Extend
             }
         }
 
+        public static void DequeRemove<T>(this List<T> list,int capacity)
+        {
+            if (list.Count > capacity)
+                list.RemoveAt(0);
+        }
+
         public static T Next<T>(this List<T> list) where T:class
         {
             int count = list.Count;

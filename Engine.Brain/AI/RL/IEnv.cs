@@ -12,7 +12,7 @@ namespace Engine.Brain.AI.RL
         /// </summary>
         /// <param name="batchSize"></param>
         /// <returns></returns>
-        (List<float[]> states, int[] labels) RandomEval(int batchSize = 64);
+        (List<double[]> states, int[] labels) RandomEval(int batchSize = 64);
         /// <summary>
         /// number of actions
         /// </summary>
@@ -26,7 +26,7 @@ namespace Engine.Brain.AI.RL
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        (float[] state, float reward) Step(int action);
+        (double[] state, double reward) Step(int action);
         /// <summary>
         /// crate an action located in action range
         /// </summary>
@@ -35,6 +35,6 @@ namespace Engine.Brain.AI.RL
         /// <summary>
         /// 重置环境
         /// </summary>
-        float[] Reset();
+        double[] Reset();
     }
 }

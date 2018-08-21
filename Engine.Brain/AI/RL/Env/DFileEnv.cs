@@ -82,9 +82,9 @@ namespace Engine.Brain.AI.RL.Env
             GRasterLayer rasterLayer = new GRasterLayer(sampleFile);
             byte[] raw = rasterLayer.BandCollection[0].GetByteBuffer();
             //归一化
-            float[] normal = NP.Normalize(raw);
+            double[] normal = NP.Normalize(raw);
             //得到样本reward
-            float reward = action == classIndex ? 1.0f : 0.1f;
+            double reward = action == classIndex ? 1.0f : 0.1f;
             //数据打包返回
             return new DRaw()
             {

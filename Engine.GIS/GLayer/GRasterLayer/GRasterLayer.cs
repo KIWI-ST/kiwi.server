@@ -73,7 +73,20 @@ namespace Engine.GIS.GLayer.GRasterLayer
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public List<float> GetPixelFloat(int x, int y)
+        public List<double> GetPixelDouble(int x, int y)
+        {
+            List<double> pixels = new List<double>();
+            for (int i = 0; i < BandCount; i++)
+                pixels.Add(BandCollection[i].GetByteData()[x, y]);
+            return pixels;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public List<float> GetPixeFloat(int x, int y)
         {
             List<float> pixels = new List<float>();
             for (int i = 0; i < BandCount; i++)

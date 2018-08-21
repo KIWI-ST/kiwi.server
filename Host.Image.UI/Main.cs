@@ -94,7 +94,7 @@ namespace Host.Image.UI
                 for (int i = 0; i < rasterLayer.XSize; i++)
                     for (int j = 0; j < rasterLayer.YSize; j++)
                     {
-                        float[] input = rasterLayer.GetPixelFloat(i, j).ToArray();
+                        float[] input = rasterLayer.GetPixeFloat(i, j).ToArray();
                         long classified = model.Classify(input, shapeEuum);
                         Invoke(new PaintPointHandler(PaintPoint), bmp, i, j, Convert.ToByte(classified * 15));
                         Invoke(new UpdateStatusLabelHandler(UpdateStatusLabel), "应用分类中，总进度：" + i + "列" + j + "行", STATUE_ENUM.WARNING);
@@ -188,6 +188,7 @@ namespace Host.Image.UI
             dqn.OnLearningLossEventHandler += Dqn_OnLearningLossEventHandler;
             Invoke(new PaintPlotModelHandler(PaintPlotModel), dqn.LossPlotModel);
             Invoke(new PaintPlotModelHandler(PaintPlotModel), dqn.AccuracyModel);
+            Invoke(new PaintPlotModelHandler(PaintPlotModel), dqn.RewardModel);
             dqn.Learn();
             //
             Bitmap bmp = new Bitmap(featureRasterLayer.XSize, featureRasterLayer.YSize);
@@ -195,19 +196,16 @@ namespace Host.Image.UI
             for (int i = 0; i < featureRasterLayer.XSize; i++)
                 for (int j = 0; j < featureRasterLayer.YSize; j++)
                 {
-                    float[] raw = featureRasterLayer.GetPixelFloat(i, j).ToArray();
-                    float[] normal = NP.Normalize(raw, 255f);
-                    int action; float q;
-                    (action, q) = dqn.ChooseAction(normal);
+                    double[] raw = featureRasterLayer.GetPixelDouble(i, j).ToArray();
+                    double[] normal = NP.Normalize(raw, 255f);
+                    var (action, q) = dqn.ChooseAction(normal);
                     Invoke(new PaintPointHandler(PaintPoint), bmp, i, j, Convert.ToByte(action * 10));
                 }
         }
 
-        private void Dqn_OnLearningLossEventHandler(float loss, float totalReward, float accuracy, float progress, string epochesTime)
+        private void Dqn_OnLearningLossEventHandler(double loss, double totalReward, double accuracy, double progress, string epochesTime)
         {
-            accuracy *= 100;
-            progress *= 100;
-            string msg = string.Format("time:{0},progress:{1}%;loss:{2},reward:{3},accuracy:{4}%", epochesTime, progress, loss, totalReward, accuracy);
+            string msg = string.Format("time:{0},progress:{1:P};loss:{2},reward:{3},accuracy:{4:P}", epochesTime, progress, loss, totalReward, accuracy);
             Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), msg);
             Invoke(new RefreshPlotModelHandler(RefreshPlotModel));
         }

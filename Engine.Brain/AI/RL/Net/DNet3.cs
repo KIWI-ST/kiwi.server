@@ -8,12 +8,12 @@ namespace Engine.Brain.AI.RL
     /// <summary>
     /// DQN State Prediction NeuralNetwork 
     /// </summary>
-    public class DNet
+    public class DNet3
     {
         #region 神经网络相关
 
         //variables
-        public TFOutput _w1, _b1, _w2, _b2, _w3, _b3, _w4, _b4;
+        public TFOutput _w1, _b1, _w2, _b2, _w3, _b3;
         //calcute graph
         private TFGraph _graph;
         //session
@@ -26,16 +26,16 @@ namespace Engine.Brain.AI.RL
         private TFOutput _output_qvalue;
         //中间操作，梯度修正
         TFOperation[] _optimize;
-        //中间操作，输出层 l1,l2,l3,l4
-        TFOutput _l1, _l2, _l3, _l4;
+        //中间操作，输出层 l1,l2,l3
+        TFOutput _l1, _l2, _l3;
         //loss
         TFOutput _loss;
         //梯度修正
         TFOutput[] _grad;
         //store varibales of W and B
-        float[] _w1_, _b1_, _w2_, _b2_, _w3_, _b3_, _w4_, _b4_;
+        float[] _w1_, _b1_, _w2_, _b2_, _w3_, _b3_;
         //隐含层
-        int _hidden_unit_1, _hidden_unit_2, _hidden_unit_3, _hidden_unit_4;
+        int _hidden_unit_1, _hidden_unit_2, _hidden_unit_3;
         //learning rate
         float learning_rate = 0.01f;
         //feature and action count
@@ -48,16 +48,16 @@ namespace Engine.Brain.AI.RL
         /// </summary>
         /// <param name="n_features"></param>
         /// <param name="n_actions"></param>
-        public DNet(int features_num, int actions_num)
+        public DNet3(int features_num, int actions_num)
         {
             //
             n_features = features_num;
             n_actions = actions_num;
             //setting hidden layer
+            //_hidden_unit_1 =  n_actions;
             _hidden_unit_1 = n_actions;
             _hidden_unit_2 = n_actions;
-            _hidden_unit_3 = n_actions / 2;
-            _hidden_unit_4 = 1;
+            _hidden_unit_3 = 1;
             //calcute graph
             _graph = new TFGraph();
             //input
@@ -75,20 +75,15 @@ namespace Engine.Brain.AI.RL
             _w3 = _graph.VariableV2(new TFShape(_hidden_unit_2, _hidden_unit_3), TFDataType.Float);
             _b3 = _graph.VariableV2(new TFShape(1, _hidden_unit_3), TFDataType.Float);
             _l3 = _graph.Selu(_graph.Add(_graph.MatMul(_l2, _w3), _b3));
-            //layer4 
-            _w4 = _graph.VariableV2(new TFShape(_hidden_unit_3, _hidden_unit_4), TFDataType.Float);
-            _b4 = _graph.VariableV2(new TFShape(1, _hidden_unit_4), TFDataType.Float);
-            _l4 = _graph.Selu(_graph.Add(_graph.MatMul(_l3, _w4), _b4));
             //calcute reward
-            _output_qvalue = _l4;
+            _output_qvalue = _l3;
             //loss and train
-            _loss = _graph.ReduceMean(_graph.Mul(_graph.Const(0.5f), _graph.Square(_graph.Sub(_input_qvalue, _l4))));
+            _loss = _graph.ReduceMean(_graph.Mul(_graph.Const(0.5f), _graph.Square(_graph.Sub(_input_qvalue, _l3))));
             //calute gradient 
             _grad = _graph.AddGradients(new TFOutput[] { _loss }, new TFOutput[] {
                 _w1,_b1,
                 _w2,_b2,
-                _w3,_b3,
-                _w4,_b4
+                _w3,_b3
             });
             //random variables of w and b
             _w1_ = NP.CreateRandomNormalFloat((n_features + n_actions) * _hidden_unit_1);
@@ -97,8 +92,6 @@ namespace Engine.Brain.AI.RL
             _b2_ = NP.CreateRandomNormalFloat(1 * _hidden_unit_2);
             _w3_ = NP.CreateRandomNormalFloat(_hidden_unit_2 * _hidden_unit_3);
             _b3_ = NP.CreateRandomNormalFloat(1 * _hidden_unit_3);
-            _w4_ = NP.CreateRandomNormalFloat(_hidden_unit_3 * _hidden_unit_4);
-            _b4_ = NP.CreateRandomNormalFloat(1 * _hidden_unit_4);
             //optimize gradient descent
             _optimize = new[]{
                 _graph.ApplyGradientDescent(_w1,_graph.Const(learning_rate),_grad[0]).Operation,
@@ -107,13 +100,14 @@ namespace Engine.Brain.AI.RL
                 _graph.ApplyGradientDescent(_b2,_graph.Const(learning_rate),_grad[3]).Operation,
                 _graph.ApplyGradientDescent(_w3,_graph.Const(learning_rate),_grad[4]).Operation,
                 _graph.ApplyGradientDescent(_b3,_graph.Const(learning_rate),_grad[5]).Operation,
-                _graph.ApplyGradientDescent(_w4,_graph.Const(learning_rate),_grad[6]).Operation,
-                _graph.ApplyGradientDescent(_b4,_graph.Const(learning_rate),_grad[7]).Operation,
             };
             //inital varibales
             Initialize();
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         private TFOperation[] AssignVariables()
         {
             var operations = new[]
@@ -124,12 +118,9 @@ namespace Engine.Brain.AI.RL
                 _graph.Assign(_b2, _graph.Const(TFTensor.FromBuffer(new TFShape(1, _hidden_unit_2), _b2_, 0, _b2_.Length))).Operation,
                 _graph.Assign(_w3, _graph.Const(TFTensor.FromBuffer(new TFShape(_hidden_unit_2, _hidden_unit_3), _w3_, 0, _w3_.Length))).Operation,
                 _graph.Assign(_b3, _graph.Const(TFTensor.FromBuffer(new TFShape(1, _hidden_unit_3), _b3_, 0, _b3_.Length))).Operation,
-                _graph.Assign(_w4, _graph.Const(TFTensor.FromBuffer(new TFShape(_hidden_unit_3, _hidden_unit_4), _w4_, 0, _w4_.Length))).Operation,
-                _graph.Assign(_b4, _graph.Const(TFTensor.FromBuffer(new TFShape(1, _hidden_unit_4), _b4_, 0, _b4_.Length))).Operation
             };
             return operations;
         }
-
         /// <summary>
         /// init session
         /// </summary>
@@ -140,25 +131,22 @@ namespace Engine.Brain.AI.RL
             _session.GetRunner().AddTarget(operations).Run();
         }
 
-        public (float[] w1, float[] b1, float[] w2, float[] b2, float[] w3, float[] b3, float[] w4, float[] b4) TrainVariables
+        public (float[] w1, float[] b1, float[] w2, float[] b2, float[] w3, float[] b3) TrainVariables
         {
-            get { return (_w1_, _b1_, _w2_, _b2_, _w3_, _b3_, _w4_, _b4_); }
+            get { return (_w1_, _b1_, _w2_, _b2_, _w3_, _b3_); }
         }
         /// <summary>
         /// 保存参数
         /// </summary>
         private void Freeze()
         {
-            //
-            var variables = _session.GetRunner().Fetch(_w1, _b1, _w2, _b2, _w3, _b3, _w4, _b4).Run();
+            var variables = _session.GetRunner().Fetch(_w1, _b1, _w2, _b2, _w3, _b3).Run();
             _w1_ = NP.Pad((float[,])variables[0].GetValue());
             _b1_ = NP.Pad((float[,])variables[1].GetValue());
             _w2_ = NP.Pad((float[,])variables[2].GetValue());
             _b2_ = NP.Pad((float[,])variables[3].GetValue());
             _w3_ = NP.Pad((float[,])variables[4].GetValue());
             _b3_ = NP.Pad((float[,])variables[5].GetValue());
-            _w4_ = NP.Pad((float[,])variables[6].GetValue());
-            _b4_ = NP.Pad((float[,])variables[7].GetValue());
             //
             DisposeTensor(variables);
         }
@@ -180,13 +168,15 @@ namespace Engine.Brain.AI.RL
             DisposeTensor(result);
             return loss;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tensors"></param>
         private void DisposeTensor(TFTensor[] tensors)
         {
             for (int i = 0; i < tensors.Length; i++)
                 tensors[i].Dispose();
         }
-
         /// <summary>
         /// 预测
         /// </summary>
@@ -205,10 +195,10 @@ namespace Engine.Brain.AI.RL
         /// </summary>
         /// <param name="sourNet"></param>
         /// <returns></returns>
-        public void Accept(DNet sourceNet)
+        public void Accept(DNet3 sourceNet)
         {
             sourceNet.Freeze();
-            (_w1_, _b1_, _w2_, _b2_, _w3_, _b3_, _w4_, _b4_) = sourceNet.TrainVariables;
+            (_w1_, _b1_, _w2_, _b2_, _w3_, _b3_) = sourceNet.TrainVariables;
             TFOperation[] operations = AssignVariables();
             _session.GetRunner().AddTarget(operations).Run();
         }

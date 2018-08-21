@@ -317,7 +317,8 @@ namespace Engine.GIS.GOperation.Arithmetic
                 }
                 centers = CalculateNewCenters(image, centers, labels);
             }
-            //image.GetBitmap().Save(@"D:\Workspace\bmp\o.jpg");
+
+            //image.GetBitmap().Save(@"D:\Workspace\bmp\lab.jpg");
             //image = drawAverage(image, centers, labels);
             //image.LABtoRGB();
             //processedImages[0] = image.GetBitmap(); // Segmented

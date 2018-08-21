@@ -22,12 +22,12 @@ namespace Engine.Brain.Entity
         /// </summary>
         /// <param name="inputs"></param>
         /// <returns></returns>
-        public static float[] Normalize(byte[] inputs)
+        public static double[] Normalize(byte[] inputs)
         {
             int count = inputs.Length;
-            float[] normal = new float[inputs.Length];
+            double[] normal = new double[inputs.Length];
             for (int i = 0; i < count; i++)
-                normal[i] = inputs[i] / 255f;
+                normal[i] = inputs[i] / 255.0;
             return normal;
         }
         /// <summary>
@@ -35,10 +35,10 @@ namespace Engine.Brain.Entity
         /// </summary>
         /// <param name="inputs"></param>
         /// <returns></returns>
-        public static float[] Normalize(float[] inputs, float max)
+        public static double[] Normalize(double[] inputs, double max)
         {
             int count = inputs.Length;
-            float[] normal = new float[inputs.Length];
+            double[] normal = new double[inputs.Length];
             for (int i = 0; i < count; i++)
                 normal[i] = inputs[i] / max;
             return normal;
@@ -49,9 +49,9 @@ namespace Engine.Brain.Entity
         /// <param name="hotIndex"></param>
         /// <param name="hotLength"></param>
         /// <returns></returns>
-        public static float[] ToOneHot(int hotIndex, int hotLength)
+        public static double[] ToOneHot(int hotIndex, int hotLength)
         {
-            float[] oneHot = new float[hotLength];
+            double[] oneHot = new double[hotLength];
             for (int i = 0; i < hotLength; i++)
                 oneHot[i] = i == hotIndex ? 1 : 0;
             return oneHot;
@@ -90,21 +90,17 @@ namespace Engine.Brain.Entity
         /// </summary>
         /// <param name="batchSzie">样本数量</param>
         /// <returns></returns>
-        public static List<float> CreateLabels(int batchSzie = 15, int oneHot = 10)
+        public static List<double> CreateLabels(int batchSzie = 15, int oneHot = 10)
         {
-            var inputs = new List<float[]>();
+            var inputs = new List<double[]>();
             //构建多样本的输出label
             for (int i = 0; i < batchSzie; i++)
             {
                 var label = NP.Random(10);
                 inputs.Add(ToOneHot(label, oneHot));
             }
-            var outputs = new List<float>();
-            inputs.ForEach(p =>
-            {
-                outputs.AddRange(p);
-            });
-            //返回一维数组，备用
+            var outputs = new List<double>();
+            inputs.ForEach(p => outputs.AddRange(p));
             return outputs;
         }
         /// <summary>
@@ -115,7 +111,7 @@ namespace Engine.Brain.Entity
         public static float[] CreateRandomNormalFloat(int length)
         {
             float[] arry = new float[length];
-            for(int i = 0; i < length; i++)
+            for (int i = 0; i < length; i++)
                 arry[i] = Normal(Random(), Random());
             return arry;
         }
@@ -137,9 +133,9 @@ namespace Engine.Brain.Entity
         /// </summary>
         /// <param name="inputs"></param>
         /// <returns></returns>
-        public static int Argmax(float[] inputs)
+        public static int Argmax(double[] inputs)
         {
-            float max = inputs.Max();
+            double max = inputs.Max();
             return Array.IndexOf(inputs, max);
         }
         /// <summary>
@@ -148,14 +144,14 @@ namespace Engine.Brain.Entity
         /// </summary>
         /// <param name="inputs"></param>
         /// <returns></returns>
-        public static int[] Argmax(float[,] inputs)
+        public static int[] Argmax(double[,] inputs)
         {
             int dim0 = inputs.GetLength(0);
             int dim1 = inputs.GetLength(1);
             int[] output = new int[dim0];
             for (int i = 0; i < dim0; i++)
             {
-                float[] arr = new float[dim1];
+                double[] arr = new double[dim1];
                 for (int j = 0; j < dim1; j++)
                     arr[j] = inputs[i, j];
                 output[i] = Argmax(arr);
@@ -167,9 +163,9 @@ namespace Engine.Brain.Entity
         /// </summary>
         /// <param name="inputs"></param>
         /// <returns></returns>
-        public static float Max(float[] inputs)
+        public static double Max(double[] inputs)
         {
-            float max = inputs.Max();
+            double max = inputs.Max();
             return max;
         }
         /// <summary>
@@ -211,12 +207,12 @@ namespace Engine.Brain.Entity
         {
             int count = predict.Length;
             float right = 0f;
-            for(int i=0;i<count;i++)
-                right+= Math.Abs(predict[i] - label[i]) < 0.1f ? 1f : 0f;
+            for (int i = 0; i < count; i++)
+                right += Math.Abs(predict[i] - label[i]) < 0.1f ? 1f : 0f;
             return right / count;
         }
 
-            public static float CalcuteAccuracy(float[,] predict,float[,] label)
+        public static float CalcuteAccuracy(float[,] predict, float[,] label)
         {
             int dim0 = predict.GetLength(0);
             int dim1 = predict.GetLength(1);
