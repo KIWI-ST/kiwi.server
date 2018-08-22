@@ -89,13 +89,13 @@
   <ItemGroup>
     <Compile Include="AI\DL\CNN.cs" />
     <Compile Include="AI\RL\DRaw.cs" />
+    <Compile Include="AI\RL\IDNet.cs" />
+    <Compile Include="AI\RL\INet.cs" />
     <Compile Include="AI\RL\IEnv.cs" />
     <Compile Include="AI\RL\Env\DImageEnv.cs" />
-    <Compile Include="AI\RL\Net\DNet.cs" />
-    <Compile Include="AI\RL\Net\DNet4.cs" />
+    <Compile Include="AI\RL\DNet.cs" />
     <Compile Include="AI\RL\DQN.cs" />
     <Compile Include="AI\RL\Env\DFileEnv.cs" />
-    <Compile Include="AI\RL\Net\DNet3.cs" />
     <Compile Include="Entity\NP.cs" />
     <Compile Include="Entity\TensorflowBootstrap.cs" />
     <Compile Include="Extend\ArrayExtend.cs" />

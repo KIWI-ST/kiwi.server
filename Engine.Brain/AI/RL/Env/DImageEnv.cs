@@ -11,13 +11,13 @@ namespace Engine.Brain.AI.RL
     /// <summary>
     ///  图片分类学习环境
     /// </summary>
-    public class DImageEnv : IDEnv
+    public class DImageEnv : IEnv
     {
         private GRasterLayer _featureRasterLayer, _labelRasterLayer;
 
         Dictionary<int, List<Point>> _memory = new Dictionary<int, List<Point>>();
 
-        int _current_x, _current_y, _current_classIndex;
+        int _current_x, _current_y, _current_classindex;
 
         int _c_x = 0, _c_y = 0, _c_classIndex = -9999;
 
@@ -33,7 +33,7 @@ namespace Engine.Brain.AI.RL
             FeatureNum = featureRasterLayer.BandCount;
             ActionNum = Convert.ToInt32(_labelRasterLayer.BandCollection[0].Max - _labelRasterLayer.BandCollection[0].Min);
             Prepare();
-            (_current_x, _current_y, _current_classIndex) = RandomAccessMemory();
+            (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
         }
         /// <summary>
         /// number of actions
@@ -60,7 +60,7 @@ namespace Engine.Brain.AI.RL
         /// 
         /// </summary>
         /// <returns></returns>
-        public double[] Reset()
+        public float[] Reset()
         {
             return Step(-1).state;
         }
@@ -92,15 +92,15 @@ namespace Engine.Brain.AI.RL
             return (p.X, p.Y, classIndex);
         }
 
-        public (List<double[]> states, int[] labels) RandomEval(int batchSize = 64)
+        public (List<float[]> states, int[] labels) RandomEval(int batchSize = 64)
         {
-            List<double[]> states = new List<double[]>();
+            List<float[]> states = new List<float[]>();
             int[] labels = new int[batchSize];
             for (int i = 0; i < batchSize; i++)
             {
                 var (x, y, classIndex) = RandomAccessMemory();
-                double[] raw = _featureRasterLayer.GetPixelDouble(x, y).ToArray();
-                double[] normal = NP.Normalize(raw, 255f);
+                float[] raw = _featureRasterLayer.GetPixelFloat(x, y).ToArray();
+                float[] normal = NP.Normalize(raw, 255f);
                 states.Add(normal);
                 labels[i] = classIndex;
             }
@@ -111,27 +111,23 @@ namespace Engine.Brain.AI.RL
         {
             return NP.Random(ActionNum);
         }
-        /// <summary>
-        /// return next state and current reward
-        /// </summary>
-        /// <param name="action"></param>
-        /// <returns>state_next,reward_t</returns>
-        public (double[] state, double reward) Step(int action)
+
+        public (float[] state, float reward) Step(int action)
         {
             if (action == -1)
             {
-                (_c_x, _c_y, _c_classIndex) = (_current_x, _current_y, _current_classIndex);
-                (_current_x, _current_y, _current_classIndex) = RandomAccessMemory();
-                double[] raw = _featureRasterLayer.GetPixelDouble(_c_x, _c_y).ToArray();
-                double[] normal = NP.Normalize(raw, 255f);
+                (_c_x, _c_y, _c_classIndex) = (_current_x, _current_y, _current_classindex);
+                (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
+                float[] raw = _featureRasterLayer.GetPixelFloat(_c_x, _c_y).ToArray();
+                float[] normal = NP.Normalize(raw, 255f);
                 return (normal, 0f);
             }
             else
             {
-                float reward = action == _current_classIndex ? 1.0f : -1.0f;
-                (_current_x, _current_y, _current_classIndex) = RandomAccessMemory();
-                double[] raw = _featureRasterLayer.GetPixelDouble(_current_x, _current_y).ToArray();
-                double[] normal = NP.Normalize(raw, 255f);
+                float reward = action == _current_classindex ? 1.0f : -1.0f;
+                (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
+                float[] raw = _featureRasterLayer.GetPixelFloat(_current_x, _current_y).ToArray();
+                float[] normal = NP.Normalize(raw, 255f);
                 return (normal, reward);
             }
         }

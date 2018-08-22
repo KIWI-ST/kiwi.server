@@ -22,12 +22,12 @@ namespace Engine.Brain.Entity
         /// </summary>
         /// <param name="inputs"></param>
         /// <returns></returns>
-        public static double[] Normalize(byte[] inputs)
+        public static float[] Normalize(byte[] inputs)
         {
             int count = inputs.Length;
-            double[] normal = new double[inputs.Length];
+            float[] normal = new float[inputs.Length];
             for (int i = 0; i < count; i++)
-                normal[i] = inputs[i] / 255.0;
+                normal[i] = inputs[i] / 255f;
             return normal;
         }
         /// <summary>
@@ -35,10 +35,10 @@ namespace Engine.Brain.Entity
         /// </summary>
         /// <param name="inputs"></param>
         /// <returns></returns>
-        public static double[] Normalize(double[] inputs, double max)
+        public static float[] Normalize(float[] inputs, float max)
         {
             int count = inputs.Length;
-            double[] normal = new double[inputs.Length];
+            float[] normal = new float[inputs.Length];
             for (int i = 0; i < count; i++)
                 normal[i] = inputs[i] / max;
             return normal;
@@ -49,9 +49,9 @@ namespace Engine.Brain.Entity
         /// <param name="hotIndex"></param>
         /// <param name="hotLength"></param>
         /// <returns></returns>
-        public static double[] ToOneHot(int hotIndex, int hotLength)
+        public static float[] ToOneHot(int hotIndex, int hotLength)
         {
-            double[] oneHot = new double[hotLength];
+            float[] oneHot = new float[hotLength];
             for (int i = 0; i < hotLength; i++)
                 oneHot[i] = i == hotIndex ? 1 : 0;
             return oneHot;
@@ -90,17 +90,21 @@ namespace Engine.Brain.Entity
         /// </summary>
         /// <param name="batchSzie">样本数量</param>
         /// <returns></returns>
-        public static List<double> CreateLabels(int batchSzie = 15, int oneHot = 10)
+        public static List<float> CreateLabels(int batchSzie = 15, int oneHot = 10)
         {
-            var inputs = new List<double[]>();
+            var inputs = new List<float[]>();
             //构建多样本的输出label
             for (int i = 0; i < batchSzie; i++)
             {
                 var label = NP.Random(10);
                 inputs.Add(ToOneHot(label, oneHot));
             }
-            var outputs = new List<double>();
-            inputs.ForEach(p => outputs.AddRange(p));
+            var outputs = new List<float>();
+            inputs.ForEach(p =>
+            {
+                outputs.AddRange(p);
+            });
+            //返回一维数组，备用
             return outputs;
         }
         /// <summary>
@@ -133,9 +137,9 @@ namespace Engine.Brain.Entity
         /// </summary>
         /// <param name="inputs"></param>
         /// <returns></returns>
-        public static int Argmax(double[] inputs)
+        public static int Argmax(float[] inputs)
         {
-            double max = inputs.Max();
+            float max = inputs.Max();
             return Array.IndexOf(inputs, max);
         }
         /// <summary>
@@ -144,14 +148,14 @@ namespace Engine.Brain.Entity
         /// </summary>
         /// <param name="inputs"></param>
         /// <returns></returns>
-        public static int[] Argmax(double[,] inputs)
+        public static int[] Argmax(float[,] inputs)
         {
             int dim0 = inputs.GetLength(0);
             int dim1 = inputs.GetLength(1);
             int[] output = new int[dim0];
             for (int i = 0; i < dim0; i++)
             {
-                double[] arr = new double[dim1];
+                float[] arr = new float[dim1];
                 for (int j = 0; j < dim1; j++)
                     arr[j] = inputs[i, j];
                 output[i] = Argmax(arr);
@@ -163,9 +167,9 @@ namespace Engine.Brain.Entity
         /// </summary>
         /// <param name="inputs"></param>
         /// <returns></returns>
-        public static double Max(double[] inputs)
+        public static float Max(float[] inputs)
         {
-            double max = inputs.Max();
+            float max = inputs.Max();
             return max;
         }
         /// <summary>

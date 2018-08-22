@@ -5,14 +5,14 @@ namespace Engine.Brain.AI.RL
     /// <summary>
     /// 定义基本环境编写接口
     /// </summary>
-    public interface IDEnv
+    public interface IEnv
     {
         /// <summary>
         /// 验证数据集
         /// </summary>
         /// <param name="batchSize"></param>
         /// <returns></returns>
-        (List<double[]> states, int[] labels) RandomEval(int batchSize = 64);
+        (List<float[]> states, int[] labels) RandomEval(int batchSize = 64);
         /// <summary>
         /// number of actions
         /// </summary>
@@ -26,7 +26,7 @@ namespace Engine.Brain.AI.RL
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        (double[] state, double reward) Step(int action);
+        (float[] state, float reward) Step(int action);
         /// <summary>
         /// crate an action located in action range
         /// </summary>
@@ -35,6 +35,6 @@ namespace Engine.Brain.AI.RL
         /// <summary>
         /// 重置环境
         /// </summary>
-        double[] Reset();
+        float[] Reset();
     }
 }

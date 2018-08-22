@@ -5,14 +5,14 @@
         /// <summary>
         /// state数据
         /// </summary>
-        public double[] State { get; set; }
+        public float[] State { get; set; }
         /// <summary>
         /// one-hot vector
         /// </summary>
-        public double[] Action { get; set; }
+        public float[] Action { get; set; }
         /// <summary>
         /// reward
         /// </summary>
-        public double Reward { get; set; }
+        public float Reward { get; set; }
     }
 }
