@@ -60,7 +60,7 @@ namespace Engine.Brain.AI.RL
         /// 
         /// </summary>
         /// <returns></returns>
-        public float[] Reset()
+        public double[] Reset()
         {
             return Step(-1).state;
         }
@@ -92,15 +92,15 @@ namespace Engine.Brain.AI.RL
             return (p.X, p.Y, classIndex);
         }
 
-        public (List<float[]> states, int[] labels) RandomEval(int batchSize = 64)
+        public (List<double[]> states, int[] labels) RandomEval(int batchSize = 64)
         {
-            List<float[]> states = new List<float[]>();
+            List<double[]> states = new List<double[]>();
             int[] labels = new int[batchSize];
             for (int i = 0; i < batchSize; i++)
             {
                 var (x, y, classIndex) = RandomAccessMemory();
-                float[] raw = _featureRasterLayer.GetPixelFloat(x, y).ToArray();
-                float[] normal = NP.Normalize(raw, 255f);
+                double[] raw = _featureRasterLayer.GetPixelDouble(x, y).ToArray();
+                double[] normal = NP.Normalize(raw, 255f);
                 states.Add(normal);
                 labels[i] = classIndex;
             }
@@ -112,22 +112,22 @@ namespace Engine.Brain.AI.RL
             return NP.Random(ActionNum);
         }
 
-        public (float[] state, float reward) Step(int action)
+        public (double[] state, double reward) Step(int action)
         {
             if (action == -1)
             {
                 (_c_x, _c_y, _c_classIndex) = (_current_x, _current_y, _current_classindex);
                 (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
-                float[] raw = _featureRasterLayer.GetPixelFloat(_c_x, _c_y).ToArray();
-                float[] normal = NP.Normalize(raw, 255f);
+                double[] raw = _featureRasterLayer.GetPixelDouble(_c_x, _c_y).ToArray();
+                double[] normal = NP.Normalize(raw, 255f);
                 return (normal, 0f);
             }
             else
             {
                 float reward = action == _current_classindex ? 1.0f : -1.0f;
                 (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
-                float[] raw = _featureRasterLayer.GetPixelFloat(_current_x, _current_y).ToArray();
-                float[] normal = NP.Normalize(raw, 255f);
+                double[] raw = _featureRasterLayer.GetPixelDouble(_current_x, _current_y).ToArray();
+                double[] normal = NP.Normalize(raw, 255f);
                 return (normal, reward);
             }
         }
