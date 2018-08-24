@@ -71,11 +71,11 @@ namespace Engine.Brain.AI.RL
         //拷贝net参数
         readonly int _everycopy = 128;
         //学习轮次
-        readonly int _epoches = 5000;
+        readonly int _epoches = 2000;
         //一次学习样本数
-        readonly int _batchSize = 27;
+        readonly int _batchSize = 29;
         //一轮学习次数
-        readonly int _forward = 512;
+        readonly int _forward = 256;
         //q值积累权重
         readonly double _alpah = 0.5;
         //q值印象权重
@@ -340,7 +340,7 @@ namespace Engine.Brain.AI.RL
         {
             PreRemember(_memoryCapacity);
             double[] state = _env.Step(-1).state;
-            for (int e = 0; e <= _epoches; e++)
+            for (int e = 1; e <= _epoches; e++)
             {
                 DateTime now = DateTime.Now;
                 double loss = 0, accuracy = 0, totalRewards = 0;
@@ -348,7 +348,7 @@ namespace Engine.Brain.AI.RL
                 {
                     TimeSpan span;
                     //choose action by epsilon_greedy
-                    var (action, q) = EpsilonGreedy(step, state);
+                    var (action, q) = EpsilonGreedy(e, state);
                     //play
                     var (nextState, reward) = _env.Step(action);
                     //store state and reward
