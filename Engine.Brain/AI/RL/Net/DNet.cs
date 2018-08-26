@@ -5,20 +5,35 @@ using System.IO;
 
 namespace Engine.Brain.AI.RL
 {
-
+    /// <summary>
+    /// Selu激活函数
+    /// </summary>
     [Serializable]
     public class SeluFunction : IActivationFunction
     {
+        /// <summary>
+        /// 
+        /// </summary>
         const double alpha = 1.6732632423543772848170429916717;
-
+        /// <summary>
+        /// 
+        /// </summary>
         const double scale = 1.0507009873554804934193349852946;
-
+        /// <summary>
+        /// dx
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
         public double Derivative(double x)
         {
             double y = Function(x);
             return Derivative2(y);
         }
-
+        /// <summary>
+        /// dy
+        /// </summary>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public double Derivative2(double y)
         {
             if (y > 0)
@@ -26,7 +41,11 @@ namespace Engine.Brain.AI.RL
             else
                 return scale * alpha * Math.Exp(y);
         }
-
+        /// <summary>
+        /// y=
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
         public double Function(double x)
         {
             if (x >= 0.0)
@@ -69,7 +88,7 @@ namespace Engine.Brain.AI.RL
 
         private string Save()
         {
-            string filePath = Directory.GetCurrentDirectory() + @"\ai\";
+            string filePath = Directory.GetCurrentDirectory() + @"\tmp\";
             string fileName = filePath + "dqn.ann";
             if (!Directory.Exists(filePath))
                 Directory.CreateDirectory(filePath);

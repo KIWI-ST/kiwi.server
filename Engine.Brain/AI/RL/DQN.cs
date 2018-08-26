@@ -305,7 +305,7 @@ namespace Engine.Brain.AI.RL
         /// <returns></returns>
         private float Accuracy()
         {
-            const int batchSize = 64;
+            const int batchSize = 128;
             var (states, rawLabels) = _env.RandomEval(batchSize);
             float[] actions = new float[batchSize];
             float[] labels = new float[batchSize];
@@ -362,10 +362,15 @@ namespace Engine.Brain.AI.RL
                     if (step % _everycopy == 0)
                         _actorNet.Accept(_criticNet);
                 }
+                //calcute accuracy
                 accuracy = Accuracy();
+                //report learning progress
                 OnLearningLossEventHandler?.Invoke(loss, totalRewards, accuracy, (float)e / _epoches, (DateTime.Now - now).TotalSeconds.ToString());
+                //loss
                 _lossLine.Points.Add(new DataPoint(e, loss));
+                //accuracy
                 _accuracyLine.Points.Add(new DataPoint(e, accuracy));
+                //reward
                 _rewardLine.Points.Add(new DataPoint(e, totalRewards));
             }
         }
