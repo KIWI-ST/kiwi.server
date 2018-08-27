@@ -11,7 +11,6 @@ using Host.Image.UI.SettingForm;
 using Host.Image.UI.SettingForm.SLIC;
 using OfficeOpenXml;
 using OxyPlot;
-using OxyPlot.Series;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -20,7 +19,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using TensorFlow;
 
 namespace Host.Image.UI
 {
@@ -190,8 +188,13 @@ namespace Host.Image.UI
             Invoke(new PaintPlotModelHandler(PaintPlotModel), dqn.AccuracyModel);
             Invoke(new PaintPlotModelHandler(PaintPlotModel), dqn.RewardModel);
             dqn.Learn();
+            //GDI绘制
+            Bitmap classificationBitmap = new Bitmap(featureRasterLayer.XSize, featureRasterLayer.YSize);
+            Graphics g = Graphics.FromImage(classificationBitmap);
+            Invoke(new UpdateMapListBoxHandler(UpdateMapListBox),DateTime.Now.ToLongTimeString()+ ": starting dqn classification");
             //
-            Bitmap bmp = new Bitmap(featureRasterLayer.XSize, featureRasterLayer.YSize);
+            int seed = 0;
+            int totalPixels = featureRasterLayer.XSize * featureRasterLayer.YSize;
             //应用dqn对图像分类
             for (int i = 0; i < featureRasterLayer.XSize; i++)
                 for (int j = 0; j < featureRasterLayer.YSize; j++)
@@ -199,8 +202,28 @@ namespace Host.Image.UI
                     double[] raw = featureRasterLayer.GetPixelDouble(i, j).ToArray();
                     double[] normal = NP.Normalize(raw, 255f);
                     var (action, q) = dqn.ChooseAction(normal);
-                    Invoke(new PaintPointHandler(PaintPoint), bmp, i, j, Convert.ToByte(action * 10));
+                    int gray = action + 1;
+                    //后台绘制，报告进度
+                    Color c = Color.FromArgb(gray, gray, gray);
+                    Pen p = new Pen(c);
+                    SolidBrush brush = new SolidBrush(c);
+                    g.FillRectangle(brush, new Rectangle(i, j, 1, 1));
+                    //report progress
+                    seed++;
+                    if ((seed*10)%totalPixels == 0)
+                    {
+                        double precent = (double)(seed) / totalPixels;
+                        string msg = string.Format(DateTime.Now.ToLongTimeString()+", drawing ，progress: {0:P}", precent);
+                        Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), msg);
+                    }
                 }
+            //保存结果至tmp
+            string fullFileName = Directory.GetCurrentDirectory() + @"\tmp\" + DateTime.Now.ToFileTimeUtc() + ".png";
+            classificationBitmap.Save(fullFileName);
+            //
+            Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": complete dqn classification");
+            //切换到主线程读取结果
+            Invoke(new ReadRasterHandler(ReadRaster), fullFileName);
         }
 
         private void Dqn_OnLearningLossEventHandler(double loss, double totalReward, double accuracy, double progress, string epochesTime)
@@ -398,6 +421,8 @@ namespace Host.Image.UI
 
         private delegate void RefreshPlotModelHandler();
 
+        private delegate void ReadRasterHandler(string fullFileName);
+
         #endregion
 
         #region 主功能
@@ -420,36 +445,41 @@ namespace Host.Image.UI
                 string fileName = Path.GetFileNameWithoutExtension(openfiledialog.FileName);
                 string extension = Path.GetExtension(openfiledialog.FileName);
                 if (extension == ".tif" || extension == ".img" || extension == ".bmp" || extension == ".jpg" || extension == ".png")
-                {
-                    //1.判断图像是否已加载
-                    if (map_treeView.Nodes.OfType<TreeNode>().FirstOrDefault(p => p.Tag.Equals(fileName)) != null)
-                    {
-                        UpdateStatusLabel("图像不能重复添加", STATUE_ENUM.WARNING);
-                        return;
-                    }
-                    //2.构建TreeNode用于存储数据和结点
-                    TreeNode node = new TreeNode(fileName)
-                    {
-                        Tag = fileName
-                    };
-                    map_treeView.Nodes.Add(node);
-                    _imageDic.Add(fileName, null);
-                    //3.分波段读取图像并加载，开辟新的线程分波段读取数据
-                    ThreadStart s = delegate { ReadBand(openfiledialog.FileName, node); };
-                    Thread t = new Thread(s)
-                    {
-                        IsBackground = true
-                    };
-                    t.Start();
-                }
+                    ReadRaster(openfiledialog.FileName);
                 else if (extension == "shp")
                 {
                     //IShpReader pShpReader = new ShpReader(fileName);
                     //后台读取shp并绘制到bmp
                 }
-
             }
         }
+
+        private void ReadRaster(string fullFileName)
+        {
+            //
+            string fileName = Path.GetFileNameWithoutExtension(fullFileName);
+            //1.判断图像是否已加载
+            if (map_treeView.Nodes.OfType<TreeNode>().FirstOrDefault(p => p.Tag.Equals(fileName)) != null)
+            {
+                UpdateStatusLabel("图像不能重复添加", STATUE_ENUM.WARNING);
+                return;
+            }
+            //2.构建TreeNode用于存储数据和结点
+            TreeNode node = new TreeNode(fileName)
+            {
+                Tag = fileName
+            };
+            map_treeView.Nodes.Add(node);
+            _imageDic.Add(fileName, null);
+            //3.分波段读取图像并加载，开辟新的线程分波段读取数据
+            ThreadStart s = delegate { ReadBand(fullFileName, node); };
+            Thread t = new Thread(s)
+            {
+                IsBackground = true
+            };
+            t.Start();
+        }
+
         /// <summary>
         /// 波段读取
         /// </summary>

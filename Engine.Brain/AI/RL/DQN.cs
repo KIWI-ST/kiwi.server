@@ -1,5 +1,7 @@
-﻿using Engine.Brain.Entity;
+﻿using Accord.Statistics.Analysis;
+using Engine.Brain.Entity;
 using Engine.Brain.Extend;
+using Engine.GIS.GLayer.GRasterLayer;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
@@ -71,7 +73,7 @@ namespace Engine.Brain.AI.RL
         //拷贝net参数
         readonly int _everycopy = 128;
         //学习轮次
-        readonly int _epoches = 3000;
+        readonly int _epoches = 2000;
         //一次学习样本数
         readonly int _batchSize = 29;
         //一轮学习次数
@@ -373,6 +375,15 @@ namespace Engine.Brain.AI.RL
                 //reward
                 _rewardLine.Points.Add(new DataPoint(e, totalRewards));
             }
+        }
+        /// <summary>
+        /// 计算kappa系数
+        /// </summary>
+        /// <returns></returns>
+        public double CalcuteKappa(GRasterLayer labelLayer, GRasterLayer classificationLayer)
+        {
+            return 0.0;
+            //GeneralConfusionMatrix
         }
 
     }
