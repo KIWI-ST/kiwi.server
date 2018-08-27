@@ -69,7 +69,8 @@ namespace Engine.Brain.AI.RL
             //
             int num = featureNum + actionNum;
             //
-            _network = new ActivationNetwork(new SeluFunction(), num, actionNum, actionNum, actionNum/2, 1);
+            //_network = new ActivationNetwork(new SeluFunction(), num, actionNum, actionNum, actionNum/2, 1);
+            _network = new ActivationNetwork(new SeluFunction(), num, actionNum, actionNum, actionNum, actionNum, actionNum , actionNum, actionNum,actionNum / 2, 1);
             //
             new NguyenWidrow(_network).Randomize();
             //https://github.com/accord-net/framework/blob/a5a2ea8b59173dd4e695da8017ba06bc45fc6b51/Samples/Neuro/Deep%20Learning/ViewModel/LearnViewModel.cs#L289
