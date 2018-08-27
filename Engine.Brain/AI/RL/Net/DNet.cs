@@ -69,10 +69,9 @@ namespace Engine.Brain.AI.RL
             //
             int num = featureNum + actionNum;
             //
-            //_network = new ActivationNetwork(new SeluFunction(), num, actionNum, actionNum, actionNum/2, 1);
-            _network = new ActivationNetwork(new SeluFunction(), num, actionNum, actionNum, actionNum, actionNum, actionNum , actionNum, actionNum,actionNum / 2, 1);
+            _network = new ActivationNetwork(new SeluFunction(), num, num, actionNum, actionNum/2,1);
             //
-            new NguyenWidrow(_network).Randomize();
+            new GaussianWeights(_network).Randomize();
             //https://github.com/accord-net/framework/blob/a5a2ea8b59173dd4e695da8017ba06bc45fc6b51/Samples/Neuro/Deep%20Learning/ViewModel/LearnViewModel.cs#L289
             _teacher = new BackPropagationLearning(_network) {
                 LearningRate = 0.01,
@@ -82,8 +81,9 @@ namespace Engine.Brain.AI.RL
 
         public double Train(double[][] inputs, double[][] outputs)
         {
+            double loss = 0.0;
             int samples = inputs.GetLength(0);
-            double loss = _teacher.RunEpoch(inputs, outputs)/samples;
+            loss = _teacher.RunEpoch(inputs, outputs) / samples;
             return loss;
         }
 

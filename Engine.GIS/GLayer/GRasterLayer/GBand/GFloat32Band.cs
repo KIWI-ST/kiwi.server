@@ -42,7 +42,7 @@ namespace Engine.GIS.GLayer.GRasterLayer.GBand
         /// <summary>
         /// 游标方式读取图像值
         /// </summary>
-        /// <returns>返回未拉伸的原始图像值</returns>
+        /// <returns>返回未拉伸的原始图像值,若游标索引结束，返回 -1, -1, -1</returns>
         public (int x, int y,int value) Next()
         {
             if (_cursor == _xCount * _yCount - 1)

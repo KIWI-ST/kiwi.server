@@ -75,7 +75,7 @@ namespace Engine.Brain.AI.RL
         //学习轮次
         readonly int _epoches = 2000;
         //一次学习样本数
-        readonly int _batchSize = 29;
+        readonly int _batchSize = 31;
         //一轮学习次数
         readonly int _forward = 256;
         //q值积累权重
@@ -85,6 +85,7 @@ namespace Engine.Brain.AI.RL
         //输入feature长度
         readonly int _featuresNumber;
         //输入action长度
+
         readonly int _actionsNumber;
         //
         LineSeries _lossLine = new LineSeries();

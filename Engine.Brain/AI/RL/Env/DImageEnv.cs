@@ -31,6 +31,10 @@ namespace Engine.Brain.AI.RL
             _featureRasterLayer = featureRasterLayer;
             _labelRasterLayer = labelRasterLayer;
             FeatureNum = featureRasterLayer.BandCount;
+            //num of categories 
+            //标注层要求：
+            //1.分类按照顺序，从1开始，逐步+1
+            //2.背景值设置为0
             ActionNum = Convert.ToInt32(_labelRasterLayer.BandCollection[0].Max - _labelRasterLayer.BandCollection[0].Min);
             Prepare();
             (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
@@ -53,8 +57,8 @@ namespace Engine.Brain.AI.RL
             do
             {
                 (_x, _y, _value) = _labelRasterLayer.BandCollection[0].Next();
-            } while (_value == 0);
-            return (_x, _y, _value - 1);
+            } while (_value == 0);//当值为0，即表示此像素为背景值，
+            return (_x, _y, _value-1);
         }
         /// <summary>
         /// 
