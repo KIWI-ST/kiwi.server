@@ -7,6 +7,7 @@ using OxyPlot.Axes;
 using OxyPlot.Series;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace Engine.Brain.AI.RL
 {
@@ -73,7 +74,7 @@ namespace Engine.Brain.AI.RL
         //拷贝net参数
         readonly int _everycopy = 128;
         //学习轮次
-        readonly int _epoches = 2000;
+        readonly int _epoches = 3000;
         //一次学习样本数
         readonly int _batchSize = 31;
         //一轮学习次数
@@ -381,10 +382,43 @@ namespace Engine.Brain.AI.RL
         /// 计算kappa系数
         /// </summary>
         /// <returns></returns>
-        public double CalcuteKappa(GRasterLayer labelLayer, GRasterLayer classificationLayer)
+        public double CalcuteKappa(GRasterLayer classificationLayer)
         {
-            return 0.0;
-            //GeneralConfusionMatrix
+            //creat m x m matrix
+            //  int[,] matrix =
+            //  {
+            //      { 0,0,0 },
+            //      { 0,0,0 },
+            //      { 0,0,0 },
+            //  };
+            //
+            int[,] matrix = new int[_actionsNumber, _actionsNumber];
+            foreach (var key in _env.Memory.Keys)
+            {
+                List<Point> points = _env.Memory[key];
+                //计算realKey类分类结果,存入混淆矩阵
+                points.ForEach(p => {
+                    int classificationType =  classificationLayer.BandCollection[0].GetRawPixel(p.X, p.Y) - 1;
+                    matrix[key, classificationType]++;
+                });
+            }
+            // Create a new multi-class Confusion Matrix
+            var cm = new GeneralConfusionMatrix(matrix);
+            //
+            int totalNum = cm.NumberOfSamples;
+            //p0
+            double p0 = 0;
+            for(int i = 0; i < _actionsNumber; i++)
+                p0 += matrix[i, i];
+            //pc
+            double pc = 0;
+            for (int i = 0; i < _actionsNumber; i++)
+                pc += cm.ColumnTotals[i] * cm.RowTotals[i];
+            pc = pc / totalNum;
+            //
+            double kappa = (p0 - pc) / (totalNum - pc);
+            //
+            return kappa;
         }
 
     }

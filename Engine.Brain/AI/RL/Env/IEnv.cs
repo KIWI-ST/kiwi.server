@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 
 namespace Engine.Brain.AI.RL
 {
@@ -7,6 +8,10 @@ namespace Engine.Brain.AI.RL
     /// </summary>
     public interface IEnv
     {
+        /// <summary>
+        /// the environment memory
+        /// </summary>
+        Dictionary<int, List<Point>> Memory { get; }
         /// <summary>
         /// 验证数据集
         /// </summary>

@@ -4,6 +4,7 @@ using Engine.GIS.GLayer.GRasterLayer;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace Engine.Brain.AI.RL
 {
@@ -14,8 +15,6 @@ namespace Engine.Brain.AI.RL
     public class DImageEnv : IEnv
     {
         private GRasterLayer _featureRasterLayer, _labelRasterLayer;
-
-        Dictionary<int, List<Point>> _memory = new Dictionary<int, List<Point>>();
 
         int _current_x, _current_y, _current_classindex;
 
@@ -35,7 +34,8 @@ namespace Engine.Brain.AI.RL
             //标注层要求：
             //1.分类按照顺序，从1开始，逐步+1
             //2.背景值设置为0
-            ActionNum = Convert.ToInt32(_labelRasterLayer.BandCollection[0].Max - _labelRasterLayer.BandCollection[0].Min);
+            //ActionNum = Convert.ToInt32(_labelRasterLayer.BandCollection[0].Max - _labelRasterLayer.BandCollection[0].Min);
+            ActionNum = Convert.ToInt32(_labelRasterLayer.BandCollection[0].Max - 0);
             Prepare();
             (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
         }
@@ -47,6 +47,11 @@ namespace Engine.Brain.AI.RL
         /// number of features
         /// </summary>
         public int FeatureNum { get; }
+        /// <summary>
+        /// 处理之后的样本集
+        /// </summary>
+        public Dictionary<int, List<Point>> Memory { get; private set; } = new Dictionary<int, List<Point>>();
+
         /// <summary>
         /// 顺序学习环境样本
         /// </summary>
@@ -77,13 +82,14 @@ namespace Engine.Brain.AI.RL
             do
             {
                 (x, y, classIndex) = SequentialAccessEnv();
-                if (_memory.ContainsKey(classIndex))
-                    _memory[classIndex].Add(new Point(x, y));
+                if (Memory.ContainsKey(classIndex))
+                    Memory[classIndex].Add(new Point(x, y));
                 else
-                    _memory.Add(classIndex, new List<Point>() { new Point(x, y) });
+                    Memory.Add(classIndex, new List<Point>() { new Point(x, y) });
             } while (classIndex != -2);
             //remove empty value
-            _memory.Remove(-2);
+            Memory.Remove(-2);
+            Memory = Memory.OrderBy(p => p.Key).ToDictionary(p => p.Key, o => o.Value);
         }
         /// <summary>
         /// 
@@ -92,10 +98,14 @@ namespace Engine.Brain.AI.RL
         private (int x, int y, int classIndex) RandomAccessMemory()
         {
             int classIndex = NP.Random(ActionNum);
-            Point p = _memory[classIndex].RandomTake();
+            Point p = Memory[classIndex].RandomTake();
             return (p.X, p.Y, classIndex);
         }
-
+        /// <summary>
+        /// random测试集
+        /// </summary>
+        /// <param name="batchSize"></param>
+        /// <returns></returns>
         public (List<double[]> states, int[] labels) RandomEval(int batchSize = 64)
         {
             List<double[]> states = new List<double[]>();
@@ -110,12 +120,19 @@ namespace Engine.Brain.AI.RL
             }
             return (states, labels);
         }
-
+        /// <summary>
+        /// random数据集
+        /// </summary>
+        /// <returns></returns>
         public int RandomAction()
         {
             return NP.Random(ActionNum);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns></returns>
         public (double[] state, double reward) Step(int action)
         {
             if (action == -1)
@@ -135,6 +152,5 @@ namespace Engine.Brain.AI.RL
                 return (normal, reward);
             }
         }
-
     }
 }

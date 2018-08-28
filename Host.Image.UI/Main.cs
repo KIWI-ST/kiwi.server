@@ -222,6 +222,9 @@ namespace Host.Image.UI
             classificationBitmap.Save(fullFileName);
             //
             Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": complete dqn classification");
+            //计算kappa
+            double kappa = dqn.CalcuteKappa(new GRasterLayer(fullFileName));
+            Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": kappa :"+kappa);
             //切换到主线程读取结果
             Invoke(new ReadRasterHandler(ReadRaster), fullFileName);
         }

@@ -31,7 +31,7 @@ namespace Engine.GIS.GLayer.GRasterLayer.GBand
             //height
             _yCount = pBand.YSize;
             //统计
-            pBand.SetNoDataValue(0);
+            pBand.SetNoDataValue(-9999);
             pBand.GetStatistics(1, 1, out _min, out _max, out _mean, out _stdDev);
             //读取rawdata
             _rawData = new float[_xCount * _yCount];
