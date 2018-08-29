@@ -176,6 +176,8 @@ namespace Engine.Brain.AI.RL
         public void SetParameters(int epoches = 3000)
         {
             _epoches = epoches;
+            //构造plot绘制图
+            InitPoltModel();
         }
         /// <summary>
         /// 控制记忆容量
@@ -356,8 +358,6 @@ namespace Engine.Brain.AI.RL
         /// <param name="batchSize"></param>
         public void Learn()
         {
-            //构造plot绘制图
-            InitPoltModel();
             //dqn训练
             PreRemember(_memoryCapacity);
             double[] state = _env.Step(-1).state;
