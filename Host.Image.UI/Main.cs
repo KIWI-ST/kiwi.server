@@ -179,10 +179,11 @@ namespace Host.Image.UI
             _dqnFormList.ForEach(p => p.UpdateDarw());
         }
 
-        private void RunDQN(GRasterLayer featureRasterLayer, GRasterLayer labelRasterLayer)
+        private void RunDQN(GRasterLayer featureRasterLayer, GRasterLayer labelRasterLayer,int epoches)
         {
             IEnv env = new DImageEnv(featureRasterLayer, labelRasterLayer);
             DQN dqn = new DQN(env);
+            dqn.SetParameters(epoches: epoches);
             dqn.OnLearningLossEventHandler += Dqn_OnLearningLossEventHandler;
             Invoke(new PaintPlotModelHandler(PaintPlotModel), dqn.LossPlotModel);
             Invoke(new PaintPlotModelHandler(PaintPlotModel), dqn.AccuracyModel);
@@ -602,7 +603,8 @@ namespace Host.Image.UI
                     {
                         string keyFeature = dqnForm.SelectedFeatureRasterLayer;
                         string keyLabel = dqnForm.SelectedLabelRasterLayer;
-                        ThreadStart s = delegate { RunDQN(_rasterDic[keyFeature], _rasterDic[keyLabel]); };
+                        int epoches = dqnForm.Epoches;
+                        ThreadStart s = delegate { RunDQN(_rasterDic[keyFeature], _rasterDic[keyLabel], epoches); };
                         Thread t = new Thread(s);
                         t.IsBackground = true;
                         t.Start();

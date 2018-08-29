@@ -74,7 +74,7 @@ namespace Engine.Brain.AI.RL
         //拷贝net参数
         readonly int _everycopy = 128;
         //学习轮次
-        readonly int _epoches = 3000;
+        int _epoches = 3000;
         //一次学习样本数
         readonly int _batchSize = 31;
         //一轮学习次数
@@ -117,6 +117,12 @@ namespace Engine.Brain.AI.RL
             _actorNet = new DNet(_featuresNumber, _actionsNumber);
             //训练
             _criticNet = new DNet(_featuresNumber, _actionsNumber);
+        }
+        /// <summary>
+        /// 初始化plotModel
+        /// </summary>
+        private void InitPoltModel()
+        {
             //loss line
             LossPlotModel.Series.Add(_lossLine);
             LossPlotModel.Axes.Add(new LinearAxis()
@@ -162,6 +168,14 @@ namespace Engine.Brain.AI.RL
                 Maximum = _forward
             });
             RewardModel.Title = "Reward";
+        }
+        /// <summary>
+        /// 设置运行参数
+        /// </summary>
+        /// <param name="epoches"></param>
+        public void SetParameters(int epoches = 3000)
+        {
+            _epoches = epoches;
         }
         /// <summary>
         /// 控制记忆容量
@@ -342,6 +356,9 @@ namespace Engine.Brain.AI.RL
         /// <param name="batchSize"></param>
         public void Learn()
         {
+            //构造plot绘制图
+            InitPoltModel();
+            //dqn训练
             PreRemember(_memoryCapacity);
             double[] state = _env.Step(-1).state;
             for (int e = 1; e <= _epoches; e++)

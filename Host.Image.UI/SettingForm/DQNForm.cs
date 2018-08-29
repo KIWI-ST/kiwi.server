@@ -12,6 +12,7 @@ namespace Host.Image.UI.SettingForm
         public DQNForm()
         {
             InitializeComponent();
+            Epoches = (int)numericUpDown1.Value;
         }
 
         Dictionary<string, GRasterLayer> _rasterDic;
@@ -19,6 +20,8 @@ namespace Host.Image.UI.SettingForm
         public string SelectedFeatureRasterLayer { get; set; }
 
         public string SelectedLabelRasterLayer { get; set; }
+
+        public int Epoches { get; set; }
 
         public Dictionary<string, GRasterLayer> RasterDic
         {
@@ -45,10 +48,6 @@ namespace Host.Image.UI.SettingForm
         {
             string key = (sender as ComboBox).SelectedItem as string;
             SelectedFeatureRasterLayer = key;
-            //comboBox2.Items.Clear();
-            //SelectedLayer.BandCollection.ForEach(p => {
-            //    comboBox2.Items.Add(p.BandName);
-            //});
         }
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
@@ -60,6 +59,11 @@ namespace Host.Image.UI.SettingForm
         private void button1_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            Epoches = (int)(sender as NumericUpDown).Value;
         }
     }
 }
