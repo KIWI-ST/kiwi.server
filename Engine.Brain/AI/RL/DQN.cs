@@ -123,13 +123,15 @@ namespace Engine.Brain.AI.RL
         /// </summary>
         private void InitPoltModel()
         {
+            //缩放比例
+            const double scale = 1.02;
             //loss line
             LossPlotModel.Series.Add(_lossLine);
             LossPlotModel.Axes.Add(new LinearAxis()
             {
                 Position = AxisPosition.Bottom,
                 Minimum = 0,
-                Maximum = _epoches
+                Maximum = _epoches* scale
             });
             LossPlotModel.Axes.Add(new LinearAxis()
             {
@@ -144,7 +146,7 @@ namespace Engine.Brain.AI.RL
             {
                 Position = AxisPosition.Bottom,
                 Minimum = 0,
-                Maximum = _epoches
+                Maximum = _epoches * scale
             });
             AccuracyModel.Axes.Add(new LinearAxis()
             {
@@ -159,7 +161,7 @@ namespace Engine.Brain.AI.RL
             {
                 Position = AxisPosition.Bottom,
                 Minimum = 0,
-                Maximum = _epoches
+                Maximum = _epoches * scale
             });
             RewardModel.Axes.Add(new LinearAxis()
             {

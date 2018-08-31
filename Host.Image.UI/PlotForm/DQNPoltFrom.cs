@@ -25,6 +25,8 @@ namespace Host.Image.UI.PlotForm
         private void ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SaveFileDialog sfg = new SaveFileDialog();
+            sfg.AddExtension = true;
+            sfg.DefaultExt = ".png";
             if (sfg.ShowDialog() == DialogResult.OK)
             {
                 var pngExporter = new PngExporter { Background = OxyColors.White };

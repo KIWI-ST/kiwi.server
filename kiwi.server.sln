@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.GIS", "Engine.GIS\En
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Brain", "Engine.Brain\Engine.Brain.csproj", "{F1D8819A-EB82-46F4-950D-E8732586AF8E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "core", "core", "{4E0D4938-0449-4899-B1C0-EA15822CD74F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,11 +44,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{1646B48F-6A20-41D0-B9BE-CA8002CB50EA} = {4E0D4938-0449-4899-B1C0-EA15822CD74F}
-		{82B3CFC7-E05C-46D3-9E91-2F5F4495238E} = {4E0D4938-0449-4899-B1C0-EA15822CD74F}
-		{F1D8819A-EB82-46F4-950D-E8732586AF8E} = {4E0D4938-0449-4899-B1C0-EA15822CD74F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CB9A02C6-D683-48EF-8ECA-4E587D75D2F9}

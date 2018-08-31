@@ -42,9 +42,9 @@
             this.dqn_plotView.Location = new System.Drawing.Point(0, 0);
             this.dqn_plotView.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.dqn_plotView.Name = "dqn_plotView";
-            this.dqn_plotView.Padding = new System.Windows.Forms.Padding(30);
+            this.dqn_plotView.Padding = new System.Windows.Forms.Padding(10);
             this.dqn_plotView.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.dqn_plotView.Size = new System.Drawing.Size(645, 360);
+            this.dqn_plotView.Size = new System.Drawing.Size(668, 385);
             this.dqn_plotView.TabIndex = 0;
             this.dqn_plotView.Text = "plot1";
             this.dqn_plotView.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
@@ -71,11 +71,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(645, 360);
+            this.ClientSize = new System.Drawing.Size(668, 385);
             this.ContextMenuStrip = this.DQNPlotForm_contextMenuStrip;
             this.Controls.Add(this.dqn_plotView);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "DQNPlotFrom";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "PlotForm";
             this.DQNPlotForm_contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
