@@ -24,6 +24,8 @@ namespace Engine.GIS.GLayer.GRasterLayer
             Name = Path.GetFileNameWithoutExtension(rasterFilename);
             //只读方式读取图层
             PDataSet = Gdal.Open(rasterFilename, Access.GA_ReadOnly);
+            //读取图像范围
+            PDataSet.GetGeoTransform(_geoTransform);
             //波段数目
             BandCount = PDataSet.RasterCount;
             //读取band
@@ -39,6 +41,11 @@ namespace Engine.GIS.GLayer.GRasterLayer
 
         #region 属性字段
 
+        double[] _geoTransform = new double[6];
+        /// <summary>
+        /// 设置图像范围，上[3] 左[0] 
+        /// </summary>
+        public double[] GeoTransform { get => _geoTransform; }
         /// <summary>
         /// height
         /// </summary>
@@ -109,6 +116,23 @@ namespace Engine.GIS.GLayer.GRasterLayer
                 pixels.Add(v);
             }
             return pixels;
+        }
+        /// <summary>
+        /// 写入band
+        /// </summary>
+        /// <param name="bandIndex"></param>
+        public void SaveBand(int bandIndex,string fullFileName,double[] geoTransform = null)
+        {
+            IGBand pband = BandCollection[bandIndex];
+            Driver drv = Gdal.GetDriverByName("GTiff");
+            string[] options = new string[] { "BLOCKXSIZE=" + PDataSet.RasterXSize, "BLOCKYSIZE=" + PDataSet.RasterYSize };
+            Dataset ds = drv.Create(fullFileName, PDataSet.RasterXSize, PDataSet.RasterYSize, 1, DataType.GDT_Byte, options);
+            Band ba = ds.GetRasterBand(1);
+            if (geoTransform != null)
+                ds.SetGeoTransform(geoTransform);
+            // GetBufferByte(_pDataSet.RasterXSize, _pDataSet.RasterYSize,byteData)
+            ba.WriteRaster(0, 0, PDataSet.RasterXSize, PDataSet.RasterYSize, pband.GetRawByteBuffer(), PDataSet.RasterXSize, PDataSet.RasterYSize, 0, 0);
+            ds.FlushCache();
         }
 
         #endregion

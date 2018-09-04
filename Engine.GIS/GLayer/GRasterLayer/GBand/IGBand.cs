@@ -4,6 +4,15 @@ namespace Engine.GIS.GLayer.GRasterLayer.GBand
 {
     public interface IGBand
     {
+
+        /// <summary>
+        /// reset cursor
+        /// </summary>
+        void ResetCursor();
+        /// <summary>
+        /// 获取band所在layer的索引
+        /// </summary>
+        int Index { get; }
         /// <summary>
         /// 游标方式读取band pixel value
         /// </summary>
@@ -42,10 +51,15 @@ namespace Engine.GIS.GLayer.GRasterLayer.GBand
         /// <returns></returns>
         byte[,] GetByteData();
         /// <summary>
-        /// byte数据流
+        /// get raw byte data
         /// </summary>
         /// <returns></returns>
         byte[] GetByteBuffer();
+        /// <summary>
+        /// raw byte value
+        /// </summary>
+        /// <returns></returns>
+        byte[] GetRawByteBuffer();
         /// <summary>
         /// 获取bitmap
         /// </summary>

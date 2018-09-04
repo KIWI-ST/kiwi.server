@@ -33,8 +33,6 @@
             this.map_menuStrip = new System.Windows.Forms.MenuStrip();
             this.文件FToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.open_toolstripmenuitem = new System.Windows.Forms.ToolStripMenuItem();
-            this.main_toolStripMenuItem = new System.Windows.Forms.ToolStripSeparator();
-            this.Export_Bitmap_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.工具TToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SLIC_toolStripMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.SLIC_Center_toolStripMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,6 +59,10 @@
             this.map_listBox = new System.Windows.Forms.ListBox();
             this.tree_contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.bandCombine_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.bandExport_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.kappa_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.map_menuStrip.SuspendLayout();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
@@ -99,9 +101,7 @@
             // 文件FToolStripMenuItem
             // 
             this.文件FToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.open_toolstripmenuitem,
-            this.main_toolStripMenuItem,
-            this.Export_Bitmap_ToolStripMenuItem});
+            this.open_toolstripmenuitem});
             this.文件FToolStripMenuItem.Name = "文件FToolStripMenuItem";
             this.文件FToolStripMenuItem.Size = new System.Drawing.Size(69, 24);
             this.文件FToolStripMenuItem.Text = "文件(&F)";
@@ -115,18 +115,6 @@
             this.open_toolstripmenuitem.Size = new System.Drawing.Size(194, 26);
             this.open_toolstripmenuitem.Text = "打开(&O)";
             this.open_toolstripmenuitem.Click += new System.EventHandler(this.Map_function_Click);
-            // 
-            // main_toolStripMenuItem
-            // 
-            this.main_toolStripMenuItem.Name = "main_toolStripMenuItem";
-            this.main_toolStripMenuItem.Size = new System.Drawing.Size(191, 6);
-            // 
-            // Export_Bitmap_ToolStripMenuItem
-            // 
-            this.Export_Bitmap_ToolStripMenuItem.Name = "Export_Bitmap_ToolStripMenuItem";
-            this.Export_Bitmap_ToolStripMenuItem.Size = new System.Drawing.Size(194, 26);
-            this.Export_Bitmap_ToolStripMenuItem.Text = "导出图片";
-            this.Export_Bitmap_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
             // 工具TToolStripMenuItem
             // 
@@ -161,7 +149,9 @@
             this.SLIC_Center_toolStripButton,
             this.DQN_toolStripButton,
             this.main_toolStripSeparator,
-            this.DL_CLASS_toolStripButton});
+            this.DL_CLASS_toolStripButton,
+            this.toolStripSeparator1,
+            this.kappa_toolStripButton});
             this.map_toolStrip.Location = new System.Drawing.Point(0, 28);
             this.map_toolStrip.Name = "map_toolStrip";
             this.map_toolStrip.Size = new System.Drawing.Size(1183, 47);
@@ -391,10 +381,12 @@
             // 
             this.tree_contextMenuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.tree_contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.bandCombine_ToolStripMenuItem});
+            this.bandCombine_ToolStripMenuItem,
+            this.toolStripMenuItem1,
+            this.bandExport_ToolStripMenuItem});
             this.tree_contextMenuStrip.Name = "tree_contextMenuStrip";
             this.tree_contextMenuStrip.ShowImageMargin = false;
-            this.tree_contextMenuStrip.Size = new System.Drawing.Size(114, 28);
+            this.tree_contextMenuStrip.Size = new System.Drawing.Size(114, 58);
             // 
             // bandCombine_ToolStripMenuItem
             // 
@@ -402,6 +394,33 @@
             this.bandCombine_ToolStripMenuItem.Size = new System.Drawing.Size(113, 24);
             this.bandCombine_ToolStripMenuItem.Text = "波段合成";
             this.bandCombine_ToolStripMenuItem.Click += new System.EventHandler(this.Map_treeView_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(110, 6);
+            // 
+            // bandExport_ToolStripMenuItem
+            // 
+            this.bandExport_ToolStripMenuItem.Name = "bandExport_ToolStripMenuItem";
+            this.bandExport_ToolStripMenuItem.Size = new System.Drawing.Size(113, 24);
+            this.bandExport_ToolStripMenuItem.Text = "波段导出";
+            this.bandExport_ToolStripMenuItem.Click += new System.EventHandler(this.Map_treeView_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 47);
+            // 
+            // kappa_toolStripButton
+            // 
+            this.kappa_toolStripButton.Image = global::Host.Image.UI.Properties.Resources.copy_64;
+            this.kappa_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.kappa_toolStripButton.Name = "kappa_toolStripButton";
+            this.kappa_toolStripButton.Size = new System.Drawing.Size(87, 44);
+            this.kappa_toolStripButton.Text = "kappa计算";
+            this.kappa_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.kappa_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
             // 
             // Main
             // 
@@ -469,13 +488,15 @@
         private System.Windows.Forms.ToolStripButton SLIC_toolStripButton;
         private System.Windows.Forms.ToolStripButton SLIC_Center_toolStripButton;
         private System.Windows.Forms.ToolStripButton DL_CLASS_toolStripButton;
-        private System.Windows.Forms.ToolStripSeparator main_toolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem Export_Bitmap_ToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton DQN_toolStripButton;
         private System.Windows.Forms.ToolStripSeparator main_toolStripSeparator;
         private System.Windows.Forms.SplitContainer map_splitContainer;
         private System.Windows.Forms.PictureBox map_pictureBox;
         private System.Windows.Forms.ListBox map_listBox;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem bandExport_ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripButton kappa_toolStripButton;
     }
 }
 

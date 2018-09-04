@@ -52,5 +52,7 @@ namespace Engine.GIS.Entity
                 return _gdalLayer;
             }
         }
+
+        public IGBand GdalBand { get => _gdalBand; set => _gdalBand = value; }
     }
 }

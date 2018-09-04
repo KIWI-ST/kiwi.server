@@ -520,10 +520,12 @@ namespace Host.Image.UI
             ToolStripItem item = sender as ToolStripItem;
             switch (item.Name)
             {
-                case "Export_Bitmap_ToolStripMenuItem":
-                    Bitmap saveBmp = map_pictureBox.Image as Bitmap;
-                    SaveBitmap(saveBmp);
-                    //导出图片
+                // calcute kappa
+                case "kappa_toolStripButton":
+                    KappaForm kappaForm = new KappaForm() {
+                        RasterDic = _rasterDic
+                    };
+                    kappaForm.ShowDialog();
                     break;
                 case "DL_CLASS_toolStripButton":
                     if (map_treeView.SelectedNode == null)
@@ -624,8 +626,24 @@ namespace Host.Image.UI
         {
             ToolStripMenuItem item = sender as ToolStripMenuItem;
             Bitmap2 bmp2 = _imageDic[map_treeView.SelectedNode.Text];
+            
             switch (item.Name)
             {
+                case "bandExport_ToolStripMenuItem":
+                    if (bmp2.GdalBand == null)
+                        return;
+                    BandExportForm bandExportModel = new BandExportForm() {
+                        RasterLayer = bmp2.GdalLayer,
+                        RasterDic = _rasterDic,
+                        Index =bmp2.GdalBand.Index
+                    };
+                    if(bandExportModel.ShowDialog() == DialogResult.OK)
+                    {
+                        if (!bandExportModel.HasChecked)
+                            return;
+                        bandExportModel.Save();
+                    }
+                    break;
                 case "bandCombine_ToolStripMenuItem":
                     BandForm bandModal = new BandForm
                     {

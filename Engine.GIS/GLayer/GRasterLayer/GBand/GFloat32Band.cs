@@ -31,7 +31,7 @@ namespace Engine.GIS.GLayer.GRasterLayer.GBand
             //height
             _yCount = pBand.YSize;
             //统计
-            pBand.SetNoDataValue(-9999);
+            pBand.SetNoDataValue(0);
             pBand.GetStatistics(1, 1, out _min, out _max, out _mean, out _stdDev);
             //读取rawdata
             _rawData = new float[_xCount * _yCount];
@@ -52,6 +52,13 @@ namespace Engine.GIS.GLayer.GRasterLayer.GBand
             int value = GetRawPixel(x, y);
             _cursor++;
             return (x, y, value);
+        }
+        /// <summary>
+        /// rest the cursor
+        /// </summary>
+        public void ResetCursor()
+        {
+            _cursor = 0;
         }
         /// <summary>
         /// 获取未拉伸的图像值
@@ -78,6 +85,9 @@ namespace Engine.GIS.GLayer.GRasterLayer.GBand
         public double Min { get { return _min; } }
 
         public double Max { get { return _max; } }
+
+        public int Index { get { return _bandIndex; } }
+
         /// <summary>
         /// 波段图层名
         /// </summary>
@@ -141,6 +151,13 @@ namespace Engine.GIS.GLayer.GRasterLayer.GBand
             byte[,] byteData = GetByteData();
             for (int count = 0; count < _rawData.Length; count++)
                 rawByteData[count] = byteData[count % _xCount, count / _xCount];
+            return rawByteData;
+        }
+        public byte[] GetRawByteBuffer()
+        {
+            byte[] rawByteData = new byte[_xCount * _yCount];
+            for (int count = 0; count < _rawData.Length; count++)
+                rawByteData[count] = GetRawPixel(count % _xCount, count / _xCount);
             return rawByteData;
         }
         /// <summary>

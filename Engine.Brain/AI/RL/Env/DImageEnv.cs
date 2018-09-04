@@ -90,6 +90,8 @@ namespace Engine.Brain.AI.RL
             //remove empty value
             Memory.Remove(-2);
             Memory = Memory.OrderBy(p => p.Key).ToDictionary(p => p.Key, o => o.Value);
+            //reset cursor
+            _labelRasterLayer.BandCollection[0].ResetCursor();
         }
         /// <summary>
         /// 

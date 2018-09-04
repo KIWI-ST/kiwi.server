@@ -93,6 +93,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SettingForm\BandExportForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingForm\BandExportForm.Designer.cs">
+      <DependentUpon>BandExportForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="SettingForm\BandForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -110,6 +116,12 @@
     </Compile>
     <Compile Include="SettingForm\DQNForm.Designer.cs">
       <DependentUpon>DQNForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SettingForm\KappaForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingForm\KappaForm.Designer.cs">
+      <DependentUpon>KappaForm.cs</DependentUpon>
     </Compile>
     <Compile Include="SettingForm\SLIC\CenterApplyForm.cs">
       <SubType>Form</SubType>
@@ -133,6 +145,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="SettingForm\BandExportForm.resx">
+      <DependentUpon>BandExportForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SettingForm\BandForm.resx">
       <DependentUpon>BandForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -141,6 +156,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SettingForm\DQNForm.resx">
       <DependentUpon>DQNForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingForm\KappaForm.resx">
+      <DependentUpon>KappaForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingForm\SLIC\CenterApplyForm.resx">
       <DependentUpon>CenterApplyForm.cs</DependentUpon>
