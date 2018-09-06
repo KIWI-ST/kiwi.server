@@ -635,13 +635,14 @@ namespace Host.Image.UI
                     BandExportForm bandExportModel = new BandExportForm() {
                         RasterLayer = bmp2.GdalLayer,
                         RasterDic = _rasterDic,
-                        Index =bmp2.GdalBand.Index
+                        Index =bmp2.GdalBand.Index-1
                     };
                     if(bandExportModel.ShowDialog() == DialogResult.OK)
                     {
                         if (!bandExportModel.HasChecked)
                             return;
                         bandExportModel.Save();
+                        MessageBox.Show("导出成功","结果",MessageBoxButtons.OK,icon:MessageBoxIcon.Information);
                     }
                     break;
                 case "bandCombine_ToolStripMenuItem":
