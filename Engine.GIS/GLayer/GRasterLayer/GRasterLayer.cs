@@ -34,7 +34,7 @@ namespace Engine.GIS.GLayer.GRasterLayer
             {
                 Band pBand = PDataSet.GetRasterBand(i);
                 PDataType = pBand.DataType;
-                if (PDataType == DataType.GDT_Float32 || PDataType == DataType.GDT_Byte || PDataType == DataType.GDT_UInt16)
+                if (PDataType == DataType.GDT_Float32 || PDataType == DataType.GDT_Byte || PDataType == DataType.GDT_UInt16||PDataType==DataType.GDT_UInt32)
                     BandCollection.Add(new GFloat32Band(pBand));
             }
         }

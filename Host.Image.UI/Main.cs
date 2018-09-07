@@ -441,14 +441,14 @@ namespace Host.Image.UI
             {
                 Multiselect = false,
                 RestoreDirectory = true,
-                Filter = "图像文件|*.img;*.tif;*.bmp;*.jpg;*.png|矢量文件|*.shp"
+                Filter = "图像文件|*.img;*.tif;*.tiff;*.bmp;*.jpg;*.png|矢量文件|*.shp"
             };
             #endregion
             if (openfiledialog.ShowDialog() == DialogResult.OK)
             {
                 string fileName = Path.GetFileNameWithoutExtension(openfiledialog.FileName);
                 string extension = Path.GetExtension(openfiledialog.FileName);
-                if (extension == ".tif" || extension == ".img" || extension == ".bmp" || extension == ".jpg" || extension == ".png")
+                if (extension == ".tif" || extension == ".tiff" || extension == ".img" || extension == ".bmp" || extension == ".jpg" || extension == ".png")
                     ReadRaster(openfiledialog.FileName);
                 else if (extension == "shp")
                 {
