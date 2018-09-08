@@ -66,7 +66,7 @@ namespace Host.Image.UI.SettingForm
             StringBuilder sb = new StringBuilder("");
             int rows = matrix.GetLength(0);
             int cols = rows;
-            sb.Append("<table style='border:1px solid black;'>");
+            sb.Append("<table style='margin:0 auto;'>");
             for (int i = 0; i < rows; i++)
             {
                 sb.Append("<tr>"); 
