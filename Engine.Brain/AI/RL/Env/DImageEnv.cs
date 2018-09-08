@@ -89,7 +89,7 @@ namespace Engine.Brain.AI.RL
             } while (classIndex != -2);
             //remove empty value
             Memory.Remove(-2);
-            Memory = Memory.OrderBy(p => p.Key).ToDictionary(p => p.Key, o => o.Value);
+            Memory = Memory.Where(p => { return Convert.ToDouble(p.Key) < _labelRasterLayer.BandCollection[0].Max && Convert.ToDouble(p.Key) >= 0; }).OrderBy(p => p.Key).ToDictionary(p => p.Key, o => o.Value);
             //reset cursor
             _labelRasterLayer.BandCollection[0].ResetCursor();
         }

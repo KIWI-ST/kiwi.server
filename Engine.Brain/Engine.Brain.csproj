@@ -88,13 +88,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AI\DL\CNN.cs" />
-    <Compile Include="AI\RL\DRaw.cs" />
+    <Compile Include="AI\RL\IDQN.cs" />
     <Compile Include="AI\RL\Net\INet.cs" />
     <Compile Include="AI\RL\Env\IEnv.cs" />
     <Compile Include="AI\RL\Env\DImageEnv.cs" />
     <Compile Include="AI\RL\Net\DNet.cs" />
     <Compile Include="AI\RL\DQN.cs" />
-    <Compile Include="AI\RL\Env\DFileEnv.cs" />
     <Compile Include="Entity\NP.cs" />
     <Compile Include="Entity\TensorflowBootstrap.cs" />
     <Compile Include="Extend\ListExtend.cs" />
