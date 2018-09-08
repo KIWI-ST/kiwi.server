@@ -19,7 +19,7 @@ namespace Engine.GIS.GOperation.Arithmetic
             return (_x, _y, _value - 1);
         }
 
-        public static (int[,] matrix,double kappa,int actionsNumber) Calcute(GRasterLayer truthLayer,GRasterLayer predLayer)
+        public static (int[,] matrix, double kappa, int actionsNumber) Calcute(GRasterLayer truthLayer, GRasterLayer predLayer)
         {
             Dictionary<int, List<Point>> Memory = new Dictionary<int, List<Point>>();
             int x, y, classIndex;
@@ -33,7 +33,7 @@ namespace Engine.GIS.GOperation.Arithmetic
             } while (classIndex != -2);
             //remove empty value
             Memory.Remove(-2);
-            Memory = Memory.OrderBy(p => p.Key).ToDictionary(p => p.Key, o => o.Value);
+            Memory = Memory.Where(p => { return Convert.ToDouble(p.Key) < truthLayer.BandCollection[0].Max && Convert.ToDouble(p.Key) >= 0; }).OrderBy(p => p.Key).ToDictionary(p => p.Key, o => o.Value);
             //reset cursor
             truthLayer.BandCollection[0].ResetCursor();
             //
@@ -45,7 +45,8 @@ namespace Engine.GIS.GOperation.Arithmetic
                 //计算realKey类分类结果,存入混淆矩阵
                 points.ForEach(p => {
                     int classificationType = predLayer.BandCollection[0].GetRawPixel(p.X, p.Y) - 1;
-                    matrix[key, classificationType]++;
+                    if(classificationType!=-1)
+                        matrix[key, classificationType]++;
                 });
             }
             // Create a new multi-class Confusion Matrix
