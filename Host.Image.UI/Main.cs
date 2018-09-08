@@ -181,7 +181,7 @@ namespace Host.Image.UI
 
         private void RunDQN(GRasterLayer featureRasterLayer, GRasterLayer labelRasterLayer,int epoches)
         {
-            IEnv env = new DImageEnv(featureRasterLayer, labelRasterLayer);
+            IEnv env = new ImageClassifyEnv(featureRasterLayer, labelRasterLayer);
             DQN dqn = new DQN(env);
             dqn.SetParameters(epoches: epoches);
             dqn.OnLearningLossEventHandler += Dqn_OnLearningLossEventHandler;

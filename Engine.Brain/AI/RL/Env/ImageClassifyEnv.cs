@@ -8,11 +8,10 @@ using System.Linq;
 
 namespace Engine.Brain.AI.RL
 {
-
     /// <summary>
-    ///  图片分类学习环境
+    ///  the environment of image classification
     /// </summary>
-    public class DImageEnv : IEnv
+    public class ImageClassifyEnv : IEnv
     {
         private GRasterLayer _featureRasterLayer, _labelRasterLayer;
 
@@ -25,7 +24,7 @@ namespace Engine.Brain.AI.RL
         /// </summary>
         /// <param name="featureRasterLayer"></param>
         /// <param name="sampleIndex"></param>
-        public DImageEnv(GRasterLayer featureRasterLayer, GRasterLayer labelRasterLayer)
+        public ImageClassifyEnv(GRasterLayer featureRasterLayer, GRasterLayer labelRasterLayer)
         {
             _featureRasterLayer = featureRasterLayer;
             _labelRasterLayer = labelRasterLayer;
