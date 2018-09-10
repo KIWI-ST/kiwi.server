@@ -87,7 +87,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AI\RL\DDQN.cs" />
     <Compile Include="AI\DL\CNN.cs" />
     <Compile Include="AI\RL\Env\PathExtractEnv.cs" />
     <Compile Include="AI\RL\IDQN.cs" />

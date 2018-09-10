@@ -50,7 +50,7 @@ namespace Engine.Brain.AI.RL
         //q值积累权重
         readonly double _alpah = 0.5;
         //q值印象权重
-        readonly double _gamma = 0.0;
+        double _gamma = 0.0;
         //输入feature长度
         readonly int _featuresNumber;
         //输入action长度
@@ -143,9 +143,12 @@ namespace Engine.Brain.AI.RL
         /// 设置运行参数
         /// </summary>
         /// <param name="epoches"></param>
-        public void SetParameters(int epoches = 3000)
+        public void SetParameters(int epoches = 3000,double gamma = 0.0)
         {
+            //训练轮次
             _epoches = epoches;
+            //设置gamma, 表示对连续状态的计算
+            _gamma = gamma;
             //构造plot绘制图
             InitPoltModel();
         }
@@ -186,7 +189,11 @@ namespace Engine.Brain.AI.RL
             }
             return (NP.Argmax(output), NP.Max(output));
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns></returns>
         private double[] MakeInput(double[] state)
         {
             double[] input = new double[_featuresNumber + _actionsNumber];
@@ -197,7 +204,6 @@ namespace Engine.Brain.AI.RL
             offset += _actionsNumber;
             return input;
         }
-
         /// <summary>
         /// 随机抽取样本
         /// </summary>
@@ -225,7 +231,7 @@ namespace Engine.Brain.AI.RL
             //qvalue input
             double[][] input_qValue = new double[batchSize][];
             //let q value equals 0  
-            float q = 0f;
+            double q = 0f;
             //
             for (int i = 0; i < batchSize; i++)
             {
@@ -239,6 +245,8 @@ namespace Engine.Brain.AI.RL
                 //input actions assign
                 Array.ConstrainedCopy(list[i].AT, 0, array, offset, _actionsNumber);
                 offset += _actionsNumber;
+                //calcute q_next
+                q = ChooseAction(list[i].S_NEXT).q;
                 //input qvalue assign
                 input_qValue[i] = new double[1] { (1 - _alpah) * list[i].QT + _alpah * (list[i].RT + _gamma * q) };
             }
@@ -407,6 +415,5 @@ namespace Engine.Brain.AI.RL
             //
             return kappa;
         }
-
     }
 }

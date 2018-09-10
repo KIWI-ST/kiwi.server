@@ -12,7 +12,9 @@ namespace Engine.Brain.AI.RL
     /// <param name="accuracy">train accuracy</param>
     /// <param name="epochesTime"></param>
     public delegate void UpdateLearningLossHandler(double loss, double totalReward, double accuracy, double progress, string epochesTime);
-
+    /// <summary>
+    /// memory
+    /// </summary>
     public class Memory
     {
         /// <summary>
@@ -41,12 +43,10 @@ namespace Engine.Brain.AI.RL
     /// </summary>
     public interface IDQN
     {
+        event UpdateLearningLossHandler OnLearningLossEventHandler;
         PlotModel AccuracyModel { get; }
         PlotModel LossPlotModel { get; }
         PlotModel RewardModel { get; }
-
-        event UpdateLearningLossHandler OnLearningLossEventHandler;
-
         double CalcuteKappa(GRasterLayer classificationLayer);
         (int action, double q) ChooseAction(double[] state);
         double EpsilonCalcute(int step, double ep_min = 0.01, double ep_max = 1, double ep_decay = 0.0001, int eps_total = 2000);
@@ -55,6 +55,6 @@ namespace Engine.Brain.AI.RL
         void PreRemember(int rememberSize);
         void Remember(double[] state, double[] action, double q, double reward, double[] stateNext);
         (double loss, TimeSpan span) Replay();
-        void SetParameters(int epoches = 3000);
+        void SetParameters(int epoches = 3000,double gamma = 0.0);
     }
 }
