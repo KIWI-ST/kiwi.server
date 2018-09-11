@@ -1,4 +1,5 @@
 ﻿using Engine.Brain.AI.RL;
+using Engine.Brain.AI.RL.Env;
 using Engine.Brain.Bootstrap;
 using Engine.Brain.Entity;
 using Engine.Brain.Utils;
@@ -179,9 +180,15 @@ namespace Host.Image.UI
             _dqnFormList.ForEach(p => p.UpdateDarw());
         }
 
-        private void RunDQN(GRasterLayer featureRasterLayer, GRasterLayer labelRasterLayer,int epoches)
+        private void RunDQN(GRasterLayer featureRasterLayer, GRasterLayer labelRasterLayer, int epoches, int Model = 1)
         {
-            IEnv env = new ImageClassifyEnv(featureRasterLayer, labelRasterLayer);
+            //create environment
+            IEnv env = null;
+            if (Model == 1)
+                env = new ImageClassifyEnv(featureRasterLayer, labelRasterLayer);
+            else if(Model ==2)
+                env = new ExtractPathEnv(featureRasterLayer, labelRasterLayer);
+            //crate dqn learning
             DQN dqn = new DQN(env);
             dqn.SetParameters(epoches: epoches);
             dqn.OnLearningLossEventHandler += Dqn_OnLearningLossEventHandler;
@@ -189,10 +196,23 @@ namespace Host.Image.UI
             Invoke(new PaintPlotModelHandler(PaintPlotModel), dqn.AccuracyModel);
             Invoke(new PaintPlotModelHandler(PaintPlotModel), dqn.RewardModel);
             dqn.Learn();
+            //
+            if(Model == 1) {
+                Dqn_ImageClassification(dqn, featureRasterLayer);
+            }
+          
+        }
+        /// <summary>
+        /// 应用dqn训练结果，绘制结果图片
+        /// </summary>
+        /// <param name="dqn"></param>
+        /// <param name="featureRasterLayer"></param>
+        private void Dqn_ImageClassification(DQN dqn,GRasterLayer featureRasterLayer)
+        {
             //GDI绘制
             Bitmap classificationBitmap = new Bitmap(featureRasterLayer.XSize, featureRasterLayer.YSize);
             Graphics g = Graphics.FromImage(classificationBitmap);
-            Invoke(new UpdateMapListBoxHandler(UpdateMapListBox),DateTime.Now.ToLongTimeString()+ ": starting dqn classification");
+            Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": starting dqn classification");
             //
             int seed = 0;
             int totalPixels = featureRasterLayer.XSize * featureRasterLayer.YSize;
@@ -211,10 +231,10 @@ namespace Host.Image.UI
                     g.FillRectangle(brush, new Rectangle(i, j, 1, 1));
                     //report progress
                     seed++;
-                    if ((seed*10)%totalPixels == 0)
+                    if ((seed * 10) % totalPixels == 0)
                     {
                         double precent = (double)(seed) / totalPixels;
-                        string msg = string.Format(DateTime.Now.ToLongTimeString()+", drawing ，progress: {0:P}", precent);
+                        string msg = string.Format(DateTime.Now.ToLongTimeString() + ", drawing ，progress: {0:P}", precent);
                         Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), msg);
                     }
                 }
@@ -225,7 +245,7 @@ namespace Host.Image.UI
             Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": complete dqn classification");
             //计算kappa
             double kappa = dqn.CalcuteKappa(new GRasterLayer(fullFileName));
-            Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": kappa :"+kappa);
+            Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": kappa :" + kappa);
             //切换到主线程读取结果
             Invoke(new ReadRasterHandler(ReadRaster), fullFileName);
         }
@@ -522,7 +542,8 @@ namespace Host.Image.UI
             {
                 // calcute kappa
                 case "kappa_toolStripButton":
-                    KappaForm kappaForm = new KappaForm() {
+                    KappaForm kappaForm = new KappaForm()
+                    {
                         RasterDic = _rasterDic
                     };
                     kappaForm.ShowDialog();
@@ -606,7 +627,7 @@ namespace Host.Image.UI
                         string keyFeature = dqnForm.SelectedFeatureRasterLayer;
                         string keyLabel = dqnForm.SelectedLabelRasterLayer;
                         int epoches = dqnForm.Epoches;
-                        ThreadStart s = delegate { RunDQN(_rasterDic[keyFeature], _rasterDic[keyLabel], epoches); };
+                        ThreadStart s = delegate { RunDQN(_rasterDic[keyFeature], _rasterDic[keyLabel], epoches, dqnForm.Model); };
                         Thread t = new Thread(s);
                         t.IsBackground = true;
                         t.Start();
@@ -626,23 +647,24 @@ namespace Host.Image.UI
         {
             ToolStripMenuItem item = sender as ToolStripMenuItem;
             Bitmap2 bmp2 = _imageDic[map_treeView.SelectedNode.Text];
-            
+
             switch (item.Name)
             {
                 case "bandExport_ToolStripMenuItem":
                     if (bmp2.GdalBand == null)
                         return;
-                    BandExportForm bandExportModel = new BandExportForm() {
+                    BandExportForm bandExportModel = new BandExportForm()
+                    {
                         RasterLayer = bmp2.GdalLayer,
                         RasterDic = _rasterDic,
-                        Index =bmp2.GdalBand.Index-1
+                        Index = bmp2.GdalBand.Index - 1
                     };
-                    if(bandExportModel.ShowDialog() == DialogResult.OK)
+                    if (bandExportModel.ShowDialog() == DialogResult.OK)
                     {
                         if (!bandExportModel.HasChecked)
                             return;
                         bandExportModel.Save();
-                        MessageBox.Show("导出成功","结果",MessageBoxButtons.OK,icon:MessageBoxIcon.Information);
+                        MessageBox.Show("导出成功", "结果", MessageBoxButtons.OK, icon: MessageBoxIcon.Information);
                     }
                     break;
                 case "bandCombine_ToolStripMenuItem":

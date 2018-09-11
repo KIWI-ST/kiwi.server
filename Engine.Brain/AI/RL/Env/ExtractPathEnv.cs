@@ -28,13 +28,16 @@ namespace Engine.Brain.AI.RL.Env
         {
             //action number 固定为8，表示八个方向的操作
             ActionNum = 8;
-
+            //固定为9，3x3的矩阵
+            FeatureNum = 9;
+            //
             _featureRasterLayer = featureRasterLayer;
+            //
             _labelRasterLayer = labelRasterLayer;
-            FeatureNum = featureRasterLayer.BandCount;
-
+            //
             Prepare();
-            (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
+            //
+            (_current_x, _current_y, _current_classindex) = SequentialAccessMemory();
         }
         /// <summary>
         /// number of actions
@@ -71,14 +74,16 @@ namespace Engine.Brain.AI.RL.Env
             return Step(-1).state;
         }
         /// <summary>
-        /// 
+        /// 分析标注道路区域
         /// </summary>
         public void Prepare()
         {
             int x, y, classIndex;
             do
             {
+                //顺序读取像素
                 (x, y, classIndex) = SequentialAccessEnv();
+                // all classindex make
                 if (Memory.ContainsKey(classIndex))
                     Memory[classIndex].Add(new Point(x, y));
                 else
@@ -86,6 +91,7 @@ namespace Engine.Brain.AI.RL.Env
             } while (classIndex != -2);
             //remove empty value
             Memory.Remove(-2);
+            //sort by key index
             Memory = Memory.Where(p => { return Convert.ToDouble(p.Key) < _labelRasterLayer.BandCollection[0].Max && Convert.ToDouble(p.Key) >= 0; }).OrderBy(p => p.Key).ToDictionary(p => p.Key, o => o.Value);
             //reset cursor
             _labelRasterLayer.BandCollection[0].ResetCursor();
@@ -94,7 +100,7 @@ namespace Engine.Brain.AI.RL.Env
         /// 
         /// </summary>
         /// <returns></returns>
-        private (int x, int y, int classIndex) RandomAccessMemory()
+        private (int x, int y, int classIndex) SequentialAccessMemory()
         {
             int classIndex = NP.Random(ActionNum);
             Point p = Memory[classIndex].RandomTake();
@@ -111,7 +117,7 @@ namespace Engine.Brain.AI.RL.Env
             int[] labels = new int[batchSize];
             for (int i = 0; i < batchSize; i++)
             {
-                var (x, y, classIndex) = RandomAccessMemory();
+                var (x, y, classIndex) = SequentialAccessMemory();
                 double[] raw = _featureRasterLayer.GetPixelDouble(x, y).ToArray();
                 double[] normal = NP.Normalize(raw, 255f);
                 states.Add(normal);
@@ -137,7 +143,7 @@ namespace Engine.Brain.AI.RL.Env
             if (action == -1)
             {
                 (_c_x, _c_y, _c_classIndex) = (_current_x, _current_y, _current_classindex);
-                (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
+                (_current_x, _current_y, _current_classindex) = SequentialAccessMemory();
                 double[] raw = _featureRasterLayer.GetPixelDouble(_c_x, _c_y).ToArray();
                 double[] normal = NP.Normalize(raw, 255f);
                 return (normal, 0f);
@@ -145,7 +151,7 @@ namespace Engine.Brain.AI.RL.Env
             else
             {
                 float reward = action == _current_classindex ? 1.0f : -1.0f;
-                (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
+                (_current_x, _current_y, _current_classindex) = SequentialAccessMemory();
                 double[] raw = _featureRasterLayer.GetPixelDouble(_current_x, _current_y).ToArray();
                 double[] normal = NP.Normalize(raw, 255f);
                 return (normal, reward);
