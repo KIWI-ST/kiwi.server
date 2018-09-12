@@ -99,7 +99,7 @@ namespace Engine.Brain.AI.RL
             {
                 Position = AxisPosition.Bottom,
                 Minimum = 0,
-                Maximum = _epoches* scale
+                Maximum = _epoches * scale
             });
             LossPlotModel.Axes.Add(new LinearAxis()
             {
@@ -143,7 +143,7 @@ namespace Engine.Brain.AI.RL
         /// 设置运行参数
         /// </summary>
         /// <param name="epoches"></param>
-        public void SetParameters(int epoches = 3000,double gamma = 0.0)
+        public void SetParameters(int epoches = 3000, double gamma = 0.0)
         {
             //训练轮次
             _epoches = epoches;
@@ -236,7 +236,7 @@ namespace Engine.Brain.AI.RL
             for (int i = 0; i < batchSize; i++)
             {
                 //写入当前sample
-                double[] array = input_features[i] = new double[_featuresNumber+_actionsNumber];
+                double[] array = input_features[i] = new double[_featuresNumber + _actionsNumber];
                 //写入偏移位
                 int offset = 0;
                 //input features assign
@@ -246,7 +246,7 @@ namespace Engine.Brain.AI.RL
                 Array.ConstrainedCopy(list[i].AT, 0, array, offset, _actionsNumber);
                 offset += _actionsNumber;
                 //calcute q_next
-                q = ChooseAction(list[i].S_NEXT).q;
+                q = _gamma != 0 ? ChooseAction(list[i].S_NEXT).q : q;
                 //input qvalue assign
                 input_qValue[i] = new double[1] { (1 - _alpah) * list[i].QT + _alpah * (list[i].RT + _gamma * q) };
             }
@@ -393,8 +393,9 @@ namespace Engine.Brain.AI.RL
             {
                 List<Point> points = _env.Memory[key];
                 //计算realKey类分类结果,存入混淆矩阵
-                points.ForEach(p => {
-                    int classificationType =  classificationLayer.BandCollection[0].GetRawPixel(p.X, p.Y) - 1;
+                points.ForEach(p =>
+                {
+                    int classificationType = classificationLayer.BandCollection[0].GetRawPixel(p.X, p.Y) - 1;
                     matrix[key, classificationType]++;
                 });
             }
@@ -404,7 +405,7 @@ namespace Engine.Brain.AI.RL
             int totalNum = cm.NumberOfSamples;
             //p0
             double p0 = 0;
-            for(int i = 0; i < _actionsNumber; i++)
+            for (int i = 0; i < _actionsNumber; i++)
                 p0 += matrix[i, i];
             //pc
             double pc = 0;

@@ -190,7 +190,7 @@ namespace Host.Image.UI
             else if(Model == 2)
             {
                 env = new ExtractPathEnv(featureRasterLayer, labelRasterLayer);
-                gamma = 0.6;
+                gamma = 0.9;
             }
             //crate dqn learning
             DQN dqn = new DQN(env);
@@ -200,11 +200,58 @@ namespace Host.Image.UI
             Invoke(new PaintPlotModelHandler(PaintPlotModel), dqn.AccuracyModel);
             Invoke(new PaintPlotModelHandler(PaintPlotModel), dqn.RewardModel);
             dqn.Learn();
-            //
-            if(Model == 1) {
+            //apply model
+            if(Model == 1)
                 Dqn_ImageClassification(dqn, featureRasterLayer);
-            }
-          
+            else if(Model == 2)
+                Dqn_PathExtract(dqn, featureRasterLayer);
+        }
+        /// <summary>
+        /// 应用dqn训练结果，提取道路
+        /// </summary>
+        /// <param name="dqn"></param>
+        /// <param name="featureRasterLayer"></param>
+        private void Dqn_PathExtract(DQN dqn,GRasterLayer featureRasterLayer)
+        {
+            //GDI绘制
+            Bitmap pathExtractmap = new Bitmap(featureRasterLayer.XSize, featureRasterLayer.YSize);
+            Graphics g = Graphics.FromImage(pathExtractmap);
+            Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": starting dqn path extract");
+            //
+            int seed = 0;
+            int totalPixels = featureRasterLayer.XSize * featureRasterLayer.YSize;
+            //应用dqn对图像分类
+            for (int i = 0; i < featureRasterLayer.XSize; i++)
+                for (int j = 0; j < featureRasterLayer.YSize; j++)
+                {
+                    double[] raw = featureRasterLayer.GetMaskPixelDouble(i, j);
+                    double[] normal = NP.Normalize(raw, 255f);
+                    var (action, q) = dqn.ChooseAction(normal);
+                    int gray = action;
+                    //后台绘制，报告进度
+                    Color c = Color.FromArgb(gray, gray, gray);
+                    Pen p = new Pen(c);
+                    SolidBrush brush = new SolidBrush(c);
+                    g.FillRectangle(brush, new Rectangle(i, j, 1, 1));
+                    //report progress
+                    seed++;
+                    if ((seed * 10) % totalPixels == 0)
+                    {
+                        double precent = (double)(seed) / totalPixels;
+                        string msg = string.Format(DateTime.Now.ToLongTimeString() + ", drawing ，progress: {0:P}", precent);
+                        Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), msg);
+                    }
+                }
+            //保存结果至tmp
+            string fullFileName = Directory.GetCurrentDirectory() + @"\tmp\" + DateTime.Now.ToFileTimeUtc() + ".png";
+            pathExtractmap.Save(fullFileName);
+            //
+            Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": complete dqn polsar image classification");
+            //计算kappa
+            double kappa = dqn.CalcuteKappa(new GRasterLayer(fullFileName));
+            Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": kappa :" + kappa);
+            //切换到主线程读取结果
+            Invoke(new ReadRasterHandler(ReadRaster), fullFileName);
         }
         /// <summary>
         /// 应用dqn训练结果，绘制结果图片
