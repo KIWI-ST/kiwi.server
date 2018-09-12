@@ -338,10 +338,11 @@ namespace Engine.Brain.AI.RL
         {
             //dqn训练
             PreRemember(_memoryCapacity);
-            double[] state = _env.Step(-1).state;
             for (int e = 1; e <= _epoches; e++)
             {
                 DateTime now = DateTime.Now;
+                //每轮需要充值环境，用于评价此轮操作的得分
+                double[] state = _env.Step(-1).state;
                 double loss = 0, accuracy = 0, totalRewards = 0;
                 for (int step = 0; step <= _forward; step++)
                 {

@@ -1,6 +1,7 @@
 ﻿using Engine.GIS.GEntity;
 using OSGeo.GDAL;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace Engine.GIS.GLayer.GRasterLayer.GBand
@@ -76,6 +77,30 @@ namespace Engine.GIS.GLayer.GRasterLayer.GBand
                 _rawByteData[count % _xCount, count / _xCount] = Convert.ToByte(_rawData[count]);
             }
             return _rawByteData[x, y];
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="rowcol">represent matrix rows and col,the matrix is row*col,i.e  9 represent 3x3 </param>
+        /// <returns></returns>
+        public double[] GetPixelDoubleByMask(int x, int y,int row = 3,int col=3)
+        {
+            int offset = 1;
+            row = 3; col = 3;
+            List<double> pixels = new List<double>();
+            for (int i = -offset; i < row - offset; i++)
+                for (int j = -offset; j < col - offset; j++)
+                {
+                    int pi = x + i;
+                    int pj = y + j;
+                    pi = pi < 0 || pi > Width ? x : pi;
+                    pj = pj < 0 || pi > Height ? y : pj;
+                    pixels.Add((double)_byteData[pi, pj]);
+                }
+            return pixels.ToArray();
         }
 
         public double StdDev { get { return _stdDev; } }

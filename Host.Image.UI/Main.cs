@@ -182,15 +182,19 @@ namespace Host.Image.UI
 
         private void RunDQN(GRasterLayer featureRasterLayer, GRasterLayer labelRasterLayer, int epoches, int Model = 1)
         {
+            double gamma = 0.0;
             //create environment
             IEnv env = null;
             if (Model == 1)
                 env = new ImageClassifyEnv(featureRasterLayer, labelRasterLayer);
-            else if(Model ==2)
+            else if(Model == 2)
+            {
                 env = new ExtractPathEnv(featureRasterLayer, labelRasterLayer);
+                gamma = 0.6;
+            }
             //crate dqn learning
             DQN dqn = new DQN(env);
-            dqn.SetParameters(epoches: epoches);
+            dqn.SetParameters(epoches: epoches,gamma: gamma);
             dqn.OnLearningLossEventHandler += Dqn_OnLearningLossEventHandler;
             Invoke(new PaintPlotModelHandler(PaintPlotModel), dqn.LossPlotModel);
             Invoke(new PaintPlotModelHandler(PaintPlotModel), dqn.AccuracyModel);

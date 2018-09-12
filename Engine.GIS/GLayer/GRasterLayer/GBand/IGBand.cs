@@ -65,5 +65,12 @@ namespace Engine.GIS.GLayer.GRasterLayer.GBand
         /// </summary>
         /// <returns></returns>
         Bitmap GetBitmap();
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        double[] GetPixelDoubleByMask(int x, int y, int row = 3, int col = 3);
     }
 }
