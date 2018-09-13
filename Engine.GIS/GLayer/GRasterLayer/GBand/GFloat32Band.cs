@@ -88,16 +88,15 @@ namespace Engine.GIS.GLayer.GRasterLayer.GBand
         /// <returns></returns>
         public double[] GetPixelDoubleByMask(int x, int y,int row = 3,int col=3)
         {
-            int offset = 1;
-            row = 3; col = 3;
+            int offset = row/2;
             List<double> pixels = new List<double>();
             for (int i = -offset; i < row - offset; i++)
                 for (int j = -offset; j < col - offset; j++)
                 {
                     int pi = x + i;
                     int pj = y + j;
-                    pi = pi < 0 || pi > Width ? x : pi;
-                    pj = pj < 0 || pi > Height ? y : pj;
+                    pi = pi <= 0 || pi >= Width ? x : pi;
+                    pj = pj <= 0 || pj >= Height ? y : pj;
                     pixels.Add((double)_byteData[pi, pj]);
                 }
             return pixels.ToArray();

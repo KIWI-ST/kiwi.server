@@ -104,17 +104,18 @@ namespace Engine.GIS.GLayer.GRasterLayer
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public double[] GetMaskPixelDouble(int x,int y)
+        public double[] GetBand0MaskPixelDouble(int x,int y,int row=5,int col=5)
         {
-            int row = 3, col = 3, offset = 0;
-            double[] pixles = new double[BandCount * row*col];
-            for (int i = 0; i < BandCount; i++)
-            {
-                double[] bandPixels = BandCollection[i].GetPixelDoubleByMask(x, y,row,col);
-                Array.ConstrainedCopy(bandPixels, 0, pixles, offset, row * col);
-                offset += row * col;
-            }
-            return pixles;
+            double[] bandPixels = BandCollection[0].GetPixelDoubleByMask(x, y, row, col);
+            return bandPixels;
+            //double[] pixles = new double[ row*col];
+            //Array.ConstrainedCopy(bandPixels, 0, pixles, offset, row * col);
+            //for (int i = 0; i < BandCount; i++)
+            //{
+            //    double[] bandPixels = BandCollection[0].GetPixelDoubleByMask(x, y,row,col);
+            //    Array.ConstrainedCopy(bandPixels, 0, pixles, offset, row * col);
+            //    offset += row * col;
+            //}
         }
         /// <summary>
         /// 

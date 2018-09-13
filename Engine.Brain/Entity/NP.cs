@@ -6,6 +6,16 @@ namespace Engine.Brain.Entity
 {
     public class NP
     {
+        /// <summary>
+        /// random with seed
+        /// </summary>
+        /// <param name="seeds"></param>
+        /// <returns>the seed value</returns>
+        public static int Random(int[] seeds)
+        {
+            int index = Random(seeds.Length);
+            return seeds[index];
+        }
 
         public static int Random(int maxValue)
         {
@@ -16,7 +26,6 @@ namespace Engine.Brain.Entity
         {
             return new Random(Guid.NewGuid().GetHashCode()).NextDouble();
         }
-
         /// <summary>
         /// 归一化
         /// </summary>

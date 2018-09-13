@@ -1,5 +1,4 @@
 ﻿using Engine.Brain.Entity;
-using Engine.Brain.Extend;
 using Engine.GIS.GLayer.GRasterLayer;
 using System;
 using System.Collections.Generic;
@@ -15,8 +14,12 @@ namespace Engine.Brain.AI.RL.Env
     ///  3.next point
     ///  after run one epoche, reset enviroment, back to step 1
     /// </summary>
-    public class ExtractPathEnv : IEnv
+    public class ExtractRoadEnv : IEnv
     {
+        /// <summary>
+        /// seed keys
+        /// </summary>
+        int[] _randomSeedKeys;
         /// <summary>
         /// defalut direction is ++, while explore the maximum of the points, the direction trun to --
         /// </summary>
@@ -28,17 +31,25 @@ namespace Engine.Brain.AI.RL.Env
         /// <summary>
         /// explore parameters
         /// </summary>
-        int _seed_classIndex, _seed_pointIndex, _max_class_num;
+        int _seed_classIndex, _seed_pointIndex;
         /// <summary>
         /// current pearmeters
         /// </summary>
         int _c_x, _c_y, _c_classIndex;
         /// <summary>
+        /// mask width
+        /// </summary>
+        const int _maskx = 5;
+        /// <summary>
+        /// mask height
+        /// </summary>
+        const int _masky = 5;
+        /// <summary>
         /// 指定观察的图像，和样本所在的层位置
         /// </summary>
         /// <param name="featureRasterLayer"></param>
         /// <param name="sampleIndex"></param>
-        public ExtractPathEnv(GRasterLayer featureRasterLayer, GRasterLayer labelRasterLayer)
+        public ExtractRoadEnv(GRasterLayer featureRasterLayer, GRasterLayer labelRasterLayer)
         {
             //input
             _featureRasterLayer = featureRasterLayer;
@@ -46,8 +57,8 @@ namespace Engine.Brain.AI.RL.Env
             _labelRasterLayer = labelRasterLayer;
             //represent eight direction actions
             ActionNum = 8;
-            //pixel matrix of 3x3
-            FeatureNum = _featureRasterLayer.BandCount*3*3;
+            //pixel matrix of M x M
+            FeatureNum = _maskx * _masky;
             //read labellayer
             Prepare();
         }
@@ -83,7 +94,7 @@ namespace Engine.Brain.AI.RL.Env
         public double[] Reset()
         {
             //1.reset seed
-            _seed_classIndex = NP.Random(_max_class_num);
+            _seed_classIndex = NP.Random(_randomSeedKeys);
             //2.reset 
             _seed_pointIndex = NP.Random(Memory[_seed_classIndex].Count);
             //3.direction
@@ -113,8 +124,8 @@ namespace Engine.Brain.AI.RL.Env
             Memory = Memory.Where(p => { return Convert.ToDouble(p.Key) < _labelRasterLayer.BandCollection[0].Max && Convert.ToDouble(p.Key) >= 0; }).OrderBy(p => p.Key).ToDictionary(p => p.Key, o => o.Value);
             //reset cursor
             _labelRasterLayer.BandCollection[0].ResetCursor();
-            //caluctue max class num
-            _max_class_num = Memory.Keys.Count;
+            //random seeds
+            _randomSeedKeys = Memory.Keys.ToArray();
         }
         /// <summary>
         /// 探索方式，沿着x轴++ 
@@ -124,10 +135,10 @@ namespace Engine.Brain.AI.RL.Env
         {
             int limits = Memory[_seed_classIndex].Count;
             //当正向探索，探索到线的终点，折返，并改变方向
-            if (_direction&&_seed_pointIndex == limits-2)
+            if (_direction && _seed_pointIndex == limits - 2)
                 _direction = false;
             //当负向探索，探索到线的起点，折返，并改变方向
-            if (!_direction&&_seed_pointIndex == 1)
+            if (!_direction && _seed_pointIndex == 1)
                 _direction = true;
             _seed_pointIndex += _direction ? 1 : -1;
             Point p = Memory[_seed_classIndex][_seed_pointIndex];
@@ -145,8 +156,8 @@ namespace Engine.Brain.AI.RL.Env
             for (int i = 0; i < batchSize; i++)
             {
                 var (x, y, classIndex) = SequentialAccessMemory();
-                double[] raw = _featureRasterLayer.GetMaskPixelDouble(x, y);
-                double[] normal = NP.Normalize(raw, 255f);
+                double[] raw = _featureRasterLayer.GetBand0MaskPixelDouble(x, y,_maskx,_masky);
+                double[] normal = NP.Normalize(raw, 255.0);
                 states.Add(normal);
                 labels[i] = classIndex;
             }
@@ -160,7 +171,10 @@ namespace Engine.Brain.AI.RL.Env
         {
             return NP.Random(ActionNum);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         private int Reward()
         {
             int current = _seed_pointIndex;
@@ -190,7 +204,6 @@ namespace Engine.Brain.AI.RL.Env
                     return 0;
             }
         }
-
         /// <summary>
         /// action direction :
         /// action value = 10*x+y
@@ -202,7 +215,7 @@ namespace Engine.Brain.AI.RL.Env
         /// -----------------------------------------------------
         /// *  0 | 1 | 2
         /// * -----------------------
-        /// *  3 | 0 | 4
+        /// *  3 | X | 4
         /// * -----------------------
         /// *  5 | 6 | 7
         /// </summary>
@@ -214,16 +227,16 @@ namespace Engine.Brain.AI.RL.Env
             {
                 Point p = Memory[_seed_classIndex][_seed_pointIndex];
                 (_c_x, _c_y, _c_classIndex) = (p.X, p.Y, _seed_classIndex);
-                double[] raw = _featureRasterLayer.GetMaskPixelDouble(_c_x, _c_y);
+                double[] raw = _featureRasterLayer.GetBand0MaskPixelDouble(_c_x, _c_y,_maskx,_masky);
                 double[] normal = NP.Normalize(raw, 255.0);
                 return (normal, 0);
             }
             else
             {
                 //p+1 与 p的关系，得到方向，通过方向得到Reward
-                float reward = action == Reward() ? 1.0f : -1.0f;
+                double reward = action == Reward() ? 1.0 : -1.0;
                 (_c_x, _c_y, _c_classIndex) = SequentialAccessMemory();
-                double[] raw = _featureRasterLayer.GetMaskPixelDouble(_c_x, _c_y);
+                double[] raw = _featureRasterLayer.GetBand0MaskPixelDouble(_c_x, _c_y,_maskx,_masky);
                 double[] normal = NP.Normalize(raw, 255.0);
                 return (normal, reward);
             }

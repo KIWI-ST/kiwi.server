@@ -189,7 +189,7 @@ namespace Host.Image.UI
                 env = new ImageClassifyEnv(featureRasterLayer, labelRasterLayer);
             else if(Model == 2)
             {
-                env = new ExtractPathEnv(featureRasterLayer, labelRasterLayer);
+                env = new ExtractRoadEnv(featureRasterLayer, labelRasterLayer);
                 gamma = 0.9;
             }
             //crate dqn learning
@@ -224,7 +224,7 @@ namespace Host.Image.UI
             for (int i = 0; i < featureRasterLayer.XSize; i++)
                 for (int j = 0; j < featureRasterLayer.YSize; j++)
                 {
-                    double[] raw = featureRasterLayer.GetMaskPixelDouble(i, j);
+                    double[] raw = featureRasterLayer.GetBand0MaskPixelDouble(i, j);
                     double[] normal = NP.Normalize(raw, 255f);
                     var (action, q) = dqn.ChooseAction(normal);
                     int gray = action;
