@@ -132,7 +132,7 @@ namespace Engine.Brain.AI.RL
             for (int i = 0; i < batchSize; i++)
             {
                 var (x, y, classIndex) = RandomAccessMemory();
-                double[] raw = _featureRasterLayer.GetPixelDouble(x, y).ToArray();
+                double[] raw = _featureRasterLayer.GetNormalValue(x, y).ToArray();
                 double[] normal = NP.Normalize(raw, 255f);
                 states.Add(normal);
                 labels[i] = classIndex;
@@ -158,7 +158,7 @@ namespace Engine.Brain.AI.RL
             {
                 (_c_x, _c_y, _c_classIndex) = (_current_x, _current_y, _current_classindex);
                 (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
-                double[] raw = _featureRasterLayer.GetPixelDouble(_c_x, _c_y).ToArray();
+                double[] raw = _featureRasterLayer.GetNormalValue(_c_x, _c_y).ToArray();
                 double[] normal = NP.Normalize(raw, 255f);
                 return (normal, 0f);
             }
@@ -166,7 +166,7 @@ namespace Engine.Brain.AI.RL
             {
                 float reward = action == _current_classindex ? 1.0f : -1.0f;
                 (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
-                double[] raw = _featureRasterLayer.GetPixelDouble(_current_x, _current_y).ToArray();
+                double[] raw = _featureRasterLayer.GetNormalValue(_current_x, _current_y).ToArray();
                 double[] normal = NP.Normalize(raw, 255f);
                 return (normal, reward);
             }

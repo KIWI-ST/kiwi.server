@@ -213,45 +213,45 @@ namespace Host.Image.UI
         /// <param name="featureRasterLayer"></param>
         private void Dqn_PathExtract(DQN dqn, Engine.GIS.GLayer.GRasterLayer.GRasterLayer featureRasterLayer)
         {
-            //GDI绘制
-            Bitmap pathExtractmap = new Bitmap(featureRasterLayer.XSize, featureRasterLayer.YSize);
-            Graphics g = Graphics.FromImage(pathExtractmap);
-            Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": starting dqn path extract");
-            //
-            int seed = 0;
-            int totalPixels = featureRasterLayer.XSize * featureRasterLayer.YSize;
-            //应用dqn对图像分类
-            for (int i = 0; i < featureRasterLayer.XSize; i++)
-                for (int j = 0; j < featureRasterLayer.YSize; j++)
-                {
-                    double[] raw = featureRasterLayer.GetBand0MaskPixelDouble(i, j);
-                    double[] normal = NP.Normalize(raw, 255f);
-                    var (action, q) = dqn.ChooseAction(normal);
-                    int gray = action;
-                    //后台绘制，报告进度
-                    Color c = Color.FromArgb(gray, gray, gray);
-                    Pen p = new Pen(c);
-                    SolidBrush brush = new SolidBrush(c);
-                    g.FillRectangle(brush, new Rectangle(i, j, 1, 1));
-                    //report progress
-                    seed++;
-                    if ((seed * 10) % totalPixels == 0)
-                    {
-                        double precent = (double)(seed) / totalPixels;
-                        string msg = string.Format(DateTime.Now.ToLongTimeString() + ", drawing ，progress: {0:P}", precent);
-                        Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), msg);
-                    }
-                }
-            //保存结果至tmp
-            string fullFileName = Directory.GetCurrentDirectory() + @"\tmp\" + DateTime.Now.ToFileTimeUtc() + ".png";
-            pathExtractmap.Save(fullFileName);
-            //
-            Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": complete dqn polsar image classification");
-            //计算kappa
-            double kappa = dqn.CalcuteKappa(new Engine.GIS.GLayer.GRasterLayer.GRasterLayer(fullFileName));
-            Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": kappa :" + kappa);
-            //切换到主线程读取结果
-            Invoke(new ReadRasterHandler(ReadRaster), fullFileName);
+            ////GDI绘制
+            //Bitmap pathExtractmap = new Bitmap(featureRasterLayer.XSize, featureRasterLayer.YSize);
+            //Graphics g = Graphics.FromImage(pathExtractmap);
+            //Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": starting dqn path extract");
+            ////
+            //int seed = 0;
+            //int totalPixels = featureRasterLayer.XSize * featureRasterLayer.YSize;
+            ////应用dqn对图像分类
+            //for (int i = 0; i < featureRasterLayer.XSize; i++)
+            //    for (int j = 0; j < featureRasterLayer.YSize; j++)
+            //    {
+            //        double[] raw = featureRasterLayer.GetBand0MaskPixelDouble(i, j);
+            //        double[] normal = NP.Normalize(raw, 255f);
+            //        var (action, q) = dqn.ChooseAction(normal);
+            //        int gray = action;
+            //        //后台绘制，报告进度
+            //        Color c = Color.FromArgb(gray, gray, gray);
+            //        Pen p = new Pen(c);
+            //        SolidBrush brush = new SolidBrush(c);
+            //        g.FillRectangle(brush, new Rectangle(i, j, 1, 1));
+            //        //report progress
+            //        seed++;
+            //        if ((seed * 10) % totalPixels == 0)
+            //        {
+            //            double precent = (double)(seed) / totalPixels;
+            //            string msg = string.Format(DateTime.Now.ToLongTimeString() + ", drawing ，progress: {0:P}", precent);
+            //            Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), msg);
+            //        }
+            //    }
+            ////保存结果至tmp
+            //string fullFileName = Directory.GetCurrentDirectory() + @"\tmp\" + DateTime.Now.ToFileTimeUtc() + ".png";
+            //pathExtractmap.Save(fullFileName);
+            ////
+            //Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": complete dqn polsar image classification");
+            ////计算kappa
+            //double kappa = dqn.CalcuteKappa(new Engine.GIS.GLayer.GRasterLayer.GRasterLayer(fullFileName));
+            //Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": kappa :" + kappa);
+            ////切换到主线程读取结果
+            //Invoke(new ReadRasterHandler(ReadRaster), fullFileName);
         }
         /// <summary>
         /// 应用dqn训练结果，绘制结果图片
@@ -271,7 +271,7 @@ namespace Host.Image.UI
             for (int i = 0; i < featureRasterLayer.XSize; i++)
                 for (int j = 0; j < featureRasterLayer.YSize; j++)
                 {
-                    double[] raw = featureRasterLayer.GetPixelDouble(i, j).ToArray();
+                    double[] raw = featureRasterLayer.GetNormalValue(i, j).ToArray();
                     double[] normal = NP.Normalize(raw, 255f);
                     var (action, q) = dqn.ChooseAction(normal);
                     int gray = action + 1;
@@ -292,11 +292,7 @@ namespace Host.Image.UI
             //保存结果至tmp
             string fullFileName = Directory.GetCurrentDirectory() + @"\tmp\" + DateTime.Now.ToFileTimeUtc() + ".png";
             classificationBitmap.Save(fullFileName);
-            //
             Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": complete dqn classification");
-            //计算kappa
-            double kappa = dqn.CalcuteKappa(new Engine.GIS.GLayer.GRasterLayer.GRasterLayer(fullFileName));
-            Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": kappa :" + kappa);
             //切换到主线程读取结果
             Invoke(new ReadRasterHandler(ReadRaster), fullFileName);
         }

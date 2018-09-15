@@ -374,48 +374,6 @@ namespace Engine.Brain.AI.RL
                 _rewardLine.Points.Add(new DataPoint(e, totalRewards));
             }
         }
-        /// <summary>
-        /// 计算kappa系数
-        /// </summary>
-        /// <returns></returns>
-        public double CalcuteKappa(GRasterLayer classificationLayer)
-        {
-            //creat m x m matrix
-            //  int[,] matrix =
-            //  {
-            //      { 0,0,0 },
-            //      { 0,0,0 },
-            //      { 0,0,0 },
-            //  };
-            //
-            int[,] matrix = new int[_actionsNumber, _actionsNumber];
-            foreach (var key in _env.Memory.Keys)
-            {
-                List<Point> points = _env.Memory[key];
-                //计算realKey类分类结果,存入混淆矩阵
-                points.ForEach(p =>
-                {
-                    int classificationType = (int)classificationLayer.BandCollection[0].GetRawValue(p.X, p.Y) - 1;
-                    matrix[key, classificationType]++;
-                });
-            }
-            // Create a new multi-class Confusion Matrix
-            var cm = new GeneralConfusionMatrix(matrix);
-            //
-            int totalNum = cm.NumberOfSamples;
-            //p0
-            double p0 = 0;
-            for (int i = 0; i < _actionsNumber; i++)
-                p0 += matrix[i, i];
-            //pc
-            double pc = 0;
-            for (int i = 0; i < _actionsNumber; i++)
-                pc += cm.ColumnTotals[i] * cm.RowTotals[i];
-            pc = pc / totalNum;
-            //
-            double kappa = (p0 - pc) / (totalNum - pc);
-            //
-            return kappa;
-        }
+
     }
 }

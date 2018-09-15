@@ -47,7 +47,6 @@ namespace Engine.Brain.AI.RL
         PlotModel AccuracyModel { get; }
         PlotModel LossPlotModel { get; }
         PlotModel RewardModel { get; }
-        double CalcuteKappa(GRasterLayer classificationLayer);
         (int action, double q) ChooseAction(double[] state);
         double EpsilonCalcute(int step, double ep_min = 0.01, double ep_max = 1, double ep_decay = 0.0001, int eps_total = 2000);
         (int action, double q) EpsilonGreedy(int step, double[] state);

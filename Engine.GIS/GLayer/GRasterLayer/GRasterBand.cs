@@ -1,26 +1,14 @@
 ﻿using Engine.GIS.GEntity;
 using OSGeo.GDAL;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Engine.GIS.GLayer.GRasterLayer.GBand
 {
-    public class PointElement
-    {
-        public int X { get; set; }
-        public int Y { get; set; }
-        public double V { get; set; }
-    }
-
     /// <summary>
     /// raw data type is double
     /// </summary>
-    public class GRasterBand : GBitmap, IEnumerable
+    public class GRasterBand : GBitmap
     {
         /// <summary>
         /// raw data 
@@ -77,11 +65,17 @@ namespace Engine.GIS.GLayer.GRasterLayer.GBand
         /// 图像高度
         /// </summary>
         public int Height { get { return _height; } }
-
+        /// <summary>
+        /// normalized data
+        /// </summary>
+        public double[,] NormalData { get => _normalData;}
+        /// <summary>
+        /// raw data
+        /// </summary>
+        public double[] RawData { get => _rawData;}
         #endregion
 
         #region 应用拉伸
-
         /// <summary>
         /// apply image stretch
         /// </summary>
@@ -92,18 +86,17 @@ namespace Engine.GIS.GLayer.GRasterLayer.GBand
             for (int count = 0; count < _rawData.Length; count++)
                 _normalData[count % _width, count / _width] = (_rawData[count] - _min) / scale;
         }
-
-        #endregion
-
-        #region 迭代
-
-        public IEnumerator GetEnumerator()
+        /// <summary>
+        /// clearn the error data
+        /// </summary>
+        private void CleaningError()
         {
-            for (int i = 0; i < 10; i++)
-                yield return (1, 11, 1);
-            //return new GDoubleBandEnumertor(_rawData,_width,_height);
+            for(int i=0;i<_width*_height;i++)
+                if (_rawData[i] > _max)
+                    _rawData[i] = _max;
+                else if (_rawData[i] < _min)
+                    _rawData[i] = _min;
         }
-
         #endregion
 
         /// <summary>
@@ -124,51 +117,11 @@ namespace Engine.GIS.GLayer.GRasterLayer.GBand
             pBand.GetStatistics(1, 1, out _min, out _max, out _mean, out _stdDev);
             //读取rawdata
             _rawData = new double[_width * _height];
-            pBand.ReadRaster(0, 0, _width, Height, _rawData, _height, Height, 0, 0);
+            pBand.ReadRaster(0, 0, _width, _height, _rawData, _width, _height, 0, 0);
+            //remove error data
+            CleaningError();
             //stretch pixel data
             Normalization();
-        }
-        /// <summary>
-        /// get raw double value at position (x,y)
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        public double GetRawValue(int x,int y)
-        {
-            int position = y * Width + x;
-            return _rawData[position];
-        }
-        /// <summary>
-        /// get normalized value at position (x,y)
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        public double GetNormalValue(int x, int y)
-        {
-            return _normalData[x, y];
-        }
-        /// <summary>
-        /// 获取 Row x Col 个像素的矩形区域像素值
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="rowcol">represent matrix rows and col,the matrix is row*col,i.e  9 represent 3x3 </param>
-        public double[] GetNormalValueByMask(int x, int y, int row = 3, int col = 3)
-        {
-            int offset = row / 2;
-            List<double> pixels = new List<double>();
-            for (int i = -offset; i < row - offset; i++)
-                for (int j = -offset; j < col - offset; j++)
-                {
-                    int pi = x + i;
-                    int pj = y + j;
-                    pi = pi <= 0 || pi >= Width ? x : pi;
-                    pj = pj <= 0 || pj >= Height ? y : pj;
-                    pixels.Add(_normalData[pi, pj]);
-                }
-            return pixels.ToArray();
         }
         /// <summary>
         /// byte数据流
@@ -178,7 +131,7 @@ namespace Engine.GIS.GLayer.GRasterLayer.GBand
         {
             byte[,] _stretchedByteData = new byte[_width,_height];
             for (int count = 0; count < _rawData.Length; count++)
-                _stretchedByteData[count % Width, count / Width] = Convert.ToByte(_normalData[count % Width, count / Width]*255);
+                _stretchedByteData[count % _width, count / _width] = Convert.ToByte(_normalData[count % _width, count / _width] *255);
             return _stretchedByteData;
         }
         /// <summary>

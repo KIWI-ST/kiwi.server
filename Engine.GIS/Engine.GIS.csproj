@@ -139,6 +139,9 @@
     <Compile Include="GOperation\Arithmetic\SutherlandHodgman.cs" />
     <Compile Include="GOperation\GOutputPyramid.cs" />
     <Compile Include="GOperation\GoutputRaster.cs" />
+    <Compile Include="GOperation\Tools\GBandCursorTool.cs" />
+    <Compile Include="GOperation\Tools\GBandStasticTool.cs" />
+    <Compile Include="GOperation\Tools\IRasterTool.cs" />
     <Compile Include="GProject\GTransformation.cs" />
     <Compile Include="GProject\WebMercatorProjection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

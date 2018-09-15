@@ -1,5 +1,6 @@
 ﻿using Engine.GIS.GLayer.GRasterLayer.GBand;
 using Engine.GIS.GOperation.Arithmetic;
+using Engine.GIS.GOperation.Tools;
 using OSGeo.GDAL;
 using System.Collections.Generic;
 using System.Drawing;
@@ -22,7 +23,7 @@ namespace Engine.GIS.GLayer.GRasterLayer
             //只读方式读取图层
             PDataSet = Gdal.Open(rasterFilename, Access.GA_ReadOnly);
             //读取图像范围
-            PDataSet.GetGeoTransform(_geoTransform);
+            PDataSet.GetGeoTransform(GeoTransform);
             //波段数目
             BandCount = PDataSet.RasterCount;
             //读取band
@@ -31,18 +32,19 @@ namespace Engine.GIS.GLayer.GRasterLayer
             {
                 Band pBand = PDataSet.GetRasterBand(i);
                 PDataType = pBand.DataType;
-                //if (PDataType == DataType.GDT_Float32 || PDataType == DataType.GDT_Byte || PDataType == DataType.GDT_UInt16||PDataType==DataType.GDT_UInt32)
                 BandCollection.Add(new GRasterBand(pBand));
             }
         }
 
         #region 属性字段
-
-        double[] _geoTransform = new double[6];
+        /// <summary>
+        /// Raster data type
+        /// </summary>
+        public DataType PDataType { get; }
         /// <summary>
         /// 设置图像范围，上[3] 左[0] 
         /// </summary>
-        public double[] GeoTransform { get => _geoTransform; }
+        public double[] GeoTransform { get; } = new double[6];
         /// <summary>
         /// height
         /// </summary>
@@ -64,10 +66,6 @@ namespace Engine.GIS.GLayer.GRasterLayer
         /// </summary>
         public int BandCount { get; }
         /// <summary>
-        /// 图层类型
-        /// </summary>
-        public DataType PDataType { get; }
-        /// <summary>
         /// 波段集合
         /// </summary>
         public List<GRasterBand> BandCollection { get; }
@@ -77,31 +75,16 @@ namespace Engine.GIS.GLayer.GRasterLayer
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public List<double> GetPixelDouble(int x,int y)
+        public List<double> GetNormalValue(int x,int y)
         {
+            IBandCursorTool pBandCursorTool = new  GBandCursorTool();
             List<double> pixels = new List<double>();
             for (int i = 0; i < BandCount; i++)
-                pixels.Add(BandCollection[i].GetNormalValue(x, y));
+            {
+                pBandCursorTool.Visit(BandCollection[i]);
+                pixels.Add(pBandCursorTool.PickNormalValue(x, y));
+            }
             return pixels;
-        }
-        /// <summary>
-        /// get mask value
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        public double[] GetBand0MaskPixelDouble(int x,int y,int row=5,int col=5)
-        {
-            double[] bandPixels = BandCollection[0].GetNormalValueByMask(x, y, row, col);
-            return bandPixels;
-            //double[] pixles = new double[ row*col];
-            //Array.ConstrainedCopy(bandPixels, 0, pixles, offset, row * col);
-            //for (int i = 0; i < BandCount; i++)
-            //{
-            //    double[] bandPixels = BandCollection[0].GetPixelDoubleByMask(x, y,row,col);
-            //    Array.ConstrainedCopy(bandPixels, 0, pixles, offset, row * col);
-            //    offset += row * col;
-            //}
         }
         /// <summary>
         /// 
