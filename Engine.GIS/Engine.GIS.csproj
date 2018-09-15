@@ -120,12 +120,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extend\ListExtend.cs" />
     <Compile Include="GEntity\GBitmap.cs" />
     <Compile Include="GEntity\GBitmap2.cs" />
     <Compile Include="GEntity\GBound.cs" />
     <Compile Include="GEntity\GTileElement.cs" />
-    <Compile Include="GLayer\GRasterLayer\GBand\GFloat32Band.cs" />
-    <Compile Include="GLayer\GRasterLayer\GBand\IGBand.cs" />
+    <Compile Include="GLayer\GRasterLayer\GRasterBand.cs" />
     <Compile Include="GLayer\GRasterLayer\GRasterLayer.cs" />
     <Compile Include="GLayer\GVectorLayer\GFeatureLayer.cs" />
     <Compile Include="GLayer\GVectorLayer\GReader\OsmReader.cs" />

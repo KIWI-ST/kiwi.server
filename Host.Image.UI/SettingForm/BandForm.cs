@@ -22,7 +22,7 @@ namespace Host.Image.UI.SettingForm
             band_listView.FullRowSelect = true;
         }
 
-        private GRasterLayer _gdalLayer;
+        private Engine.GIS.GLayer.GRasterLayer.GRasterLayer _gdalLayer;
 
         private List<int>_bandIndexSave = new List<int>();
 
@@ -54,7 +54,7 @@ namespace Host.Image.UI.SettingForm
             ImageList imageList = new ImageList();
             for(int i = 0; i < _gdalLayer.BandCollection.Count; i++)
             {
-                IGBand band = _gdalLayer.BandCollection[i];
+                GRasterBand band = _gdalLayer.BandCollection[i];
                 ListViewItem lvi = new ListViewItem
                 {
                     ImageIndex = i
@@ -62,7 +62,7 @@ namespace Host.Image.UI.SettingForm
                 lvi.SubItems.Add(band.BandName);
                 lvi.SubItems.Add(band.Width + "x" + band.Height);
                 band_listView.Items.Add(lvi);
-                imageList.Images.Add(band.GetBitmap());
+                imageList.Images.Add(band.GrayscaleImage);
             }
             band_listView.SmallImageList = imageList;
             band_listView.LargeImageList = imageList;

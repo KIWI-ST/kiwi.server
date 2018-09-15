@@ -10,11 +10,11 @@ namespace Engine.GIS.Entity
 
         Bitmap _bitmap;
 
-        GRasterLayer _gdalLayer;
+        GLayer.GRasterLayer.GRasterLayer _gdalLayer;
 
-        IGBand _gdalBand;
+        GRasterBand _gdalBand;
 
-        public Bitmap2(Bitmap bmp = null, string name = "", string dec = "", GRasterLayer gdalLayer = null, IGBand gdalBand = null)
+        public Bitmap2(Bitmap bmp = null, string name = "", string dec = "", GLayer.GRasterLayer.GRasterLayer gdalLayer = null, GRasterBand gdalBand = null)
         {
             _bitmap = bmp;
             _name = name;
@@ -53,6 +53,6 @@ namespace Engine.GIS.Entity
             }
         }
 
-        public IGBand GdalBand { get => _gdalBand; set => _gdalBand = value; }
+        public GRasterBand GdalBand { get => _gdalBand; set => _gdalBand = value; }
     }
 }

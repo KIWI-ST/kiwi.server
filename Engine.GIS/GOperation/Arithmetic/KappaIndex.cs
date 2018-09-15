@@ -1,5 +1,6 @@
 ﻿using Accord.Statistics.Analysis;
 using Engine.GIS.GLayer.GRasterLayer;
+using Engine.GIS.GLayer.GRasterLayer.GBand;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -11,16 +12,24 @@ namespace Engine.GIS.GOperation.Arithmetic
     {
         private static (int x,int y,int classIndex) SequentialAccessEnv(GRasterLayer labelRasterLayer)
         {
-            int _x, _y, _value;
-            do
-            {
-                (_x, _y, _value) = labelRasterLayer.BandCollection[0].Next();
-            } while (_value == 0);//当值为0，即表示此像素为背景值，
-            return (_x, _y, _value - 1);
+            //int _x, _y, _value;
+            //do
+            //{
+            //    (_x, _y, _value) = labelRasterLayer.BandCollection[0].Next();
+            //} while (_value == 0);//当值为0，即表示此像素为背景值，
+            //return (_x, _y, _value - 1);
+            return (0, 0, 0);
         }
 
         public static (int[,] matrix, double kappa, int actionsNumber) Calcute(GRasterLayer truthLayer, GRasterLayer predLayer)
         {
+            GRasterBand labelBand = truthLayer.BandCollection[0];
+            foreach ( var element in labelBand)
+            {
+                
+            }
+
+
             Dictionary<int, List<Point>> Memory = new Dictionary<int, List<Point>>();
             int x, y, classIndex;
             do
@@ -35,18 +44,23 @@ namespace Engine.GIS.GOperation.Arithmetic
             Memory.Remove(-2);
             Memory = Memory.Where(p => { return Convert.ToDouble(p.Key) < truthLayer.BandCollection[0].Max && Convert.ToDouble(p.Key) >= 0; }).OrderBy(p => p.Key).ToDictionary(p => p.Key, o => o.Value);
             //reset cursor
-            truthLayer.BandCollection[0].ResetCursor();
+           // truthLayer.BandCollection[0].ResetCursor();
+            //key index
+            List<int> Keys = Memory.Keys.ToList();
             //
-            int actionsNumber = Convert.ToInt32(truthLayer.BandCollection[0].Max - 0);
+            int actionsNumber = Keys.Count;
             int[,] matrix = new int[actionsNumber, actionsNumber];
-            foreach (var key in Memory.Keys)
+            //
+            for(int i=0;i<actionsNumber;i++)
             {
+                int key = Keys[i];
                 List<Point> points = Memory[key];
                 //计算realKey类分类结果,存入混淆矩阵
                 points.ForEach(p => {
-                    int classificationType = predLayer.BandCollection[0].GetRawPixel(p.X, p.Y) - 1;
-                    if(classificationType!=-1)
-                        matrix[key, classificationType]++;
+                    int classificationType = (int)predLayer.BandCollection[0].GetRawValue(p.X, p.Y) - 1;
+                    classificationType = Keys.IndexOf(classificationType);
+                    if (classificationType != -1)
+                        matrix[i, classificationType]++;
                 });
             }
             // Create a new multi-class Confusion Matrix
@@ -67,7 +81,6 @@ namespace Engine.GIS.GOperation.Arithmetic
             //
             return (matrix,kappa,actionsNumber);
         }
-
 
     }
 }

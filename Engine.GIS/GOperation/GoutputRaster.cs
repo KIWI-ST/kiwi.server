@@ -9,9 +9,9 @@ namespace Engine.GIS.GOperation
     /// </summary>
     public class GoutputRaster
     {
-        GRasterLayer _rasterLayer;
+        GLayer.GRasterLayer.GRasterLayer _rasterLayer;
 
-        public GoutputRaster(GRasterLayer rasterLayer)
+        public GoutputRaster(GLayer.GRasterLayer.GRasterLayer rasterLayer)
         {
             _rasterLayer = rasterLayer;
         }
@@ -24,9 +24,9 @@ namespace Engine.GIS.GOperation
             Dataset writeDs = drv.Create(outputDir, readDs.RasterXSize, readDs.RasterYSize, 1, _rasterLayer.PDataType, options);
             for(int i=1;i<= _rasterLayer.BandCount; i++)
             {
-                IGBand readBand = _rasterLayer.BandCollection[i - 1];
+                GRasterBand readBand = _rasterLayer.BandCollection[i - 1];
                 Band writeBand = writeDs.GetRasterBand(i);
-                writeBand.WriteRaster(0, 0, readDs.RasterXSize, readDs.RasterYSize, readBand.GetByteBuffer(), readDs.RasterXSize, readDs.RasterYSize, 0, 0);
+                writeBand.WriteRaster(0, 0, readDs.RasterXSize, readDs.RasterYSize, readBand.GetRawBuffer(), readDs.RasterXSize, readDs.RasterYSize, 0, 0);
             }
             writeDs.FlushCache();
         }

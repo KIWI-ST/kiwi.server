@@ -49,7 +49,7 @@ namespace Host.Image.UI
         /// <summary>
         /// raster layer
         /// </summary>
-        Dictionary<string, GRasterLayer> _rasterDic = new Dictionary<string, GRasterLayer>();
+        Dictionary<string, Engine.GIS.GLayer.GRasterLayer.GRasterLayer> _rasterDic = new Dictionary<string, Engine.GIS.GLayer.GRasterLayer.GRasterLayer>();
         /// <summary>
         /// 管理全局的图像与树视图区域的缓存对应
         /// key是图片名称或图+波段名称，值为对应的bitmap
@@ -67,7 +67,7 @@ namespace Host.Image.UI
         /// 应用深度学习模型进行分类
         /// </summary>
         /// <param name="rasterLayer"></param>
-        private void RunClassify(GRasterLayer rasterLayer, bool useSLIC, string pbName, string centerName, string labelName)
+        private void RunClassify(Engine.GIS.GLayer.GRasterLayer.GRasterLayer rasterLayer, bool useSLIC, string pbName, string centerName, string labelName)
         {
             //判断图层结构，选用不同的tensor输入
             ShapeEnum shapeEuum;
@@ -90,14 +90,14 @@ namespace Host.Image.UI
             //判断是否基于超像素
             if (!useSLIC)
             {
-                for (int i = 0; i < rasterLayer.XSize; i++)
-                    for (int j = 0; j < rasterLayer.YSize; j++)
-                    {
-                        float[] input = rasterLayer.GetPixelFloat(i, j).ToArray();
-                        long classified = model.Classify(input, shapeEuum);
-                        Invoke(new PaintPointHandler(PaintPoint), bmp, i, j, Convert.ToByte(classified * 15));
-                        Invoke(new UpdateStatusLabelHandler(UpdateStatusLabel), "应用分类中，总进度：" + i + "列" + j + "行", STATUE_ENUM.WARNING);
-                    }
+                //for (int i = 0; i < rasterLayer.XSize; i++)
+                //    for (int j = 0; j < rasterLayer.YSize; j++)
+                //    {
+                //        float[] input = rasterLayer.GetPixelDouble(i, j).ToArray();
+                //        long classified = model.Classify(input, shapeEuum);
+                //        Invoke(new PaintPointHandler(PaintPoint), bmp, i, j, Convert.ToByte(classified * 15));
+                //        Invoke(new UpdateStatusLabelHandler(UpdateStatusLabel), "应用分类中，总进度：" + i + "列" + j + "行", STATUE_ENUM.WARNING);
+                //    }
             }
             else
             {
@@ -180,7 +180,7 @@ namespace Host.Image.UI
             _dqnFormList.ForEach(p => p.UpdateDarw());
         }
 
-        private void RunDQN(GRasterLayer featureRasterLayer, GRasterLayer labelRasterLayer, int epoches, int Model = 1)
+        private void RunDQN(Engine.GIS.GLayer.GRasterLayer.GRasterLayer featureRasterLayer, Engine.GIS.GLayer.GRasterLayer.GRasterLayer labelRasterLayer, int epoches, int Model = 1)
         {
             double gamma = 0.0;
             //create environment
@@ -211,7 +211,7 @@ namespace Host.Image.UI
         /// </summary>
         /// <param name="dqn"></param>
         /// <param name="featureRasterLayer"></param>
-        private void Dqn_PathExtract(DQN dqn,GRasterLayer featureRasterLayer)
+        private void Dqn_PathExtract(DQN dqn, Engine.GIS.GLayer.GRasterLayer.GRasterLayer featureRasterLayer)
         {
             //GDI绘制
             Bitmap pathExtractmap = new Bitmap(featureRasterLayer.XSize, featureRasterLayer.YSize);
@@ -248,7 +248,7 @@ namespace Host.Image.UI
             //
             Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": complete dqn polsar image classification");
             //计算kappa
-            double kappa = dqn.CalcuteKappa(new GRasterLayer(fullFileName));
+            double kappa = dqn.CalcuteKappa(new Engine.GIS.GLayer.GRasterLayer.GRasterLayer(fullFileName));
             Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": kappa :" + kappa);
             //切换到主线程读取结果
             Invoke(new ReadRasterHandler(ReadRaster), fullFileName);
@@ -258,7 +258,7 @@ namespace Host.Image.UI
         /// </summary>
         /// <param name="dqn"></param>
         /// <param name="featureRasterLayer"></param>
-        private void Dqn_ImageClassification(DQN dqn,GRasterLayer featureRasterLayer)
+        private void Dqn_ImageClassification(DQN dqn, Engine.GIS.GLayer.GRasterLayer.GRasterLayer featureRasterLayer)
         {
             //GDI绘制
             Bitmap classificationBitmap = new Bitmap(featureRasterLayer.XSize, featureRasterLayer.YSize);
@@ -295,7 +295,7 @@ namespace Host.Image.UI
             //
             Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": complete dqn classification");
             //计算kappa
-            double kappa = dqn.CalcuteKappa(new GRasterLayer(fullFileName));
+            double kappa = dqn.CalcuteKappa(new Engine.GIS.GLayer.GRasterLayer.GRasterLayer(fullFileName));
             Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": kappa :" + kappa);
             //切换到主线程读取结果
             Invoke(new ReadRasterHandler(ReadRaster), fullFileName);
@@ -563,13 +563,13 @@ namespace Host.Image.UI
         private void ReadBand(string rasterFilename, TreeNode parentNode)
         {
             string name = parentNode.Text;
-            GRasterLayer _layer = new GRasterLayer(rasterFilename);
+            Engine.GIS.GLayer.GRasterLayer.GRasterLayer _layer = new Engine.GIS.GLayer.GRasterLayer.GRasterLayer(rasterFilename);
             _rasterDic.Add(_layer.Name, _layer);
             for (int i = 0; i < _layer.BandCollection.Count; i++)
             {
-                IGBand band = _layer.BandCollection[i];
+                GRasterBand band = _layer.BandCollection[i];
                 band.BandName = name + "_波段_" + i;
-                Bitmap2 bmp2 = new Bitmap2(bmp: band.GetBitmap(), name: band.BandName, gdalBand: band, gdalLayer: _layer);
+                Bitmap2 bmp2 = new Bitmap2(bmp: band.GrayscaleImage, name: band.BandName, gdalBand: band, gdalLayer: _layer);
                 //获取band对应的bitmap格式图像，载入treedNode中
                 _imageDic.Add(band.BandName, bmp2);
                 TreeNode childrenNode = new TreeNode(band.BandName);
@@ -613,7 +613,7 @@ namespace Host.Image.UI
                             //1.选择处理那副图像
                             string imageName = map_treeView.SelectedNode.Text;
                             Bitmap2 imageBitmap2 = _imageDic[imageName];
-                            GRasterLayer rasterLayer = imageBitmap2.GdalLayer;
+                            Engine.GIS.GLayer.GRasterLayer.GRasterLayer rasterLayer = imageBitmap2.GdalLayer;
                             ThreadStart clsfy_ts = delegate { RunClassify(rasterLayer, dlclassify.UseSLIC, dlclassify.PBName, dlclassify.CenterName, dlclassify.LabelName); };
                             Thread clsfy_t = new Thread(clsfy_ts);
                             clsfy_t.IsBackground = true;
@@ -727,9 +727,9 @@ namespace Host.Image.UI
                     {
                         List<int> combineIndex = bandModal.BanCombineIndex;
                         Bitmap layerBitmap = GRGBCombine.Run(
-                            bandModal.GdalLayer.BandCollection[combineIndex[0]].GetByteData(),
-                            bandModal.GdalLayer.BandCollection[combineIndex[1]].GetByteData(),
-                            bandModal.GdalLayer.BandCollection[combineIndex[2]].GetByteData());
+                            bandModal.GdalLayer.BandCollection[combineIndex[0]].GetByteBuffer(),
+                            bandModal.GdalLayer.BandCollection[combineIndex[1]].GetByteBuffer(),
+                            bandModal.GdalLayer.BandCollection[combineIndex[2]].GetByteBuffer());
                         Bitmap2 layerBitmap2 = new Bitmap2(bmp: layerBitmap, name: bandModal.GdalLayer.Name, gdalLayer: bandModal.GdalLayer);
                         //获取band对应的bitmap格式图像，载入treedNode中
                         _imageDic[bandModal.GdalLayer.Name] = layerBitmap2;

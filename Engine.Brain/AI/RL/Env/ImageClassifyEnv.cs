@@ -35,7 +35,9 @@ namespace Engine.Brain.AI.RL
             //2.背景值设置为0
             //ActionNum = Convert.ToInt32(_labelRasterLayer.BandCollection[0].Max - _labelRasterLayer.BandCollection[0].Min);
             ActionNum = Convert.ToInt32(_labelRasterLayer.BandCollection[0].Max - 0);
+            //statical graph
             Prepare();
+            //
             (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
         }
         /// <summary>
@@ -50,19 +52,55 @@ namespace Engine.Brain.AI.RL
         /// 处理之后的样本集
         /// </summary>
         public Dictionary<int, List<Point>> Memory { get; private set; } = new Dictionary<int, List<Point>>();
-
+        /// <summary>
+        /// 探索有值的像素
+        /// </summary>
+        /// <returns></returns>
+        (int x, int y, int classIndex) SeuqnetialNext()
+        {
+            //ignore zero
+            //int x, y, value;
+            //do
+            //{
+            //    (x, y, value) = _labelRasterLayer.BandCollection[0].Next();
+            //} while (value == 0);
+            //return (x, y, value - 1);
+            return (0, 0, 0);
+        }
+        /// <summary>
+        /// 分析标注道路区域
+        /// </summary>
+        public void Prepare()
+        {
+            int x, y, pixelValue;
+            do
+            {
+                (x, y, pixelValue) = SeuqnetialNext();
+                if (Memory.ContainsKey(pixelValue))
+                    Memory[pixelValue].Add(new Point(x, y));
+                else
+                    Memory.Add(pixelValue, new List<Point>() { new Point(x, y) });
+            } while (pixelValue != -2);
+            //remove empty value
+            Memory.Remove(-2);
+            //remove
+            Memory = Memory.Where(p => { return Convert.ToDouble(p.Key) < _labelRasterLayer.BandCollection[0].Max && Convert.ToDouble(p.Key) >= 0; }).OrderBy(p => p.Key).ToDictionary(p => p.Key, o => o.Value);
+            //reset cursor to zero
+           
+        }
         /// <summary>
         /// 顺序学习环境样本
         /// </summary>
         /// <returns></returns>
         private (int x, int y, int classIndex) SequentialAccessEnv()
         {
-            int _x, _y, _value;
-            do
-            {
-                (_x, _y, _value) = _labelRasterLayer.BandCollection[0].Next();
-            } while (_value == 0);//当值为0，即表示此像素为背景值，
-            return (_x, _y, _value-1);
+            //int _x, _y, _value;
+            //do
+            //{
+            //    (_x, _y, _value) = _labelRasterLayer.BandCollection[0].Next();
+            //} while (_value == 0);//当值为0，即表示此像素为背景值，
+            //return (_x, _y, _value-1);
+            return (0, 0, 0);
         }
         /// <summary>
         /// 
@@ -71,26 +109,6 @@ namespace Engine.Brain.AI.RL
         public double[] Reset()
         {
             return Step(-1).state;
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        public void Prepare()
-        {
-            int x, y, classIndex;
-            do
-            {
-                (x, y, classIndex) = SequentialAccessEnv();
-                if (Memory.ContainsKey(classIndex))
-                    Memory[classIndex].Add(new Point(x, y));
-                else
-                    Memory.Add(classIndex, new List<Point>() { new Point(x, y) });
-            } while (classIndex != -2);
-            //remove empty value
-            Memory.Remove(-2);
-            Memory = Memory.Where(p => { return Convert.ToDouble(p.Key) < _labelRasterLayer.BandCollection[0].Max && Convert.ToDouble(p.Key) >= 0; }).OrderBy(p => p.Key).ToDictionary(p => p.Key, o => o.Value);
-            //reset cursor
-            _labelRasterLayer.BandCollection[0].ResetCursor();
         }
         /// <summary>
         /// 

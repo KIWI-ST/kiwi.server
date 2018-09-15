@@ -1,10 +1,5 @@
 ﻿using Engine.Brain.Entity;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Engine.Brain.Extend
 {
@@ -16,6 +11,7 @@ namespace Engine.Brain.Extend
         /// <typeparam name="T"></typeparam>
         /// <param name="list"></param>
         /// <returns></returns>
+        /// 
         public static T RandomTake<T>(this List<T> list)
         {
             int index = NP.Random(list.Count);

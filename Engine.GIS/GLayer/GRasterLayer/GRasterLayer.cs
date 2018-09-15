@@ -1,7 +1,6 @@
 ﻿using Engine.GIS.GLayer.GRasterLayer.GBand;
 using Engine.GIS.GOperation.Arithmetic;
 using OSGeo.GDAL;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -27,13 +26,13 @@ namespace Engine.GIS.GLayer.GRasterLayer
             //波段数目
             BandCount = PDataSet.RasterCount;
             //读取band
-            BandCollection = new List<IGBand>();
+            BandCollection = new List<GRasterBand>();
             for (int i = 1; i <= BandCount; i++)
             {
                 Band pBand = PDataSet.GetRasterBand(i);
                 PDataType = pBand.DataType;
-                if (PDataType == DataType.GDT_Float32 || PDataType == DataType.GDT_Byte || PDataType == DataType.GDT_UInt16||PDataType==DataType.GDT_UInt32)
-                    BandCollection.Add(new GFloat32Band(pBand));
+                //if (PDataType == DataType.GDT_Float32 || PDataType == DataType.GDT_Byte || PDataType == DataType.GDT_UInt16||PDataType==DataType.GDT_UInt32)
+                BandCollection.Add(new GRasterBand(pBand));
             }
         }
 
@@ -71,20 +70,7 @@ namespace Engine.GIS.GLayer.GRasterLayer
         /// <summary>
         /// 波段集合
         /// </summary>
-        public List<IGBand> BandCollection { get; }
-        /// <summary>
-        /// 获取rasterLayer
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        public List<float> GetPixelFloat(int x, int y)
-        {
-            List<float> pixels = new List<float>();
-            for (int i = 0; i < BandCount; i++)
-                pixels.Add(BandCollection[i].GetByteData()[x, y]);
-            return pixels;
-        }
+        public List<GRasterBand> BandCollection { get; }
         /// <summary>
         /// 
         /// </summary>
@@ -95,7 +81,7 @@ namespace Engine.GIS.GLayer.GRasterLayer
         {
             List<double> pixels = new List<double>();
             for (int i = 0; i < BandCount; i++)
-                pixels.Add(BandCollection[i].GetByteData()[x, y]);
+                pixels.Add(BandCollection[i].GetNormalValue(x, y));
             return pixels;
         }
         /// <summary>
@@ -106,7 +92,7 @@ namespace Engine.GIS.GLayer.GRasterLayer
         /// <returns></returns>
         public double[] GetBand0MaskPixelDouble(int x,int y,int row=5,int col=5)
         {
-            double[] bandPixels = BandCollection[0].GetPixelDoubleByMask(x, y, row, col);
+            double[] bandPixels = BandCollection[0].GetNormalValueByMask(x, y, row, col);
             return bandPixels;
             //double[] pixles = new double[ row*col];
             //Array.ConstrainedCopy(bandPixels, 0, pixles, offset, row * col);
@@ -128,7 +114,7 @@ namespace Engine.GIS.GLayer.GRasterLayer
             List<float> pixels = new List<float>();
             for (int i = 0; i < BandCount; i++)
             {
-                Bitmap bandBmp = BandCollection[i].GetBitmap();
+                Bitmap bandBmp = BandCollection[i].GrayscaleImage;
                 byte v = GConvolution.Run(bandBmp, x, y, mask);
                 pixels.Add(v);
             }
@@ -140,7 +126,7 @@ namespace Engine.GIS.GLayer.GRasterLayer
         /// <param name="bandIndex"></param>
         public void SaveBand(int bandIndex,string fullFileName,double[] geoTransform = null)
         {
-            IGBand pband = BandCollection[bandIndex];
+            GRasterBand pband = BandCollection[bandIndex];
             Driver drv = Gdal.GetDriverByName("GTiff");
             string[] options = new string[] { "BLOCKXSIZE=" + PDataSet.RasterXSize, "BLOCKYSIZE=" + PDataSet.RasterYSize };
             Dataset ds = drv.Create(fullFileName, PDataSet.RasterXSize, PDataSet.RasterYSize, 1, DataType.GDT_Byte, options);
@@ -148,7 +134,7 @@ namespace Engine.GIS.GLayer.GRasterLayer
             if (geoTransform != null)
                 ds.SetGeoTransform(geoTransform);
             // GetBufferByte(_pDataSet.RasterXSize, _pDataSet.RasterYSize,byteData)
-            ba.WriteRaster(0, 0, PDataSet.RasterXSize, PDataSet.RasterYSize, pband.GetRawByteBuffer(), PDataSet.RasterXSize, PDataSet.RasterYSize, 0, 0);
+            ba.WriteRaster(0, 0, PDataSet.RasterXSize, PDataSet.RasterYSize, pband.GetRawBuffer(), PDataSet.RasterXSize, PDataSet.RasterYSize, 0, 0);
             ds.FlushCache();
         }
 

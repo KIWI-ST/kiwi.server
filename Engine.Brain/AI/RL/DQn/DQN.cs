@@ -395,7 +395,7 @@ namespace Engine.Brain.AI.RL
                 //计算realKey类分类结果,存入混淆矩阵
                 points.ForEach(p =>
                 {
-                    int classificationType = classificationLayer.BandCollection[0].GetRawPixel(p.X, p.Y) - 1;
+                    int classificationType = (int)classificationLayer.BandCollection[0].GetRawValue(p.X, p.Y) - 1;
                     matrix[key, classificationType]++;
                 });
             }
