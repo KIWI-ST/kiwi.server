@@ -42,6 +42,7 @@
             this.DQN_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.main_toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.DL_CLASS_toolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.kappa_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.map_statusStrip = new System.Windows.Forms.StatusStrip();
             this.empty_statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.map_processBar = new System.Windows.Forms.ToolStripProgressBar();
@@ -61,8 +62,6 @@
             this.bandCombine_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.bandExport_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.kappa_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.map_menuStrip.SuspendLayout();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
@@ -149,9 +148,8 @@
             this.SLIC_Center_toolStripButton,
             this.DQN_toolStripButton,
             this.main_toolStripSeparator,
-            this.DL_CLASS_toolStripButton,
-            this.toolStripSeparator1,
-            this.kappa_toolStripButton});
+            this.kappa_toolStripButton,
+            this.DL_CLASS_toolStripButton});
             this.map_toolStrip.Location = new System.Drawing.Point(0, 28);
             this.map_toolStrip.Name = "map_toolStrip";
             this.map_toolStrip.Size = new System.Drawing.Size(1183, 47);
@@ -204,6 +202,16 @@
             this.DL_CLASS_toolStripButton.Text = "图像分类";
             this.DL_CLASS_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.DL_CLASS_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
+            // 
+            // kappa_toolStripButton
+            // 
+            this.kappa_toolStripButton.Image = global::Host.Image.UI.Properties.Resources.copy_64;
+            this.kappa_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.kappa_toolStripButton.Name = "kappa_toolStripButton";
+            this.kappa_toolStripButton.Size = new System.Drawing.Size(87, 44);
+            this.kappa_toolStripButton.Text = "kappa计算";
+            this.kappa_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.kappa_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
             // 
             // map_statusStrip
             // 
@@ -407,21 +415,6 @@
             this.bandExport_ToolStripMenuItem.Text = "波段导出";
             this.bandExport_ToolStripMenuItem.Click += new System.EventHandler(this.Map_treeView_Click);
             // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 47);
-            // 
-            // kappa_toolStripButton
-            // 
-            this.kappa_toolStripButton.Image = global::Host.Image.UI.Properties.Resources.copy_64;
-            this.kappa_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.kappa_toolStripButton.Name = "kappa_toolStripButton";
-            this.kappa_toolStripButton.Size = new System.Drawing.Size(87, 44);
-            this.kappa_toolStripButton.Text = "kappa计算";
-            this.kappa_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.kappa_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -495,7 +488,6 @@
         private System.Windows.Forms.ListBox map_listBox;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem bandExport_ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton kappa_toolStripButton;
     }
 }

@@ -80,6 +80,10 @@ namespace Engine.Brain.AI.RL.Env
         /// </summary>
         public int FeatureNum { get; }
         /// <summary>
+        /// 
+        /// </summary>
+        public int[] RandomSeedKeys { get { return _randomSeedKeys; } }
+        /// <summary>
         /// 处理之后的样本集
         /// </summary>
         public Dictionary<int, List<Point>> Memory { get { return _memory; } }
@@ -137,18 +141,19 @@ namespace Engine.Brain.AI.RL.Env
         /// <returns></returns>
         public (List<double[]> states, int[] labels) RandomEval(int batchSize = 64)
         {
-            //List<double[]> states = new List<double[]>();
-            //int[] labels = new int[batchSize];
-            //for (int i = 0; i < batchSize; i++)
-            //{
-            //    var (x, y, classIndex) = SequentialAccessMemory();
-            //    double[] raw = _featureRasterLayer.GetBand0MaskPixelDouble(x, y,_maskx,_masky);
-            //    double[] normal = NP.Normalize(raw, 255.0);
-            //    states.Add(normal);
-            //    labels[i] = classIndex;
-            //}
-            //return (states, labels);
-            return (new List<double[]> { }, new int[] { });
+            //reset environment
+            Reset();
+            //store states and actions
+            List<double[]> states = new List<double[]>();
+            int[] labels = new int[batchSize];
+            for (int i = 0; i < batchSize; i++)
+            {
+                var (x, y, classIndex) = SequentialAccessMemory();
+                double[] raw = _pBandCursorTool.PickNormalValueByMask(x, y, _maskx, _masky);
+                states.Add(raw);
+                labels[i] = Reward();
+            }
+            return (states, labels);
         }
         /// <summary>
         /// random数据集

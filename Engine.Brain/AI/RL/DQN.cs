@@ -11,11 +11,46 @@ using System.Drawing;
 
 namespace Engine.Brain.AI.RL
 {
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="loss">loss value</param>
+    /// <param name="totalReward">rewards</param>
+    /// <param name="accuracy">train accuracy</param>
+    /// <param name="epochesTime"></param>
+    public delegate void UpdateLearningLossHandler(double loss, double totalReward, double accuracy, double progress, string epochesTime);
+    /// <summary>
+    /// memory
+    /// </summary>
+    public class Memory
+    {
+        /// <summary>
+        /// state at t
+        /// </summary>
+        public double[] ST { get; set; }
+        /// <summary>
+        /// state at t+1
+        /// </summary>
+        public double[] S_NEXT { get; set; }
+        /// <summary>
+        /// action at t
+        /// </summary>
+        public double[] AT { get; set; }
+        /// <summary>
+        /// q value at t
+        /// </summary>
+        public double QT { get; set; }
+        /// <summary>
+        /// reward at t
+        /// </summary>
+        public double RT { get; set; }
+    }
     /// <summary>
     /// 用于影像分类的dqn学习机
     /// action固定为label图层的类别数
     /// </summary>
-    public class DQN : IDQN
+    public class DQN
     {
         /// <summary>
         /// 回调区
@@ -68,7 +103,6 @@ namespace Engine.Brain.AI.RL
         public PlotModel AccuracyModel { get; } = new PlotModel();
         //
         public PlotModel RewardModel { get; } = new PlotModel();
-
         /// <summary>
         /// 
         /// </summary>
@@ -151,6 +185,15 @@ namespace Engine.Brain.AI.RL
             _gamma = gamma;
             //构造plot绘制图
             InitPoltModel();
+        }
+        /// <summary>
+        /// convert action to raw byte value
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public int ActionToRawValue(int action)
+        {
+            return _env.RandomSeedKeys[action];
         }
         /// <summary>
         /// 控制记忆容量

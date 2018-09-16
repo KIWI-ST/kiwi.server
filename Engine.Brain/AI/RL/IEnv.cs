@@ -9,6 +9,10 @@ namespace Engine.Brain.AI.RL
     public interface IEnv
     {
         /// <summary>
+        /// get action - rawValue dictionary map
+        /// </summary>
+        int[] RandomSeedKeys { get; }
+        /// <summary>
         /// the environment memory
         /// </summary>
         Dictionary<int, List<Point>> Memory { get; }

@@ -89,12 +89,11 @@
   <ItemGroup>
     <Compile Include="AI\DL\CNN.cs" />
     <Compile Include="AI\RL\Env\ExtractRoadEnv.cs" />
-    <Compile Include="AI\RL\IDQN.cs" />
     <Compile Include="AI\RL\INet.cs" />
     <Compile Include="AI\RL\IEnv.cs" />
     <Compile Include="AI\RL\Env\ImageClassifyEnv.cs" />
     <Compile Include="AI\RL\Net\DNet.cs" />
-    <Compile Include="AI\RL\DQn\DQN.cs" />
+    <Compile Include="AI\RL\DQN.cs" />
     <Compile Include="Entity\NP.cs" />
     <Compile Include="Entity\TensorflowBootstrap.cs" />
     <Compile Include="Extend\ListExtend.cs" />

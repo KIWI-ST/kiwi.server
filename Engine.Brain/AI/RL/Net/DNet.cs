@@ -54,7 +54,6 @@ namespace Engine.Brain.AI.RL
                 return scale * alpha * (Math.Exp(x) - 1);
         }
     }
-
     /// <summary>
     /// DQN State Prediction NeuralNetwork 
     /// </summary>

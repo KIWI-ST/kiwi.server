@@ -16,6 +16,8 @@ namespace Engine.Brain.AI.RL
     {
         Dictionary<int, List<Point>> _memory = new Dictionary<int, List<Point>>();
 
+        int[] _randomSeedKeys;
+
         private GRasterLayer _featureRasterLayer, _labelRasterLayer;
 
         int _current_x, _current_y, _current_classindex;
@@ -52,6 +54,10 @@ namespace Engine.Brain.AI.RL
         /// </summary>
         public int FeatureNum { get; }
         /// <summary>
+        /// 
+        /// </summary>
+        public int[] RandomSeedKeys { get { return _randomSeedKeys; } }
+        /// <summary>
         /// 处理之后的样本集
         /// </summary>
         public Dictionary<int, List<Point>> Memory { get { return _memory; } }
@@ -63,6 +69,7 @@ namespace Engine.Brain.AI.RL
             IBandStasticTool pBandStasticTool = new GBandStasticTool();
             pBandStasticTool.Visit(_labelRasterLayer.BandCollection[0]);
             _memory = pBandStasticTool.StaisticalRawGraph;
+            _randomSeedKeys = _memory.Keys.ToArray();
         }
         /// <summary>
         /// 

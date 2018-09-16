@@ -180,7 +180,7 @@ namespace Host.Image.UI
             _dqnFormList.ForEach(p => p.UpdateDarw());
         }
 
-        private void RunDQN(Engine.GIS.GLayer.GRasterLayer.GRasterLayer featureRasterLayer, Engine.GIS.GLayer.GRasterLayer.GRasterLayer labelRasterLayer, int epoches, int Model = 1)
+        private void RunDQN(GRasterLayer featureRasterLayer, GRasterLayer labelRasterLayer, int epoches, int Model = 1)
         {
             double gamma = 0.0;
             //create environment
@@ -274,7 +274,8 @@ namespace Host.Image.UI
                     double[] raw = featureRasterLayer.GetNormalValue(i, j).ToArray();
                     double[] normal = NP.Normalize(raw, 255f);
                     var (action, q) = dqn.ChooseAction(normal);
-                    int gray = action + 1;
+                    //convert action to raw byte value
+                    int gray = dqn.ActionToRawValue(action);
                     //后台绘制，报告进度
                     Color c = Color.FromArgb(gray, gray, gray);
                     Pen p = new Pen(c);
@@ -296,7 +297,14 @@ namespace Host.Image.UI
             //切换到主线程读取结果
             Invoke(new ReadRasterHandler(ReadRaster), fullFileName);
         }
-
+        /// <summary>
+        /// report loss every epoch
+        /// </summary>
+        /// <param name="loss"></param>
+        /// <param name="totalReward"></param>
+        /// <param name="accuracy"></param>
+        /// <param name="progress"></param>
+        /// <param name="epochesTime"></param>
         private void Dqn_OnLearningLossEventHandler(double loss, double totalReward, double accuracy, double progress, string epochesTime)
         {
             string msg = string.Format("time:{0},progress:{1:P};loss:{2},reward:{3},accuracy:{4:P}", epochesTime, progress, loss, totalReward, accuracy);
