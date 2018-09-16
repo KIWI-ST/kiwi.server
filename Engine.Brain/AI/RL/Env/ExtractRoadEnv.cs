@@ -1,7 +1,6 @@
 ﻿using Engine.Brain.Entity;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Tools;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -96,7 +95,7 @@ namespace Engine.Brain.AI.RL.Env
             //1.reset seed
             _seed_classIndex = NP.Random(_randomSeedKeys);
             //2.reset 
-            _seed_pointIndex = NP.Random(Memory[_seed_classIndex].Count);
+            _seed_pointIndex = NP.Random(_memory[_seed_classIndex].Count);
             //3.direction
             _direction = true;
             //3. retrun state
@@ -171,8 +170,8 @@ namespace Engine.Brain.AI.RL.Env
         {
             int current = _seed_pointIndex;
             int next = _direction ? _seed_pointIndex + 1 : _seed_pointIndex - 1;
-            Point p = Memory[_seed_classIndex][current];
-            Point pNext = Memory[_seed_classIndex][next];
+            Point p = _memory[_seed_classIndex][current];
+            Point pNext = _memory[_seed_classIndex][next];
             int direction = (pNext.X - p.X) * 10 + (pNext.Y - p.Y);
             switch (direction)
             {
@@ -217,7 +216,7 @@ namespace Engine.Brain.AI.RL.Env
         {
             if (action == -1)
             {
-                Point p = Memory[_seed_classIndex][_seed_pointIndex];
+                Point p = _memory[_seed_classIndex][_seed_pointIndex];
                 (_c_x, _c_y, _c_classIndex) = (p.X, p.Y, _seed_classIndex);
                 double[] raw = _pBandCursorTool.PickNormalValueByMask(_c_x, _c_y,_maskx,_masky);
                 return (raw, 0);

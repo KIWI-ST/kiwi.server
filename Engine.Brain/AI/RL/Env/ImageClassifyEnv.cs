@@ -85,7 +85,7 @@ namespace Engine.Brain.AI.RL
         /// <returns></returns>
         private (int x, int y, int classIndex) RandomAccessMemory()
         {
-            int classIndex = NP.Random(ActionNum);
+            int classIndex = NP.Random(_randomSeedKeys);
             Point p = Memory[classIndex].RandomTake();
             return (p.X, p.Y, classIndex);
         }
@@ -138,5 +138,6 @@ namespace Engine.Brain.AI.RL
                 return (raw, reward);
             }
         }
+
     }
 }

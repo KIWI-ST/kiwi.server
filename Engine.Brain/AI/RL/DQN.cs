@@ -1,13 +1,10 @@
-﻿using Accord.Statistics.Analysis;
-using Engine.Brain.Entity;
+﻿using Engine.Brain.Entity;
 using Engine.Brain.Extend;
-using Engine.GIS.GLayer.GRasterLayer;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 
 namespace Engine.Brain.AI.RL
 {
@@ -72,7 +69,7 @@ namespace Engine.Brain.AI.RL
         /// 观察环境
         /// </summary>
         private IEnv _env;
-
+        //
         readonly int _memoryCapacity = 512;
         //拷贝net参数
         readonly int _everycopy = 128;
@@ -89,7 +86,6 @@ namespace Engine.Brain.AI.RL
         //输入feature长度
         readonly int _featuresNumber;
         //输入action长度
-
         readonly int _actionsNumber;
         //
         LineSeries _lossLine = new LineSeries();
