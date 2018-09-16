@@ -1,6 +1,7 @@
 ﻿using Engine.Brain.Entity;
 using Engine.Brain.Extend;
 using Engine.GIS.GLayer.GRasterLayer;
+using Engine.GIS.GOperation.Tools;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -13,6 +14,8 @@ namespace Engine.Brain.AI.RL
     /// </summary>
     public class ImageClassifyEnv : IEnv
     {
+        Dictionary<int, List<Point>> _memory = new Dictionary<int, List<Point>>();
+
         private GRasterLayer _featureRasterLayer, _labelRasterLayer;
 
         int _current_x, _current_y, _current_classindex;
@@ -51,56 +54,15 @@ namespace Engine.Brain.AI.RL
         /// <summary>
         /// 处理之后的样本集
         /// </summary>
-        public Dictionary<int, List<Point>> Memory { get; private set; } = new Dictionary<int, List<Point>>();
-        /// <summary>
-        /// 探索有值的像素
-        /// </summary>
-        /// <returns></returns>
-        (int x, int y, int classIndex) SeuqnetialNext()
-        {
-            //ignore zero
-            //int x, y, value;
-            //do
-            //{
-            //    (x, y, value) = _labelRasterLayer.BandCollection[0].Next();
-            //} while (value == 0);
-            //return (x, y, value - 1);
-            return (0, 0, 0);
-        }
+        public Dictionary<int, List<Point>> Memory { get { return _memory; } }
         /// <summary>
         /// 分析标注道路区域
         /// </summary>
         public void Prepare()
         {
-            int x, y, pixelValue;
-            do
-            {
-                (x, y, pixelValue) = SeuqnetialNext();
-                if (Memory.ContainsKey(pixelValue))
-                    Memory[pixelValue].Add(new Point(x, y));
-                else
-                    Memory.Add(pixelValue, new List<Point>() { new Point(x, y) });
-            } while (pixelValue != -2);
-            //remove empty value
-            Memory.Remove(-2);
-            //remove
-            Memory = Memory.Where(p => { return Convert.ToDouble(p.Key) < _labelRasterLayer.BandCollection[0].Max && Convert.ToDouble(p.Key) >= 0; }).OrderBy(p => p.Key).ToDictionary(p => p.Key, o => o.Value);
-            //reset cursor to zero
-           
-        }
-        /// <summary>
-        /// 顺序学习环境样本
-        /// </summary>
-        /// <returns></returns>
-        private (int x, int y, int classIndex) SequentialAccessEnv()
-        {
-            //int _x, _y, _value;
-            //do
-            //{
-            //    (_x, _y, _value) = _labelRasterLayer.BandCollection[0].Next();
-            //} while (_value == 0);//当值为0，即表示此像素为背景值，
-            //return (_x, _y, _value-1);
-            return (0, 0, 0);
+            IBandStasticTool pBandStasticTool = new GBandStasticTool();
+            pBandStasticTool.Visit(_labelRasterLayer.BandCollection[0]);
+            _memory = pBandStasticTool.StaisticalRawGraph;
         }
         /// <summary>
         /// 
@@ -159,16 +121,14 @@ namespace Engine.Brain.AI.RL
                 (_c_x, _c_y, _c_classIndex) = (_current_x, _current_y, _current_classindex);
                 (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
                 double[] raw = _featureRasterLayer.GetNormalValue(_c_x, _c_y).ToArray();
-                double[] normal = NP.Normalize(raw, 255f);
-                return (normal, 0f);
+                return (raw, 0.0);
             }
             else
             {
-                float reward = action == _current_classindex ? 1.0f : -1.0f;
+                double reward = action == _current_classindex ? 1.0 : -1.0;
                 (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
                 double[] raw = _featureRasterLayer.GetNormalValue(_current_x, _current_y).ToArray();
-                double[] normal = NP.Normalize(raw, 255f);
-                return (normal, reward);
+                return (raw, reward);
             }
         }
     }
