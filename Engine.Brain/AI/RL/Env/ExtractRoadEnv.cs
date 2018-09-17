@@ -33,13 +33,17 @@ namespace Engine.Brain.AI.RL.Env
         /// </summary>
         bool _direction = true;
         /// <summary>
+        /// query Table
+        /// </summary>
+        double[,] _queryTable;
+        /// <summary>
         /// input features and output
         /// </summary>
         private GRasterLayer _featureRasterLayer, _labelRasterLayer;
         /// <summary>
         /// explore parameters
         /// </summary>
-        int _seed_classIndex, _seed_pointIndex;
+        int _seed_classIndex, _seed_x, _seed_y, _seed_action;
         /// <summary>
         /// current pearmeters
         /// </summary>
@@ -52,6 +56,14 @@ namespace Engine.Brain.AI.RL.Env
         /// mask height
         /// </summary>
         const int _masky = 5;
+        /// <summary>
+        /// limit explor x
+        /// </summary>
+        private readonly int _limit_x;
+        /// <summary>
+        /// limit explor y
+        /// </summary>
+        private readonly int _limit_y;
         /// <summary>
         /// 指定观察的图像，和样本所在的层位置
         /// </summary>
@@ -67,6 +79,10 @@ namespace Engine.Brain.AI.RL.Env
             ActionNum = 8;
             //pixel matrix of M x M
             FeatureNum = _maskx * _masky;
+            //limit of x
+            _limit_x = _labelRasterLayer.XSize;
+            //limit of y
+            _limit_y = _labelRasterLayer.YSize;
             //read labellayer
             Prepare();
         }
@@ -92,11 +108,14 @@ namespace Engine.Brain.AI.RL.Env
         /// <returns></returns>
         public double[] Reset()
         {
-            //1.reset seed
+            //1. reset seed
             _seed_classIndex = NP.Random(_randomSeedKeys);
-            //2.reset 
-            _seed_pointIndex = NP.Random(_memory[_seed_classIndex].Count);
-            //3.direction
+            //2 get seed point list
+            List<Point> seed_points = _memory[_seed_classIndex];
+            //3. get seed point
+            Point p = seed_points[NP.Random(seed_points.Count)];
+            (_seed_x,_seed_y) = (p.X,p.Y);
+            //4.direction
             _direction = true;
             //3. retrun state
             return Step(-1).state;
@@ -113,25 +132,45 @@ namespace Engine.Brain.AI.RL.Env
             pStaticTool.Visit(_labelRasterLayer.BandCollection[0]);
             //set visitor band
             _memory = pStaticTool.StaisticalRawGraph;
+            //convert memory to queryable structure
+            _queryTable = pStaticTool.StatisticalRawQueryTable;
             //random seeds
             _randomSeedKeys = _memory.Keys.ToArray();
         }
         /// <summary>
-        /// 探索方式，沿着x轴++ 
+        /// 探索方式，沿顺时针 
         /// </summary>
         /// <returns></returns>
         private (int x, int y, int classIndex) SequentialAccessMemory()
         {
-            int limits = Memory[_seed_classIndex].Count;
-            //当正向探索，探索到线的终点，折返，并改变方向
-            if (_direction && _seed_pointIndex == limits - 2)
-                _direction = false;
-            //当负向探索，探索到线的起点，折返，并改变方向
-            if (!_direction && _seed_pointIndex == 1)
-                _direction = true;
-            _seed_pointIndex += _direction ? 1 : -1;
-            Point p = Memory[_seed_classIndex][_seed_pointIndex];
-            return (p.X, p.Y, _seed_classIndex);
+            //快速搜索x++方向点
+            List<Point> points = new List<Point>() {
+                new Point(_seed_x-1,_seed_y-1),
+                new Point(_seed_x,_seed_y-1),
+                new Point(_seed_x+1,_seed_y-1),
+                new Point(_seed_x+1,_seed_y),
+                new Point(_seed_x+1,_seed_y+1),
+                new Point(_seed_x,_seed_y+1),
+                new Point(_seed_x-1,_seed_y+1),
+                new Point(_seed_x-1,_seed_y),
+            };
+            //create target point
+            Point target = new Point(_seed_x, _seed_y);
+            //search next point
+            for(int action = 0; action < ActionNum; action++)
+            {
+                Point p = points[action];
+                if (p.X >= _limit_x || p.X < 0 || p.Y >= _limit_y || p.Y < 0) continue;
+                if (_queryTable[p.X, p.Y] == _c_classIndex)
+                {
+                    //get seed action 
+                    _seed_action = action;
+                    //set target point
+                    target = p;
+                }
+            }
+            //
+            return (target.X,target.Y, _seed_classIndex);
         }
         /// <summary>
         /// random测试集
@@ -150,7 +189,7 @@ namespace Engine.Brain.AI.RL.Env
                 var (x, y, classIndex) = SequentialAccessMemory();
                 double[] raw = _pBandCursorTool.PickNormalValueByMask(x, y, _maskx, _masky);
                 states.Add(raw);
-                labels[i] = Reward();
+                labels[i] = _seed_action;
             }
             return (states, labels);
         }
@@ -163,46 +202,7 @@ namespace Engine.Brain.AI.RL.Env
             return NP.Random(ActionNum);
         }
         /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        private int Reward()
-        {
-            int current = _seed_pointIndex;
-            int next = _direction ? _seed_pointIndex + 1 : _seed_pointIndex - 1;
-            Point p = _memory[_seed_classIndex][current];
-            Point pNext = _memory[_seed_classIndex][next];
-            int direction = (pNext.X - p.X) * 10 + (pNext.Y - p.Y);
-            switch (direction)
-            {
-                case -11:
-                    return 0;
-                case -1:
-                    return 1;
-                case 9:
-                    return 2;
-                case -10:
-                    return 3;
-                case 10:
-                    return 4;
-                case -9:
-                    return 5;
-                case 1:
-                    return 6;
-                case 11:
-                    return 7;
-                default:
-                    return 0;
-            }
-        }
-        /// <summary>
         /// action direction :
-        /// action value = 10*x+y
-        /// *  -11 | -1 | 9
-        /// * -----------------------
-        /// *  -10 |  0 | 10
-        /// * -----------------------
-        /// *  -9   | 1  | 11
         /// -----------------------------------------------------
         /// *    0  |  1  |  2
         /// * -----------------------
@@ -216,15 +216,14 @@ namespace Engine.Brain.AI.RL.Env
         {
             if (action == -1)
             {
-                Point p = _memory[_seed_classIndex][_seed_pointIndex];
-                (_c_x, _c_y, _c_classIndex) = (p.X, p.Y, _seed_classIndex);
+                (_c_x, _c_y, _c_classIndex) = (_seed_x,_seed_y, _seed_classIndex);
                 double[] raw = _pBandCursorTool.PickNormalValueByMask(_c_x, _c_y,_maskx,_masky);
                 return (raw, 0);
             }
             else
             {
                 //p+1 与 p的关系，得到方向，通过方向得到Reward
-                double reward = action == Reward() ? 1.0 : -1.0;
+                double reward = action == _seed_action ? 1.0 : -1.0;
                 (_c_x, _c_y, _c_classIndex) = SequentialAccessMemory();
                 double[] raw = _pBandCursorTool.PickNormalValueByMask(_c_x, _c_y,_maskx,_masky);
                 return (raw, reward);

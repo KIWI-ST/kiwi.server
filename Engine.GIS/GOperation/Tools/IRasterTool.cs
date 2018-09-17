@@ -53,6 +53,10 @@ namespace Engine.GIS.GOperation.Tools
     public interface IBandStasticTool : IRasterTool
     {
         /// <summary>
+        /// static raw value query table (convert one-dim to [x,y] two dim]
+        /// </summary>
+        double[,] StatisticalRawQueryTable { get; }
+        /// <summary>
         /// static raw value graph
         /// </summary>
         Dictionary<int, List<Point>> StaisticalRawGraph { get; }

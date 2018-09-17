@@ -35,6 +35,17 @@ namespace Engine.GIS.GOperation.Tools
             _rawData = pBand.RawData;
         }
 
+        public double[,] StatisticalRawQueryTable
+        {
+            get
+            {
+                double[,] queryTable = new double[_width, _height];
+                for (int position = 0; position < _width * _height; position++)
+                    queryTable[position % _width, position / _width] = _rawData[position];
+                return queryTable;
+            }
+        }
+
         public Dictionary<int, List<Point>> StaisticalRawGraph
         {
             get {
