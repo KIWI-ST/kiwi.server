@@ -63,17 +63,21 @@ namespace Engine.Brain.AI.RL
 
         BackPropagationLearning _teacher;
 
-        public DNet(int featureNum, int actionNum)
+        double _learningRate;
+
+        public DNet(int featureNum, int actionNum,double learningRate = 0.01)
         {
             //
             int num = featureNum + actionNum;
+            //
+            _learningRate = learningRate;
             //
             _network = new ActivationNetwork(new SeluFunction(), num, num, actionNum, actionNum/2,1);
             //
             new GaussianWeights(_network).Randomize();
             //https://github.com/accord-net/framework/blob/a5a2ea8b59173dd4e695da8017ba06bc45fc6b51/Samples/Neuro/Deep%20Learning/ViewModel/LearnViewModel.cs#L289
             _teacher = new BackPropagationLearning(_network) {
-                LearningRate = 0.01,
+                LearningRate = learningRate,
                 Momentum = 0.9
             };
         }
@@ -103,7 +107,7 @@ namespace Engine.Brain.AI.RL
             _network = Network.Load(sourceNet.Save()) as ActivationNetwork;
             _teacher = new BackPropagationLearning(_network)
             {
-                LearningRate = 0.01,
+                LearningRate = _learningRate,
                 Momentum = 0.9
             };
         }

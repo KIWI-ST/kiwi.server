@@ -30,8 +30,9 @@ namespace Engine.Brain.AI.RL.Env
         int[] _randomSeedKeys;
         /// <summary>
         /// defalut direction is ++, while explore the maximum of the points, the direction trun to --
+        /// indicate the exploration direction,default is clockwise
         /// </summary>
-        bool _direction = true;
+        bool _clockwise = true;
         /// <summary>
         /// query Table
         /// </summary>
@@ -115,8 +116,8 @@ namespace Engine.Brain.AI.RL.Env
             //3. get seed point
             Point p = seed_points[NP.Random(seed_points.Count)];
             (_seed_x,_seed_y) = (p.X,p.Y);
-            //4.direction
-            _direction = true;
+            //4.reset exploration direction
+            _clockwise = true;
             //3. retrun state
             return Step(-1).state;
         }
@@ -138,21 +139,30 @@ namespace Engine.Brain.AI.RL.Env
             _randomSeedKeys = _memory.Keys.ToArray();
         }
         /// <summary>
+        /// }{  debug 探索方向固定
         /// 探索方式，沿顺时针 
+        /// -----------------------------------------------------
+        /// *    0  |  1  |  2
+        /// * -----------------------
+        /// *    7  |  X  |  3
+        /// * -----------------------
+        /// *    6  |  5  |  4
         /// </summary>
         /// <returns></returns>
         private (int x, int y, int classIndex) SequentialAccessMemory()
         {
+            //determine the direction of exploration
+
             //快速搜索x++方向点
             List<Point> points = new List<Point>() {
-                new Point(_seed_x-1,_seed_y-1),
-                new Point(_seed_x,_seed_y-1),
-                new Point(_seed_x+1,_seed_y-1),
-                new Point(_seed_x+1,_seed_y),
-                new Point(_seed_x+1,_seed_y+1),
-                new Point(_seed_x,_seed_y+1),
-                new Point(_seed_x-1,_seed_y+1),
-                new Point(_seed_x-1,_seed_y),
+                new Point(_seed_x-1,_seed_y-1), //(-1,-1)
+                new Point(_seed_x,_seed_y-1),   //(0,-1)
+                new Point(_seed_x+1,_seed_y-1),//(1,-1)
+                new Point(_seed_x+1,_seed_y),   //(1,0)
+                new Point(_seed_x+1,_seed_y+1),//(1,1)
+                new Point(_seed_x,_seed_y+1),//(0,1)
+                new Point(_seed_x-1,_seed_y+1),//(-1,1)
+                new Point(_seed_x-1,_seed_y),//(-1,0)
             };
             //create target point
             Point target = new Point(_seed_x, _seed_y);
@@ -167,10 +177,14 @@ namespace Engine.Brain.AI.RL.Env
                     _seed_action = action;
                     //set target point
                     target = p;
+                    //set seed x
+                    _seed_x = target.X;
+                    //set seed y
+                    _seed_y = target.Y;
                 }
             }
             //
-            return (target.X,target.Y, _seed_classIndex);
+            return (_seed_x,_seed_y, _seed_classIndex);
         }
         /// <summary>
         /// random测试集
@@ -206,9 +220,9 @@ namespace Engine.Brain.AI.RL.Env
         /// -----------------------------------------------------
         /// *    0  |  1  |  2
         /// * -----------------------
-        /// *    3  |  X  |  4
+        /// *    7  |  X  |  3
         /// * -----------------------
-        /// *    5  |  6  |  7
+        /// *    6  |  5  |  4
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
