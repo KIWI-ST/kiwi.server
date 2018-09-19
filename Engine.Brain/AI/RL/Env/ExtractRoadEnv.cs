@@ -1,4 +1,5 @@
 ﻿using Engine.Brain.Entity;
+using Engine.Brain.Extend;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Tools;
 using System.Collections.Generic;
@@ -151,6 +152,7 @@ namespace Engine.Brain.AI.RL.Env
         private (int x, int y, int classIndex) SequentialAccessMemory()
         {
             //快速搜索x++方向点
+            double[] action = new double[ActionNum];
             //组成onehot
             List<Point> points = new List<Point>() {
                 new Point(_seed_x-1,_seed_y-1), //(-1,-1)
@@ -164,21 +166,16 @@ namespace Engine.Brain.AI.RL.Env
             };
             //create target point
             Point target = new Point(_seed_x, _seed_y);
-            //while explore to the end
-            if (_seed_x == _limit_x - 1||_seed_y==_limit_y-1||_seed_x==0||_seed_y==0)
-                return (_seed_x, _seed_y, 8);
             //search next point
-            for(int action = 0; action < ActionNum; action++)
+            for(int pointIndex = 0; pointIndex < ActionNum; pointIndex++)
             {
-                Point p = points[action];
+                Point p = points[pointIndex];
                 //if reach to the end, use original point
-                if (p.X >= _limit_x || p.X < 0 || p.Y >= _limit_y || p.Y < 0) {
-                    _seed_action = 8;
-                };
+                if (p.X >= _limit_x || p.X < 0 || p.Y >= _limit_y || p.Y < 0) continue;
                 if (_queryTable[p.X, p.Y] == _c_classIndex)
                 {
                     //get seed action 
-                    _seed_action = action;
+                    action = action.CombineOneHot(NP.ToOneHot(pointIndex,ActionNum));
                     //set target point
                     target = p;
                     //set seed x
