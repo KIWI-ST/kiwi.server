@@ -29,11 +29,6 @@ namespace Engine.Brain.AI.RL.Env
         /// </summary>
         int[] _randomSeedKeys;
         /// <summary>
-        /// defalut direction is ++, while explore the maximum of the points, the direction trun to --
-        /// indicate the exploration direction,default is clockwise
-        /// </summary>
-        bool _clockwise = true;
-        /// <summary>
         /// query Table
         /// </summary>
         double[,] _queryTable;
@@ -76,9 +71,16 @@ namespace Engine.Brain.AI.RL.Env
             _featureRasterLayer = featureRasterLayer;
             //output
             _labelRasterLayer = labelRasterLayer;
+            // 探索方式，沿顺时针 
+            // -----------------------------------------------------
+            // *    0  |  1  |  2
+            // * -----------------------
+            // *    7  |  8  |  3
+            // * -----------------------
+            // *    6  |  5  |  4
             //represent eight direction actions
-            ActionNum = 8;
-            //pixel matrix of M x M
+            ActionNum = 9;
+            //pixel matrix of M x M ， and use one value to indicate clockwise(whether 1 is clock wise,0 is not)
             FeatureNum = _maskx * _masky;
             //limit of x
             _limit_x = _labelRasterLayer.XSize;
@@ -116,9 +118,7 @@ namespace Engine.Brain.AI.RL.Env
             //3. get seed point
             Point p = seed_points[NP.Random(seed_points.Count)];
             (_seed_x,_seed_y) = (p.X,p.Y);
-            //4.reset exploration direction
-            _clockwise = true;
-            //3. retrun state
+            //4. retrun state
             return Step(-1).state;
         }
         /// <summary>
@@ -140,20 +140,18 @@ namespace Engine.Brain.AI.RL.Env
         }
         /// <summary>
         /// }{  debug 探索方向固定
-        /// 探索方式，沿顺时针 
         /// -----------------------------------------------------
         /// *    0  |  1  |  2
         /// * -----------------------
-        /// *    7  |  X  |  3
+        /// *    7  |  8  |  3
         /// * -----------------------
         /// *    6  |  5  |  4
         /// </summary>
         /// <returns></returns>
         private (int x, int y, int classIndex) SequentialAccessMemory()
         {
-            //determine the direction of exploration
-
             //快速搜索x++方向点
+            //组成onehot
             List<Point> points = new List<Point>() {
                 new Point(_seed_x-1,_seed_y-1), //(-1,-1)
                 new Point(_seed_x,_seed_y-1),   //(0,-1)
@@ -166,11 +164,17 @@ namespace Engine.Brain.AI.RL.Env
             };
             //create target point
             Point target = new Point(_seed_x, _seed_y);
+            //while explore to the end
+            if (_seed_x == _limit_x - 1||_seed_y==_limit_y-1||_seed_x==0||_seed_y==0)
+                return (_seed_x, _seed_y, 8);
             //search next point
             for(int action = 0; action < ActionNum; action++)
             {
                 Point p = points[action];
-                if (p.X >= _limit_x || p.X < 0 || p.Y >= _limit_y || p.Y < 0) continue;
+                //if reach to the end, use original point
+                if (p.X >= _limit_x || p.X < 0 || p.Y >= _limit_y || p.Y < 0) {
+                    _seed_action = 8;
+                };
                 if (_queryTable[p.X, p.Y] == _c_classIndex)
                 {
                     //get seed action 
@@ -181,6 +185,8 @@ namespace Engine.Brain.AI.RL.Env
                     _seed_x = target.X;
                     //set seed y
                     _seed_y = target.Y;
+                    //
+                    break;
                 }
             }
             //
