@@ -5,18 +5,28 @@ using Engine.GIS.GOperation.Tools;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Engine.Brain.AI.RL.Env.Agent;
 
 namespace Engine.Brain.AI.RL.Env
 {
+   
     /// <summary>
     ///  the environment of Path extract
     ///  1.reset environment
     ///  2.random take classIndex and start point
     ///  3.next point
-    ///  after run one epoche, reset enviroment, back to step 1
+    ///  after running epoche once, reset enviroment, back to step 1
     /// </summary>
     public class ExtractRoadEnv : IEnv
     {
+        /// <summary>
+        /// agent explorer
+        /// </summary>
+        AgentExplorer _seed_agent;
+        /// <summary>
+        /// 
+        /// </summary>
+        AgentManager _agentManager = new AgentManager();
         /// <summary>
         /// 
         /// </summary>
@@ -37,14 +47,6 @@ namespace Engine.Brain.AI.RL.Env
         /// input features and output
         /// </summary>
         private GRasterLayer _featureRasterLayer, _labelRasterLayer;
-        /// <summary>
-        /// explore parameters
-        /// </summary>
-        int _seed_classIndex, _seed_x, _seed_y, _seed_action;
-        /// <summary>
-        /// current pearmeters
-        /// </summary>
-        int _c_x, _c_y, _c_classIndex;
         /// <summary>
         /// mask width
         /// </summary>
@@ -76,7 +78,7 @@ namespace Engine.Brain.AI.RL.Env
             // -----------------------------------------------------
             // *    0  |  1  |  2
             // * -----------------------
-            // *    7  |  8  |  3
+            // *    7  |  p  |  3
             // * -----------------------
             // *    6  |  5  |  4
             //represent eight direction actions
@@ -112,13 +114,14 @@ namespace Engine.Brain.AI.RL.Env
         /// <returns></returns>
         public double[] Reset()
         {
-            //1. reset seed
-            _seed_classIndex = NP.Random(_randomSeedKeys);
-            //2 get seed point list
-            List<Point> seed_points = _memory[_seed_classIndex];
+            //1. reset class index
+            int seedClassIndex = NP.Random(_randomSeedKeys);
+            //2 reset start point
+            List<Point> seed_points = _memory[seedClassIndex];
             //3. get seed point
             Point p = seed_points[NP.Random(seed_points.Count)];
-            (_seed_x,_seed_y) = (p.X,p.Y);
+            //4. create seed agent explorer
+            _seed_agent = _agentManager.ResetExplorer(p.X,p.Y);
             //4. retrun state
             return Step(-1).state;
         }
@@ -140,7 +143,6 @@ namespace Engine.Brain.AI.RL.Env
             _randomSeedKeys = _memory.Keys.ToArray();
         }
         /// <summary>
-        /// }{  debug 探索方向固定
         /// -----------------------------------------------------
         /// *    0  |  1  |  2
         /// * -----------------------
@@ -149,23 +151,21 @@ namespace Engine.Brain.AI.RL.Env
         /// *    6  |  5  |  4
         /// </summary>
         /// <returns></returns>
-        private (int x, int y, int classIndex) SequentialAccessMemory()
+        private (int x, int y, int classIndex) SequentialAccessMemory(AgentExplorer explorer)
         {
             //快速搜索x++方向点
             double[] action = new double[ActionNum];
             //组成onehot
             List<Point> points = new List<Point>() {
-                new Point(_seed_x-1,_seed_y-1), //(-1,-1)
-                new Point(_seed_x,_seed_y-1),   //(0,-1)
-                new Point(_seed_x+1,_seed_y-1),//(1,-1)
-                new Point(_seed_x+1,_seed_y),   //(1,0)
-                new Point(_seed_x+1,_seed_y+1),//(1,1)
-                new Point(_seed_x,_seed_y+1),//(0,1)
-                new Point(_seed_x-1,_seed_y+1),//(-1,1)
-                new Point(_seed_x-1,_seed_y),//(-1,0)
+                new Point(explorer.X-1,explorer.Y-1), //(-1,-1)
+                new Point(explorer.X,explorer.Y-1),   //(0,-1)
+                new Point(explorer.X+1,explorer.Y-1),//(1,-1)
+                new Point(explorer.X+1,explorer.Y),   //(1,0)
+                new Point(explorer.X+1,explorer.Y+1),//(1,1)
+                new Point(explorer.X,explorer.Y+1),//(0,1)
+                new Point(explorer.X-1,explorer.Y+1),//(-1,1)
+                new Point(explorer.X-1,explorer.Y),//(-1,0)
             };
-            //create target point
-            Point target = new Point(_seed_x, _seed_y);
             //search next point
             for(int pointIndex = 0; pointIndex < ActionNum; pointIndex++)
             {

@@ -88,6 +88,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AI\DL\CNN.cs" />
+    <Compile Include="AI\RL\Env\Agent\AgentExplorer.cs" />
+    <Compile Include="AI\RL\Env\Agent\AgentManager.cs" />
     <Compile Include="AI\RL\Env\ExtractRoadEnv.cs" />
     <Compile Include="AI\RL\INet.cs" />
     <Compile Include="AI\RL\IEnv.cs" />
