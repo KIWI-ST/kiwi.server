@@ -16,7 +16,7 @@
 //    ///  3.next random point
 //    ///  after running epoche once, reset enviroment, back to step 1
 //    /// </summary>
-//    public class ExtractRoadEnv : IEnv
+//    public class ExtractRoadEnv :  IEnv
 //    {
 //        /// <summary>
 //        /// 
@@ -125,7 +125,7 @@
 //            Point p = seed_points[NP.Random(seed_points.Count)];
 //            (_seed_x, _seed_y) = (p.X, p.Y);
 //            //4. retrun state
-//            return Step(-1).state;
+//            return Step(null).state;
 //        }
 //        /// <summary>
 //        /// 分析标注道路区域
@@ -153,7 +153,7 @@
 //        /// *    6  |  5  |  4
 //        /// </summary>
 //        /// <returns></returns>
-//        private (int x, int y, int classIndex) SequentialAccessMemory()
+//        private (int x, int y, double[] classIndex) SequentialAccessMemory()
 //        {
 //            //快速搜索x++方向点
 //            _seed_action = new double[ActionNum];
@@ -180,20 +180,20 @@
 //                if (_queryTable[p.X, p.Y] == _c_classIndex) _seed_action.CombineOneHot(NP.ToOneHot(pointIndex, ActionNum));
 //            }
 //            //
-//            return (_seed_x,_seed_y, _seed_classIndex);
+//            return (_seed_x, _seed_y, _seed_classIndex);
 //        }
 //        /// <summary>
 //        /// random测试集
 //        /// </summary>
 //        /// <param name="batchSize"></param>
 //        /// <returns></returns>
-//        public (List<double[]> states, int[] labels) RandomEval(int batchSize = 64)
+//        public (List<double[]> states, double[][] labels) RandomEval(int batchSize = 64)
 //        {
 //            //reset environment
 //            Reset();
 //            //store states and actions
 //            List<double[]> states = new List<double[]>();
-//            int[] labels = new int[batchSize];
+//            double[] labels = new double[batchSize];
 //            for (int i = 0; i < batchSize; i++)
 //            {
 //                var (x, y, classIndex) = SequentialAccessMemory();
@@ -224,10 +224,10 @@
 //        /// <returns></returns>
 //        public (double[] state, double reward) Step(double[] action)
 //        {
-//            if (action == -1)
+//            if (action == null)
 //            {
-//                (_c_x, _c_y, _c_classIndex) = (_seed_x,_seed_y, _seed_classIndex);
-//                double[] raw = _pBandCursorTool.PickNormalValueByMask(_c_x, _c_y,_maskx,_masky);
+//                (_c_x, _c_y, _c_classIndex) = (_seed_x, _seed_y, _seed_classIndex);
+//                double[] raw = _pBandCursorTool.PickNormalValueByMask(_c_x, _c_y, _maskx, _masky);
 //                return (raw, 0);
 //            }
 //            else
@@ -235,7 +235,7 @@
 //                //p+1 与 p的关系，得到方向，通过方向得到Reward
 //                double reward = action == _seed_action ? 1.0 : -1.0;
 //                (_c_x, _c_y, _c_classIndex) = SequentialAccessMemory();
-//                double[] raw = _pBandCursorTool.PickNormalValueByMask(_c_x, _c_y,_maskx,_masky);
+//                double[] raw = _pBandCursorTool.PickNormalValueByMask(_c_x, _c_y, _maskx, _masky);
 //                return (raw, reward);
 //            }
 //        }

@@ -7,6 +7,23 @@ namespace Engine.Brain.Entity
     public class NP
     {
         /// <summary>
+        /// indicate prediction vector equals lable vector
+        /// </summary>
+        /// <param name="pred"></param>
+        /// <param name="label"></param>
+        /// <returns></returns>
+        public static bool Equal(double[] pred,double[] label)
+        {
+            int predCount = pred.Length;
+            int labelCount = label.Length;
+            if (predCount != labelCount)
+                return false;
+            bool result = true;
+            for (int i = 0; i < predCount; i++)
+                result &= pred[i] == label[i];
+            return result;
+        }
+        /// <summary>
         /// create ont hot array stochastic
         /// </summary>
         /// <param name="length"></param>
@@ -227,6 +244,18 @@ namespace Engine.Brain.Entity
                 for (int j = 0; j < dim1; j++)
                     outputs[i * dim1 + j] = inputs[i, j];
             return outputs;
+        }
+
+       public static double  CalcuteAccuracy(double[][] predict, double[][] label)
+        {
+            int predCount = predict.GetLength(0);
+            int labelCount = predict.GetLength(0);
+            if (predCount != labelCount)
+                return 0.0;
+            double right = 0.0;
+            for (int i = 0; i < predCount; i++)
+                right += Equal(predict[i], label[i])?1:0;
+            return right / predCount;
         }
 
         public static double CalcuteAccuracy(float[] predict, float[] label)

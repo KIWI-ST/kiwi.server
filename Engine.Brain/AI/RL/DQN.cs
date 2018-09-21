@@ -345,16 +345,11 @@ namespace Engine.Brain.AI.RL
             //eval data batchSize
             const int evalSize = 128;
             var (states, rawLabels) = _env.RandomEval(evalSize);
-            float[] preds = new float[evalSize];
-            float[] labels = new float[evalSize];
+            double[][] predicts = new double[evalSize][];
             for (int i = 0; i < evalSize; i++)
-            {
-                double[] action = ChooseAction(states[i]).action;
-                preds[i] = NP.Argmax(action);
-                labels[i] = NP.Argmax(rawLabels[i]);
-            }
+                predicts[i] = ChooseAction(states[i]).action;
             //calcute accuracy
-            var accuracy = NP.CalcuteAccuracy(preds, labels);
+            var accuracy = NP.CalcuteAccuracy(predicts, rawLabels);
             return accuracy;
         }
         /// <summary>
