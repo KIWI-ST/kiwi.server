@@ -5,7 +5,6 @@ using Engine.GIS.GOperation.Tools;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using Engine.Brain.AI.RL.Env.Agent;
 
 namespace Engine.Brain.AI.RL.Env
 {
@@ -13,20 +12,12 @@ namespace Engine.Brain.AI.RL.Env
     /// <summary>
     ///  the environment of Path extract
     ///  1.reset environment
-    ///  2.random take classIndex and start point
-    ///  3.next point
+    ///  2.random take classIndex and point
+    ///  3.next random point
     ///  after running epoche once, reset enviroment, back to step 1
     /// </summary>
     public class ExtractRoadEnv : IEnv
     {
-        /// <summary>
-        /// agent explorer
-        /// </summary>
-        AgentExplorer _seed_agent;
-        /// <summary>
-        /// 
-        /// </summary>
-        AgentManager _agentManager = new AgentManager();
         /// <summary>
         /// 
         /// </summary>
@@ -47,6 +38,14 @@ namespace Engine.Brain.AI.RL.Env
         /// input features and output
         /// </summary>
         private GRasterLayer _featureRasterLayer, _labelRasterLayer;
+        /// <summary>
+        /// explore parameters
+        /// </summary>
+        int _seed_classIndex, _seed_x, _seed_y, _seed_action;
+        /// <summary>
+        /// current pearmeters
+        /// </summary>
+        int _c_x, _c_y, _c_classIndex;
         /// <summary>
         /// mask width
         /// </summary>
@@ -120,8 +119,7 @@ namespace Engine.Brain.AI.RL.Env
             List<Point> seed_points = _memory[seedClassIndex];
             //3. get seed point
             Point p = seed_points[NP.Random(seed_points.Count)];
-            //4. create seed agent explorer
-            _seed_agent = _agentManager.ResetExplorer(p.X,p.Y);
+            (_seed_x, _seed_y) = (p.X, p.Y);
             //4. retrun state
             return Step(-1).state;
         }
@@ -151,23 +149,25 @@ namespace Engine.Brain.AI.RL.Env
         /// *    6  |  5  |  4
         /// </summary>
         /// <returns></returns>
-        private (int x, int y, int classIndex) SequentialAccessMemory(AgentExplorer explorer)
+        private (int x, int y, int classIndex) SequentialAccessMemory()
         {
             //快速搜索x++方向点
             double[] action = new double[ActionNum];
             //组成onehot
             List<Point> points = new List<Point>() {
-                new Point(explorer.X-1,explorer.Y-1), //(-1,-1)
-                new Point(explorer.X,explorer.Y-1),   //(0,-1)
-                new Point(explorer.X+1,explorer.Y-1),//(1,-1)
-                new Point(explorer.X+1,explorer.Y),   //(1,0)
-                new Point(explorer.X+1,explorer.Y+1),//(1,1)
-                new Point(explorer.X,explorer.Y+1),//(0,1)
-                new Point(explorer.X-1,explorer.Y+1),//(-1,1)
-                new Point(explorer.X-1,explorer.Y),//(-1,0)
+                new Point(_seed_x-1,_seed_y-1), //(-1,-1)
+                new Point(_seed_x,_seed_y-1),   //(0,-1)
+                new Point(_seed_x+1,_seed_y-1),//(1,-1)
+                new Point(_seed_x+1,_seed_y),   //(1,0)
+                new Point(_seed_x+1,_seed_y+1),//(1,1)
+                new Point(_seed_x,_seed_y+1),//(0,1)
+                new Point(_seed_x-1,_seed_y+1),//(-1,1)
+                new Point(_seed_x-1,_seed_y),//(-1,0)
             };
+            //create target point
+            Point target = new Point(_seed_x, _seed_y);
             //search next point
-            for(int pointIndex = 0; pointIndex < ActionNum; pointIndex++)
+            for (int pointIndex = 0; pointIndex < ActionNum; pointIndex++)
             {
                 Point p = points[pointIndex];
                 //if reach to the end, use original point
@@ -175,7 +175,7 @@ namespace Engine.Brain.AI.RL.Env
                 if (_queryTable[p.X, p.Y] == _c_classIndex)
                 {
                     //get seed action 
-                    action = action.CombineOneHot(NP.ToOneHot(pointIndex,ActionNum));
+                    action = action.CombineOneHot(NP.ToOneHot(pointIndex, ActionNum));
                     //set target point
                     target = p;
                     //set seed x
