@@ -212,7 +212,7 @@ namespace Engine.Brain.AI.RL
         /// 输出每一个 state 对应的 action 值
         /// </summary>
         /// <returns></returns>
-        public (int action, double q) ChooseAction(double[] state)
+        public (double[] action, double q) ChooseAction(double[] state)
         {
             double[] input = new double[_featuresNumber + _actionsNumber];
             double[] output = new double[_actionsNumber];
@@ -226,7 +226,7 @@ namespace Engine.Brain.AI.RL
                 double[] preditOutput = _actorNet.Predict(input);
                 output[i] = preditOutput[0];
             }
-            return (NP.Argmax(output), NP.Max(output));
+            return (NP.ToOneHot(NP.Argmax(output), _actionsNumber), NP.Max(output));
         }
         /// <summary>
         /// 
@@ -310,7 +310,7 @@ namespace Engine.Brain.AI.RL
         /// <param name="step"></param>
         /// <param name="state"></param>
         /// <returns></returns>
-        public (int action, double q) EpsilonGreedy(int step, double[] state)
+        public (double[] action, double q) EpsilonGreedy(int step, double[] state)
         {
             var epsion = EpsilonCalcute(step);
             if (NP.Random() < epsion)
@@ -340,18 +340,21 @@ namespace Engine.Brain.AI.RL
         /// </summary>
         /// <param name="list"></param>
         /// <returns></returns>
-        private float Accuracy()
+        private double Accuracy()
         {
-            const int batchSize = 128;
-            var (states, rawLabels) = _env.RandomEval(batchSize);
-            float[] actions = new float[batchSize];
-            float[] labels = new float[batchSize];
-            for (int i = 0; i < batchSize; i++)
+            //eval data batchSize
+            const int evalSize = 128;
+            var (states, rawLabels) = _env.RandomEval(evalSize);
+            float[] preds = new float[evalSize];
+            float[] labels = new float[evalSize];
+            for (int i = 0; i < evalSize; i++)
             {
-                actions[i] = ChooseAction(states[i]).action;
-                labels[i] = rawLabels[i];
+                double[] action = ChooseAction(states[i]).action;
+                preds[i] = NP.Argmax(action);
+                labels[i] = NP.Argmax(rawLabels[i]);
             }
-            var accuracy = NP.CalcuteAccuracy(labels, actions);
+            //calcute accuracy
+            var accuracy = NP.CalcuteAccuracy(preds, labels);
             return accuracy;
         }
         /// <summary>
@@ -363,9 +366,9 @@ namespace Engine.Brain.AI.RL
             double[] state = _env.Reset();
             for (int i = 0; i < rememberSize; i++)
             {
-                int action = _env.RandomAction();
+                double[] action = _env.RandomAction();
                 var (nextState, reward) = _env.Step(action);
-                Remember(state, NP.ToOneHot(action, _env.ActionNum), 0, reward, nextState);
+                Remember(state, action, 0, reward, nextState);
                 state = nextState;
             }
         }
@@ -391,7 +394,7 @@ namespace Engine.Brain.AI.RL
                     //play
                     var (nextState, reward) = _env.Step(action);
                     //store state and reward
-                    Remember(state, NP.ToOneHot(action, _env.ActionNum), q, reward, nextState);
+                    Remember(state, action, q, reward, nextState);
                     //train
                     (loss, span) = Replay();
                     //

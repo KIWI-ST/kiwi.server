@@ -189,8 +189,8 @@ namespace Host.Image.UI
                 env = new ImageClassifyEnv(featureRasterLayer, labelRasterLayer);
             else if(Model == 2)
             {
-                env = new ExtractRoadEnv(featureRasterLayer, labelRasterLayer);
-                gamma = 0.9;
+                //env = new ExtractRoadEnv(featureRasterLayer, labelRasterLayer);
+                //gamma = 0.9;
             }
             //crate dqn learning
             DQN dqn = new DQN(env);
@@ -271,11 +271,12 @@ namespace Host.Image.UI
             for (int i = 0; i < featureRasterLayer.XSize; i++)
                 for (int j = 0; j < featureRasterLayer.YSize; j++)
                 {
-                    double[] raw = featureRasterLayer.GetNormalValue(i, j).ToArray();
-                    double[] normal = NP.Normalize(raw, 255f);
+                    //get normalized input raw value
+                    double[] normal = featureRasterLayer.GetNormalValue(i, j).ToArray();
+                    //}{debug
                     var (action, q) = dqn.ChooseAction(normal);
                     //convert action to raw byte value
-                    int gray = dqn.ActionToRawValue(action);
+                    int gray = dqn.ActionToRawValue(NP.Argmax(action));
                     //后台绘制，报告进度
                     Color c = Color.FromArgb(gray, gray, gray);
                     Pen p = new Pen(c);

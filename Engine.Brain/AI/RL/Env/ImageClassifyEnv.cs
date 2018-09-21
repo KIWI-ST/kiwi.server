@@ -1,4 +1,5 @@
-﻿using Engine.Brain.Entity;
+﻿using Accord.Math;
+using Engine.Brain.Entity;
 using Engine.Brain.Extend;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Tools;
@@ -7,7 +8,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
-namespace Engine.Brain.AI.RL
+namespace Engine.Brain.AI.RL.Env
 {
     /// <summary>
     ///  the environment of image classification
@@ -20,9 +21,19 @@ namespace Engine.Brain.AI.RL
 
         private GRasterLayer _featureRasterLayer, _labelRasterLayer;
 
-        int _current_x, _current_y, _current_classindex;
+        int _current_x, _current_y;
 
-        int _c_x = 0, _c_y = 0, _c_classIndex = -9999;
+        /// <summary>
+        /// use one-hot vector represent image class(anno)
+        /// </summary>
+        double[] _current_classindex;
+
+        int _c_x = 0, _c_y = 0;
+
+        /// <summary>
+        /// the current image class(represented by one-hot vector)
+        /// </summary>
+        double[] _c_classIndex;
 
         /// <summary>
         /// 指定观察的图像，和样本所在的层位置
@@ -77,16 +88,19 @@ namespace Engine.Brain.AI.RL
         /// <returns></returns>
         public double[] Reset()
         {
-            return Step(-1).state;
+            return Step(null).state;
         }
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        private (int x, int y, int classIndex) RandomAccessMemory()
+        private (int x, int y, double[] classIndex) RandomAccessMemory()
         {
-            int classIndex = NP.Random(_randomSeedKeys);
-            Point p = Memory[classIndex].RandomTake();
+            //use actionNumber represent real types
+            int rawValueIndex = NP.Random(_randomSeedKeys);
+            Point p = _memory[rawValueIndex].RandomTake();
+            //current one-hot action
+            double[] classIndex = NP.ToOneHot(Array.IndexOf(_randomSeedKeys, rawValueIndex), ActionNum);
             return (p.X, p.Y, classIndex);
         }
         /// <summary>
@@ -94,15 +108,14 @@ namespace Engine.Brain.AI.RL
         /// </summary>
         /// <param name="batchSize"></param>
         /// <returns></returns>
-        public (List<double[]> states, int[] labels) RandomEval(int batchSize = 64)
+        public (List<double[]> states, double[][] labels) RandomEval(int batchSize = 64)
         {
             List<double[]> states = new List<double[]>();
-            int[] labels = new int[batchSize];
+            double[][] labels = new double[batchSize][];
             for (int i = 0; i < batchSize; i++)
             {
                 var (x, y, classIndex) = RandomAccessMemory();
-                double[] raw = _featureRasterLayer.GetNormalValue(x, y).ToArray();
-                double[] normal = NP.Normalize(raw, 255f);
+                double[] normal = _featureRasterLayer.GetNormalValue(x, y).ToArray();
                 states.Add(normal);
                 labels[i] = classIndex;
             }
@@ -111,19 +124,19 @@ namespace Engine.Brain.AI.RL
         /// <summary>
         /// random数据集
         /// </summary>
-        /// <returns></returns>
-        public int RandomAction()
+        public double[] RandomAction()
         {
-            return NP.Random(ActionNum);
+            int action = NP.Random(ActionNum);
+            return NP.ToOneHot(action, ActionNum);
         }
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="action"></param>
+        /// <param name="action">use null to reset environment,else use one-hot vector</param>
         /// <returns></returns>
-        public (double[] state, double reward) Step(int action)
+        public (double[] state, double reward) Step(double[] action)
         {
-            if (action == -1)
+            if (action == null)
             {
                 (_c_x, _c_y, _c_classIndex) = (_current_x, _current_y, _current_classindex);
                 (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
@@ -132,7 +145,7 @@ namespace Engine.Brain.AI.RL
             }
             else
             {
-                double reward = action == _current_classindex ? 1.0 : -1.0;
+                double reward = NP.Argmax(action) == NP.Argmax(_current_classindex) ? 1.0 : -1.0;
                 (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
                 double[] raw = _featureRasterLayer.GetNormalValue(_current_x, _current_y).ToArray();
                 return (raw, reward);

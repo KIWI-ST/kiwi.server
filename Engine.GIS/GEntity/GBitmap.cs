@@ -25,7 +25,7 @@ namespace Engine.GIS.GEntity
             int imgheight = normalbuffer.GetLength(1);
             for (int i = 0; i < imgheight; i++)
                 for (int j = 0; j < imgwidth; j++)
-                    rawValues[index++] = Convert.ToByte(normalbuffer[j, i] * 255);
+                    rawValues[index++] = double.IsNaN(normalbuffer[j, i]) ? (byte)255 : Convert.ToByte(normalbuffer[j, i] * 255);
             //申请目标位图的变量，并将其内存区域锁定
             Bitmap bmp = new Bitmap(width, height, PixelFormat.Format24bppRgb);
             BitmapData bmpData = bmp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);

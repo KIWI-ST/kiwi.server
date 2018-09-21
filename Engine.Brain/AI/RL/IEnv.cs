@@ -21,7 +21,7 @@ namespace Engine.Brain.AI.RL
         /// </summary>
         /// <param name="batchSize"></param>
         /// <returns></returns>
-        (List<double[]> states, int[] labels) RandomEval(int batchSize = 64);
+        (List<double[]> states, double[][] labels) RandomEval(int batchSize = 64);
         /// <summary>
         /// number of actions
         /// </summary>
@@ -31,16 +31,16 @@ namespace Engine.Brain.AI.RL
         /// </summary>
         int FeatureNum { get; }
         /// <summary>
-        /// get sate/reward/q/sate next(state_)
+        /// get sate/reward/q/sate next(state_) (one hot)
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        (double[] state, double reward) Step(int action);
+        (double[] state, double reward) Step(double[] action);
         /// <summary>
         /// crate an action located in action range
         /// </summary>
         /// <returns></returns>
-        int RandomAction();
+        double[] RandomAction();
         /// <summary>
         /// 重置环境
         /// </summary>

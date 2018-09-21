@@ -7,6 +7,19 @@ namespace Engine.Brain.Entity
     public class NP
     {
         /// <summary>
+        /// create ont hot array stochastic
+        /// </summary>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public static double[] StochasticOnehot(int length)
+        {
+            double[] action = new double[length];
+            for (int i = 0; i < length; i++)
+                action[i] = NP.Random(1);
+            return action;
+        }
+
+        /// <summary>
         /// random with seed
         /// </summary>
         /// <param name="seeds"></param>
@@ -216,7 +229,7 @@ namespace Engine.Brain.Entity
             return outputs;
         }
 
-        public static float CalcuteAccuracy(float[] predict, float[] label)
+        public static double CalcuteAccuracy(float[] predict, float[] label)
         {
             int count = predict.Length;
             float right = 0f;

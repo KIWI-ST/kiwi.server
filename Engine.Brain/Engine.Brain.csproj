@@ -107,11 +107,10 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine.GIS\Engine.GIS.csproj">
-      <Project>{82B3CFC7-E05C-46D3-9E91-2F5F4495238E}</Project>
+      <Project>{82b3cfc7-e05c-46d3-9e91-2f5f4495238e}</Project>
       <Name>Engine.GIS</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\TensorFlowSharp.1.9.0\build\net45\TensorFlowSharp.targets" Condition="Exists('..\packages\TensorFlowSharp.1.9.0\build\net45\TensorFlowSharp.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
