@@ -20,21 +20,14 @@ namespace Engine.Brain.AI.RL.Env
         int[] _randomSeedKeys;
 
         private GRasterLayer _featureRasterLayer, _labelRasterLayer;
-
+        /// <summary>
+        /// x,y position
+        /// </summary>
         int _current_x, _current_y;
-
         /// <summary>
         /// use one-hot vector represent image class(anno)
         /// </summary>
         double[] _current_classindex;
-
-        int _c_x = 0, _c_y = 0;
-
-        /// <summary>
-        /// the current image class(represented by one-hot vector)
-        /// </summary>
-        double[] _c_classIndex;
-
         /// <summary>
         /// 指定观察的图像，和样本所在的层位置
         /// </summary>
@@ -138,7 +131,7 @@ namespace Engine.Brain.AI.RL.Env
         {
             if (action == null)
             {
-                (_c_x, _c_y, _c_classIndex) = (_current_x, _current_y, _current_classindex);
+                var (_c_x, _c_y, _c_classIndex) = (_current_x, _current_y, _current_classindex);
                 (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
                 double[] raw = _featureRasterLayer.GetNormalValue(_c_x, _c_y).ToArray();
                 return (raw, 0.0);
