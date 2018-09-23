@@ -63,6 +63,10 @@ namespace Engine.Brain.AI.RL.Env
         /// </summary>
         private readonly int _limit_y;
         /// <summary>
+        /// indicate the action can be combine
+        /// </summary>
+        public bool IsSingleAction { get { return false; } }
+        /// <summary>
         /// 指定观察的图像，和样本所在的层位置
         /// </summary>
         /// <param name="featureRasterLayer"></param>

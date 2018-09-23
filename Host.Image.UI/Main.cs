@@ -189,8 +189,8 @@ namespace Host.Image.UI
                 env = new ImageClassifyEnv(featureRasterLayer, labelRasterLayer);
             else if(Model == 2)
             {
-                //env = new ExtractRoadEnv(featureRasterLayer, labelRasterLayer);
-                //gamma = 0.9;
+                env = new ExtractRoadEnv(featureRasterLayer, labelRasterLayer);
+                gamma = 0.9;
             }
             //crate dqn learning
             DQN dqn = new DQN(env);

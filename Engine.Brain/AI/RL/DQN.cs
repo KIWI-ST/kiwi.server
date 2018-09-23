@@ -5,6 +5,7 @@ using OxyPlot.Axes;
 using OxyPlot.Series;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Engine.Brain.AI.RL
 {
@@ -215,18 +216,37 @@ namespace Engine.Brain.AI.RL
         public (double[] action, double q) ChooseAction(double[] state)
         {
             double[] input = new double[_featuresNumber + _actionsNumber];
-            double[] output = new double[_actionsNumber];
-            for (int i = 0; i < _actionsNumber; i++)
+            Dictionary<double[], double> predicts = new Dictionary<double[], double>();
+            //1.create dict to simulate action,based on 
+            if (_env.IsSingleAction)//env.singleAction == true
+                for (int i = 0; i < _actionsNumber; i++)
+                    predicts.Add(NP.ToOneHot(i, _actionsNumber), -1.0);
+            else//2.env.singleAction == false
+                for (int i = 1; i < Math.Pow(2, _actionsNumber); i++)
+                {
+                    char[] strOnehot = Convert.ToString(i, 2).PadLeft(_actionsNumber, '0').ToCharArray();
+                    double[] doubleOnehot = new double[_actionsNumber];
+                    for (int index = 0; index < _actionsNumber; index++)
+                        doubleOnehot[_actionsNumber-index-1] = Convert.ToDouble(strOnehot[index].ToString());
+                    predicts.Add(doubleOnehot, -1.0);
+                }
+            List<double[]> keyCollection = predicts.Keys.ToList();
+            //2.choose action
+            for (int i = 0; i < keyCollection.Count; i++)
             {
+                double[] key = keyCollection[i];
                 int offset = 0;
                 Array.ConstrainedCopy(state, 0, input, offset, _featuresNumber);
                 offset += _featuresNumber;
-                Array.ConstrainedCopy(NP.ToOneHot(i, _actionsNumber), 0, input, offset, _actionsNumber);
+                Array.ConstrainedCopy(key, 0, input, offset, _actionsNumber);
                 offset += _actionsNumber;
                 double[] preditOutput = _actorNet.Predict(input);
-                output[i] = preditOutput[0];
+                predicts[key] = preditOutput[0];
             }
-            return (NP.ToOneHot(NP.Argmax(output), _actionsNumber), NP.Max(output));
+            //3.sort dictionary
+            var target = predicts.OrderByDescending(p => p.Value).ToDictionary(p => p.Key, o => o.Value).First();
+            //3. calcute action and qvalue
+            return (target.Key, target.Value);
         }
         /// <summary>
         /// 

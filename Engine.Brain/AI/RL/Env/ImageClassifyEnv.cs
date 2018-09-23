@@ -62,6 +62,10 @@ namespace Engine.Brain.AI.RL.Env
         /// </summary>
         public int[] RandomSeedKeys { get { return _randomSeedKeys; } }
         /// <summary>
+        /// 
+        /// </summary>
+        public bool IsSingleAction { get { return true; } }
+        /// <summary>
         /// 处理之后的样本集
         /// </summary>
         public Dictionary<int, List<Point>> Memory { get { return _memory; } }

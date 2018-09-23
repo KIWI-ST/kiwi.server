@@ -9,6 +9,13 @@ namespace Engine.Brain.AI.RL
     public interface IEnv
     {
         /// <summary>
+        /// indicate the action value can be assigned by multi-action value
+        /// e.g. 
+        /// only support [0001] while the value is true
+        /// support [1001] while the value is false
+        /// </summary>
+        bool IsSingleAction { get; }
+        /// <summary>
         /// get action - rawValue dictionary map
         /// </summary>
         int[] RandomSeedKeys { get; }
