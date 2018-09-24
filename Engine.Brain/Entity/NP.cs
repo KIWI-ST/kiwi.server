@@ -32,10 +32,9 @@ namespace Engine.Brain.Entity
         {
             double[] action = new double[length];
             for (int i = 0; i < length; i++)
-                action[i] = NP.Random(1);
+                action[i] = NP.Random(2);
             return action;
         }
-
         /// <summary>
         /// random with seed
         /// </summary>
