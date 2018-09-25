@@ -222,6 +222,9 @@ namespace Engine.Brain.AI.RL.Env
                 var (_c_x, _c_y, _c_action) = (_current_x, _current_y, _current_action);
                 (_current_x, _current_y, _current_action) = RandomAccessMemory();
                 double[] raw = _pBandCursorTool.PickNormalValueByMask(_c_x, _c_y, _maskx, _masky);
+                //}{debug
+                double[] debugRaw = _featureRasterLayer.GetNormalValue(_c_x, _c_y).ToArray();
+
                 return (raw, 0);
             }
             else
