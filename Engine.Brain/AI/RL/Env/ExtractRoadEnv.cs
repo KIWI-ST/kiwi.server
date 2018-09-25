@@ -170,9 +170,11 @@ namespace Engine.Brain.AI.RL.Env
             {
                 Point p = points[pointIndex];
                 //if reach to the end, use original point
-                if (p.X >= _limit_x || p.X < 0 || p.Y >= _limit_y || p.Y < 0) continue;
+                if (p.X >= _limit_x || p.X < 0 || p.Y >= _limit_y || p.Y < 0)
+                    continue;
                 //store right action(one-hot)
-                if (_queryTable[p.X, p.Y] == rawValueIndex) actions.CombineOneHot(NP.ToOneHot(pointIndex, ActionNum));
+                if (_queryTable[p.X, p.Y] == rawValueIndex)
+                    actions.CombineOneHot(NP.ToOneHot(pointIndex, ActionNum));
             }
             //
             if (!_existActions.Exists(p => NP.Equal(p, actions)))
@@ -199,14 +201,6 @@ namespace Engine.Brain.AI.RL.Env
             }
             //return states and labels
             return (states, labels);
-        }
-        /// <summary>
-        /// return right action
-        /// </summary>
-        /// <returns></returns>
-        public double[] LabelAction()
-        {
-            return _current_action;
         }
         /// <summary>
         /// random数据集

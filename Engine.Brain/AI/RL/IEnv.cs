@@ -44,11 +44,6 @@ namespace Engine.Brain.AI.RL
         /// <returns></returns>
         (double[] state, double reward) Step(double[] action);
         /// <summary>
-        /// return the right action
-        /// </summary>
-        /// <returns></returns>
-        double[] LabelAction();
-        /// <summary>
         /// crate an action located in action range
         /// </summary>
         /// <returns></returns>

@@ -65,7 +65,7 @@ namespace Engine.Brain.AI.RL
 
         double _learningRate;
 
-        public DNet(int featureNum, int actionNum,double learningRate = 0.01)
+        public DNet(int featureNum, int actionNum,double learningRate = 0.001)
         {
             //
             int num = featureNum + actionNum;
