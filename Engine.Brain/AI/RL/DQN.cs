@@ -227,7 +227,7 @@ namespace Engine.Brain.AI.RL
                     char[] strOnehot = Convert.ToString(i, 2).PadLeft(_actionsNumber, '0').ToCharArray();
                     double[] doubleOnehot = new double[_actionsNumber];
                     for (int index = 0; index < _actionsNumber; index++)
-                        doubleOnehot[_actionsNumber-index-1] = Convert.ToDouble(strOnehot[index].ToString());
+                        doubleOnehot[_actionsNumber - index - 1] = Convert.ToDouble(strOnehot[index].ToString());
                     predicts.Add(doubleOnehot, -1.0);
                 }
             List<double[]> keyCollection = predicts.Keys.ToList();
@@ -373,7 +373,8 @@ namespace Engine.Brain.AI.RL
             return accuracy;
         }
         /// <summary>
-        /// 预存储记忆
+        /// }{debug 
+        /// 初始化记忆库时，需要给一定的优质记忆，否则记忆库里全是错误记忆，当action可选范围很大时，无法拟合
         /// </summary>
         /// <param name="rememberSize"></param>
         public void PreRemember(int rememberSize)
@@ -381,6 +382,8 @@ namespace Engine.Brain.AI.RL
             double[] state = _env.Reset();
             for (int i = 0; i < rememberSize; i++)
             {
+                //double[] action = i % 2 == 0 ? _env.RandomAction() : _env.LabelAction();
+                //增加随机探索记忆
                 double[] action = _env.RandomAction();
                 var (nextState, reward) = _env.Step(action);
                 Remember(state, action, 0, reward, nextState);

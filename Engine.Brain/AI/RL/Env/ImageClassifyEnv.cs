@@ -119,6 +119,14 @@ namespace Engine.Brain.AI.RL.Env
             return (states, labels);
         }
         /// <summary>
+        /// return the right action
+        /// </summary>
+        /// <returns></returns>
+        public double[] LabelAction()
+        {
+            return _current_classindex;
+        }
+        /// <summary>
         /// random数据集
         /// </summary>
         public double[] RandomAction()

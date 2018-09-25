@@ -185,13 +185,10 @@ namespace Host.Image.UI
             double gamma = 0.0;
             //create environment
             IEnv env = null;
-            if (Model == 1)
+            if (Model == 1) //gamma = 0.0;
                 env = new ImageClassifyEnv(featureRasterLayer, labelRasterLayer);
-            else if(Model == 2)
-            {
+            else if(Model == 2) //gamma = 0.9;
                 env = new ExtractRoadEnv(featureRasterLayer, labelRasterLayer);
-                gamma = 0.9;
-            }
             //crate dqn learning
             DQN dqn = new DQN(env);
             dqn.SetParameters(epoches: epoches,gamma: gamma);
