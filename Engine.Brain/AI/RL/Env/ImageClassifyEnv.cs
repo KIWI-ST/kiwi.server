@@ -19,6 +19,8 @@ namespace Engine.Brain.AI.RL.Env
 
         int[] _randomSeedKeys;
 
+        private IRasterLayerCursorTool _pGRasterLayerCursorTool = new GRasterLayerCursorTool();
+
         private GRasterLayer _featureRasterLayer, _labelRasterLayer;
         /// <summary>
         /// x,y position
@@ -74,8 +76,12 @@ namespace Engine.Brain.AI.RL.Env
         /// </summary>
         public void Prepare()
         {
+            //
             IBandStasticTool pBandStasticTool = new GBandStasticTool();
             pBandStasticTool.Visit(_labelRasterLayer.BandCollection[0]);
+            //
+            _pGRasterLayerCursorTool.Visit(_featureRasterLayer);
+            //
             _memory = pBandStasticTool.StaisticalRawGraph;
             _randomSeedKeys = _memory.Keys.ToArray();
         }
@@ -112,7 +118,7 @@ namespace Engine.Brain.AI.RL.Env
             for (int i = 0; i < batchSize; i++)
             {
                 var (x, y, classIndex) = RandomAccessMemory();
-                double[] normal = _featureRasterLayer.GetNormalValue(x, y).ToArray();
+                double[] normal = _pGRasterLayerCursorTool.PickNormalValue(x,y);
                 states.Add(normal);
                 labels[i] = classIndex;
             }
@@ -137,14 +143,14 @@ namespace Engine.Brain.AI.RL.Env
             {
                 var (_c_x, _c_y, _c_classIndex) = (_current_x, _current_y, _current_classindex);
                 (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
-                double[] raw = _featureRasterLayer.GetNormalValue(_c_x, _c_y).ToArray();
+                double[] raw = _pGRasterLayerCursorTool.PickNormalValue(_c_x, _c_y);
                 return (raw, 0.0);
             }
             else
             {
                 double reward = NP.Argmax(action) == NP.Argmax(_current_classindex) ? 1.0 : -1.0;
                 (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
-                double[] raw = _featureRasterLayer.GetNormalValue(_current_x, _current_y).ToArray();
+                double[] raw = _pGRasterLayerCursorTool.PickNormalValue(_current_x, _current_y);
                 return (raw, reward);
             }
         }

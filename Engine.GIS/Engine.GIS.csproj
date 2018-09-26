@@ -144,6 +144,7 @@
     <Compile Include="GOperation\GoutputRaster.cs" />
     <Compile Include="GOperation\Tools\GBandCursorTool.cs" />
     <Compile Include="GOperation\Tools\GBandStasticTool.cs" />
+    <Compile Include="GOperation\Tools\GRasterLayerCursorTool.cs" />
     <Compile Include="GOperation\Tools\IRasterTool.cs" />
     <Compile Include="GProject\GTransformation.cs" />
     <Compile Include="GProject\WebMercatorProjection.cs" />

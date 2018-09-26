@@ -1,6 +1,5 @@
 ﻿using Engine.GIS.GLayer.GRasterLayer.GBand;
 using Engine.GIS.GOperation.Arithmetic;
-using Engine.GIS.GOperation.Tools;
 using OSGeo.GDAL;
 using System.Collections.Generic;
 using System.Drawing;
@@ -69,23 +68,6 @@ namespace Engine.GIS.GLayer.GRasterLayer
         /// 波段集合
         /// </summary>
         public List<GRasterBand> BandCollection { get; }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        public List<double> GetNormalValue(int x,int y)
-        {
-            IBandCursorTool pBandCursorTool = new  GBandCursorTool();
-            List<double> pixels = new List<double>();
-            for (int i = 0; i < BandCount; i++)
-            {
-                pBandCursorTool.Visit(BandCollection[i]);
-                pixels.Add(pBandCursorTool.PickNormalValue(x, y));
-            }
-            return pixels;
-        }
         /// <summary>
         /// 
         /// </summary>

@@ -7,6 +7,7 @@ using Engine.GIS.Entity;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GLayer.GRasterLayer.GBand;
 using Engine.GIS.GOperation.Arithmetic;
+using Engine.GIS.GOperation.Tools;
 using Host.Image.UI.PlotForm;
 using Host.Image.UI.SettingForm;
 using Host.Image.UI.SettingForm.SLIC;
@@ -257,7 +258,10 @@ namespace Host.Image.UI
         /// <param name="featureRasterLayer"></param>
         private void Dqn_ImageClassification(DQN dqn, Engine.GIS.GLayer.GRasterLayer.GRasterLayer featureRasterLayer)
         {
-            //GDI绘制
+            //bind raster layer
+            IRasterLayerCursorTool pRasterLayerCursorTool = new GRasterLayerCursorTool();
+            pRasterLayerCursorTool.Visit(featureRasterLayer);
+            //GDI graph
             Bitmap classificationBitmap = new Bitmap(featureRasterLayer.XSize, featureRasterLayer.YSize);
             Graphics g = Graphics.FromImage(classificationBitmap);
             Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": starting dqn classification");
@@ -269,7 +273,7 @@ namespace Host.Image.UI
                 for (int j = 0; j < featureRasterLayer.YSize; j++)
                 {
                     //get normalized input raw value
-                    double[] normal = featureRasterLayer.GetNormalValue(i, j).ToArray();
+                    double[] normal = pRasterLayerCursorTool.PickNormalValue(i, j);
                     //}{debug
                     var (action, q) = dqn.ChooseAction(normal);
                     //convert action to raw byte value
