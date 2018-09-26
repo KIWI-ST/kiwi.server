@@ -101,7 +101,7 @@
     <Compile Include="AI\RL\INet.cs" />
     <Compile Include="AI\RL\IEnv.cs" />
     <Compile Include="AI\RL\Env\ImageClassifyEnv.cs" />
-    <Compile Include="AI\RL\Net\CNET.cs" />
+    <Compile Include="AI\RL\Net\CNet.cs" />
     <Compile Include="AI\RL\Net\DNet.cs" />
     <Compile Include="AI\RL\DQN.cs" />
     <Compile Include="Entity\NP.cs" />

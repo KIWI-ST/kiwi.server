@@ -7,9 +7,9 @@ using ConvNetSharp.Volume.Double;
 
 namespace Engine.Brain.AI.RL.Net
 {
-    class CNET
+    public class CNet:INet
     {
-        public CNET()
+        public CNet()
         {
 
             var net = new Net<double>();
@@ -44,6 +44,26 @@ namespace Engine.Brain.AI.RL.Net
 
             var prob2 = net.Forward(x);
 
+        }
+
+        public void Accept(INet sourceNet)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string Persistence()
+        {
+            throw new NotImplementedException();
+        }
+
+        public double[] Predict(double[] input)
+        {
+            throw new NotImplementedException();
+        }
+
+        public double Train(double[][] inputs, double[][] outputs)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -57,7 +57,7 @@ namespace Engine.Brain.AI.RL
     /// <summary>
     /// DQN State Prediction NeuralNetwork 
     /// </summary>
-    public class DNet
+    public class DNet: INet
     {
         ActivationNetwork _network;
 
@@ -90,7 +90,7 @@ namespace Engine.Brain.AI.RL
             return loss;
         }
 
-        private string Save()
+        public string Persistence()
         {
             string filePath = Directory.GetCurrentDirectory() + @"\tmp\";
             string fileName = filePath + "dqn.ann";
@@ -102,9 +102,9 @@ namespace Engine.Brain.AI.RL
             return fileName;
         }
 
-        public void Accept(DNet sourceNet)
+        public void Accept(INet sourceNet)
         {
-            _network = Network.Load(sourceNet.Save()) as ActivationNetwork;
+            _network = Network.Load(sourceNet.Persistence()) as ActivationNetwork;
             _teacher = new BackPropagationLearning(_network)
             {
                 LearningRate = _learningRate,

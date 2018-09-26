@@ -12,8 +12,7 @@
         /// <summary>
         /// 
         /// </summary>
-        /// <returns></returns>
-        string Copy();
+        string Persistence();
         /// <summary>
         /// 
         /// </summary>
