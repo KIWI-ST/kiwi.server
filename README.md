@@ -12,12 +12,20 @@ The commonly used operations are packaged, mainly the following modules
           band.BandName = "xxx";
         }
 ```
->read data form GRasterLayer.
+>read data form GRasterLayer by IRasterTools.
 ```c#
-        //get the stretch pixel values of all layers at once
-        rasterLayer.GetPixelFloat(x,y)
-        //get the raw pixel value of specified band
-        rasterLayer.BandCollection[0].GetRawPixel(x,y)
+        //use raster band tool
+        IBandCursorTool pBandCursorTool = new GBandCursorTool();
+        pBandCursorTool.Visit(band);
+        //pick noramlized value at positon (100,200)
+        pBandCursorTool.PickNormalValue(100,200);
+        //pick raw value at position (100,200)
+        pBandCursorTool.PickRawValue(100,200);
+        //user raster band stastic tool
+        IBandStasticTool pBandStasticTool = new GBandStasticTool();
+        pBandStasticTool.Visit(band);
+        foreach(var (classIndex,point) in pBandStasticTool.StaisticalRawGraph)
+                //do something as you need
 ```
 
 ### Engine.Brain ###
