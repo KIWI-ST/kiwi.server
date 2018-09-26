@@ -332,7 +332,7 @@ namespace Engine.Brain.AI.RL
         /// <returns></returns>
         public (double[] action, double q) EpsilonGreedy(int step, double[] state)
         {
-            var epsion = EpsilonCalcute(step);
+            var epsion = EpsilonCalcute(step,eps_total:_epoches);
             if (NP.Random() < epsion)
                 return (_env.RandomAction(), 0);
             else
