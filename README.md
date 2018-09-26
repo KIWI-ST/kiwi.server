@@ -38,12 +38,18 @@ The commonly used operations are packaged, mainly the following modules
          dqn.OnLearningLossEventHandler += Dqn_OnLearningLossEventHandler;
          dqn.Learn();
 ```
->the user interface as follow:
-![image](https://user-images.githubusercontent.com/5127112/43514772-77f87c80-95b3-11e8-9a80-20b3945c0f52.png)
->effective training
-![result3000 1](https://user-images.githubusercontent.com/5127112/46065783-9a762a00-c1a5-11e8-85c3-f800f023791a.png)
->support kappa index calcute
-![4khp7 z3kjxj n8 xrk8m 0](https://user-images.githubusercontent.com/5127112/46065786-9ba75700-c1a5-11e8-832c-4f7f4fcb9996.png)
+>the user interface as follow: 
+
+![image](https://user-images.githubusercontent.com/5127112/43514772-77f87c80-95b3-11e8-9a80-20b3945c0f52.png) 
+
+>effective training 
+
+![result3000 1](https://user-images.githubusercontent.com/5127112/46065783-9a762a00-c1a5-11e8-85c3-f800f023791a.png) 
+
+>support kappa index calcute 
+
+![4khp7 z3kjxj n8 xrk8m 0](https://user-images.githubusercontent.com/5127112/46065786-9ba75700-c1a5-11e8-832c-4f7f4fcb9996.png) 
+
 >use .pb model directly.
 ```c#
          TensorflowBootstrap model = new TensorflowBootstrap(pbName);          
