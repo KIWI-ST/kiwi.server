@@ -35,7 +35,22 @@ namespace Engine.GIS.GOperation.Tools
     /// </summary>
     public interface IRasterLayerCursorTool : IRasterLayerTool
     {
+        /// <summary>
+        /// pick normalized value
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         double[] PickNormalValue(int x, int y);
+        /// <summary>
+        /// pick normalized with range
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="row"></param>
+        /// <param name="col"></param>
+        /// <returns></returns>
+        double[] PickRagneNormalValue(int x, int y, int row = 5, int col = 5);
     }
     /// <summary>
     /// cursor tool
@@ -72,7 +87,7 @@ namespace Engine.GIS.GOperation.Tools
         /// <param name="row"></param>
         /// <param name="col"></param>
         /// <returns></returns>
-        double[] PickNormalValueByMask(int x, int y, int row = 5, int col = 5);
+        double[] PickRangeNormalValue(int x, int y, int row = 5, int col = 5);
     }
 
     public interface IBandStasticTool : IRasterBandTool

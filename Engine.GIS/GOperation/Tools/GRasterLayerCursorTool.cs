@@ -27,6 +27,11 @@ namespace Engine.GIS.GOperation.Tools
             return normalValueArray;
         }
 
+        public double[] PickRagneNormalValue(int x, int y, int row = 5, int col = 5)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Visit(GRasterLayer pLayer)
         {
             _pLayer = pLayer;

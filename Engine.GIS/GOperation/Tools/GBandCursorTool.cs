@@ -86,7 +86,7 @@ namespace Engine.GIS.GOperation.Tools
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="rowcol">represent matrix rows and col,the matrix is row*col,i.e  9 represent 3x3 </param>
-        public double[] PickNormalValueByMask(int x,int y,int row=5,int col = 5)
+        public double[] PickRangeNormalValue(int x,int y,int row=5,int col = 5)
         {
             int offset = row / 2;
             List<double> pixels = new List<double>();

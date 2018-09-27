@@ -49,8 +49,6 @@ namespace Engine.Brain.AI.RL.Env
             ActionNum = Convert.ToInt32(_labelRasterLayer.BandCollection[0].Max - 0);
             //statical graph
             Prepare();
-            //
-            (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
         }
         /// <summary>
         /// number of actions
@@ -85,6 +83,8 @@ namespace Engine.Brain.AI.RL.Env
             //
             _memory = pBandStasticTool.StaisticalRawGraph;
             _randomSeedKeys = _memory.Keys.ToArray();
+            //
+            (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
         }
         /// <summary>
         /// 

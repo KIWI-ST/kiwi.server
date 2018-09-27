@@ -26,7 +26,7 @@ namespace Engine.Brain.AI.RL.Env
         /// <summary>
         /// 
         /// </summary>
-        IBandCursorTool _pFeatureBandCursorTool = new GBandCursorTool();
+        IRasterLayerCursorTool _pRasterLayerCursorTool = new GRasterLayerCursorTool();
         /// <summary>
         /// seed keys
         /// </summary>
@@ -132,7 +132,7 @@ namespace Engine.Brain.AI.RL.Env
         public void Prepare()
         {
             //set cursor tool to featureRasterLayer
-            _pFeatureBandCursorTool.Visit(_featureRasterLayer.BandCollection[0]);
+            _pRasterLayerCursorTool.Visit(_featureRasterLayer);
             //statical label raw graph
             IBandStasticTool pLabelBandStaticTool = new GBandStasticTool();
             pLabelBandStaticTool.Visit(_labelRasterLayer.BandCollection[0]);
@@ -142,6 +142,8 @@ namespace Engine.Brain.AI.RL.Env
             _queryTable = pLabelBandStaticTool.StatisticalRawQueryTable;
             //random seeds
             _randomSeedKeys = _memory.Keys.ToArray();
+            //initial x, y, action
+            (_current_x, _current_y, _current_action) = RandomAccessMemory();
         }
         /// <summary>
         /// -----------------------------------------------------
@@ -200,7 +202,7 @@ namespace Engine.Brain.AI.RL.Env
             for (int i = 0; i < batchSize; i++)
             {
                 var (x, y, actions) = RandomAccessMemory();
-                double[] raw = _pFeatureBandCursorTool.PickNormalValueByMask(x, y, _maskx, _masky);
+                double[] raw = _pRasterLayerCursorTool.PickRagneNormalValue(x, y, _maskx, _masky);
                 states.Add(raw);
                 labels[i] = actions;
             }
@@ -232,14 +234,14 @@ namespace Engine.Brain.AI.RL.Env
             {
                 var (_c_x, _c_y, _c_action) = (_current_x, _current_y, _current_action);
                 (_current_x, _current_y, _current_action) = RandomAccessMemory();
-                double[] raw = _pFeatureBandCursorTool.PickNormalValueByMask(_c_x, _c_y, _maskx, _masky);
+                double[] raw = _pRasterLayerCursorTool.PickRagneNormalValue(_c_x, _c_y, _maskx, _masky);
                 return (raw, 0);
             }
             else
             {
                 double reward = NP.Equal(action,_current_action) ? 1.0 : -1.0;
                 (_current_x, _current_y, _current_action) = RandomAccessMemory();
-                double[] raw = _pFeatureBandCursorTool.PickNormalValueByMask(_current_x, _current_y, _maskx, _masky);
+                double[] raw = _pRasterLayerCursorTool.PickRagneNormalValue(_current_x, _current_y, _maskx, _masky);
                 return (raw, reward);
             }
         }
