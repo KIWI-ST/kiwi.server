@@ -17,10 +17,12 @@ namespace Engine.Brain.AI.RL.Net
 
         SgdTrainer<double> _trainer;
 
-        public CNet()
+        public CNet(int[] featureNum,int actionNum)
         {
+            //get channel
+            int channel = featureNum[3];
             //create cnn neural network
-            _network = FluentNet<double>.Create(24, 24, 1)
+            _network = FluentNet<double>.Create(24, 24, channel)
                      .Conv(5, 5, 8).Stride(1).Pad(2)
                      .Relu()
                      .Pool(2, 2).Stride(2)

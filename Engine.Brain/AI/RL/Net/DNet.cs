@@ -1,4 +1,5 @@
-﻿using Accord.Neuro;
+﻿using Accord.Math;
+using Accord.Neuro;
 using Accord.Neuro.Learning;
 using System;
 using System.IO;
@@ -65,10 +66,10 @@ namespace Engine.Brain.AI.RL
 
         double _learningRate;
 
-        public DNet(int featureNum, int actionNum,double learningRate = 0.001)
+        public DNet(int[] featureNum, int actionNum,double learningRate = 0.001)
         {
             //
-            int num = featureNum + actionNum;
+            int num = featureNum.Product() + actionNum;
             //
             _learningRate = learningRate;
             //

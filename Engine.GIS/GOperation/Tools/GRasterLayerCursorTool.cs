@@ -18,7 +18,7 @@ namespace Engine.GIS.GOperation.Tools
         public double[] PickNormalValue(int x, int y)
         {
             double[] normalValueArray = new double[_pLayer.BandCollection.Count];
-            for(int i = 0; i < _pLayer.BandCollection.Count; i++)
+            for (int i = 0; i < _pLayer.BandCollection.Count; i++)
             {
                 GRasterBand pBand = _pLayer.BandCollection[i];
                 _pBandCursorTool.Visit(pBand);
@@ -29,7 +29,17 @@ namespace Engine.GIS.GOperation.Tools
 
         public double[] PickRagneNormalValue(int x, int y, int row = 5, int col = 5)
         {
-            throw new NotImplementedException();
+            double[] rangeNormalValueArray = new double[row * col * _pLayer.BandCollection.Count];
+            int offset = 0;
+            for (int i = 0; i < _pLayer.BandCollection.Count; i++)
+            {
+                GRasterBand pBand = _pLayer.BandCollection[i];
+                _pBandCursorTool.Visit(pBand);
+                double[] singleBandRangeNormalValue = _pBandCursorTool.PickRangeNormalValue(x, y, row, col);
+                Array.ConstrainedCopy(singleBandRangeNormalValue, 0, rangeNormalValueArray, offset, row * col);
+                offset += row * col;
+            }
+            return rangeNormalValueArray;
         }
 
         public void Visit(GRasterLayer pLayer)

@@ -113,9 +113,9 @@ namespace Engine.Brain.AI.RL
             //
             _featuresNumber = _env.FeatureNum.Product();
             //决策
-            _actorNet = new DNet(_featuresNumber, _actionsNumber);
+            _actorNet = new DNet(_env.FeatureNum, _actionsNumber);
             //训练
-            _criticNet = new DNet(_featuresNumber, _actionsNumber);
+            _criticNet = new DNet(_env.FeatureNum, _actionsNumber);
         }
         /// <summary>
         /// 初始化plotModel
@@ -274,15 +274,6 @@ namespace Engine.Brain.AI.RL
             for (int i = 0; i < batchSize; i++)
                 list.Add(_memoryList.RandomTake());
             return list;
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="list"></param>
-        /// <returns></returns>
-        private (double[] inputs,double[] outpus) MakeCNNBatch(List<Memory> list)
-        {
-            return (null, null);
         }
         /// <summary>
         /// 
