@@ -14,5 +14,18 @@
                 array[i] = otherArray[i] > 0 ? otherArray[i] : array[i];
             return array;
         }
+        /// <summary>
+        /// calcute the product of array
+        /// </summary>
+        /// <param name="array"></param>
+        /// <returns></returns>
+        public static int Product(this int[] array)
+        {
+            int product = 1;
+            for (int i = 0; i < array.Length; i++)
+                product *= array[i];
+            return product;
+        }
+
     }
 }

@@ -37,9 +37,10 @@ namespace Engine.Brain.AI.RL.Env
         /// <param name="sampleIndex"></param>
         public ImageClassifyEnv(GRasterLayer featureRasterLayer, GRasterLayer labelRasterLayer)
         {
+            //input feature raster layer
             _featureRasterLayer = featureRasterLayer;
+            //groundtruth raster layer
             _labelRasterLayer = labelRasterLayer;
-            FeatureNum = featureRasterLayer.BandCount;
             //num of categories 
             //标注层要求：
             //1.分类按照顺序，从1开始，逐步+1
@@ -58,7 +59,7 @@ namespace Engine.Brain.AI.RL.Env
         /// <summary>
         /// number of features
         /// </summary>
-        public int FeatureNum { get; }
+        public int[] FeatureNum { get { return new int[] { _featureRasterLayer.BandCount }; } }
         /// <summary>
         /// 
         /// </summary>
@@ -118,7 +119,7 @@ namespace Engine.Brain.AI.RL.Env
             for (int i = 0; i < batchSize; i++)
             {
                 var (x, y, classIndex) = RandomAccessMemory();
-                double[] normal = _pGRasterLayerCursorTool.PickNormalValue(x,y);
+                double[] normal = _pGRasterLayerCursorTool.PickNormalValue(x, y);
                 states.Add(normal);
                 labels[i] = classIndex;
             }

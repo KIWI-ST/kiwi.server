@@ -20,6 +20,14 @@ namespace Engine.Brain.AI.RL
         /// </summary>
         int[] RandomSeedKeys { get; }
         /// <summary>
+        /// number of actions
+        /// </summary>
+        int ActionNum { get; }
+        /// <summary>
+        /// number of features
+        /// </summary>
+        int[] FeatureNum { get; }
+        /// <summary>
         /// the environment memory
         /// </summary>
         Dictionary<int, List<Point>> Memory { get; }
@@ -29,14 +37,6 @@ namespace Engine.Brain.AI.RL
         /// <param name="batchSize"></param>
         /// <returns></returns>
         (List<double[]> states, double[][] labels) RandomEval(int batchSize = 64);
-        /// <summary>
-        /// number of actions
-        /// </summary>
-        int ActionNum { get; }
-        /// <summary>
-        /// number of features
-        /// </summary>
-        int FeatureNum { get; }
         /// <summary>
         /// get sate/reward/q/sate next(state_) (one hot)
         /// </summary>

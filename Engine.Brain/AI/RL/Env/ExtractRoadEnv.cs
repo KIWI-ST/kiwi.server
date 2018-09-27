@@ -56,6 +56,10 @@ namespace Engine.Brain.AI.RL.Env
         /// </summary>
         const int _masky = 7;
         /// <summary>
+        /// use channel
+        /// </summary>
+        int _channel = 1;
+        /// <summary>
         /// limit explor x
         /// </summary>
         private readonly int _limit_x;
@@ -87,8 +91,8 @@ namespace Engine.Brain.AI.RL.Env
             // *    6  |  5  |  4
             //represent eight direction actions
             ActionNum = 8;
-            //pixel matrix of M x M ， and use one value to indicate clockwise(whether 1 is clock wise,0 is not)
-            FeatureNum = _maskx * _masky;
+            //
+            _channel = _featureRasterLayer.BandCount;
             //limit of x
             _limit_x = _labelRasterLayer.XSize;
             //limit of y
@@ -101,9 +105,10 @@ namespace Engine.Brain.AI.RL.Env
         /// </summary>
         public int ActionNum { get; }
         /// <summary>
+        /// pixel matrix of M x M ， and use one value to indicate clockwise(whether 1 is clock wise,0 is not)
         /// number of features
         /// </summary>
-        public int FeatureNum { get; }
+        public int[] FeatureNum { get { return new int[] { _maskx, _masky, _channel }; } }
         /// <summary>
         /// 
         /// </summary>

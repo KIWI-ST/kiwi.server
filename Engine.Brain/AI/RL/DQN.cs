@@ -111,7 +111,7 @@ namespace Engine.Brain.AI.RL
             //
             _actionsNumber = _env.ActionNum;
             //
-            _featuresNumber = _env.FeatureNum;
+            _featuresNumber = _env.FeatureNum.Product();
             //决策
             _actorNet = new DNet(_featuresNumber, _actionsNumber);
             //训练
@@ -278,10 +278,19 @@ namespace Engine.Brain.AI.RL
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        private (double[] inputs,double[] outpus) MakeCNNBatch(List<Memory> list)
+        {
+            return (null, null);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="input_features_tensor"></param>
         /// <param name="input_qvalue_tensor"></param>
         /// <param name="batchSize"></param>
-        private (double[][] inputs, double[][] outputs) MakeBatch(List<Memory> list)
+        private (double[][] inputs, double[][] outputs) MakeDNNBatch(List<Memory> list)
         {
             //batchSize个样本
             int batchSize = list.Count;
@@ -350,7 +359,7 @@ namespace Engine.Brain.AI.RL
             DateTime now = DateTime.Now;
             //batch of memory
             List<Memory> rawBatchList = CreateRawDataBatch(_batchSize);
-            var (inputs, outputs) = MakeBatch(rawBatchList);
+            var (inputs, outputs) = MakeDNNBatch(rawBatchList);
             //loss计算
             double loss = _criticNet.Train(inputs, outputs);
             return (loss, DateTime.Now - now);

@@ -229,21 +229,6 @@ namespace Engine.Brain.Entity
             }
             return output;
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="inputs"></param>
-        /// <returns></returns>
-        public static float[] Pad(float[,] inputs)
-        {
-            int dim0 = inputs.GetLength(0);
-            int dim1 = inputs.GetLength(1);
-            float[] outputs = new float[dim0 * dim1];
-            for (int i = 0; i < dim0; i++)
-                for (int j = 0; j < dim1; j++)
-                    outputs[i * dim1 + j] = inputs[i, j];
-            return outputs;
-        }
 
        public static double  CalcuteAccuracy(double[][] predict, double[][] label)
         {
