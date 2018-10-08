@@ -113,8 +113,9 @@ namespace Engine.GIS.GLayer.GRasterLayer.GBand
             _height = pBand.YSize;
             //统计
             pBand.SetNoDataValue(0);
-            //
-            pBand.GetStatistics(1, 1, out _min, out _max, out _mean, out _stdDev);
+            //approx_ok ：true 表示粗略统计，false表示严格统计
+            //bForce：表示扫描图统计生成xml
+            pBand.GetStatistics(0, 1, out _min, out _max, out _mean, out _stdDev);
             //读取rawdata
             _rawData = new double[_width * _height];
             pBand.ReadRaster(0, 0, _width, _height, _rawData, _width, _height, 0, 0);

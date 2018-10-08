@@ -51,10 +51,6 @@ namespace Engine.Brain.AI.RL
     public class DQN
     {
         /// <summary>
-        /// 
-        /// </summary>
-        private Dictionary<string, int> _correctMemory = new Dictionary<string, int>();
-        /// <summary>
         /// 回调区
         /// </summary>
         public event UpdateLearningLossHandler OnLearningLossEventHandler;
@@ -275,12 +271,7 @@ namespace Engine.Brain.AI.RL
         private List<Memory> CreateRawDataBatch(int batchSize)
         {
             List<Memory> list = new List<Memory>();
-            for (int i = 0; i < batchSize; i++)
-            {
-                Memory selectMemory = _memoryList.RandomTake();
-                if (selectMemory.RT == 1.0)_correctMemory[string.Join(",", selectMemory.ST.ToList())] = NP.Argmax(selectMemory.AT);
-                list.Add(selectMemory);
-            }
+            for (int i = 0; i < batchSize; i++) list.Add(_memoryList.RandomTake());
             return list;
         }
         /// <summary>
