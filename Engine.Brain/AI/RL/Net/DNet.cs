@@ -86,8 +86,11 @@ namespace Engine.Brain.AI.RL
         public double Train(double[][] inputs, double[][] outputs)
         {
             double loss = 0.0;
-            int samples = inputs.GetLength(0);
-            loss = _teacher.RunEpoch(inputs, outputs) / samples;
+            for (int i = 0; i < 100; i++)
+            {
+                int samples = inputs.GetLength(0);
+                loss = _teacher.RunEpoch(inputs, outputs) / samples;
+            }
             return loss;
         }
 
