@@ -68,11 +68,11 @@ namespace Engine.GIS.GLayer.GRasterLayer.GBand
         /// <summary>
         /// normalized data
         /// </summary>
-        public double[,] NormalData { get => _normalData;}
+        public double[,] NormalData { get => _normalData; }
         /// <summary>
         /// raw data
         /// </summary>
-        public double[] RawData { get => _rawData;}
+        public double[] RawData { get => _rawData; }
         #endregion
 
         #region 应用拉伸
@@ -84,18 +84,16 @@ namespace Engine.GIS.GLayer.GRasterLayer.GBand
             _normalData = new double[_width, _height];
             double scale = _max - _min;
             for (int count = 0; count < _rawData.Length; count++)
-                _normalData[count % _width, count / _width] = (_rawData[count] - _min) / scale;
+                _normalData[count % _width, count / _width] = _rawData[count] == 0 ? 0 : (_rawData[count] - _min) / scale;
         }
         /// <summary>
         /// clearn the error data
         /// </summary>
         private void CleaningError()
         {
-            for(int i=0;i<_width*_height;i++)
-                if (_rawData[i] > _max)
-                    _rawData[i] = _max;
-                else if (_rawData[i] < _min)
-                    _rawData[i] = _min;
+            for (int i = 0; i < _width * _height; i++)
+                if (_rawData[i] > _max || _rawData[i] < _min)
+                    _rawData[i] = 0;
         }
         #endregion
 
@@ -130,9 +128,9 @@ namespace Engine.GIS.GLayer.GRasterLayer.GBand
         /// <returns>stretched byte buffer</returns>
         public byte[,] GetByteBuffer()
         {
-            byte[,] _stretchedByteData = new byte[_width,_height];
+            byte[,] _stretchedByteData = new byte[_width, _height];
             for (int count = 0; count < _rawData.Length; count++)
-                _stretchedByteData[count % _width, count / _width] = Convert.ToByte(_normalData[count % _width, count / _width] *255);
+                _stretchedByteData[count % _width, count / _width] = Convert.ToByte(_normalData[count % _width, count / _width] * 255);
             return _stretchedByteData;
         }
         /// <summary>
