@@ -73,7 +73,7 @@ namespace Engine.Brain.AI.RL
             //
             _learningRate = learningRate;
             //
-            _network = new ActivationNetwork(new SeluFunction(), num, num, actionNum, actionNum/2,1);
+            _network = new ActivationNetwork(new SeluFunction(), num, num*2, num,num,num, actionNum*2, actionNum, actionNum/2,1);
             //
             new GaussianWeights(_network).Randomize();
             //https://github.com/accord-net/framework/blob/a5a2ea8b59173dd4e695da8017ba06bc45fc6b51/Samples/Neuro/Deep%20Learning/ViewModel/LearnViewModel.cs#L289

@@ -50,9 +50,9 @@ namespace Host.Image.UI.SettingForm
             //计算kappa,并输出矩阵
             GRasterLayer truthLayer = _rasterDic[truthKey];
             GRasterLayer predLayer = _rasterDic[predKey];
-            var (matrix, kappa, actionsNumber) = KappaIndex.Calcute(truthLayer, predLayer);
+            var (matrix, kappa, actionsNumber,oa) = KappaIndex.Calcute(truthLayer, predLayer);
             //matrix for binding and kappa for display
-            kappa_label.Text = string.Format("{0:P}", kappa);
+            kappa_label.Text = string.Format("kappa:{0:P} oa:{1:P}", kappa,oa);
             //绘表头
             webBrowser1.DocumentText = GenericTable(matrix);
         }

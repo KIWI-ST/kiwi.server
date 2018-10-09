@@ -11,7 +11,7 @@ namespace Engine.GIS.GOperation.Arithmetic
     public class KappaIndex
     {
 
-        public static (int[,] matrix, double kappa, int actionsNumber) Calcute(GRasterLayer truthLayer, GRasterLayer predLayer)
+        public static (int[,] matrix, double kappa, int actionsNumber,double oa) Calcute(GRasterLayer truthLayer, GRasterLayer predLayer)
         {
             //statical label band graph
             IBandStasticTool pBandStaticTool = new GBandStasticTool();
@@ -55,8 +55,9 @@ namespace Engine.GIS.GOperation.Arithmetic
             pc = pc / totalNum;
             //
             double kappa = (p0 - pc) / (totalNum - pc);
+            double oa = p0 / totalNum;
             //
-            return (matrix, kappa, actionsNumber);
+            return (matrix, kappa, actionsNumber,oa);
         }
 
     }
