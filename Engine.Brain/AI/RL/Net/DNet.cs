@@ -58,7 +58,7 @@ namespace Engine.Brain.AI.RL
     /// <summary>
     /// DQN State Prediction NeuralNetwork 
     /// </summary>
-    public class DNet: INet
+    public class DNet : INet
     {
         ActivationNetwork _network;
 
@@ -66,18 +66,20 @@ namespace Engine.Brain.AI.RL
 
         double _learningRate;
 
-        public DNet(int[] featureNum, int actionNum,double learningRate = 0.001)
+        public DNet(int[] featureNum, int actionNum, double learningRate = 0.005)
         {
             //
             int num = featureNum.Product() + actionNum;
             //
             _learningRate = learningRate;
-            //
-            _network = new ActivationNetwork(new SeluFunction(), num, num*2, num,num,num, actionNum*2, actionNum, actionNum/2,1);
+            // _network = new ActivationNetwork(new SeluFunction(), num, num, actionNum, actionNum/2,1);
+            // _network = new ActivationNetwork(new SeluFunction(), num, num, featureNum.Product(), actionNum, actionNum, actionNum, 1);
+            _network = new ActivationNetwork(new SeluFunction(), num, num, actionNum, actionNum / 2, 1);
             //
             new GaussianWeights(_network).Randomize();
             //https://github.com/accord-net/framework/blob/a5a2ea8b59173dd4e695da8017ba06bc45fc6b51/Samples/Neuro/Deep%20Learning/ViewModel/LearnViewModel.cs#L289
-            _teacher = new BackPropagationLearning(_network) {
+            _teacher = new BackPropagationLearning(_network)
+            {
                 LearningRate = learningRate,
                 Momentum = 0.9
             };

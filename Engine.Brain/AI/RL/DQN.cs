@@ -81,7 +81,7 @@ namespace Engine.Brain.AI.RL
         //一轮学习次数
         readonly int _forward = 256;
         //q值积累权重
-        readonly double _alpah = 0.5;
+        readonly double _alpah = 0.6;
         //q值印象权重
         double _gamma = 0.0;
         //输入feature长度
@@ -331,7 +331,9 @@ namespace Engine.Brain.AI.RL
         /// <returns></returns>
         public (double[] action, double q) EpsilonGreedy(int step, double[] state)
         {
-            var epsion = EpsilonCalcute(step,eps_total:_epoches);
+            //int total_epochs = _epoches > 2000 ? 2000 : _epoches;
+            int epsTotal = Convert.ToInt32(_epoches * 0.9);
+            var epsion = EpsilonCalcute(step,eps_total: epsTotal);
             if (NP.Random() < epsion)
                 return (_env.RandomAction(), 0);
             else
@@ -362,7 +364,7 @@ namespace Engine.Brain.AI.RL
         private double Accuracy()
         {
             //eval data batchSize
-            const int evalSize = 128;
+            const int evalSize = 100;
             var (states, rawLabels) = _env.RandomEval(evalSize);
             double[][] predicts = new double[evalSize][];
             for (int i = 0; i < evalSize; i++)
@@ -381,7 +383,6 @@ namespace Engine.Brain.AI.RL
             double[] state = _env.Reset();
             for (int i = 0; i < rememberSize; i++)
             {
-                //double[] action = i % 2 == 0 ? _env.RandomAction() : _env.LabelAction();
                 //增加随机探索记忆
                 double[] action = _env.RandomAction();
                 var (nextState, reward) = _env.Step(action);
