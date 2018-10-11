@@ -1,6 +1,6 @@
 ﻿namespace Host.Image.UI.PlotForm
 {
-    partial class DQNPlotFrom
+    partial class EmptyPlotForm
     {
         /// <summary>
         /// Required designer variable.

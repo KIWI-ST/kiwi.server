@@ -1,6 +1,7 @@
 ﻿using Engine.Brain.Entity;
 using Engine.Brain.Extend;
 using OxyPlot;
+using OxyPlot.Annotations;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 using System;
@@ -125,6 +126,7 @@ namespace Engine.Brain.AI.RL
             //缩放比例
             const double scale = 1.02;
             //loss line
+            //LossPlotModel.LegendArea.Add(new LineAnnotation { Slope = 0.1, Intercept = 1, Text = "LineAnnotation", ToolTip = "This is a tool tip for the LineAnnotation" });
             LossPlotModel.Series.Add(_lossLine);
             LossPlotModel.Axes.Add(new LinearAxis()
             {
@@ -332,7 +334,7 @@ namespace Engine.Brain.AI.RL
         public (double[] action, double q) EpsilonGreedy(int step, double[] state)
         {
             //int total_epochs = _epoches > 2000 ? 2000 : _epoches;
-            int epsTotal = Convert.ToInt32(_epoches * 0.9);
+            int epsTotal = Convert.ToInt32(_epoches *0.7);
             var epsion = EpsilonCalcute(step,eps_total: epsTotal);
             if (NP.Random() < epsion)
                 return (_env.RandomAction(), 0);

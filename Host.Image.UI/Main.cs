@@ -166,11 +166,11 @@ namespace Host.Image.UI
             Invoke(new SaveBitmapHandler(SaveBitmap), pkg.Average);
         }
 
-        List<DQNPlotFrom> _dqnFormList = new List<DQNPlotFrom>();
+        List<EmptyPlotForm> _dqnFormList = new List<EmptyPlotForm>();
 
         private void PaintPlotModel(PlotModel plotModel)
         {
-            DQNPlotFrom form = new DQNPlotFrom();
+            EmptyPlotForm form = new EmptyPlotForm();
             form.SetModel(plotModel);
             _dqnFormList.Add(form);
             form.Show();
@@ -689,6 +689,11 @@ namespace Host.Image.UI
                         t.IsBackground = true;
                         t.Start();
                     }
+                    break;
+                case "Compare_Plot_toolStripButton":
+                    //drawing comparsion multi-reslut curve
+                    ComparedPlotForm cp_form = new ComparedPlotForm();
+                    cp_form.ShowDialog();
                     break;
                 default:
                     break;

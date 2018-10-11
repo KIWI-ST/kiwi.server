@@ -91,11 +91,17 @@
     <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
-    <Compile Include="PlotForm\DQNPoltFrom.cs">
+    <Compile Include="PlotForm\ComparedPlotForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PlotForm\DQNPoltFrom.Designer.cs">
-      <DependentUpon>DQNPoltFrom.cs</DependentUpon>
+    <Compile Include="PlotForm\ComparedPlotForm.Designer.cs">
+      <DependentUpon>ComparedPlotForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PlotForm\EmptyPlotForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PlotForm\EmptyPlotForm.Designer.cs">
+      <DependentUpon>EmptyPlotForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -138,8 +144,11 @@
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PlotForm\DQNPoltFrom.resx">
-      <DependentUpon>DQNPoltFrom.cs</DependentUpon>
+    <EmbeddedResource Include="PlotForm\ComparedPlotForm.resx">
+      <DependentUpon>ComparedPlotForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PlotForm\EmptyPlotForm.resx">
+      <DependentUpon>EmptyPlotForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

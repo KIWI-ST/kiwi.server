@@ -5,9 +5,9 @@ using System.Windows.Forms;
 
 namespace Host.Image.UI.PlotForm
 {
-    public partial class DQNPlotFrom : Form
+    public partial class EmptyPlotForm : Form
     {
-        public DQNPlotFrom()
+        public EmptyPlotForm()
         {
             InitializeComponent();
         }
