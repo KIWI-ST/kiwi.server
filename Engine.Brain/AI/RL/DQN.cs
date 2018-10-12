@@ -327,7 +327,7 @@ namespace Engine.Brain.AI.RL
         /// <param name="ep_decay"></param>
         /// <param name="eps_total"></param>
         /// <returns></returns>
-        public double EpsilonCalcute(int step, double ep_min = 0.01, double ep_max = 1, double ep_decay = 0.0001, int eps_total = 2000)
+        public double EpsilonCalcute(int step, double ep_min = 0.0001, double ep_max = 1, double ep_decay = 0.0001, int eps_total = 2000)
         {
             return Math.Max(ep_min, ep_max - (ep_max - ep_min) * step / eps_total);
         }
@@ -339,7 +339,6 @@ namespace Engine.Brain.AI.RL
         /// <returns></returns>
         public (double[] action, double q) EpsilonGreedy(int step, double[] state)
         {
-            //int total_epochs = _epoches > 2000 ? 2000 : _epoches;
             int epsTotal = Convert.ToInt32(_epoches *0.85);
             var epsion = EpsilonCalcute(step,eps_total: epsTotal);
             if (NP.Random() < epsion)
