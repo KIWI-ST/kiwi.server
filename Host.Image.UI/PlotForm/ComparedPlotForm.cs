@@ -20,24 +20,30 @@ namespace Host.Image.UI.PlotForm
 
         public void InilializationModel(string title, double x_min = 0, double x_max = 5000, double y_min = 0.85, double y_max = 1)
         {
+            //
             _plotModel.Axes.Add(new LinearAxis()
             {
                 Title = "Training Epochs",
                 Position = AxisPosition.Bottom,
                 Minimum = x_min,
-                Maximum = x_max * 1.02
+                Maximum = x_max * 1.1,
+                FontSize = 26
             });
+            //
             _plotModel.Axes.Add(new LinearAxis()
             {
                 Title = "Accuracy",
                 Position = AxisPosition.Left,
                 Minimum = y_min,
-                Maximum = y_max
+                Maximum = y_max,
+                FontSize = 26
             });
+            //
             _plotModel.Title = title;
             //legend
             _plotModel.LegendPlacement = LegendPlacement.Inside;
             _plotModel.LegendPosition = LegendPosition.RightTop;
+            _plotModel.LegendFontSize = 26;
         }
 
         public void AddLineSeries(List<DataPoint> points,string title)

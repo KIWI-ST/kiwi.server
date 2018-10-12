@@ -124,7 +124,7 @@ namespace Engine.Brain.AI.RL
         private void InitPoltModel()
         {
             //缩放比例
-            const double scale = 1.02;
+            const double scale = 1.1;
             //loss line
             //LossPlotModel.LegendArea.Add(new LineAnnotation { Slope = 0.1, Intercept = 1, Text = "LineAnnotation", ToolTip = "This is a tool tip for the LineAnnotation" });
             LossPlotModel.Series.Add(_lossLine);
@@ -138,9 +138,10 @@ namespace Engine.Brain.AI.RL
             {
                 Position = AxisPosition.Left,
                 Minimum = 0,
-                Maximum = 1
+                Maximum = 1,
+                Title = "Loss",
             });
-            LossPlotModel.Title = "Loss";
+            //LossPlotModel.Title = "Loss";
             //accuracy line
             AccuracyModel.Series.Add(_accuracyLine);
             AccuracyModel.Axes.Add(new LinearAxis()
@@ -153,24 +154,29 @@ namespace Engine.Brain.AI.RL
             {
                 Position = AxisPosition.Left,
                 Minimum = 0,
-                Maximum = 1
+                Maximum = 1,
+                Title = "Accuracy",
             });
-            AccuracyModel.Title = "Accuracy";
+            //AccuracyModel.Title = "Accuracy";
             //reward line
             RewardModel.Series.Add(_rewardLine);
             RewardModel.Axes.Add(new LinearAxis()
             {
                 Position = AxisPosition.Bottom,
                 Minimum = 0,
-                Maximum = _epoches * scale
+                Maximum = _epoches * scale,
+                FontSize = 26,
+                Title = "Training Epochs"
             });
             RewardModel.Axes.Add(new LinearAxis()
             {
                 Position = AxisPosition.Left,
                 Minimum = -_forward,
-                Maximum = _forward
+                Maximum = _forward,
+                FontSize = 26,
+                Title = "Reward",
             });
-            RewardModel.Title = "Reward";
+            //RewardModel.Title = "Reward";
         }
         /// <summary>
         /// 设置运行参数
@@ -334,7 +340,7 @@ namespace Engine.Brain.AI.RL
         public (double[] action, double q) EpsilonGreedy(int step, double[] state)
         {
             //int total_epochs = _epoches > 2000 ? 2000 : _epoches;
-            int epsTotal = Convert.ToInt32(_epoches *0.7);
+            int epsTotal = Convert.ToInt32(_epoches *0.85);
             var epsion = EpsilonCalcute(step,eps_total: epsTotal);
             if (NP.Random() < epsion)
                 return (_env.RandomAction(), 0);

@@ -44,7 +44,7 @@
             this.dqn_plotView.Name = "dqn_plotView";
             this.dqn_plotView.Padding = new System.Windows.Forms.Padding(10);
             this.dqn_plotView.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.dqn_plotView.Size = new System.Drawing.Size(668, 385);
+            this.dqn_plotView.Size = new System.Drawing.Size(653, 409);
             this.dqn_plotView.TabIndex = 0;
             this.dqn_plotView.Text = "plot1";
             this.dqn_plotView.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
@@ -67,16 +67,16 @@
             this.另存为ToolStripMenuItem.Text = "另存为";
             this.另存为ToolStripMenuItem.Click += new System.EventHandler(this.ToolStripMenuItem_Click);
             // 
-            // DQNPlotFrom
+            // EmptyPlotForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(668, 385);
+            this.ClientSize = new System.Drawing.Size(653, 409);
             this.ContextMenuStrip = this.DQNPlotForm_contextMenuStrip;
             this.Controls.Add(this.dqn_plotView);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.Name = "DQNPlotFrom";
+            this.Name = "EmptyPlotForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "PlotForm";
             this.DQNPlotForm_contextMenuStrip.ResumeLayout(false);

@@ -30,6 +30,7 @@ namespace Host.Image.UI.PlotForm
             if (sfg.ShowDialog() == DialogResult.OK)
             {
                 var pngExporter = new PngExporter { Background = OxyColors.White };
+                pngExporter.Resolution = 300;
                 pngExporter.ExportToFile(dqn_plotView.Model, sfg.FileName);
             }
         }
