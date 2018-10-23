@@ -1,14 +1,9 @@
-﻿using System;
-using ConvNetSharp.Core;
-using ConvNetSharp.Core.Fluent;
-using ConvNetSharp.Core.Layers.Double;
+﻿using ConvNetSharp.Core.Fluent;
 using ConvNetSharp.Core.Training;
-using ConvNetSharp.Core.Training.Double;
-using ConvNetSharp.Volume;
-using ConvNetSharp.Volume.Double;
-using Engine.Brain.Entity;
+using System;
 
 namespace Engine.Brain.AI.RL.Net
+
 {
     public class CNet:INet
     {
@@ -20,9 +15,11 @@ namespace Engine.Brain.AI.RL.Net
         public CNet(int[] featureNum,int actionNum)
         {
             //get channel
-            int channel = featureNum[3];
+            int channel = featureNum[0];
+            int width = featureNum[1];
+            int height = featureNum[2];
             //create cnn neural network
-            _network = FluentNet<double>.Create(24, 24, channel)
+            _network = FluentNet<double>.Create(width, height, channel)
                      .Conv(5, 5, 8).Stride(1).Pad(2)
                      .Relu()
                      .Pool(2, 2).Stride(2)
@@ -30,7 +27,7 @@ namespace Engine.Brain.AI.RL.Net
                      .Relu()
                      .Pool(3, 3).Stride(3)
                      .FullyConn(10)
-                     .Softmax(10)
+                     .Softmax(actionNum)
                      .Build();
             //create trainer
             _trainer = new SgdTrainer<double>(_network) {

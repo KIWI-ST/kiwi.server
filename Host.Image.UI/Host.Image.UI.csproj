@@ -117,6 +117,12 @@
     <Compile Include="SettingForm\BandForm.Designer.cs">
       <DependentUpon>BandForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="SettingForm\CNNForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingForm\CNNForm.Designer.cs">
+      <DependentUpon>CNNForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="SettingForm\DLClassifyForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -165,6 +171,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SettingForm\BandForm.resx">
       <DependentUpon>BandForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingForm\CNNForm.resx">
+      <DependentUpon>CNNForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingForm\DLClassifyForm.resx">
       <DependentUpon>DLClassifyForm.cs</DependentUpon>

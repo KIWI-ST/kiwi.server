@@ -43,6 +43,8 @@
             this.main_toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.kappa_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.DL_CLASS_toolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.Compare_Plot_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.map_statusStrip = new System.Windows.Forms.StatusStrip();
             this.empty_statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.map_processBar = new System.Windows.Forms.ToolStripProgressBar();
@@ -62,8 +64,7 @@
             this.bandCombine_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.bandExport_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.Compare_Plot_toolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.CNN_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.map_menuStrip.SuspendLayout();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
@@ -148,6 +149,7 @@
             this.map_toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.SLIC_toolStripButton,
             this.SLIC_Center_toolStripButton,
+            this.CNN_toolStripButton,
             this.DQN_toolStripButton,
             this.main_toolStripSeparator,
             this.kappa_toolStripButton,
@@ -216,6 +218,21 @@
             this.DL_CLASS_toolStripButton.Text = "图像分类";
             this.DL_CLASS_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.DL_CLASS_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 47);
+            // 
+            // Compare_Plot_toolStripButton
+            // 
+            this.Compare_Plot_toolStripButton.Image = global::Host.Image.UI.Properties.Resources.brush_64;
+            this.Compare_Plot_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.Compare_Plot_toolStripButton.Name = "Compare_Plot_toolStripButton";
+            this.Compare_Plot_toolStripButton.Size = new System.Drawing.Size(73, 44);
+            this.Compare_Plot_toolStripButton.Text = "对比曲线";
+            this.Compare_Plot_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.Compare_Plot_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
             // 
             // map_statusStrip
             // 
@@ -419,20 +436,16 @@
             this.bandExport_ToolStripMenuItem.Text = "波段导出";
             this.bandExport_ToolStripMenuItem.Click += new System.EventHandler(this.Map_treeView_Click);
             // 
-            // toolStripSeparator1
+            // CNN_toolStripButton
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 47);
-            // 
-            // Compare_Plot_toolStripButton
-            // 
-            this.Compare_Plot_toolStripButton.Image = global::Host.Image.UI.Properties.Resources.brush_64;
-            this.Compare_Plot_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.Compare_Plot_toolStripButton.Name = "Compare_Plot_toolStripButton";
-            this.Compare_Plot_toolStripButton.Size = new System.Drawing.Size(73, 44);
-            this.Compare_Plot_toolStripButton.Text = "对比曲线";
-            this.Compare_Plot_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.Compare_Plot_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
+            this.CNN_toolStripButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.CNN_toolStripButton.Image = global::Host.Image.UI.Properties.Resources.disk_64;
+            this.CNN_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.CNN_toolStripButton.Name = "CNN_toolStripButton";
+            this.CNN_toolStripButton.Size = new System.Drawing.Size(47, 44);
+            this.CNN_toolStripButton.Text = "CNN";
+            this.CNN_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.CNN_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
             // 
             // Main
             // 
@@ -510,6 +523,7 @@
         private System.Windows.Forms.ToolStripButton kappa_toolStripButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton Compare_Plot_toolStripButton;
+        private System.Windows.Forms.ToolStripButton CNN_toolStripButton;
     }
 }
 

@@ -25,6 +25,9 @@ namespace Engine.Brain.AI.RL
         int ActionNum { get; }
         /// <summary>
         /// number of features
+        /// FeatureNum[0] represent Channel
+        /// FeatureNum[1] represent image Width if possible
+        /// FeatureNum[2] represent image Height if possible
         /// </summary>
         int[] FeatureNum { get; }
         /// <summary>

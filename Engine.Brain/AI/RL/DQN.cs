@@ -181,11 +181,11 @@ namespace Engine.Brain.AI.RL
         /// <summary>
         /// 设置运行参数
         /// </summary>
-        /// <param name="epoches"></param>
-        public void SetParameters(int epoches = 3000, double gamma = 0.0)
+        /// <param name="epochs"></param>
+        public void SetParameters(int epochs = 3000, double gamma = 0.0)
         {
             //训练轮次
-            _epoches = epoches;
+            _epoches = epochs;
             //设置gamma, 表示对连续状态的计算
             _gamma = gamma;
             //构造plot绘制图

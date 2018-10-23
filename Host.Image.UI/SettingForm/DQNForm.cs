@@ -12,7 +12,7 @@ namespace Host.Image.UI.SettingForm
         public DQNForm()
         {
             InitializeComponent();
-            Epoches = (int)numericUpDown1.Value;
+            Epochs = (int)numericUpDown1.Value;
         }
         
 
@@ -22,7 +22,7 @@ namespace Host.Image.UI.SettingForm
 
         public string SelectedLabelRasterLayer { get; set; }
 
-        public int Epoches { get; set; }
+        public int Epochs { get; set; }
 
         /// <summary>
         /// model
@@ -76,7 +76,7 @@ namespace Host.Image.UI.SettingForm
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
-            Epoches = (int)(sender as NumericUpDown).Value;
+            Epochs = (int)(sender as NumericUpDown).Value;
         }
 
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
@@ -93,7 +93,7 @@ namespace Host.Image.UI.SettingForm
 
         private void numericUpDown2_ValueChanged(object sender, EventArgs e)
         {
-            Epoches = (int)(sender as NumericUpDown).Value;
+            Epochs = (int)(sender as NumericUpDown).Value;
         }
 
         private void button2_Click(object sender, EventArgs e)

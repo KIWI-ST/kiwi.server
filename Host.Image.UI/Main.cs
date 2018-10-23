@@ -180,36 +180,53 @@ namespace Host.Image.UI
         {
             _dqnFormList.ForEach(p => p.UpdateDarw());
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="featureRasterLayer"></param>
+        /// <param name="labelRasterLayer"></param>
+        /// <param name="epochs"></param>
+        /// <param name="model"></param>
+        private void RunCNN(GRasterLayer featureRasterLayer,GRasterLayer labelRasterLayer,int epochs, int model,int width,int height,int channel)
+        {
 
-        private void RunDQN(GRasterLayer featureRasterLayer, GRasterLayer labelRasterLayer, int epoches, int Model = 1)
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="featureRasterLayer"></param>
+        /// <param name="labelRasterLayer"></param>
+        /// <param name="epochs"></param>
+        /// <param name="model"></param>
+        private void RunDQN(GRasterLayer featureRasterLayer, GRasterLayer labelRasterLayer, int epochs, int model = 1)
         {
             double gamma = 0.0;
             //create environment
             IEnv env = null;
-            if (Model == 1) //gamma = 0.0;
+            if (model == 1) //gamma = 0.0;
                 env = new ImageClassifyEnv(featureRasterLayer, labelRasterLayer);
-            else if(Model == 2) //gamma = 0.9;
+            else if(model == 2) //gamma = 0.9;
                 env = new ExtractRoadEnv(featureRasterLayer, labelRasterLayer);
             //crate dqn learning
             DQN dqn = new DQN(env);
-            dqn.SetParameters(epoches: epoches,gamma: gamma);
+            dqn.SetParameters(epochs: epochs,gamma: gamma);
             dqn.OnLearningLossEventHandler += Dqn_OnLearningLossEventHandler;
             Invoke(new PaintPlotModelHandler(PaintPlotModel), dqn.LossPlotModel);
             Invoke(new PaintPlotModelHandler(PaintPlotModel), dqn.AccuracyModel);
             Invoke(new PaintPlotModelHandler(PaintPlotModel), dqn.RewardModel);
             dqn.Learn();
             //apply model
-            if(Model == 1)
-                Dqn_ImageClassification(dqn, featureRasterLayer);
-            else if(Model == 2)
-                Dqn_PathExtract(dqn, featureRasterLayer);
+            if(model == 1)
+                DQN_ImageClassification(dqn, featureRasterLayer);
+            else if(model == 2)
+                DQN_PathExtract(dqn, featureRasterLayer);
         }
         /// <summary>
         /// 应用dqn训练结果，提取道路
         /// </summary>
         /// <param name="dqn"></param>
         /// <param name="featureRasterLayer"></param>
-        private void Dqn_PathExtract(DQN dqn, Engine.GIS.GLayer.GRasterLayer.GRasterLayer featureRasterLayer)
+        private void DQN_PathExtract(DQN dqn, Engine.GIS.GLayer.GRasterLayer.GRasterLayer featureRasterLayer)
         {
             ////GDI绘制
             //Bitmap pathExtractmap = new Bitmap(featureRasterLayer.XSize, featureRasterLayer.YSize);
@@ -256,7 +273,7 @@ namespace Host.Image.UI
         /// </summary>
         /// <param name="dqn"></param>
         /// <param name="featureRasterLayer"></param>
-        private void Dqn_ImageClassification(DQN dqn, Engine.GIS.GLayer.GRasterLayer.GRasterLayer featureRasterLayer)
+        private void DQN_ImageClassification(DQN dqn, Engine.GIS.GLayer.GRasterLayer.GRasterLayer featureRasterLayer)
         {
             //bind raster layer
             IRasterLayerCursorTool pRasterLayerCursorTool = new GRasterLayerCursorTool();
@@ -649,7 +666,7 @@ namespace Host.Image.UI
                         UpdateStatusLabel("未选中待计算图像，地图区域无图片", STATUE_ENUM.ERROR);
                     }
                     break;
-                //超像素中心应用
+                //super pixel
                 case "SLIC_Center_toolStripButton":
                 case "SLIC_Center_toolStripMenu":
                     OpenFileDialog opg = new OpenFileDialog
@@ -675,7 +692,7 @@ namespace Host.Image.UI
                         }
                     }
                     break;
-                //强化学习模型训练入口 
+                //dqn classification 
                 case "DQN_toolStripButton":
                     DQNForm dqnForm = new DQNForm();
                     dqnForm.RasterDic = _rasterDic;
@@ -683,8 +700,23 @@ namespace Host.Image.UI
                     {
                         string keyFeature = dqnForm.SelectedFeatureRasterLayer;
                         string keyLabel = dqnForm.SelectedLabelRasterLayer;
-                        int epoches = dqnForm.Epoches;
-                        ThreadStart s = delegate { RunDQN(_rasterDic[keyFeature], _rasterDic[keyLabel], epoches, dqnForm.Model); };
+                        int epochs = dqnForm.Epochs;
+                        ThreadStart s = delegate { RunDQN(_rasterDic[keyFeature], _rasterDic[keyLabel], epochs, dqnForm.Model); };
+                        Thread t = new Thread(s);
+                        t.IsBackground = true;
+                        t.Start();
+                    }
+                    break;
+                    //cnn classification
+                case "CNN_toolStripButton":
+                    CNNForm cnnForm = new CNNForm();
+                    cnnForm.RasterDic = _rasterDic;
+                    if(cnnForm.ShowDialog() == DialogResult.OK)
+                    {
+                        string keyFeature = cnnForm.SelectedFeatureRasterLayer;
+                        string keyLabel = cnnForm.SelectedLabelRasterLayer;
+                        int epochs = cnnForm.Epochs;
+                        ThreadStart s = delegate { RunCNN(_rasterDic[keyFeature], _rasterDic[keyLabel], epochs, cnnForm.Model, cnnForm.Width, cnnForm.Height, 1); };
                         Thread t = new Thread(s);
                         t.IsBackground = true;
                         t.Start();

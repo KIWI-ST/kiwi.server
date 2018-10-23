@@ -6,7 +6,6 @@ using Engine.GIS.GOperation.Tools;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 
 namespace Engine.Brain.AI.RL.Env
@@ -86,15 +85,15 @@ namespace Engine.Brain.AI.RL.Env
             //limited the environment _memory size to cetrain number
             _memory = _memory.LimitedDictionaryCapcaity();
             //}{debug 保存成.txt
-            //using(StreamWriter sw = new StreamWriter(@"C:\Users\81596\Desktop\B\Samples.txt"))
-            //{
-            //    string str="";
-            //    foreach (var element1 in _memory)
-            //        foreach (var element2 in element1.Value)
-            //            str += string.Join(",",_pGRasterLayerCursorTool.PickRawValue(element2.X, element2.Y)) + "," + element1.Key + "\r\n";
-            //    sw.Write(str);
-            //}
-            //
+            // using(StreamWriter sw = new StreamWriter(@"C:\Users\81596\Desktop\B\Samples.txt"))
+            // {
+            //     string str="";
+            //     foreach (var element1 in _memory)
+            //         foreach (var element2 in element1.Value)
+            //             str += string.Join(",",_pGRasterLayerCursorTool.PickRawValue(element2.X, element2.Y)) + "," + element1.Key + "\r\n";
+            //     sw.Write(str);
+            // }
+            //random seeds
             _randomSeedKeys = _memory.Keys.ToArray();
             //
             (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
