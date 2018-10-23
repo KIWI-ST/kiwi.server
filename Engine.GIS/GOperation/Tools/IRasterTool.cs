@@ -36,6 +36,13 @@ namespace Engine.GIS.GOperation.Tools
     public interface IRasterLayerCursorTool : IRasterLayerTool
     {
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        double[] PickRawValue(int x, int y);
+        /// <summary>
         /// pick normalized value
         /// </summary>
         /// <param name="x"></param>

@@ -1,10 +1,29 @@
 ﻿using Engine.Brain.Entity;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Engine.Brain.Extend
 {
     public static class ListExtend
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="batchSize"></param>
+        /// <returns></returns>
+        public static List<T> RandomTakeBatch<T>(this List<T> list, int batchSize=200)
+        {
+            int num = list.Count;
+            if (num <= batchSize)
+                return list;
+            List<T> dist = new List<T>();
+            int lerp = num / batchSize;
+            for (int i = 0; i < num; i++)
+                if (i % lerp == 0) dist.Add(list[i]);
+            return dist;
+        }
         /// <summary>
         /// 随机从数组中取出数据
         /// </summary>

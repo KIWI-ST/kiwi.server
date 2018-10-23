@@ -15,6 +15,18 @@ namespace Engine.GIS.GOperation.Tools
 
         IBandCursorTool _pBandCursorTool = new GBandCursorTool();
 
+        public double[] PickRawValue(int x,int y)
+        {
+            double[] normalValueArray = new double[_pLayer.BandCollection.Count];
+            for (int i = 0; i < _pLayer.BandCollection.Count; i++)
+            {
+                GRasterBand pBand = _pLayer.BandCollection[i];
+                _pBandCursorTool.Visit(pBand);
+                normalValueArray[i] = _pBandCursorTool.PickRawValue(x, y);
+            }
+            return normalValueArray;
+        }
+
         public double[] PickNormalValue(int x, int y)
         {
             double[] normalValueArray = new double[_pLayer.BandCollection.Count];
