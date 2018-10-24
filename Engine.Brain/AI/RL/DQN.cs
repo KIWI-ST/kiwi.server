@@ -124,7 +124,7 @@ namespace Engine.Brain.AI.RL
         private void InitPoltModel()
         {
             //缩放比例
-            const double scale = 1.1;
+            const double scale = 1.05;
             //loss line
             //LossPlotModel.LegendArea.Add(new LineAnnotation { Slope = 0.1, Intercept = 1, Text = "LineAnnotation", ToolTip = "This is a tool tip for the LineAnnotation" });
             LossPlotModel.Series.Add(_lossLine);
@@ -339,8 +339,8 @@ namespace Engine.Brain.AI.RL
         /// <returns></returns>
         public (double[] action, double q) EpsilonGreedy(int step, double[] state)
         {
-            int epsTotal = Convert.ToInt32(_epoches *0.85);
-            var epsion = EpsilonCalcute(step,eps_total: epsTotal);
+            int totalEpochs = Convert.ToInt32(_epoches * 0.9);
+            var epsion = EpsilonCalcute(step,eps_total: totalEpochs);
             if (NP.Random() < epsion)
                 return (_env.RandomAction(), 0);
             else

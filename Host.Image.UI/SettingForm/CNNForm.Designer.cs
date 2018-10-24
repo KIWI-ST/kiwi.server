@@ -115,7 +115,7 @@
             // 
             this.Epochs_numericUpDown.Location = new System.Drawing.Point(412, 271);
             this.Epochs_numericUpDown.Maximum = new decimal(new int[] {
-            10000,
+            100000,
             0,
             0,
             0});

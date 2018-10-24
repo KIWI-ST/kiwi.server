@@ -263,6 +263,7 @@ namespace Host.Image.UI
         /// <param name="model"></param>
         private void RunDQN(GRasterLayer featureRasterLayer, GRasterLayer labelRasterLayer, int epochs, int model = 1)
         {
+            DateTime start = DateTime.Now;
             double gamma = 0.0;
             //create environment
             IEnv env = null;
@@ -278,6 +279,8 @@ namespace Host.Image.UI
             Invoke(new PaintPlotModelHandler(PaintPlotModel), dqn.AccuracyModel);
             Invoke(new PaintPlotModelHandler(PaintPlotModel), dqn.RewardModel);
             dqn.Learn();
+            //update total seconds
+            Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), "complete learning, totalTime: " + (DateTime.Now - start).TotalSeconds + " seconds");
             //apply model
             if (model == 1)
                 DQN_ImageClassification(dqn, featureRasterLayer);

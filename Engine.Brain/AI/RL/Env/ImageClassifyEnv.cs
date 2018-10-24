@@ -83,7 +83,7 @@ namespace Engine.Brain.AI.RL.Env
             //将memory限定成4800总量
             _memory = pBandStasticTool.StaisticalRawGraph;
             //limited the environment _memory size to cetrain number
-            _memory = _memory.LimitedDictionaryCapcaity(capaciaty:200);
+            _memory = _memory.LimitedDictionaryCapcaity();
             //}{debug 保存成.txt
             // using(StreamWriter sw = new StreamWriter(@"C:\Users\81596\Desktop\B\Samples.txt"))
             // {
@@ -94,6 +94,24 @@ namespace Engine.Brain.AI.RL.Env
             //     sw.Write(str);
             // }
             //random seeds
+            //}{debug 保存图位置
+            //Bitmap samplesBitmap = new Bitmap(_featureRasterLayer.XSize, _featureRasterLayer.YSize);
+            //Graphics g = Graphics.FromImage(samplesBitmap);
+            //Color c;
+            //Pen p;
+            //SolidBrush brush;
+            //foreach (var element1 in _memory)
+            //    foreach (var element2 in element1.Value)
+            //    {
+            //        int gray = element1.Key;
+            //        c = Color.FromArgb(gray, gray, gray);
+            //        p = new Pen(c);
+            //        brush = new SolidBrush(c);
+            //        g.FillRectangle(brush, new Rectangle(element2.X, element2.Y, 1, 1));
+            //    }
+            ////
+            //samplesBitmap.Save(@"C:\Users\81596\Desktop\B\Samples.jpg");
+            //
             _randomSeedKeys = _memory.Keys.ToArray();
             //
             (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
