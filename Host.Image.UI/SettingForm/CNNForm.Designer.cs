@@ -209,7 +209,7 @@
             this.Height_numericUpDown.TabIndex = 14;
             this.Height_numericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Height_numericUpDown.Value = new decimal(new int[] {
-            4,
+            6,
             0,
             0,
             0});

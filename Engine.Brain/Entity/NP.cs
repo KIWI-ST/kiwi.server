@@ -95,6 +95,22 @@ namespace Engine.Brain.Entity
             return oneHot;
         }
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static double[] ToUnidimensional(double[][] input)
+        {
+            var list = input.ToList();
+            int rows = list.Count;
+            int cols = list[0].Length;
+            int totalCount = rows*cols;
+            double[] output = new double[totalCount];
+            for(int i = 0; i < totalCount; i++)
+                output[i] = input[i / cols][i % cols];
+            return output;
+        }
+        /// <summary>
         /// 随机构建训练样本
         /// </summary>
         /// <param name="oneDimensionCount">样本 features count</param>

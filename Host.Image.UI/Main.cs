@@ -1,4 +1,5 @@
-﻿using Engine.Brain.AI.RL;
+﻿using Engine.Brain.AI.DL;
+using Engine.Brain.AI.RL;
 using Engine.Brain.AI.RL.Env;
 using Engine.Brain.Bootstrap;
 using Engine.Brain.Entity;
@@ -187,9 +188,71 @@ namespace Host.Image.UI
         /// <param name="labelRasterLayer"></param>
         /// <param name="epochs"></param>
         /// <param name="model"></param>
-        private void RunCNN(GRasterLayer featureRasterLayer,GRasterLayer labelRasterLayer,int epochs, int model,int width,int height,int channel)
+        private void RunCNN(GRasterLayer featureRasterLayer, GRasterLayer labelRasterLayer, int epochs, int model, int width, int height, int channel)
         {
-
+            ImageClassifyEnv env = new ImageClassifyEnv(featureRasterLayer, labelRasterLayer);
+            CNN cnn = new CNN(new int[] { channel, width, height }, env.ActionNum);
+            for(int i=0;i<epochs;i++)
+            {
+                int batchSize = cnn.BatchSize;
+                var (states, labels) = env.RandomEval(batchSize);
+                double[][] inputX = new double[batchSize][];
+                for (int j = 0; j < batchSize; j++)
+                    inputX[j] = states[j];
+                double loss = cnn.Train(inputX, labels);
+                string msg = string.Format(DateTime.Now.ToLongTimeString() + ", training ，progress: {0:P}, loss: {1}", (double)i/ epochs, loss);
+                Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), msg);
+            }
+            //cnn image classification application
+            CNN_ImageClassification(cnn, env, featureRasterLayer);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cnn"></param>
+        /// <param name="featureRasterLayer"></param>
+        private void CNN_ImageClassification(CNN  cnn, IEnv env,GRasterLayer featureRasterLayer)
+        {
+            //bind raster layer
+            IRasterLayerCursorTool pRasterLayerCursorTool = new GRasterLayerCursorTool();
+            pRasterLayerCursorTool.Visit(featureRasterLayer);
+            //GDI graph
+            Bitmap classificationBitmap = new Bitmap(featureRasterLayer.XSize, featureRasterLayer.YSize);
+            Graphics g = Graphics.FromImage(classificationBitmap);
+            Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": starting cnn classification");
+            //
+            int seed = 0;
+            int totalPixels = featureRasterLayer.XSize * featureRasterLayer.YSize;
+            //应用dqn对图像分类
+            for (int i = 0; i < featureRasterLayer.XSize; i++)
+                for (int j = 0; j < featureRasterLayer.YSize; j++)
+                {
+                    //get normalized input raw value
+                    double[] normal = pRasterLayerCursorTool.PickNormalValue(i, j);
+                    //}{debug
+                    double[] action = cnn.Predict(normal);
+                    //convert action to raw byte value
+                    int gray = env.RandomSeedKeys[NP.Argmax(action)];
+                    //后台绘制，报告进度
+                    Color c = Color.FromArgb(gray, gray, gray);
+                    Pen p = new Pen(c);
+                    SolidBrush brush = new SolidBrush(c);
+                    g.FillRectangle(brush, new Rectangle(i, j, 1, 1));
+                    //report progress
+                    seed++;
+                    if ((seed * 10) % totalPixels == 0)
+                    {
+                        double precent = (double)(seed) / totalPixels;
+                        string msg = string.Format(DateTime.Now.ToLongTimeString() + ", drawing ，progress: {0:P}", precent);
+                        Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), msg);
+                    }
+                }
+            //保存结果至tmp
+            string fullFileName = Directory.GetCurrentDirectory() + @"\tmp\" + DateTime.Now.ToFileTimeUtc() + ".png";
+            classificationBitmap.Save(fullFileName);
+            Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": complete cnn classification");
+            //切换到主线程读取结果
+            Invoke(new ReadRasterHandler(ReadRaster), fullFileName);
         }
         /// <summary>
         /// 
@@ -205,20 +268,20 @@ namespace Host.Image.UI
             IEnv env = null;
             if (model == 1) //gamma = 0.0;
                 env = new ImageClassifyEnv(featureRasterLayer, labelRasterLayer);
-            else if(model == 2) //gamma = 0.9;
+            else if (model == 2) //gamma = 0.9;
                 env = new ExtractRoadEnv(featureRasterLayer, labelRasterLayer);
             //crate dqn learning
             DQN dqn = new DQN(env);
-            dqn.SetParameters(epochs: epochs,gamma: gamma);
+            dqn.SetParameters(epochs: epochs, gamma: gamma);
             dqn.OnLearningLossEventHandler += Dqn_OnLearningLossEventHandler;
             Invoke(new PaintPlotModelHandler(PaintPlotModel), dqn.LossPlotModel);
             Invoke(new PaintPlotModelHandler(PaintPlotModel), dqn.AccuracyModel);
             Invoke(new PaintPlotModelHandler(PaintPlotModel), dqn.RewardModel);
             dqn.Learn();
             //apply model
-            if(model == 1)
+            if (model == 1)
                 DQN_ImageClassification(dqn, featureRasterLayer);
-            else if(model == 2)
+            else if (model == 2)
                 DQN_PathExtract(dqn, featureRasterLayer);
         }
         /// <summary>
@@ -707,16 +770,16 @@ namespace Host.Image.UI
                         t.Start();
                     }
                     break;
-                    //cnn classification
+                //cnn classification
                 case "CNN_toolStripButton":
                     CNNForm cnnForm = new CNNForm();
                     cnnForm.RasterDic = _rasterDic;
-                    if(cnnForm.ShowDialog() == DialogResult.OK)
+                    if (cnnForm.ShowDialog() == DialogResult.OK)
                     {
                         string keyFeature = cnnForm.SelectedFeatureRasterLayer;
                         string keyLabel = cnnForm.SelectedLabelRasterLayer;
                         int epochs = cnnForm.Epochs;
-                        ThreadStart s = delegate { RunCNN(_rasterDic[keyFeature], _rasterDic[keyLabel], epochs, cnnForm.Model, cnnForm.Width, cnnForm.Height, 1); };
+                        ThreadStart s = delegate { RunCNN(_rasterDic[keyFeature], _rasterDic[keyLabel], epochs, cnnForm.Model, cnnForm.ImageWidth, cnnForm.ImageHeight, 1); };
                         Thread t = new Thread(s);
                         t.IsBackground = true;
                         t.Start();
