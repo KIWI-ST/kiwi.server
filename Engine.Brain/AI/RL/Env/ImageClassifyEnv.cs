@@ -83,7 +83,7 @@ namespace Engine.Brain.AI.RL.Env
             //将memory限定成4800总量
             _memory = pBandStasticTool.StaisticalRawGraph;
             //limited the environment _memory size to cetrain number
-            _memory = _memory.LimitedDictionaryCapcaity();
+            _memory = _memory.LimitedDictionaryCapcaity(capaciaty:200);
             //}{debug 保存成.txt
             // using(StreamWriter sw = new StreamWriter(@"C:\Users\81596\Desktop\B\Samples.txt"))
             // {
