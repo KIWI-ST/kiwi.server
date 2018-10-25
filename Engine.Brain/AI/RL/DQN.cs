@@ -52,6 +52,14 @@ namespace Engine.Brain.AI.RL
     public class DQN
     {
         /// <summary>
+        /// 
+        /// </summary>
+        //Dictionary<string, int> _usedSamples = new Dictionary<string, int>();
+        /// <summary>
+        /// 
+        /// </summary>
+        //Dictionary<string, int> _usedInfos = new Dictionary<string, int>();
+        /// <summary>
         /// 回调区
         /// </summary>
         public event UpdateLearningLossHandler OnLearningLossEventHandler;
@@ -124,7 +132,7 @@ namespace Engine.Brain.AI.RL
         private void InitPoltModel()
         {
             //缩放比例
-            const double scale = 1.05;
+            const double scale = 1.04;
             //loss line
             //LossPlotModel.LegendArea.Add(new LineAnnotation { Slope = 0.1, Intercept = 1, Text = "LineAnnotation", ToolTip = "This is a tool tip for the LineAnnotation" });
             LossPlotModel.Series.Add(_lossLine);
@@ -279,7 +287,21 @@ namespace Engine.Brain.AI.RL
         private List<Memory> CreateRawDataBatch(int batchSize)
         {
             List<Memory> list = new List<Memory>();
-            for (int i = 0; i < batchSize; i++) list.Add(_memoryList.RandomTake());
+            for (int i = 0; i < batchSize; i++)
+            {
+                Memory memory = _memoryList.RandomTake();
+                //if(memory.RT == 1.0)
+                //{
+                //    string key = string.Join(",", memory.ST);
+                //    _usedSamples[key] = 1;
+                //}
+                //else
+                //{
+                //    string key = string.Join(",", memory.ST) + string.Join(",", memory.AT);
+                //    _usedInfos[key] = 1;
+                //}
+                list.Add(memory);
+            }
             return list;
         }
         /// <summary>
@@ -407,6 +429,11 @@ namespace Engine.Brain.AI.RL
             PreRemember(_memoryCapacity);
             for (int e = 1; e <= _epoches; e++)
             {
+                //if(e==500|| e == 1000|| e == 1500|| e == 2000|| e == 2500|| e == 3000|| e == 3500)
+                //{
+                //    var s = _usedSamples;
+                //    var s1 = _usedInfos;
+                //}
                 //reset environment every epoches
                 double[] state = _env.Reset();
                 DateTime now = DateTime.Now;
