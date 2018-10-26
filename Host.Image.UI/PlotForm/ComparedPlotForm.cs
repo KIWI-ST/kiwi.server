@@ -3,25 +3,28 @@ using OxyPlot.Axes;
 using OxyPlot.Series;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 
 namespace Host.Image.UI.PlotForm
 {
+
     public partial class ComparedPlotForm : Form
     {
+
         public ComparedPlotForm()
         {
             InitializeComponent();
         }
 
-        PlotModel _plotModel = new PlotModel { LegendBackground = OxyColor.FromAColor(200, OxyColors.White), LegendBorder = OxyColors.Transparent };
+        List<double> _x, _y;
 
-        List<DataPoint> _points = new List<DataPoint>();
+        List<LineSeries> _lines = new List<LineSeries>();
 
-        public void InilializationModel(string title, double x_min = 0, double x_max = 5000, double y_min = 0.85, double y_max = 1)
+        public void InilializationModel(PlotModel plotModel, string title, double x_min = 0, double x_max = 5000, double y_min = 0.85, double y_max = 1)
         {
             //
-            _plotModel.Axes.Add(new LinearAxis()
+            plotModel.Axes.Add(new LinearAxis()
             {
                 Title = "Training Epochs",
                 Position = AxisPosition.Bottom,
@@ -30,7 +33,7 @@ namespace Host.Image.UI.PlotForm
                 FontSize = 26
             });
             //
-            _plotModel.Axes.Add(new LinearAxis()
+            plotModel.Axes.Add(new LinearAxis()
             {
                 Title = "Accuracy",
                 Position = AxisPosition.Left,
@@ -39,57 +42,100 @@ namespace Host.Image.UI.PlotForm
                 FontSize = 26
             });
             //
-            _plotModel.Title = title;
+            plotModel.Title = title;
             //legend
-            _plotModel.LegendPlacement = LegendPlacement.Inside;
-            _plotModel.LegendPosition = LegendPosition.RightTop;
-            _plotModel.LegendFontSize = 26;
-        }
-
-        public void AddLineSeries(List<DataPoint> points,string title)
-        {
-            LineSeries line = new LineSeries();
-            line.Title = title;
-            points.ForEach(p => line.Points.Add(p));
-            _plotModel.Series.Add(line);
-        }
-
-        private void button1_Click(object sender, System.EventArgs e)
-        {
-            try
-            {
-                double x = Convert.ToDouble(position_textbox.Text);
-                double y = Convert.ToDouble(value_textbox.Text);
-                DataPoint point = new DataPoint(x, y);
-                _points.Add(point);
-                //
-                listBox1.Items.Add(string.Format("{0},{1}",x,y));
-            }
-            catch
-            {
-                MessageBox.Show("添加点错误，请检查输入值");
-            }
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            if (_points.Count == 0)
-                return;
-            listBox1.Items.Clear();
-            AddLineSeries(_points, series_name_textbox.Text);
-            _points = new List<DataPoint>();
+            plotModel.LegendPlacement = LegendPlacement.Inside;
+            plotModel.LegendPosition = LegendPosition.LeftTop;
+            plotModel.LegendFontSize = 26;
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-
-            InilializationModel(plot_name_textbox.Text,Convert.ToDouble(x_min.Value), Convert.ToDouble(x_max.Value), Convert.ToDouble(y_min.Text), Convert.ToDouble(y_max.Text));
-            listBox1.Items.Clear();
-            //
+            PlotModel plotModel = new PlotModel { LegendBackground = OxyColor.FromAColor(200, OxyColors.White), LegendBorder = OxyColors.Transparent };
+            InilializationModel(plotModel, title_textbox.Text, Convert.ToDouble(x_min.Value), Convert.ToDouble(x_max.Value), Convert.ToDouble(y_min.Text), Convert.ToDouble(y_max.Text));
+            _lines.ForEach(p => {
+                plotModel.Series.Add(p);
+            });
             EmptyPlotForm form = new EmptyPlotForm();
-            form.SetModel(_plotModel);
+            form.SetModel(plotModel);
             form.Show();
             form.UpdateDarw();
         }
+
+        private void x_open_button_Click(object sender, EventArgs e)
+        {
+            //打开x轴数据
+            OpenFileDialog opg = new OpenFileDialog();
+            opg.Filter = "文本文件(*.txt)|*.txt";
+            if (opg.ShowDialog() == DialogResult.OK)
+            {
+                using (StreamReader sr = new StreamReader(opg.FileName))
+                {
+                    _x = new List<double>();
+                    string text = sr.ReadToEnd();
+                    Array.ForEach(text.Split(','), p =>
+                    {
+                        _x.Add(Convert.ToDouble(p));
+                    });
+                    x_textBox.Text = text;
+                }
+            }
+        }
+
+        private void addline_button_Click(object sender, EventArgs e)
+        {
+            if (_x == null || _y == null)
+            {
+                MessageBox.Show("缺少数据");
+                return;
+            }
+            else if (_x.Count != _y.Count)
+            {
+                MessageBox.Show("x,y轴数据长度不一致");
+                return;
+            }
+            //
+            LineSeries line = new LineSeries();
+            line.Title = lengend_textBox.Text;
+            for (int i = 0; i < _x.Count; i++)
+            {
+                DataPoint p = new DataPoint(_x[i], _y[i]);
+                line.Points.Add(p);
+            }
+            _lines.Add(line);
+            // clear 
+            Reset();
+        }
+
+        private void Reset()
+        {
+            _x = null;
+            _y = null;
+            lengend_textBox.Text = "";
+            x_textBox.Text = "";
+            y_textBox.Text = "";
+        }
+
+        private void y_open_button_Click(object sender, EventArgs e)
+        {
+            //打开y轴数据
+            //打开x轴数据
+            OpenFileDialog opg = new OpenFileDialog();
+            opg.Filter = "文本文件(*.txt)|*.txt";
+            if (opg.ShowDialog() == DialogResult.OK)
+            {
+                using (StreamReader sr = new StreamReader(opg.FileName))
+                {
+                    _y = new List<double>();
+                    string text = sr.ReadToEnd();
+                    Array.ForEach(text.Split(','), p =>
+                    {
+                        _y.Add(Convert.ToDouble(p));
+                    });
+                    y_textBox.Text = text;
+                }
+            }
+        }
+
     }
 }

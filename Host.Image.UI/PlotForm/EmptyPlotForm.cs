@@ -10,6 +10,13 @@ namespace Host.Image.UI.PlotForm
         public EmptyPlotForm()
         {
             InitializeComponent();
+            this.FormClosing += EmptyPlotForm_FormClosing;
+        }
+
+        private void EmptyPlotForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            dqn_plotView.Model.Series.Clear();
+            dqn_plotView.Dispose();
         }
 
         public void SetModel(PlotModel model)
