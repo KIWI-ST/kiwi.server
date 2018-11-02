@@ -252,135 +252,6 @@ namespace Host.Image.UI
             classificationBitmap.Save(fullFileName);
             Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": complete cnn classification");
             //切换到主线程读取结果
-            Invoke(new ReadRasterHandler(ReadRaster), fullFileName);
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="featureRasterLayer"></param>
-        /// <param name="labelRasterLayer"></param>
-        /// <param name="epochs"></param>
-        /// <param name="model"></param>
-        private void RunDQN(GRasterLayer featureRasterLayer, GRasterLayer labelRasterLayer, int epochs, int model = 1)
-        {
-            DateTime start = DateTime.Now;
-            double gamma = 0.0;
-            //create environment
-            IEnv env = null;
-            if (model == 1) //gamma = 0.0;
-                env = new ImageClassifyEnv(featureRasterLayer, labelRasterLayer);
-            else if (model == 2) //gamma = 0.9;
-                env = new ExtractRoadEnv(featureRasterLayer, labelRasterLayer);
-            //crate dqn learning
-            DQN dqn = new DQN(env);
-            dqn.SetParameters(epochs: epochs, gamma: gamma);
-            dqn.OnLearningLossEventHandler += Dqn_OnLearningLossEventHandler;
-            Invoke(new PaintPlotModelHandler(PaintPlotModel), dqn.LossPlotModel);
-            Invoke(new PaintPlotModelHandler(PaintPlotModel), dqn.AccuracyModel);
-            Invoke(new PaintPlotModelHandler(PaintPlotModel), dqn.RewardModel);
-            dqn.Learn();
-            //update total seconds
-            Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), "complete learning, totalTime: " + (DateTime.Now - start).TotalSeconds + " seconds");
-            //apply model
-            if (model == 1)
-                DQN_ImageClassification(dqn, featureRasterLayer);
-            else if (model == 2)
-                DQN_PathExtract(dqn, featureRasterLayer);
-        }
-        /// <summary>
-        /// 应用dqn训练结果，提取道路
-        /// </summary>
-        /// <param name="dqn"></param>
-        /// <param name="featureRasterLayer"></param>
-        private void DQN_PathExtract(DQN dqn, Engine.GIS.GLayer.GRasterLayer.GRasterLayer featureRasterLayer)
-        {
-            ////GDI绘制
-            //Bitmap pathExtractmap = new Bitmap(featureRasterLayer.XSize, featureRasterLayer.YSize);
-            //Graphics g = Graphics.FromImage(pathExtractmap);
-            //Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": starting dqn path extract");
-            ////
-            //int seed = 0;
-            //int totalPixels = featureRasterLayer.XSize * featureRasterLayer.YSize;
-            ////应用dqn对图像分类
-            //for (int i = 0; i < featureRasterLayer.XSize; i++)
-            //    for (int j = 0; j < featureRasterLayer.YSize; j++)
-            //    {
-            //        double[] raw = featureRasterLayer.GetBand0MaskPixelDouble(i, j);
-            //        double[] normal = NP.Normalize(raw, 255f);
-            //        var (action, q) = dqn.ChooseAction(normal);
-            //        int gray = action;
-            //        //后台绘制，报告进度
-            //        Color c = Color.FromArgb(gray, gray, gray);
-            //        Pen p = new Pen(c);
-            //        SolidBrush brush = new SolidBrush(c);
-            //        g.FillRectangle(brush, new Rectangle(i, j, 1, 1));
-            //        //report progress
-            //        seed++;
-            //        if ((seed * 10) % totalPixels == 0)
-            //        {
-            //            double precent = (double)(seed) / totalPixels;
-            //            string msg = string.Format(DateTime.Now.ToLongTimeString() + ", drawing ，progress: {0:P}", precent);
-            //            Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), msg);
-            //        }
-            //    }
-            ////保存结果至tmp
-            //string fullFileName = Directory.GetCurrentDirectory() + @"\tmp\" + DateTime.Now.ToFileTimeUtc() + ".png";
-            //pathExtractmap.Save(fullFileName);
-            ////
-            //Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": complete dqn polsar image classification");
-            ////计算kappa
-            //double kappa = dqn.CalcuteKappa(new Engine.GIS.GLayer.GRasterLayer.GRasterLayer(fullFileName));
-            //Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": kappa :" + kappa);
-            ////切换到主线程读取结果
-            //Invoke(new ReadRasterHandler(ReadRaster), fullFileName);
-        }
-        /// <summary>
-        /// 应用dqn训练结果，绘制结果图片
-        /// </summary>
-        /// <param name="dqn"></param>
-        /// <param name="featureRasterLayer"></param>
-        private void DQN_ImageClassification(DQN dqn, Engine.GIS.GLayer.GRasterLayer.GRasterLayer featureRasterLayer)
-        {
-            //bind raster layer
-            IRasterLayerCursorTool pRasterLayerCursorTool = new GRasterLayerCursorTool();
-            pRasterLayerCursorTool.Visit(featureRasterLayer);
-            //GDI graph
-            Bitmap classificationBitmap = new Bitmap(featureRasterLayer.XSize, featureRasterLayer.YSize);
-            Graphics g = Graphics.FromImage(classificationBitmap);
-            Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": starting dqn classification");
-            //
-            int seed = 0;
-            int totalPixels = featureRasterLayer.XSize * featureRasterLayer.YSize;
-            //应用dqn对图像分类
-            for (int i = 0; i < featureRasterLayer.XSize; i++)
-                for (int j = 0; j < featureRasterLayer.YSize; j++)
-                {
-                    //get normalized input raw value
-                    double[] normal = pRasterLayerCursorTool.PickNormalValue(i, j);
-                    //}{debug
-                    var (action, q) = dqn.ChooseAction(normal);
-                    //convert action to raw byte value
-                    int gray = dqn.ActionToRawValue(NP.Argmax(action));
-                    //后台绘制，报告进度
-                    Color c = Color.FromArgb(gray, gray, gray);
-                    Pen p = new Pen(c);
-                    SolidBrush brush = new SolidBrush(c);
-                    g.FillRectangle(brush, new Rectangle(i, j, 1, 1));
-                    //report progress
-                    seed++;
-                    if ((seed * 10) % totalPixels == 0)
-                    {
-                        double precent = (double)(seed) / totalPixels;
-                        string msg = string.Format(DateTime.Now.ToLongTimeString() + ", drawing ，progress: {0:P}", precent);
-                        Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), msg);
-                    }
-                }
-            //保存结果至tmp
-            string fullFileName = Directory.GetCurrentDirectory() + @"\tmp\" + DateTime.Now.ToFileTimeUtc() + ".png";
-            classificationBitmap.Save(fullFileName);
-            Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": complete dqn classification");
-            //切换到主线程读取结果
-            Invoke(new ReadRasterHandler(ReadRaster), fullFileName);
         }
         /// <summary>
         /// report loss every epoch
@@ -499,7 +370,7 @@ namespace Host.Image.UI
             else
                 map_treeView.Nodes.Add(childrenNode);
             //2.应对picture更新
-            map_pictureBox.Image = _imageDic[childrenNode.Text].BMP;
+            map_pictureBox.Image = _imageDic[childrenNode.Text]?.BMP;
         }
         /// <summary>
         /// 
@@ -609,7 +480,11 @@ namespace Host.Image.UI
                 string fileName = Path.GetFileNameWithoutExtension(openfiledialog.FileName);
                 string extension = Path.GetExtension(openfiledialog.FileName);
                 if (extension == ".tif" || extension == ".tiff" || extension == ".img" || extension == ".bmp" || extension == ".jpg" || extension == ".png")
-                    ReadRaster(openfiledialog.FileName);
+                {
+                    IJob readRasterJob = new JobReadRaster();
+                    RegisterJob(readRasterJob);
+                    readRasterJob.Start(openfiledialog.FileName);
+                }
                 else if (extension == "shp")
                 {
                     //IShpReader pShpReader = new ShpReader(fileName);
@@ -617,58 +492,42 @@ namespace Host.Image.UI
                 }
             }
         }
-        /// <summary>
-        /// 读取rester (by GDAL)
-        /// </summary>
-        /// <param name="fullFileName"></param>
-        private void ReadRaster(string fullFileName)
-        {
-            //
-            string fileName = Path.GetFileNameWithoutExtension(fullFileName);
-            //1.判断图像是否已加载
-            if (map_treeView.Nodes.OfType<TreeNode>().FirstOrDefault(p => p.Tag.Equals(fileName)) != null)
-            {
-                UpdateStatusLabel("图像不能重复添加", STATUE_ENUM.WARNING);
-                return;
-            }
-            //2.构建TreeNode用于存储数据和结点
-            TreeNode node = new TreeNode(fileName);
-            node.Tag = fileName;
-            map_treeView.Nodes.Add(node);
-            _imageDic.Add(fileName, null);
-            //3.分波段读取图像并加载，开辟新的线程分波段读取数据
-            void s() { ReadBand(fullFileName, node); }
-            Thread t = new Thread(s)
-            {
-                IsBackground = true
-            };
-            t.Start();
-        }
-
-        /// <summary>
-        /// 波段读取
-        /// </summary>
-        /// <param name="filePath"></param>
-        /// <param name="parentNode"></param>
-        private void ReadBand(string rasterFilename, TreeNode parentNode)
-        {
-            string name = parentNode.Text;
-            GRasterLayer _layer = new GRasterLayer(rasterFilename);
-            _rasterDic.Add(_layer.Name, _layer);
-            for (int i = 0; i < _layer.BandCollection.Count; i++)
-            {
-                GRasterBand band = _layer.BandCollection[i];
-                band.BandName = name + "_波段_" + i;
-                Bitmap2 bmp2 = new Bitmap2(bmp: band.GrayscaleImage, name: band.BandName, gdalBand: band, gdalLayer: _layer);
-                //获取band对应的bitmap格式图像，载入treedNode中
-                _imageDic.Add(band.BandName, bmp2);
-                TreeNode childrenNode = new TreeNode(band.BandName);
-                Invoke(new UpdateTreeNodeHandler(UpdateTreeNode), parentNode, childrenNode);
-                //this.BeginInvoke
-            }
-        }
-
+   
         #endregion
+
+
+        private void RegisterJob(IJob job)
+        {
+            job.OnTaskComplete += Job_OnTaskComplete;
+        }
+
+        private void Job_OnTaskComplete(string taskName, params object[] outputs)
+        {
+            switch (taskName)
+            {
+                case "DQN Classification Task":
+                    string fullFilename = outputs[0] as string;
+
+                    break;
+                case "Read Raster Image Task":
+                    string nodeName = outputs[0] as string;
+                    Dictionary<string, Bitmap2> dict = outputs[1] as Dictionary<string, Bitmap2>;
+                    TreeNode node = new TreeNode(nodeName);
+                    node.Tag = nodeName;
+                    _imageDic.Add(nodeName, null);
+                    //更新界面
+                    Invoke(new UpdateTreeNodeHandler(UpdateTreeNode), null, node);
+                    foreach (var key in dict.Keys)
+                    {
+                        TreeNode childNode = new TreeNode(key);
+                        _imageDic[key] = dict[key];
+                        Invoke(new UpdateTreeNodeHandler(UpdateTreeNode), node, childNode);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
 
         #region UI事件相应方法
         /// <summary>
@@ -714,14 +573,17 @@ namespace Host.Image.UI
                         }
                     }
                     break;
-                case "open_toolstripmenuitem"://添加图像
+                //添加图像
+                case "open_toolstripmenuitem":
                     ReadImage();
                     break;
+                //添加图像
                 case "open_contextMenuStrip":
                     ReadImage();
                     break;
                 //超像素分割
                 case "SLIC_toolStripButton":
+                //超像素分割
                 case "SLIC_toolStripMenu":
                     Bitmap bmp = map_pictureBox.Image as Bitmap;
                     if (bmp != null)
@@ -768,13 +630,13 @@ namespace Host.Image.UI
                     dqnForm.RasterDic = _rasterDic;
                     if (dqnForm.ShowDialog() == DialogResult.OK)
                     {
-
+                        //
                         string keyFeature = dqnForm.SelectedFeatureRasterLayer;
                         string keyLabel = dqnForm.SelectedLabelRasterLayer;
                         int epochs = dqnForm.Epochs;
                         //
                         IJob dqnClassifyJob = new JobDQNClassify(_rasterDic[keyFeature], _rasterDic[keyLabel], epochs);
-                        dqnClassifyJob.OnTaskComplete += DqnClassifyJob_OnTaskComplete;
+                        RegisterJob(dqnClassifyJob);
                         dqnClassifyJob.Start();
                     }
                     break;
@@ -802,12 +664,6 @@ namespace Host.Image.UI
                     break;
             }
         }
-
-        private void DqnClassifyJob_OnTaskComplete(string fullFileName)
-        {
-            Invoke(new ReadRasterHandler(ReadRaster), fullFileName);
-        }
-
         /// <summary>
         ///  树视图点击捕捉，用于邮件弹出功能栏
         /// </summary>

@@ -1,14 +1,17 @@
 ﻿using OxyPlot;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Host.Image.UI.Jobs
 {
-    public delegate void OnTaskCompleteHandler(string result);
-
+    /// <summary>
+    /// task complete event handler
+    /// </summary>
+    /// <param name="taskName"></param>
+    /// <param name="outputs"></param>
+    public delegate void OnTaskCompleteHandler(string taskName, params object[] outputs);
+    /// <summary>
+    /// Job tasks interface
+    /// </summary>
     public interface IJob
     {
         /// <summary>

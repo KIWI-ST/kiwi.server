@@ -17,10 +17,6 @@ namespace Host.Image.UI.Jobs
     public class JobDQNClassify : IJob
     {
         /// <summary>
-        /// 
-        /// </summary>
-        bool _isRunning = false;
-        /// <summary>
         /// background thread
         /// </summary>
         Thread _t;
@@ -40,6 +36,10 @@ namespace Host.Image.UI.Jobs
         /// 
         /// </summary>
         DQN _dqn;
+        /// <summary>
+        /// 
+        /// </summary>
+        string _summary;
         /// <summary>
         /// 
         /// </summary>
@@ -63,7 +63,7 @@ namespace Host.Image.UI.Jobs
         /// <summary>
         /// 
         /// </summary>
-        public string Summary => string.Format("开始时间{0}，进度{1:P}",_startTime,_process);
+        public string Summary => _summary;
         /// <summary>
         /// 
         /// </summary>
@@ -119,14 +119,14 @@ namespace Host.Image.UI.Jobs
                     seed++;
                     if ((seed * 10) % totalPixels == 0)
                     {
-                        double precent = (double)(seed) / totalPixels;
-                        string msg = string.Format(DateTime.Now.ToLongTimeString() + ", drawing ，progress: {0:P}", precent);
+                        double _process = (double)(seed) / totalPixels;
+                        _summary = string.Format("应用模型，当前时间{0},分类进度{1:P}", DateTime.Now.ToLongTimeString(), _process);
                     }
                 }
             //保存结果至tmp
             string fullFileName = Directory.GetCurrentDirectory() + @"\tmp\" + DateTime.Now.ToFileTimeUtc() + ".png";
             classificationBitmap.Save(fullFileName);
-            OnTaskComplete?.Invoke(fullFileName);
+            OnTaskComplete?.Invoke(Name,fullFileName);
         }
         /// <summary>
         /// 
@@ -139,6 +139,7 @@ namespace Host.Image.UI.Jobs
         private void _dqn_OnLearningLossEventHandler(double loss, double totalReward, double accuracy, double progress, string epochesTime)
         {
             _process = progress;
+            _summary  = string.Format("开始时间{0}，学习进度{1:P}", _startTime.ToLongDateString()+_startTime.ToLongTimeString(), _process);
         }
         /// <summary>
         /// 
@@ -147,10 +148,7 @@ namespace Host.Image.UI.Jobs
         {
             _startTime = DateTime.Now;
             _t.IsBackground = true;
-            if(!_isRunning)
-                _t.Start();
-            else
-                _isRunning = true;
+            _t.Start();
         }
 
     }
