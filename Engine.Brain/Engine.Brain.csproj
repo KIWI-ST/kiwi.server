@@ -110,6 +110,7 @@
     <Compile Include="Extend\ListExtend.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entity\TensorFactory.cs" />
+    <Compile Include="Repoter\IRepoter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -592,7 +592,7 @@ namespace Host.Image.UI
         #region 主功能
 
         /// <summary>
-        /// 读取图片
+        /// 读取图像数据
         /// </summary>
         private void ReadImage()
         {
@@ -617,7 +617,10 @@ namespace Host.Image.UI
                 }
             }
         }
-
+        /// <summary>
+        /// 读取rester (by GDAL)
+        /// </summary>
+        /// <param name="fullFileName"></param>
         private void ReadRaster(string fullFileName)
         {
             //
@@ -669,7 +672,6 @@ namespace Host.Image.UI
         #endregion
 
         #region UI事件相应方法
-
         /// <summary>
         /// 底图区域功能按钮
         /// </summary>
@@ -797,7 +799,6 @@ namespace Host.Image.UI
                     break;
             }
         }
-
         /// <summary>
         ///  树视图点击捕捉，用于邮件弹出功能栏
         /// </summary>
@@ -869,7 +870,6 @@ namespace Host.Image.UI
                 tree_contextMenuStrip.Show(map_treeView, new Point(e.X, e.Y));
             }
         }
-
         #endregion
 
     }

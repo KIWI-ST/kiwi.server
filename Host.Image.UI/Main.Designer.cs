@@ -39,6 +39,7 @@
             this.map_toolStrip = new System.Windows.Forms.ToolStrip();
             this.SLIC_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.SLIC_Center_toolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.CNN_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.DQN_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.main_toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.kappa_toolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -64,7 +65,6 @@
             this.bandCombine_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.bandExport_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.CNN_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.map_menuStrip.SuspendLayout();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
@@ -183,6 +183,17 @@
             this.SLIC_Center_toolStripButton.Text = "中心提取";
             this.SLIC_Center_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.SLIC_Center_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
+            // 
+            // CNN_toolStripButton
+            // 
+            this.CNN_toolStripButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.CNN_toolStripButton.Image = global::Host.Image.UI.Properties.Resources.disk_64;
+            this.CNN_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.CNN_toolStripButton.Name = "CNN_toolStripButton";
+            this.CNN_toolStripButton.Size = new System.Drawing.Size(47, 44);
+            this.CNN_toolStripButton.Text = "CNN";
+            this.CNN_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.CNN_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
             // 
             // DQN_toolStripButton
             // 
@@ -435,17 +446,6 @@
             this.bandExport_ToolStripMenuItem.Size = new System.Drawing.Size(113, 24);
             this.bandExport_ToolStripMenuItem.Text = "波段导出";
             this.bandExport_ToolStripMenuItem.Click += new System.EventHandler(this.Map_treeView_Click);
-            // 
-            // CNN_toolStripButton
-            // 
-            this.CNN_toolStripButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.CNN_toolStripButton.Image = global::Host.Image.UI.Properties.Resources.disk_64;
-            this.CNN_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.CNN_toolStripButton.Name = "CNN_toolStripButton";
-            this.CNN_toolStripButton.Size = new System.Drawing.Size(47, 44);
-            this.CNN_toolStripButton.Text = "CNN";
-            this.CNN_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.CNN_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
             // 
             // Main
             // 
