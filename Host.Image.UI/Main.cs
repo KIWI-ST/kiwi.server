@@ -632,18 +632,14 @@ namespace Host.Image.UI
                 return;
             }
             //2.构建TreeNode用于存储数据和结点
-            TreeNode node = new TreeNode(fileName)
-            {
-                Tag = fileName
-            };
+            TreeNode node = new TreeNode(fileName);
+            node.Tag = fileName;
             map_treeView.Nodes.Add(node);
             _imageDic.Add(fileName, null);
             //3.分波段读取图像并加载，开辟新的线程分波段读取数据
             ThreadStart s = delegate { ReadBand(fullFileName, node); };
-            Thread t = new Thread(s)
-            {
-                IsBackground = true
-            };
+            Thread t = new Thread(s);
+            t.IsBackground = true;
             t.Start();
         }
 
@@ -682,7 +678,10 @@ namespace Host.Image.UI
             ToolStripItem item = sender as ToolStripItem;
             switch (item.Name)
             {
-                // calcute kappa
+                case "task_toolStripButton":
+                    TaskMonitor taskForm = new TaskMonitor();
+                    taskForm.ShowDialog();
+                    break;
                 case "kappa_toolStripButton":
                     KappaForm kappaForm = new KappaForm()
                     {
