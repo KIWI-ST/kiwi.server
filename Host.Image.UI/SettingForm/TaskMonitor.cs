@@ -16,10 +16,28 @@ namespace Host.Image.UI.SettingForm
         {
             InitializeComponent();
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        ListViewItem _selected_item;
 
-        private void task_listView_Click(object sender, EventArgs e)
+        private void task_listView_MouseClick(object sender, MouseEventArgs e)
         {
+            ListView listView = sender as ListView;
+            _selected_item = listView.SelectedItems[0];
+        }
 
+        private void ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem item = sender as ToolStripMenuItem;
+            switch (item.Name)
+            {
+                case "accuracy_ToolStripMenuItem":
+                    MessageBox.Show(_selected_item.Text);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

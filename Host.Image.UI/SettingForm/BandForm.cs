@@ -1,8 +1,6 @@
 ﻿using Engine.GIS.GLayer.GRasterLayer;
-using Engine.GIS.GLayer.GRasterLayer.GBand;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace Host.Image.UI.SettingForm

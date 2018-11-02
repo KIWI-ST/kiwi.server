@@ -1,4 +1,4 @@
-﻿using Engine.GIS.GLayer.GRasterLayer.GBand;
+﻿using Engine.GIS.GLayer.GRasterLayer;
 using System.Collections.Generic;
 
 namespace Engine.GIS.GOperation.Tools

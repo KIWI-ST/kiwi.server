@@ -85,14 +85,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Jobs\IJob.cs" />
+    <Compile Include="Jobs\JobCNNClassify.cs" />
+    <Compile Include="Jobs\JobDQNClassify.cs" />
+    <Compile Include="Jobs\JobReadRaster.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MainExt\SuperPixel.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="PlotForm\ComparedPlotForm.cs">
       <SubType>Form</SubType>

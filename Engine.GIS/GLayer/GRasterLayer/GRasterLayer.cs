@@ -1,5 +1,4 @@
-﻿using Engine.GIS.GLayer.GRasterLayer.GBand;
-using Engine.GIS.GOperation.Arithmetic;
+﻿using Engine.GIS.GOperation.Arithmetic;
 using OSGeo.GDAL;
 using System.Collections.Generic;
 using System.Drawing;
@@ -34,7 +33,6 @@ namespace Engine.GIS.GLayer.GRasterLayer
                 BandCollection.Add(new GRasterBand(pBand));
             }
         }
-
         #region 属性字段
         /// <summary>
         /// Raster data type

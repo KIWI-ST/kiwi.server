@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Engine.GIS.GLayer.GRasterLayer;
-using Engine.GIS.GLayer.GRasterLayer.GBand;
+﻿using Engine.GIS.GLayer.GRasterLayer;
+using System;
 
 namespace Engine.GIS.GOperation.Tools
 {

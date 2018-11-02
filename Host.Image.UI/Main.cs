@@ -6,9 +6,9 @@ using Engine.Brain.Entity;
 using Engine.Brain.Utils;
 using Engine.GIS.Entity;
 using Engine.GIS.GLayer.GRasterLayer;
-using Engine.GIS.GLayer.GRasterLayer.GBand;
 using Engine.GIS.GOperation.Arithmetic;
 using Engine.GIS.GOperation.Tools;
+using Host.Image.UI.Jobs;
 using Host.Image.UI.PlotForm;
 using Host.Image.UI.SettingForm;
 using Host.Image.UI.SettingForm.SLIC;
@@ -637,9 +637,11 @@ namespace Host.Image.UI
             map_treeView.Nodes.Add(node);
             _imageDic.Add(fileName, null);
             //3.分波段读取图像并加载，开辟新的线程分波段读取数据
-            ThreadStart s = delegate { ReadBand(fullFileName, node); };
-            Thread t = new Thread(s);
-            t.IsBackground = true;
+            void s() { ReadBand(fullFileName, node); }
+            Thread t = new Thread(s)
+            {
+                IsBackground = true
+            };
             t.Start();
         }
 
@@ -651,7 +653,7 @@ namespace Host.Image.UI
         private void ReadBand(string rasterFilename, TreeNode parentNode)
         {
             string name = parentNode.Text;
-            Engine.GIS.GLayer.GRasterLayer.GRasterLayer _layer = new Engine.GIS.GLayer.GRasterLayer.GRasterLayer(rasterFilename);
+            GRasterLayer _layer = new GRasterLayer(rasterFilename);
             _rasterDic.Add(_layer.Name, _layer);
             for (int i = 0; i < _layer.BandCollection.Count; i++)
             {
@@ -662,6 +664,7 @@ namespace Host.Image.UI
                 _imageDic.Add(band.BandName, bmp2);
                 TreeNode childrenNode = new TreeNode(band.BandName);
                 Invoke(new UpdateTreeNodeHandler(UpdateTreeNode), parentNode, childrenNode);
+                //this.BeginInvoke
             }
         }
 
@@ -765,13 +768,14 @@ namespace Host.Image.UI
                     dqnForm.RasterDic = _rasterDic;
                     if (dqnForm.ShowDialog() == DialogResult.OK)
                     {
+
                         string keyFeature = dqnForm.SelectedFeatureRasterLayer;
                         string keyLabel = dqnForm.SelectedLabelRasterLayer;
                         int epochs = dqnForm.Epochs;
-                        ThreadStart s = delegate { RunDQN(_rasterDic[keyFeature], _rasterDic[keyLabel], epochs, dqnForm.Model); };
-                        Thread t = new Thread(s);
-                        t.IsBackground = true;
-                        t.Start();
+                        //
+                        IJob dqnClassifyJob = new JobDQNClassify(_rasterDic[keyFeature], _rasterDic[keyLabel], epochs);
+                        dqnClassifyJob.OnTaskComplete += DqnClassifyJob_OnTaskComplete;
+                        dqnClassifyJob.Start();
                     }
                     break;
                 //cnn classification
@@ -798,6 +802,12 @@ namespace Host.Image.UI
                     break;
             }
         }
+
+        private void DqnClassifyJob_OnTaskComplete(string fullFileName)
+        {
+            Invoke(new ReadRasterHandler(ReadRaster), fullFileName);
+        }
+
         /// <summary>
         ///  树视图点击捕捉，用于邮件弹出功能栏
         /// </summary>

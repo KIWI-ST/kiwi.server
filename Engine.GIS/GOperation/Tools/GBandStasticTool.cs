@@ -1,4 +1,4 @@
-﻿using Engine.GIS.GLayer.GRasterLayer.GBand;
+﻿using Engine.GIS.GLayer.GRasterLayer;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

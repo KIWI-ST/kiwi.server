@@ -4,14 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Host.Image.UI
+namespace Host.Image.UI.Jobs
 {
-    /// <summary>
-    /// SuperPixel 处理
-    /// </summary>
-    public partial class Main
+    public class JobCNNClassify
     {
-
-
     }
 }

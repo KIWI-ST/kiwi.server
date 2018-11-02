@@ -3,7 +3,7 @@ using OSGeo.GDAL;
 using System;
 using System.Drawing;
 
-namespace Engine.GIS.GLayer.GRasterLayer.GBand
+namespace Engine.GIS.GLayer.GRasterLayer
 {
     /// <summary>
     /// raw data type is double
