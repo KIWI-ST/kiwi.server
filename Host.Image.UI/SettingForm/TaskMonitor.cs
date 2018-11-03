@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Host.Image.UI.Jobs;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,6 +17,12 @@ namespace Host.Image.UI.SettingForm
         {
             InitializeComponent();
         }
+
+        public List<IJob> Jobs
+        {
+            set { LoadTaskInforList(value); }
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -39,5 +46,18 @@ namespace Host.Image.UI.SettingForm
                     break;
             }
         }
+
+        private void LoadTaskInforList(List<IJob> jobList)
+        {
+            for (int i = 0; i < jobList.Count; i++)
+            {
+                IJob job = jobList[i];
+                ListViewItem lvi = new ListViewItem();
+                lvi.SubItems.Add(job.Name);
+                lvi.SubItems.Add( string.Format("process:{0:P}", job.Process));
+                task_listView.Items.Add(lvi);
+            }
+        }
+
     }
 }

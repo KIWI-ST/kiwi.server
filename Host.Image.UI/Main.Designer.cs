@@ -66,6 +66,7 @@
             this.bandCombine_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.bandExport_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rf_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.map_menuStrip.SuspendLayout();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
@@ -151,6 +152,7 @@
             this.SLIC_toolStripButton,
             this.SLIC_Center_toolStripButton,
             this.CNN_toolStripButton,
+            this.rf_toolStripButton,
             this.DQN_toolStripButton,
             this.main_toolStripSeparator,
             this.kappa_toolStripButton,
@@ -299,7 +301,7 @@
             this.splitContainer_main.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.splitContainer_main.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer_main.Location = new System.Drawing.Point(0, 75);
-            this.splitContainer_main.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.splitContainer_main.Margin = new System.Windows.Forms.Padding(4);
             this.splitContainer_main.Name = "splitContainer_main";
             // 
             // splitContainer_main.Panel1
@@ -319,7 +321,7 @@
             this.map_tabControl.Controls.Add(this.tab_treeview);
             this.map_tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.map_tabControl.Location = new System.Drawing.Point(0, 0);
-            this.map_tabControl.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.map_tabControl.Margin = new System.Windows.Forms.Padding(4);
             this.map_tabControl.Name = "map_tabControl";
             this.map_tabControl.SelectedIndex = 0;
             this.map_tabControl.Size = new System.Drawing.Size(233, 712);
@@ -329,9 +331,9 @@
             // 
             this.tab_treeview.Controls.Add(this.map_treeView);
             this.tab_treeview.Location = new System.Drawing.Point(4, 25);
-            this.tab_treeview.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tab_treeview.Margin = new System.Windows.Forms.Padding(4);
             this.tab_treeview.Name = "tab_treeview";
-            this.tab_treeview.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tab_treeview.Padding = new System.Windows.Forms.Padding(4);
             this.tab_treeview.Size = new System.Drawing.Size(225, 683);
             this.tab_treeview.TabIndex = 0;
             this.tab_treeview.Text = "视图";
@@ -341,7 +343,7 @@
             // 
             this.map_treeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.map_treeView.Location = new System.Drawing.Point(4, 4);
-            this.map_treeView.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.map_treeView.Margin = new System.Windows.Forms.Padding(4);
             this.map_treeView.Name = "map_treeView";
             this.map_treeView.Size = new System.Drawing.Size(217, 675);
             this.map_treeView.TabIndex = 0;
@@ -352,7 +354,7 @@
             this.tabControl2.Controls.Add(this.tab_mapview);
             this.tabControl2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl2.Location = new System.Drawing.Point(0, 0);
-            this.tabControl2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabControl2.Margin = new System.Windows.Forms.Padding(4);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
             this.tabControl2.Size = new System.Drawing.Size(937, 712);
@@ -362,9 +364,9 @@
             // 
             this.tab_mapview.Controls.Add(this.map_splitContainer);
             this.tab_mapview.Location = new System.Drawing.Point(4, 25);
-            this.tab_mapview.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tab_mapview.Margin = new System.Windows.Forms.Padding(4);
             this.tab_mapview.Name = "tab_mapview";
-            this.tab_mapview.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tab_mapview.Padding = new System.Windows.Forms.Padding(4);
             this.tab_mapview.Size = new System.Drawing.Size(929, 683);
             this.tab_mapview.TabIndex = 1;
             this.tab_mapview.Text = "地图";
@@ -459,6 +461,16 @@
             this.bandExport_ToolStripMenuItem.Text = "波段导出";
             this.bandExport_ToolStripMenuItem.Click += new System.EventHandler(this.Map_treeView_Click);
             // 
+            // rf_toolStripButton
+            // 
+            this.rf_toolStripButton.Image = global::Host.Image.UI.Properties.Resources.bulb_off_64;
+            this.rf_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.rf_toolStripButton.Name = "rf_toolStripButton";
+            this.rf_toolStripButton.Size = new System.Drawing.Size(73, 44);
+            this.rf_toolStripButton.Text = "随机森林";
+            this.rf_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.rf_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -469,7 +481,7 @@
             this.Controls.Add(this.map_toolStrip);
             this.Controls.Add(this.map_menuStrip);
             this.MainMenuStrip = this.map_menuStrip;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "图像处理可视化工具";
@@ -537,6 +549,7 @@
         private System.Windows.Forms.ToolStripButton Compare_Plot_toolStripButton;
         private System.Windows.Forms.ToolStripButton CNN_toolStripButton;
         private System.Windows.Forms.ToolStripButton task_toolStripButton;
+        private System.Windows.Forms.ToolStripButton rf_toolStripButton;
     }
 }
 

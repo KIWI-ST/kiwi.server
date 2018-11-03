@@ -19,7 +19,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -44,6 +43,10 @@ namespace Host.Image.UI
         {
             InitializeComponent();
         }
+        /// <summary>
+        /// get time string
+        /// </summary>
+        string Now => DateTime.Now.ToLongDateString()+DateTime.Now.ToLongTimeString();
 
         #endregion
 
@@ -51,12 +54,16 @@ namespace Host.Image.UI
         /// <summary>
         /// raster layer
         /// </summary>
-        Dictionary<string, Engine.GIS.GLayer.GRasterLayer.GRasterLayer> _rasterDic = new Dictionary<string, Engine.GIS.GLayer.GRasterLayer.GRasterLayer>();
+        Dictionary<string, GRasterLayer> _rasterDic = new Dictionary<string, GRasterLayer>();
         /// <summary>
         /// 管理全局的图像与树视图区域的缓存对应
         /// key是图片名称或图+波段名称，值为对应的bitmap
         /// </summary>
         Dictionary<string, Bitmap2> _imageDic = new Dictionary<string, Bitmap2>();
+        /// <summary>
+        /// store jobs
+        /// </summary>
+        List<IJob> _jobs = new List<IJob>();
         /// <summary>
         /// 当前选中的Bitmap2信息，包含图层，波段，索引等
         /// </summary>
@@ -370,7 +377,8 @@ namespace Host.Image.UI
             else
                 map_treeView.Nodes.Add(childrenNode);
             //2.应对picture更新
-            map_pictureBox.Image = _imageDic[childrenNode.Text]?.BMP;
+            if(_imageDic.ContainsKey(childrenNode.Text))
+                map_pictureBox.Image = _imageDic[childrenNode.Text]?.BMP;
         }
         /// <summary>
         /// 
@@ -481,9 +489,7 @@ namespace Host.Image.UI
                 string extension = Path.GetExtension(openfiledialog.FileName);
                 if (extension == ".tif" || extension == ".tiff" || extension == ".img" || extension == ".bmp" || extension == ".jpg" || extension == ".png")
                 {
-                    IJob readRasterJob = new JobReadRaster();
-                    RegisterJob(readRasterJob);
-                    readRasterJob.Start(openfiledialog.FileName);
+                    ReadRaster(openfiledialog.FileName);
                 }
                 else if (extension == "shp")
                 {
@@ -492,42 +498,86 @@ namespace Host.Image.UI
                 }
             }
         }
-   
-        #endregion
-
-
-        private void RegisterJob(IJob job)
+        /// <summary>
+        /// read raster data
+        /// </summary>
+        /// <param name="fullFilename"></param>
+        private void ReadRaster(string fullFilename)
         {
-            job.OnTaskComplete += Job_OnTaskComplete;
+            string name = Path.GetFileNameWithoutExtension(fullFilename);
+            if(map_treeView.Nodes.ContainsKey(name))
+                Invoke(new UpdateStatusLabelHandler(UpdateStatusLabel), "请勿重复加载影像", STATUE_ENUM.ERROR);
+            else
+            {
+                TreeNode node = new TreeNode(name){ Name = name };
+                Invoke(new UpdateTreeNodeHandler(UpdateTreeNode), null, node);
+                IJob readRasterJob = new JobReadRaster();
+                RegisterJob(readRasterJob);
+                readRasterJob.Start(fullFilename);
+            }
+        }
+        /// <summary>
+        /// Update Read Raster UI
+        /// </summary>
+        private void UpdateReadRasterUI(string nodeName, Dictionary<string, Bitmap2> dict,GRasterLayer rasterLayer)
+        {
+            TreeNode node = map_treeView.Nodes[nodeName];
+            _imageDic[nodeName] = null;
+            _rasterDic[nodeName] = rasterLayer;
+            foreach (var key in dict.Keys)
+            {
+                TreeNode childNode = new TreeNode(key);
+                _imageDic[key] = dict[key];
+                Invoke(new UpdateTreeNodeHandler(UpdateTreeNode), node, childNode);
+            }
         }
 
+        #endregion
+
+        #region jobs
+
+        /// <summary>
+        /// register job
+        /// </summary>
+        /// <param name="job"></param>
+        private void RegisterJob(IJob job)
+        {
+            //task complete
+            job.OnTaskComplete += Job_OnTaskComplete;
+            //add to jobs
+            _jobs.Add(job);
+            //print job register information
+            string msg = string.Format("time:{0},task:{1} registered", Now, job.Name);
+            Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), msg);
+        }
+        /// <summary>
+        /// job complete
+        /// </summary>
+        /// <param name="taskName"></param>
+        /// <param name="outputs"></param>
         private void Job_OnTaskComplete(string taskName, params object[] outputs)
         {
             switch (taskName)
             {
                 case "DQN Classification Task":
                     string fullFilename = outputs[0] as string;
-
+                    ReadRaster(fullFilename);
                     break;
                 case "Read Raster Image Task":
                     string nodeName = outputs[0] as string;
                     Dictionary<string, Bitmap2> dict = outputs[1] as Dictionary<string, Bitmap2>;
-                    TreeNode node = new TreeNode(nodeName);
-                    node.Tag = nodeName;
-                    _imageDic.Add(nodeName, null);
-                    //更新界面
-                    Invoke(new UpdateTreeNodeHandler(UpdateTreeNode), null, node);
-                    foreach (var key in dict.Keys)
-                    {
-                        TreeNode childNode = new TreeNode(key);
-                        _imageDic[key] = dict[key];
-                        Invoke(new UpdateTreeNodeHandler(UpdateTreeNode), node, childNode);
-                    }
+                    GRasterLayer rasterLayer = outputs[2] as GRasterLayer;
+                    UpdateReadRasterUI(nodeName, dict, rasterLayer);
                     break;
                 default:
                     break;
             }
+            //print completed information
+            string msg = string.Format("time:{0},task:{1} completed", Now, taskName);
+            Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), msg);
         }
+
+        #endregion
 
         #region UI事件相应方法
         /// <summary>
@@ -542,6 +592,7 @@ namespace Host.Image.UI
             {
                 case "task_toolStripButton":
                     TaskMonitor taskForm = new TaskMonitor();
+                    taskForm.Jobs = _jobs;
                     taskForm.ShowDialog();
                     break;
                 case "kappa_toolStripButton":
@@ -565,7 +616,7 @@ namespace Host.Image.UI
                             //1.选择处理那副图像
                             string imageName = map_treeView.SelectedNode.Text;
                             Bitmap2 imageBitmap2 = _imageDic[imageName];
-                            Engine.GIS.GLayer.GRasterLayer.GRasterLayer rasterLayer = imageBitmap2.GdalLayer;
+                            GRasterLayer rasterLayer = imageBitmap2.GdalLayer;
                             ThreadStart clsfy_ts = delegate { RunClassify(rasterLayer, dlclassify.UseSLIC, dlclassify.PBName, dlclassify.CenterName, dlclassify.LabelName); };
                             Thread clsfy_t = new Thread(clsfy_ts);
                             clsfy_t.IsBackground = true;
@@ -594,9 +645,7 @@ namespace Host.Image.UI
                         slic_t.Start();
                     }
                     else
-                    {
                         UpdateStatusLabel("未选中待计算图像，地图区域无图片", STATUE_ENUM.ERROR);
-                    }
                     break;
                 //super pixel
                 case "SLIC_Center_toolStripButton":
@@ -654,6 +703,9 @@ namespace Host.Image.UI
                         t.IsBackground = true;
                         t.Start();
                     }
+                    break;
+                    //random forest classification
+                case "rf_toolStripButton":
                     break;
                 case "Compare_Plot_toolStripButton":
                     //drawing comparsion multi-reslut curve

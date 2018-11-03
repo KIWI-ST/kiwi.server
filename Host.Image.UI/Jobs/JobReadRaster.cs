@@ -15,7 +15,7 @@ namespace Host.Image.UI.Jobs
 
         public string Summary => throw new NotImplementedException();
 
-        public double Process => throw new NotImplementedException();
+        public double Process => 1.0;
 
         public DateTime StartTime => throw new NotImplementedException();
 
@@ -38,7 +38,7 @@ namespace Host.Image.UI.Jobs
                     Bitmap2 bmp2 = new Bitmap2(bmp: band.GrayscaleImage, name: band.BandName, gdalBand: band, gdalLayer: rasterLayer);
                     dict[band.BandName] = bmp2;
                 }
-                OnTaskComplete?.Invoke(Name,name,dict);
+                OnTaskComplete?.Invoke(Name,name,dict, rasterLayer);
             });
             t.IsBackground = true;
             t.Start();
