@@ -40,24 +40,28 @@ namespace Host.Image.UI.Jobs
                 int treeCount = Convert.ToInt32(paramaters[0]);
                 string fullFilename = paramaters[1] as string;
                 GRasterLayer rasterLayer = paramaters[2] as GRasterLayer;
-                //
+                //rf
                 RF rf = new RF(treeCount);
                 //read samples
-                using (var excel = new ExcelPackage(new FileInfo(fullFilename)))
+                using (StreamReader sr = new StreamReader(fullFilename))
                 {
-                    var ws = excel.Workbook.Worksheets[1];
-                    int rows = 3647;
-                    int cols = ws.Cells.Columns;
-                    double[][] inputs = new double[rows-2][];
-                    int[] outputs = new int[rows-2];
-                    for(int r = 2; r <rows; r++)
+                    List<List<double>> inputList = new List<List<double>>();
+                    List<int> outputList = new List<int>();
+                    string text = sr.ReadLine();
+                    do
                     {
-                        outputs[r-2] = Convert.ToInt32(ws.Cells[r, 3].Value);
-                        inputs[r-2] = new double[9];
-                        for (int c = 14; c <= 22; c++)
-                            inputs[r-2][c - 14] = Convert.ToDouble(ws.Cells[r, c].Value);
-                    }
-                    //rf learning
+                        string[] rawdatas = text.Split(',');
+                        outputList.Add(Convert.ToInt32(rawdatas.Last()));
+                        List<double> inputItem = new List<double>();
+                        for (int i = 0; i < rawdatas.Length - 1; i++)
+                            inputItem.Add(Convert.ToDouble(rawdatas[i]));
+                        inputList.Add(inputItem);
+                        text = sr.ReadLine();
+                    } while (text != null);
+                    double[][] inputs = new double[inputList.Count][];
+                    int[] outputs = outputList.ToArray();
+                    for (int i = 0; i < inputList.Count; i++)
+                        inputs[i] = inputList[i].ToArray();
                     rf.Train(inputs, outputs);
                 }
                 //image classify
@@ -94,7 +98,7 @@ namespace Host.Image.UI.Jobs
                 string fullFileName = Directory.GetCurrentDirectory() + @"\tmp\" + DateTime.Now.ToFileTimeUtc() + ".png";
                 classificationBitmap.Save(fullFileName);
                 //complete work
-                OnTaskComplete?.Invoke(Name,fullFileName);
+                OnTaskComplete?.Invoke(Name, fullFileName);
             });
             t.IsBackground = true;
             t.Start();

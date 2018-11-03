@@ -38,7 +38,8 @@ namespace Host.Image.UI.SettingForm
         private void open_button_Click(object sender, EventArgs e)
         {
             OpenFileDialog opg = new OpenFileDialog();
-            if(opg.ShowDialog() == DialogResult.OK)
+            opg.Filter = "样本文件|*.txt";
+            if (opg.ShowDialog() == DialogResult.OK)
             {
                 sample_file_textBox.Text = opg.FileName;
                 FullFilename = opg.FileName;

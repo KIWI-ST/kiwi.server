@@ -559,10 +559,13 @@ namespace Host.Image.UI
         {
             switch (taskName)
             {
+                //load image classification result
+                case "Random Forest Job Task":
                 case "DQN Classification Task":
                     string fullFilename = outputs[0] as string;
                     ReadRaster(fullFilename);
                     break;
+                //load image
                 case "Read Raster Image Task":
                     string nodeName = outputs[0] as string;
                     Dictionary<string, Bitmap2> dict = outputs[1] as Dictionary<string, Bitmap2>;
