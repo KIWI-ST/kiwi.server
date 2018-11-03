@@ -23,12 +23,12 @@ namespace Host.Image.UI.Jobs
 
         public event OnTaskCompleteHandler OnTaskComplete;
 
-        public void Start(params string[] paramaters)
+        public void Start(params object[] paramaters)
         {
             Dictionary<string, Bitmap2> dict = new Dictionary<string, Bitmap2>();
             Thread t = new Thread(() =>
             {
-                string fullFilename = paramaters[0];
+                string fullFilename = paramaters[0] as string;
                 string name = Path.GetFileNameWithoutExtension(fullFilename);
                 GRasterLayer rasterLayer = new GRasterLayer(fullFilename);
                 for (int i = 0; i < rasterLayer.BandCount; i++)

@@ -706,6 +706,17 @@ namespace Host.Image.UI
                     break;
                     //random forest classification
                 case "rf_toolStripButton":
+                    RandomForestForm rfForm = new RandomForestForm();
+                    rfForm.RasterDic = _rasterDic;
+                    if (rfForm.ShowDialog() == DialogResult.OK)
+                    {
+                        string treeCount = rfForm.TreeCount.ToString();
+                        string sampleFilename = rfForm.FullFilename;
+                        string featureKey = rfForm.FeatureKey;
+                        IJob rfJob = new JobRFClassify();
+                        RegisterJob(rfJob);
+                        rfJob.Start(treeCount, sampleFilename,_rasterDic[featureKey]);
+                    }
                     break;
                 case "Compare_Plot_toolStripButton":
                     //drawing comparsion multi-reslut curve

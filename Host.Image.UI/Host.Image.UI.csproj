@@ -89,6 +89,7 @@
     <Compile Include="Jobs\JobCNNClassify.cs" />
     <Compile Include="Jobs\JobDQNClassify.cs" />
     <Compile Include="Jobs\JobReadRaster.cs" />
+    <Compile Include="Jobs\JobRFClassify.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -145,6 +146,12 @@
     <Compile Include="SettingForm\KappaForm.Designer.cs">
       <DependentUpon>KappaForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="SettingForm\RandomForestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingForm\RandomForestForm.Designer.cs">
+      <DependentUpon>RandomForestForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="SettingForm\SLIC\CenterApplyForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -193,6 +200,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SettingForm\KappaForm.resx">
       <DependentUpon>KappaForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingForm\RandomForestForm.resx">
+      <DependentUpon>RandomForestForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingForm\SLIC\CenterApplyForm.resx">
       <DependentUpon>CenterApplyForm.cs</DependentUpon>

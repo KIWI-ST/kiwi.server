@@ -37,7 +37,7 @@ namespace Host.Image.UI.Jobs
         /// <summary>
         /// start thread 
         /// </summary>
-        void Start(params string[] paramaters);
+        void Start(params object[] paramaters);
         /// <summary>
         /// plot models
         /// </summary>

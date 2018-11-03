@@ -119,7 +119,7 @@ namespace Host.Image.UI.Jobs
                     seed++;
                     if ((seed * 10) % totalPixels == 0)
                     {
-                        double _process = (double)(seed) / totalPixels;
+                         _process = (double)(seed) / totalPixels;
                         _summary = string.Format("应用模型，当前时间{0},分类进度{1:P}", DateTime.Now.ToLongTimeString(), _process);
                     }
                 }
@@ -144,7 +144,7 @@ namespace Host.Image.UI.Jobs
         /// <summary>
         /// 
         /// </summary>
-        public void Start(params string[] paramaters)
+        public void Start(params object[] paramaters)
         {
             _startTime = DateTime.Now;
             _t.IsBackground = true;

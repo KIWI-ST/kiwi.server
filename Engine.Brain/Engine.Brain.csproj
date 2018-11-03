@@ -96,6 +96,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AI\ML\RF.cs" />
     <Compile Include="AI\RL\Env\ExtractRoadEnv.cs" />
     <Compile Include="AI\RL\INet.cs" />
     <Compile Include="AI\RL\IEnv.cs" />
@@ -122,6 +123,7 @@
       <Name>Engine.GIS</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
