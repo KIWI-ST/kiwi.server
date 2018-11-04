@@ -1,9 +1,7 @@
 ﻿using Engine.Brain.AI.DL;
 using Engine.Brain.AI.RL;
 using Engine.Brain.AI.RL.Env;
-using Engine.Brain.Bootstrap;
 using Engine.Brain.Entity;
-using Engine.Brain.Utils;
 using Engine.GIS.Entity;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Arithmetic;
@@ -43,14 +41,15 @@ namespace Host.Image.UI
         {
             InitializeComponent();
         }
-        /// <summary>
-        /// get time string
-        /// </summary>
-        string Now => DateTime.Now.ToLongDateString()+DateTime.Now.ToLongTimeString();
 
         #endregion
 
         #region 缓存管理
+
+        /// <summary>
+        /// get time string
+        /// </summary>
+        string Now => DateTime.Now.ToLongDateString() + DateTime.Now.ToLongTimeString();
         /// <summary>
         /// raster layer
         /// </summary>
@@ -72,68 +71,7 @@ namespace Host.Image.UI
         #endregion
 
         #region 算法执行
-        /// <summary>
-        /// 应用深度学习模型进行分类
-        /// </summary>
-        /// <param name="rasterLayer"></param>
-        private void RunClassify(Engine.GIS.GLayer.GRasterLayer.GRasterLayer rasterLayer, bool useSLIC, string pbName, string centerName, string labelName)
-        {
-            //判断图层结构，选用不同的tensor输入
-            ShapeEnum shapeEuum;
-            if (rasterLayer.BandCount == 130)
-                shapeEuum = ShapeEnum.THIRTEEN_TEN;
-            else if (rasterLayer.BandCount == 100)
-                shapeEuum = ShapeEnum.TEN_TEN;
-            else if (rasterLayer.BandCount == 64)
-                shapeEuum = ShapeEnum.EIGHT_EIGHT;
-            else
-                shapeEuum = ShapeEnum.TEN_TEN;
-            //构建结果图层，用于动态绘制
-            Bitmap bmp = new Bitmap(rasterLayer.XSize, rasterLayer.YSize);
-            string nodeName = rasterLayer.Name + "结果图层";
-            TreeNode childrenNode = new TreeNode(nodeName);
-            _imageDic.Add(nodeName, new Bitmap2(name: nodeName, bmp: bmp));
-            Invoke(new UpdateTreeNodeHandler(UpdateTreeNode), null, childrenNode);
-            //获取波段
-            TensorflowBootstrap model = new TensorflowBootstrap(pbName);
-            //判断是否基于超像素
-            if (!useSLIC)
-            {
-                //for (int i = 0; i < rasterLayer.XSize; i++)
-                //    for (int j = 0; j < rasterLayer.YSize; j++)
-                //    {
-                //        float[] input = rasterLayer.GetPixelDouble(i, j).ToArray();
-                //        long classified = model.Classify(input, shapeEuum);
-                //        Invoke(new PaintPointHandler(PaintPoint), bmp, i, j, Convert.ToByte(classified * 15));
-                //        Invoke(new UpdateStatusLabelHandler(UpdateStatusLabel), "应用分类中，总进度：" + i + "列" + j + "行", STATUE_ENUM.WARNING);
-                //    }
-            }
-            else
-            {
-                //基于slic的超像素绘制方法
-                using (StreamReader sr_center = new StreamReader(centerName))
-                using (StreamReader sr_label = new StreamReader(labelName))
-                {
-                    Center[] centers = SuperPixelSegment.ReadCenter(sr_center.ReadToEnd());
-                    Bitplane labels = SuperPixelSegment.ReadLabel(sr_label.ReadToEnd());
-                    int[] mask = new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1 };
-                    for (int i = 0; i < centers.Length; i++)
-                    {
-                        Center center = centers[i];
-                        float[] input = rasterLayer.GetPixelFloatWidthConv((int)center.X, (int)center.Y, mask).ToArray();
-                        long classified = model.Classify(input, shapeEuum);
-                        center.L = classified * 15;
-                        center.A = classified * 15;
-                        center.B = classified * 15;
-                        Invoke(new UpdateStatusLabelHandler(UpdateStatusLabel), "已处理第" + i + "/" + centers.Length + "个中心", STATUE_ENUM.WARNING);
-                    }
-                    //遍历图片进行绘制
-                    for (int i = 0; i < rasterLayer.XSize; i++)
-                        for (int j = 0; j < rasterLayer.YSize; j++)
-                            Invoke(new PaintPointHandler(PaintPoint), bmp, i, j, Convert.ToByte(centers[(int)Math.Floor(labels.GetPixel(i, j))].L));
-                }
-            }
-        }
+
         /// <summary>
         /// }{小萌娃记得改哟
         /// </summary>
@@ -151,8 +89,8 @@ namespace Host.Image.UI
                 string fileName = fileNameCollection[k];
                 Bitmap bmp = new Bitmap(fileName);
                 //添加1列
-                DataColumn dc = dt.Columns.Add(System.IO.Path.GetFileNameWithoutExtension(fileName));
-                dt.Rows[0][dc] = System.IO.Path.GetFileNameWithoutExtension(fileName);
+                DataColumn dc = dt.Columns.Add(Path.GetFileNameWithoutExtension(fileName));
+                dt.Rows[0][dc] = Path.GetFileNameWithoutExtension(fileName);
                 //1.提取x,y位置的像素值
                 for (int i = 0; i < centers.Length; i++)
                     //}{小萌娃记得改哟  new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1 } 是 3x3 mask 都是1的算子，这里可以修改 自动识别的
@@ -172,21 +110,6 @@ namespace Host.Image.UI
             Invoke(new SaveJsonHandler(SaveJson), pkg.Label);
             Invoke(new SaveBitmapHandler(SaveBitmap), pkg.Edge);
             Invoke(new SaveBitmapHandler(SaveBitmap), pkg.Average);
-        }
-
-        List<EmptyPlotForm> _dqnFormList = new List<EmptyPlotForm>();
-
-        private void PaintPlotModel(PlotModel plotModel)
-        {
-            EmptyPlotForm form = new EmptyPlotForm();
-            form.SetModel(plotModel);
-            _dqnFormList.Add(form);
-            form.Show();
-        }
-
-        private void RefreshPlotModel()
-        {
-            _dqnFormList.ForEach(p => p.UpdateDarw());
         }
         /// <summary>
         /// 
@@ -259,20 +182,6 @@ namespace Host.Image.UI
             classificationBitmap.Save(fullFileName);
             Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": complete cnn classification");
             //切换到主线程读取结果
-        }
-        /// <summary>
-        /// report loss every epoch
-        /// </summary>
-        /// <param name="loss"></param>
-        /// <param name="totalReward"></param>
-        /// <param name="accuracy"></param>
-        /// <param name="progress"></param>
-        /// <param name="epochesTime"></param>
-        private void Dqn_OnLearningLossEventHandler(double loss, double totalReward, double accuracy, double progress, string epochesTime)
-        {
-            string msg = string.Format("time:{0},progress:{1:P};loss:{2},reward:{3},accuracy:{4:P}", epochesTime, progress, loss, totalReward, accuracy);
-            Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), msg);
-            Invoke(new RefreshPlotModelHandler(RefreshPlotModel));
         }
 
         #endregion
@@ -583,6 +492,7 @@ namespace Host.Image.UI
         #endregion
 
         #region UI事件相应方法
+
         /// <summary>
         /// 底图区域功能按钮
         /// </summary>
@@ -605,39 +515,13 @@ namespace Host.Image.UI
                     };
                     kappaForm.ShowDialog();
                     break;
-                case "DL_CLASS_toolStripButton":
-                    if (map_treeView.SelectedNode == null)
-                    {
-                        UpdateStatusLabel("请选择一副图像或者一个图层后，进行分类操作", STATUE_ENUM.ERROR);
-                        return;
-                    }
-                    else
-                    {
-                        DLClassifyForm dlclassify = new DLClassifyForm();
-                        if (dlclassify.ShowDialog() == DialogResult.OK)
-                        {
-                            //1.选择处理那副图像
-                            string imageName = map_treeView.SelectedNode.Text;
-                            Bitmap2 imageBitmap2 = _imageDic[imageName];
-                            GRasterLayer rasterLayer = imageBitmap2.GdalLayer;
-                            ThreadStart clsfy_ts = delegate { RunClassify(rasterLayer, dlclassify.UseSLIC, dlclassify.PBName, dlclassify.CenterName, dlclassify.LabelName); };
-                            Thread clsfy_t = new Thread(clsfy_ts);
-                            clsfy_t.IsBackground = true;
-                            clsfy_t.Start();
-                        }
-                    }
-                    break;
                 //添加图像
                 case "open_toolstripmenuitem":
-                    ReadImage();
-                    break;
-                //添加图像
                 case "open_contextMenuStrip":
                     ReadImage();
                     break;
                 //超像素分割
                 case "SLIC_toolStripButton":
-                //超像素分割
                 case "SLIC_toolStripMenu":
                     Bitmap bmp = map_pictureBox.Image as Bitmap;
                     if (bmp != null)
@@ -801,6 +685,7 @@ namespace Host.Image.UI
                 tree_contextMenuStrip.Show(map_treeView, new Point(e.X, e.Y));
             }
         }
+
         #endregion
 
     }

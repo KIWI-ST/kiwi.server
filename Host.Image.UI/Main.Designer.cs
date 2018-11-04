@@ -40,10 +40,10 @@
             this.SLIC_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.SLIC_Center_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.CNN_toolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.rf_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.DQN_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.main_toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.kappa_toolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.DL_CLASS_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.Compare_Plot_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.task_toolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -66,7 +66,6 @@
             this.bandCombine_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.bandExport_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.rf_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.map_menuStrip.SuspendLayout();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
@@ -156,7 +155,6 @@
             this.DQN_toolStripButton,
             this.main_toolStripSeparator,
             this.kappa_toolStripButton,
-            this.DL_CLASS_toolStripButton,
             this.toolStripSeparator1,
             this.Compare_Plot_toolStripButton,
             this.task_toolStripButton});
@@ -199,6 +197,16 @@
             this.CNN_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.CNN_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
             // 
+            // rf_toolStripButton
+            // 
+            this.rf_toolStripButton.Image = global::Host.Image.UI.Properties.Resources.bulb_off_64;
+            this.rf_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.rf_toolStripButton.Name = "rf_toolStripButton";
+            this.rf_toolStripButton.Size = new System.Drawing.Size(73, 44);
+            this.rf_toolStripButton.Text = "随机森林";
+            this.rf_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.rf_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
+            // 
             // DQN_toolStripButton
             // 
             this.DQN_toolStripButton.Image = global::Host.Image.UI.Properties.Resources.laptop_64;
@@ -223,16 +231,6 @@
             this.kappa_toolStripButton.Text = "kappa计算";
             this.kappa_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.kappa_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
-            // 
-            // DL_CLASS_toolStripButton
-            // 
-            this.DL_CLASS_toolStripButton.Image = global::Host.Image.UI.Properties.Resources.chart_bar1_64;
-            this.DL_CLASS_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.DL_CLASS_toolStripButton.Name = "DL_CLASS_toolStripButton";
-            this.DL_CLASS_toolStripButton.Size = new System.Drawing.Size(73, 44);
-            this.DL_CLASS_toolStripButton.Text = "图像分类";
-            this.DL_CLASS_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.DL_CLASS_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
             // 
             // toolStripSeparator1
             // 
@@ -461,16 +459,6 @@
             this.bandExport_ToolStripMenuItem.Text = "波段导出";
             this.bandExport_ToolStripMenuItem.Click += new System.EventHandler(this.Map_treeView_Click);
             // 
-            // rf_toolStripButton
-            // 
-            this.rf_toolStripButton.Image = global::Host.Image.UI.Properties.Resources.bulb_off_64;
-            this.rf_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.rf_toolStripButton.Name = "rf_toolStripButton";
-            this.rf_toolStripButton.Size = new System.Drawing.Size(73, 44);
-            this.rf_toolStripButton.Text = "随机森林";
-            this.rf_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.rf_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -536,7 +524,6 @@
         private System.Windows.Forms.ToolStripMenuItem SLIC_Center_toolStripMenu;
         private System.Windows.Forms.ToolStripButton SLIC_toolStripButton;
         private System.Windows.Forms.ToolStripButton SLIC_Center_toolStripButton;
-        private System.Windows.Forms.ToolStripButton DL_CLASS_toolStripButton;
         private System.Windows.Forms.ToolStripButton DQN_toolStripButton;
         private System.Windows.Forms.ToolStripSeparator main_toolStripSeparator;
         private System.Windows.Forms.SplitContainer map_splitContainer;
