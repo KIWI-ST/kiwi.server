@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Host.Image.UI.SettingForm
+namespace Host.UI.SettingForm
 {
     public partial class DLClassifyForm : Form
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Host.Image.UI.SettingForm
+namespace Host.UI.SettingForm
 {
     public partial class BandForm : Form
     {

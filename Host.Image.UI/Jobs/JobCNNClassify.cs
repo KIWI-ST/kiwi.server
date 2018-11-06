@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Host.Image.UI.Jobs
+namespace Host.UI.Jobs
 {
     public class JobCNNClassify
     {

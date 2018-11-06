@@ -3,7 +3,7 @@ using OxyPlot.WindowsForms;
 using System;
 using System.Windows.Forms;
 
-namespace Host.Image.UI.PlotForm
+namespace Host.UI.PlotForm
 {
     public partial class EmptyPlotForm : Form
     {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Host.Image.UI.SettingForm
+namespace Host.UI.SettingForm
 {
     public partial class RandomForestForm : Form
     {

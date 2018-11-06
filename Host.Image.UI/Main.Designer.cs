@@ -1,4 +1,4 @@
-﻿namespace Host.Image.UI
+﻿namespace Host.UI
 {
     partial class Main
     {
@@ -130,7 +130,7 @@
             // 
             // SLIC_toolStripMenu
             // 
-            this.SLIC_toolStripMenu.Image = global::Host.Image.UI.Properties.Resources.calculator_64;
+            this.SLIC_toolStripMenu.Image = global::Host.UI.Properties.Resources.calculator_64;
             this.SLIC_toolStripMenu.Name = "SLIC_toolStripMenu";
             this.SLIC_toolStripMenu.Size = new System.Drawing.Size(189, 26);
             this.SLIC_toolStripMenu.Text = "超像素分割";
@@ -138,7 +138,7 @@
             // 
             // SLIC_Center_toolStripMenu
             // 
-            this.SLIC_Center_toolStripMenu.Image = global::Host.Image.UI.Properties.Resources.cut_64;
+            this.SLIC_Center_toolStripMenu.Image = global::Host.UI.Properties.Resources.cut_64;
             this.SLIC_Center_toolStripMenu.Name = "SLIC_Center_toolStripMenu";
             this.SLIC_Center_toolStripMenu.Size = new System.Drawing.Size(189, 26);
             this.SLIC_Center_toolStripMenu.Text = "超像素特征提取";
@@ -166,7 +166,7 @@
             // 
             // SLIC_toolStripButton
             // 
-            this.SLIC_toolStripButton.Image = global::Host.Image.UI.Properties.Resources.calculator_64;
+            this.SLIC_toolStripButton.Image = global::Host.UI.Properties.Resources.calculator_64;
             this.SLIC_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.SLIC_toolStripButton.Name = "SLIC_toolStripButton";
             this.SLIC_toolStripButton.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -178,7 +178,7 @@
             // 
             // SLIC_Center_toolStripButton
             // 
-            this.SLIC_Center_toolStripButton.Image = global::Host.Image.UI.Properties.Resources.cut_64;
+            this.SLIC_Center_toolStripButton.Image = global::Host.UI.Properties.Resources.cut_64;
             this.SLIC_Center_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.SLIC_Center_toolStripButton.Name = "SLIC_Center_toolStripButton";
             this.SLIC_Center_toolStripButton.Size = new System.Drawing.Size(73, 44);
@@ -189,7 +189,7 @@
             // CNN_toolStripButton
             // 
             this.CNN_toolStripButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.CNN_toolStripButton.Image = global::Host.Image.UI.Properties.Resources.disk_64;
+            this.CNN_toolStripButton.Image = global::Host.UI.Properties.Resources.disk_64;
             this.CNN_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.CNN_toolStripButton.Name = "CNN_toolStripButton";
             this.CNN_toolStripButton.Size = new System.Drawing.Size(47, 44);
@@ -199,7 +199,7 @@
             // 
             // rf_toolStripButton
             // 
-            this.rf_toolStripButton.Image = global::Host.Image.UI.Properties.Resources.bulb_off_64;
+            this.rf_toolStripButton.Image = global::Host.UI.Properties.Resources.bulb_off_64;
             this.rf_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.rf_toolStripButton.Name = "rf_toolStripButton";
             this.rf_toolStripButton.Size = new System.Drawing.Size(73, 44);
@@ -209,7 +209,7 @@
             // 
             // DQN_toolStripButton
             // 
-            this.DQN_toolStripButton.Image = global::Host.Image.UI.Properties.Resources.laptop_64;
+            this.DQN_toolStripButton.Image = global::Host.UI.Properties.Resources.laptop_64;
             this.DQN_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.DQN_toolStripButton.Name = "DQN_toolStripButton";
             this.DQN_toolStripButton.Size = new System.Drawing.Size(73, 44);
@@ -224,7 +224,7 @@
             // 
             // kappa_toolStripButton
             // 
-            this.kappa_toolStripButton.Image = global::Host.Image.UI.Properties.Resources.copy_64;
+            this.kappa_toolStripButton.Image = global::Host.UI.Properties.Resources.copy_64;
             this.kappa_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.kappa_toolStripButton.Name = "kappa_toolStripButton";
             this.kappa_toolStripButton.Size = new System.Drawing.Size(87, 44);
@@ -239,7 +239,7 @@
             // 
             // Compare_Plot_toolStripButton
             // 
-            this.Compare_Plot_toolStripButton.Image = global::Host.Image.UI.Properties.Resources.brush_64;
+            this.Compare_Plot_toolStripButton.Image = global::Host.UI.Properties.Resources.brush_64;
             this.Compare_Plot_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.Compare_Plot_toolStripButton.Name = "Compare_Plot_toolStripButton";
             this.Compare_Plot_toolStripButton.Size = new System.Drawing.Size(73, 44);
@@ -249,7 +249,7 @@
             // 
             // task_toolStripButton
             // 
-            this.task_toolStripButton.Image = global::Host.Image.UI.Properties.Resources.sum_64;
+            this.task_toolStripButton.Image = global::Host.UI.Properties.Resources.sum_64;
             this.task_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.task_toolStripButton.Name = "task_toolStripButton";
             this.task_toolStripButton.Size = new System.Drawing.Size(73, 44);
@@ -287,7 +287,7 @@
             // map_statusLabel
             // 
             this.map_statusLabel.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.map_statusLabel.Image = global::Host.Image.UI.Properties.Resources.smile_64;
+            this.map_statusLabel.Image = global::Host.UI.Properties.Resources.smile_64;
             this.map_statusLabel.Name = "map_statusLabel";
             this.map_statusLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.map_statusLabel.Size = new System.Drawing.Size(59, 20);

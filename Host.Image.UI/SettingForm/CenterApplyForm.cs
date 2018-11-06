@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace Host.Image.UI.SettingForm.SLIC
+namespace Host.UI.SettingForm.SLIC
 {
     public partial class CenterApplyForm : Form
     {

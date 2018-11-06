@@ -9,7 +9,7 @@ using System.Drawing;
 using System.IO;
 using System.Threading;
 
-namespace Host.Image.UI.Jobs
+namespace Host.UI.Jobs
 {
     /// <summary>
     /// image classification based on dqn

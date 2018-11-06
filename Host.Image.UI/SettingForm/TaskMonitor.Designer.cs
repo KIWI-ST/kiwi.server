@@ -1,4 +1,4 @@
-﻿namespace Host.Image.UI.SettingForm
+﻿namespace Host.UI.SettingForm
 {
     partial class TaskMonitor
     {

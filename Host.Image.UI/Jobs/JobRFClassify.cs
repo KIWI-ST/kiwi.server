@@ -12,7 +12,7 @@ using Engine.GIS.GOperation.Tools;
 using OfficeOpenXml;
 using OxyPlot;
 
-namespace Host.Image.UI.Jobs
+namespace Host.UI.Jobs
 {
     public class JobRFClassify : IJob
     {

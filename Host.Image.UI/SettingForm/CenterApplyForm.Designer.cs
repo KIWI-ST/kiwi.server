@@ -1,4 +1,4 @@
-﻿namespace Host.Image.UI.SettingForm.SLIC
+﻿namespace Host.UI.SettingForm.SLIC
 {
     partial class CenterApplyForm
     {

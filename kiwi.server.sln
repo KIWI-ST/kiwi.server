@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Host.Image.UI", "Host.Image.UI\Host.Image.UI.csproj", "{1646B48F-6A20-41D0-B9BE-CA8002CB50EA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Host.UI", "Host.Image.UI\Host.UI.csproj", "{1646B48F-6A20-41D0-B9BE-CA8002CB50EA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.GIS", "Engine.GIS\Engine.GIS.csproj", "{82B3CFC7-E05C-46D3-9E91-2F5F4495238E}"
 EndProject

@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{1646B48F-6A20-41D0-B9BE-CA8002CB50EA}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Host.Image.UI</RootNamespace>
-    <AssemblyName>Host.Image.UI</AssemblyName>
+    <RootNamespace>Host.UI</RootNamespace>
+    <AssemblyName>Host.UI</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -155,10 +155,10 @@
     <Compile Include="SettingForm\RandomForestForm.Designer.cs">
       <DependentUpon>RandomForestForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SettingForm\SLIC\CenterApplyForm.cs">
+    <Compile Include="SettingForm\CenterApplyForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SettingForm\SLIC\CenterApplyForm.Designer.cs">
+    <Compile Include="SettingForm\CenterApplyForm.Designer.cs">
       <DependentUpon>CenterApplyForm.cs</DependentUpon>
     </Compile>
     <Compile Include="SettingForm\TaskMonitor.cs">
@@ -207,7 +207,7 @@
     <EmbeddedResource Include="SettingForm\RandomForestForm.resx">
       <DependentUpon>RandomForestForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SettingForm\SLIC\CenterApplyForm.resx">
+    <EmbeddedResource Include="SettingForm\CenterApplyForm.resx">
       <DependentUpon>CenterApplyForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingForm\TaskMonitor.resx">
@@ -684,6 +684,7 @@
   <ItemGroup>
     <Content Include="globe.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\TensorFlowSharp.1.11.0\build\net45\TensorFlowSharp.targets" Condition="Exists('..\packages\TensorFlowSharp.1.11.0\build\net45\TensorFlowSharp.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

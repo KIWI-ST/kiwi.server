@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 
-namespace Host.Image.UI.PlotForm
+namespace Host.UI.PlotForm
 {
 
     public partial class ComparedPlotForm : Form

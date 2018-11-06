@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 
-namespace Host.Image.UI.Jobs
+namespace Host.UI.Jobs
 {
     public class JobReadRaster : IJob
     {

@@ -1,4 +1,4 @@
-﻿namespace Host.Image.UI.PlotForm
+﻿namespace Host.UI.PlotForm
 {
     partial class EmptyPlotForm
     {

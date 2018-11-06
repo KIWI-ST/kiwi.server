@@ -1,7 +1,7 @@
 ﻿using OxyPlot;
 using System;
 
-namespace Host.Image.UI.Jobs
+namespace Host.UI.Jobs
 {
     /// <summary>
     /// task complete event handler

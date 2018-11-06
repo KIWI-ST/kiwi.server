@@ -6,10 +6,10 @@ using Engine.GIS.Entity;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Arithmetic;
 using Engine.GIS.GOperation.Tools;
-using Host.Image.UI.Jobs;
-using Host.Image.UI.PlotForm;
-using Host.Image.UI.SettingForm;
-using Host.Image.UI.SettingForm.SLIC;
+using Host.UI.Jobs;
+using Host.UI.PlotForm;
+using Host.UI.SettingForm;
+using Host.UI.SettingForm.SLIC;
 using OfficeOpenXml;
 using OxyPlot;
 using System;
@@ -20,7 +20,7 @@ using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace Host.Image.UI
+namespace Host.UI
 {
     /// <summary>
     /// 标识颜色
