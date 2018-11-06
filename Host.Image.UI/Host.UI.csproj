@@ -155,11 +155,11 @@
     <Compile Include="SettingForm\RandomForestForm.Designer.cs">
       <DependentUpon>RandomForestForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SettingForm\CenterApplyForm.cs">
+    <Compile Include="SettingForm\SLICForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SettingForm\CenterApplyForm.Designer.cs">
-      <DependentUpon>CenterApplyForm.cs</DependentUpon>
+    <Compile Include="SettingForm\SLICForm.Designer.cs">
+      <DependentUpon>SLICForm.cs</DependentUpon>
     </Compile>
     <Compile Include="SettingForm\TaskMonitor.cs">
       <SubType>Form</SubType>
@@ -207,8 +207,8 @@
     <EmbeddedResource Include="SettingForm\RandomForestForm.resx">
       <DependentUpon>RandomForestForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SettingForm\CenterApplyForm.resx">
-      <DependentUpon>CenterApplyForm.cs</DependentUpon>
+    <EmbeddedResource Include="SettingForm\SLICForm.resx">
+      <DependentUpon>SLICForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingForm\TaskMonitor.resx">
       <DependentUpon>TaskMonitor.cs</DependentUpon>

@@ -17,30 +17,31 @@ namespace Host.UI.Jobs
     public class JobRFClassify : IJob
     {
 
-        double _process = 0.0;
+        public string Name => "RFClassificationTask";
 
-        string _summary = "";
+        public string Summary { get; private set; }
 
-        public string Name => "Random Forest Job Task";
+        public double Process { get; private set; } = 0.0;
 
-        public string Summary => _summary;
-
-        public double Process => _process;
-
-        public DateTime StartTime => throw new NotImplementedException();
+        public DateTime StartTime { get; private set; } = DateTime.Now;
 
         public PlotModel[] PlotModels => throw new NotImplementedException();
 
         public event OnTaskCompleteHandler OnTaskComplete;
-
-        public void Start(params object[] paramaters)
+        /// <summary>
+        /// 
+        /// </summary>
+        Thread _t;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="treeCount"></param>
+        /// <param name="fullFilename"></param>
+        /// <param name="rasterLayer"></param>
+        public JobRFClassify(int treeCount, string fullFilename, GRasterLayer rasterLayer)
         {
-            Thread t = new Thread(() =>
+            _t = new Thread(() =>
             {
-                int treeCount = Convert.ToInt32(paramaters[0]);
-                string fullFilename = paramaters[1] as string;
-                GRasterLayer rasterLayer = paramaters[2] as GRasterLayer;
-                //rf
                 RF rf = new RF(treeCount);
                 //read samples
                 using (StreamReader sr = new StreamReader(fullFilename))
@@ -74,7 +75,7 @@ namespace Host.UI.Jobs
                 //
                 int seed = 0;
                 int totalPixels = rasterLayer.XSize * rasterLayer.YSize;
-                _process = 0.0;
+                Process = 0.0;
                 //应用dqn对图像分类
                 for (int i = 0; i < rasterLayer.XSize; i++)
                     for (int j = 0; j < rasterLayer.YSize; j++)
@@ -92,16 +93,23 @@ namespace Host.UI.Jobs
                         SolidBrush brush = new SolidBrush(c);
                         g.FillRectangle(brush, new Rectangle(i, j, 1, 1));
                         //report progress
-                        _process = (double)seed++ / totalPixels;
+                        Process = (double)seed++ / totalPixels;
                     }
                 //保存结果至tmp
                 string fullFileName = Directory.GetCurrentDirectory() + @"\tmp\" + DateTime.Now.ToFileTimeUtc() + ".png";
                 classificationBitmap.Save(fullFileName);
-                //complete work
                 OnTaskComplete?.Invoke(Name, fullFileName);
             });
-            t.IsBackground = true;
-            t.Start();
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="paramaters"></param>
+        public void Start()
+        {
+            StartTime = DateTime.Now;
+            _t.IsBackground = true;
+            _t.Start();
         }
     }
 }

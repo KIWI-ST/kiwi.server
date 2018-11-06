@@ -11,38 +11,52 @@ namespace Host.UI.Jobs
     public class JobReadRaster : IJob
     {
 
-        public string Name => "Read Raster Image Task";
+        public string Name => "ReadRasterTask";
 
         public string Summary => throw new NotImplementedException();
 
-        public double Process => 1.0;
+        public double Process { get; private set; } = 0.0;
 
-        public DateTime StartTime => throw new NotImplementedException();
+        public DateTime StartTime { get; private set; } = DateTime.Now;
 
         public PlotModel[] PlotModels => throw new NotImplementedException();
 
         public event OnTaskCompleteHandler OnTaskComplete;
-
-        public void Start(params object[] paramaters)
+        /// <summary>
+        /// 
+        /// </summary>
+        Thread _t;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fullFilename"></param>
+        public JobReadRaster(string fullFilename)
         {
-            Dictionary<string, Bitmap2> dict = new Dictionary<string, Bitmap2>();
-            Thread t = new Thread(() =>
+             _t = new Thread(() =>
             {
-                string fullFilename = paramaters[0] as string;
+                Dictionary<string, Bitmap2> dict = new Dictionary<string, Bitmap2>();
                 string name = Path.GetFileNameWithoutExtension(fullFilename);
                 GRasterLayer rasterLayer = new GRasterLayer(fullFilename);
                 for (int i = 0; i < rasterLayer.BandCount; i++)
                 {
                     GRasterBand band = rasterLayer.BandCollection[i];
-                    band.BandName = name + "_波段_" + i;
+                    band.BandName = name + "_band_" + i;
                     Bitmap2 bmp2 = new Bitmap2(bmp: band.GrayscaleImage, name: band.BandName, gdalBand: band, gdalLayer: rasterLayer);
                     dict[band.BandName] = bmp2;
+                    Process = (double)(i+1) / rasterLayer.BandCount;
                 }
-                OnTaskComplete?.Invoke(Name,name,dict, rasterLayer);
+                OnTaskComplete?.Invoke(Name, name, dict, rasterLayer);
             });
-            t.IsBackground = true;
-            t.Start();
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="paramaters"></param>
+        public void Start()
+        {
+            StartTime = DateTime.Now;
+            _t.IsBackground = true;
+            _t.Start();
+        }
     }
 }

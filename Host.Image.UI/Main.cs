@@ -111,78 +111,6 @@ namespace Host.UI
             Invoke(new SaveBitmapHandler(SaveBitmap), pkg.Edge);
             Invoke(new SaveBitmapHandler(SaveBitmap), pkg.Average);
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="featureRasterLayer"></param>
-        /// <param name="labelRasterLayer"></param>
-        /// <param name="epochs"></param>
-        /// <param name="model"></param>
-        private void RunCNN(GRasterLayer featureRasterLayer, GRasterLayer labelRasterLayer, int epochs, int model, int width, int height, int channel)
-        {
-            ImageClassifyEnv env = new ImageClassifyEnv(featureRasterLayer, labelRasterLayer);
-            CNN cnn = new CNN(new int[] { channel, width, height }, env.ActionNum);
-            for(int i=0;i<epochs;i++)
-            {
-                int batchSize = cnn.BatchSize;
-                var (states, labels) = env.RandomEval(batchSize);
-                double[][] inputX = new double[batchSize][];
-                for (int j = 0; j < batchSize; j++)
-                    inputX[j] = states[j];
-                double loss = cnn.Train(inputX, labels);
-                string msg = string.Format(DateTime.Now.ToLongTimeString() + ", training ，progress: {0:P}, loss: {1}", (double)i/ epochs, loss);
-                Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), msg);
-            }
-            //cnn image classification application
-            CNN_ImageClassification(cnn, env, featureRasterLayer);
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="cnn"></param>
-        /// <param name="featureRasterLayer"></param>
-        private void CNN_ImageClassification(CNN  cnn, IEnv env,GRasterLayer featureRasterLayer)
-        {
-            //bind raster layer
-            IRasterLayerCursorTool pRasterLayerCursorTool = new GRasterLayerCursorTool();
-            pRasterLayerCursorTool.Visit(featureRasterLayer);
-            //GDI graph
-            Bitmap classificationBitmap = new Bitmap(featureRasterLayer.XSize, featureRasterLayer.YSize);
-            Graphics g = Graphics.FromImage(classificationBitmap);
-            Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": starting cnn classification");
-            //
-            int seed = 0;
-            int totalPixels = featureRasterLayer.XSize * featureRasterLayer.YSize;
-            //应用dqn对图像分类
-            for (int i = 0; i < featureRasterLayer.XSize; i++)
-                for (int j = 0; j < featureRasterLayer.YSize; j++)
-                {
-                    //get normalized input raw value
-                    double[] normal = pRasterLayerCursorTool.PickNormalValue(i, j);
-                    //}{debug
-                    double[] action = cnn.Predict(normal);
-                    //convert action to raw byte value
-                    int gray = env.RandomSeedKeys[NP.Argmax(action)];
-                    //后台绘制，报告进度
-                    Color c = Color.FromArgb(gray, gray, gray);
-                    Pen p = new Pen(c);
-                    SolidBrush brush = new SolidBrush(c);
-                    g.FillRectangle(brush, new Rectangle(i, j, 1, 1));
-                    //report progress
-                    seed++;
-                    if ((seed * 10) % totalPixels == 0)
-                    {
-                        double precent = (double)(seed) / totalPixels;
-                        string msg = string.Format(DateTime.Now.ToLongTimeString() + ", drawing ，progress: {0:P}", precent);
-                        Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), msg);
-                    }
-                }
-            //保存结果至tmp
-            string fullFileName = Directory.GetCurrentDirectory() + @"\tmp\" + DateTime.Now.ToFileTimeUtc() + ".png";
-            classificationBitmap.Save(fullFileName);
-            Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), DateTime.Now.ToLongTimeString() + ": complete cnn classification");
-            //切换到主线程读取结果
-        }
 
         #endregion
 
@@ -420,9 +348,9 @@ namespace Host.UI
             {
                 TreeNode node = new TreeNode(name){ Name = name };
                 Invoke(new UpdateTreeNodeHandler(UpdateTreeNode), null, node);
-                IJob readRasterJob = new JobReadRaster();
+                IJob readRasterJob = new JobReadRaster(fullFilename);
                 RegisterJob(readRasterJob);
-                readRasterJob.Start(fullFilename);
+                readRasterJob.Start();
             }
         }
         /// <summary>
@@ -469,13 +397,14 @@ namespace Host.UI
             switch (taskName)
             {
                 //load image classification result
-                case "Random Forest Job Task":
-                case "DQN Classification Task":
+                case "RFClassificationTask":
+                case "CnnClassificationTask":
+                case "DqnClassificationTask":
                     string fullFilename = outputs[0] as string;
                     ReadRaster(fullFilename);
                     break;
                 //load image
-                case "Read Raster Image Task":
+                case "ReadRasterTask":
                     string nodeName = outputs[0] as string;
                     Dictionary<string, Bitmap2> dict = outputs[1] as Dictionary<string, Bitmap2>;
                     GRasterLayer rasterLayer = outputs[2] as GRasterLayer;
@@ -549,7 +478,7 @@ namespace Host.UI
                             List<byte> colors = new List<byte>();
                             Center[] centers = SuperPixelSegment.ReadCenter(sr.ReadToEnd());
                             //2.设置使用图层
-                            CenterApplyForm centerApplyForm = new CenterApplyForm();
+                            SLICForm centerApplyForm = new SLICForm();
                             if (centerApplyForm.ShowDialog() == DialogResult.OK)
                             {
                                 ThreadStart s = delegate { RunCenter(centerApplyForm.FileNameCollection, centers); };
@@ -566,12 +495,7 @@ namespace Host.UI
                     dqnForm.RasterDic = _rasterDic;
                     if (dqnForm.ShowDialog() == DialogResult.OK)
                     {
-                        //
-                        string keyFeature = dqnForm.SelectedFeatureRasterLayer;
-                        string keyLabel = dqnForm.SelectedLabelRasterLayer;
-                        int epochs = dqnForm.Epochs;
-                        //
-                        IJob dqnClassifyJob = new JobDQNClassify(_rasterDic[keyFeature], _rasterDic[keyLabel], epochs);
+                        IJob dqnClassifyJob = new JobDQNClassify(_rasterDic[dqnForm.SelectedFeatureRasterLayer], _rasterDic[dqnForm.SelectedLabelRasterLayer], dqnForm.Epochs);
                         RegisterJob(dqnClassifyJob);
                         dqnClassifyJob.Start();
                     }
@@ -582,13 +506,9 @@ namespace Host.UI
                     cnnForm.RasterDic = _rasterDic;
                     if (cnnForm.ShowDialog() == DialogResult.OK)
                     {
-                        string keyFeature = cnnForm.SelectedFeatureRasterLayer;
-                        string keyLabel = cnnForm.SelectedLabelRasterLayer;
-                        int epochs = cnnForm.Epochs;
-                        ThreadStart s = delegate { RunCNN(_rasterDic[keyFeature], _rasterDic[keyLabel], epochs, cnnForm.Model, cnnForm.ImageWidth, cnnForm.ImageHeight, 1); };
-                        Thread t = new Thread(s);
-                        t.IsBackground = true;
-                        t.Start();
+                        IJob cnnClassifyJob = new JobCNNClassify(_rasterDic[cnnForm.SelectedFeatureRasterLayer], _rasterDic[cnnForm.SelectedLabelRasterLayer], cnnForm.Epochs, cnnForm.Model, cnnForm.ImageWidth, cnnForm.ImageHeight, 1);
+                        RegisterJob(cnnClassifyJob);
+                        cnnClassifyJob.Start();
                     }
                     break;
                     //random forest classification
@@ -597,12 +517,9 @@ namespace Host.UI
                     rfForm.RasterDic = _rasterDic;
                     if (rfForm.ShowDialog() == DialogResult.OK)
                     {
-                        string treeCount = rfForm.TreeCount.ToString();
-                        string sampleFilename = rfForm.FullFilename;
-                        string featureKey = rfForm.FeatureKey;
-                        IJob rfJob = new JobRFClassify();
+                        IJob rfJob = new JobRFClassify(rfForm.TreeCount, rfForm.FullFilename, _rasterDic[rfForm.FeatureKey]);
                         RegisterJob(rfJob);
-                        rfJob.Start(treeCount, sampleFilename,_rasterDic[featureKey]);
+                        rfJob.Start();
                     }
                     break;
                 case "Compare_Plot_toolStripButton":

@@ -4,11 +4,11 @@ using System.Windows.Forms;
 
 namespace Host.UI.SettingForm.SLIC
 {
-    public partial class CenterApplyForm : Form
+    public partial class SLICForm : Form
     {
         List<string> _files;
 
-        public CenterApplyForm()
+        public SLICForm()
         {
             InitializeComponent();
             _files = new List<string>();

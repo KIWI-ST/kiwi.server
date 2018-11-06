@@ -1,6 +1,6 @@
 ﻿namespace Host.UI.SettingForm.SLIC
 {
-    partial class CenterApplyForm
+    partial class SLICForm
     {
         /// <summary>
         /// Required designer variable.

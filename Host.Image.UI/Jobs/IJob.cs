@@ -37,7 +37,7 @@ namespace Host.UI.Jobs
         /// <summary>
         /// start thread 
         /// </summary>
-        void Start(params object[] paramaters);
+        void Start();
         /// <summary>
         /// plot models
         /// </summary>
