@@ -66,6 +66,8 @@ namespace Engine.Brain.AI.RL
 
         double _learningRate;
 
+        string _dqnFilename = DateTime.Now.ToFileTimeUtc().ToString() + ".ann";
+
         public DNet(int[] featureNum, int actionNum, double learningRate = 0.002)
         {
             //
@@ -95,7 +97,7 @@ namespace Engine.Brain.AI.RL
         public string Persistence()
         {
             string filePath = Directory.GetCurrentDirectory() + @"\tmp\";
-            string fileName = filePath + "dqn.ann";
+            string fileName = filePath + _dqnFilename;
             if (!Directory.Exists(filePath))
                 Directory.CreateDirectory(filePath);
             if (File.Exists(fileName))

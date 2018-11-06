@@ -17,11 +17,13 @@ namespace Host.UI.Jobs
 
         public string Name => "CnnClassificationTask";
 
-        public string Summary => throw new NotImplementedException();
+        public string Summary { get; private set; } = "";
 
         public DateTime StartTime { get; private set; } = DateTime.Now;
 
         public PlotModel[] PlotModels => throw new NotImplementedException();
+
+        public bool Complete { get; private set; } = false;
 
         public event OnTaskCompleteHandler OnTaskComplete;
 
@@ -33,6 +35,7 @@ namespace Host.UI.Jobs
                 ImageClassifyEnv env = new ImageClassifyEnv(featureRasterLayer, labelRasterLayer);
                 CNN cnn = new CNN(new int[] { channel, width, height }, env.ActionNum);
                 //training
+                Summary = "模型训练中";
                 for (int i = 0; i < epochs; i++)
                 {
                     int batchSize = cnn.BatchSize;
@@ -44,6 +47,7 @@ namespace Host.UI.Jobs
                     Process = (double)i / epochs;
                 }
                 //classify
+                Summary = "分类应用中";
                 IRasterLayerCursorTool pRasterLayerCursorTool = new GRasterLayerCursorTool();
                 pRasterLayerCursorTool.Visit(featureRasterLayer);
                 //GDI graph
@@ -73,6 +77,9 @@ namespace Host.UI.Jobs
                 //保存结果至tmp
                 string fullFileName = Directory.GetCurrentDirectory() + @"\tmp\" + DateTime.Now.ToFileTimeUtc() + ".png";
                 classificationBitmap.Save(fullFileName);
+                //complete
+                Summary = "CNN训练分类完成";
+                Complete = true;
                 OnTaskComplete?.Invoke(Name, fullFileName);
             });
         }

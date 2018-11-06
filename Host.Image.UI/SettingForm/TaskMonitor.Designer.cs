@@ -52,10 +52,13 @@
             this.task_listView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.task_listView.FullRowSelect = true;
             this.task_listView.GridLines = true;
+            this.task_listView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.task_listView.Location = new System.Drawing.Point(0, 0);
+            this.task_listView.Margin = new System.Windows.Forms.Padding(4);
             this.task_listView.MultiSelect = false;
             this.task_listView.Name = "task_listView";
-            this.task_listView.Size = new System.Drawing.Size(494, 341);
+            this.task_listView.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.task_listView.Size = new System.Drawing.Size(708, 482);
             this.task_listView.TabIndex = 1;
             this.task_listView.TileSize = new System.Drawing.Size(128, 38);
             this.task_listView.UseCompatibleStateImageBehavior = false;
@@ -65,20 +68,21 @@
             // task_name
             // 
             this.task_name.Text = "任务名";
-            this.task_name.Width = 119;
+            this.task_name.Width = 120;
             // 
             // task_progress
             // 
             this.task_progress.Text = "任务进度";
-            this.task_progress.Width = 145;
+            this.task_progress.Width = 120;
             // 
             // task_summary
             // 
             this.task_summary.Text = "总结";
-            this.task_summary.Width = 224;
+            this.task_summary.Width = 286;
             // 
             // task_contextMenuStrip
             // 
+            this.task_contextMenuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.task_contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.result_ToolStripMenuItem,
             this.toolStripMenuItem1,
@@ -86,43 +90,45 @@
             this.统计曲线ToolStripMenuItem});
             this.task_contextMenuStrip.Name = "task_contextMenuStrip";
             this.task_contextMenuStrip.ShowImageMargin = false;
-            this.task_contextMenuStrip.Size = new System.Drawing.Size(100, 76);
+            this.task_contextMenuStrip.Size = new System.Drawing.Size(114, 82);
             // 
             // result_ToolStripMenuItem
             // 
             this.result_ToolStripMenuItem.Name = "result_ToolStripMenuItem";
-            this.result_ToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
+            this.result_ToolStripMenuItem.Size = new System.Drawing.Size(113, 24);
             this.result_ToolStripMenuItem.Text = "处理结果";
             this.result_ToolStripMenuItem.Click += new System.EventHandler(this.ToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(96, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(110, 6);
             // 
             // accuracy_ToolStripMenuItem
             // 
             this.accuracy_ToolStripMenuItem.Name = "accuracy_ToolStripMenuItem";
-            this.accuracy_ToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
+            this.accuracy_ToolStripMenuItem.Size = new System.Drawing.Size(113, 24);
             this.accuracy_ToolStripMenuItem.Text = "精度曲线";
             this.accuracy_ToolStripMenuItem.Click += new System.EventHandler(this.ToolStripMenuItem_Click);
             // 
             // 统计曲线ToolStripMenuItem
             // 
             this.统计曲线ToolStripMenuItem.Name = "统计曲线ToolStripMenuItem";
-            this.统计曲线ToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
+            this.统计曲线ToolStripMenuItem.Size = new System.Drawing.Size(113, 24);
             this.统计曲线ToolStripMenuItem.Text = "统计曲线";
             // 
             // TaskMonitor
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(494, 341);
+            this.ClientSize = new System.Drawing.Size(708, 482);
             this.Controls.Add(this.task_listView);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "TaskMonitor";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "TaskMonitor";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.TaskMonitor_FormClosing);
             this.task_contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
 

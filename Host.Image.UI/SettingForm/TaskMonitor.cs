@@ -12,9 +12,16 @@ namespace Host.UI.SettingForm
             InitializeComponent();
         }
 
+        List<IJob> _jobs;
+
+        Timer _t = new Timer();
+
         public List<IJob> Jobs
         {
-            set { LoadTaskInforList(value); }
+            set {
+                _jobs = value;
+                LoadTaskInforList(value);
+            }
         }
 
         /// <summary>
@@ -43,15 +50,48 @@ namespace Host.UI.SettingForm
 
         private void LoadTaskInforList(List<IJob> jobList)
         {
+            task_listView.Items.Clear();
             for (int i = 0; i < jobList.Count; i++)
             {
                 IJob job = jobList[i];
                 ListViewItem lvi = new ListViewItem();
-                lvi.SubItems.Add(job.Name);
-                lvi.SubItems.Add( string.Format("process:{0:P}", job.Process));
+                lvi.SubItems[0].Text = job.Name;
+                lvi.SubItems.Add(string.Format("process:{0:P}", job.Process));
+                lvi.SubItems.Add(job.Summary);
                 task_listView.Items.Add(lvi);
             }
+            //
+            _t.Tick += T_Tick;
+            _t.Start();
         }
-
+        /// <summary>
+        /// update statues
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void T_Tick(object sender, EventArgs e)
+        {
+            //update process and remark
+            //only update task list views
+            for (int i = 0; i < task_listView.Items.Count; i++)
+            {
+                IJob job = _jobs[i];
+                if (job.Complete) continue;
+                ListViewItem lvi = task_listView.Items[i];
+                lvi.SubItems[0].Text = job.Name;
+                lvi.SubItems[1].Text = string.Format("process:{0:P}", job.Process);
+                lvi.SubItems[2].Text = job.Summary;
+            }
+        }
+        /// <summary>
+        /// dispose resoruces
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TaskMonitor_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _t.Tick -= T_Tick;
+            _t.Dispose();
+        }
     }
 }

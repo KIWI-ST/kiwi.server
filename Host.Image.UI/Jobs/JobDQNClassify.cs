@@ -51,6 +51,10 @@ namespace Host.UI.Jobs
         /// <summary>
         /// 
         /// </summary>
+        public bool Complete { get; private set; } = false;
+        /// <summary>
+        /// 
+        /// </summary>
         public event OnTaskCompleteHandler OnTaskComplete;
         /// <summary>
         /// DQN classify task
@@ -66,8 +70,11 @@ namespace Host.UI.Jobs
                 _dqn = new DQN(env);
                 _dqn.SetParameters(epochs: epochs, gamma: _gamma);
                 _dqn.OnLearningLossEventHandler += _dqn_OnLearningLossEventHandler;
+                //training
+                Summary = "模型训练中";
                 _dqn.Learn();
                 //classification
+                Summary = "分类应用中";
                 IRasterLayerCursorTool pRasterLayerCursorTool = new GRasterLayerCursorTool();
                 pRasterLayerCursorTool.Visit(featureRasterLayer);
                 Bitmap classificationBitmap = new Bitmap(featureRasterLayer.XSize, featureRasterLayer.YSize);
@@ -92,6 +99,9 @@ namespace Host.UI.Jobs
                 //save result
                 string fullFileName = Directory.GetCurrentDirectory() + @"\tmp\" + DateTime.Now.ToFileTimeUtc() + ".png";
                 classificationBitmap.Save(fullFileName);
+                //complete
+                Summary = "DQN训练分类完成";
+                Complete = true;
                 OnTaskComplete?.Invoke(Name, fullFileName);
             });
         }
@@ -106,7 +116,6 @@ namespace Host.UI.Jobs
         private void _dqn_OnLearningLossEventHandler(double loss, double totalReward, double accuracy, double progress, string epochesTime)
         {
             Process = progress;
-            Summary = string.Format("开始时间{0}，学习进度{1:P}", StartTime.ToLongDateString() + StartTime.ToLongTimeString(), Process);
         }
         /// <summary>
         /// 

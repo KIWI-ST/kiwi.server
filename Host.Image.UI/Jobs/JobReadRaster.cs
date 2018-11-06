@@ -13,14 +13,22 @@ namespace Host.UI.Jobs
 
         public string Name => "ReadRasterTask";
 
-        public string Summary => throw new NotImplementedException();
+        public string Summary { get; private set; } = "";
 
         public double Process { get; private set; } = 0.0;
 
         public DateTime StartTime { get; private set; } = DateTime.Now;
-
+        /// <summary>
+        /// 
+        /// </summary>
         public PlotModel[] PlotModels => throw new NotImplementedException();
-
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool Complete { get; private set; } = false;
+        /// <summary>
+        /// 
+        /// </summary>
         public event OnTaskCompleteHandler OnTaskComplete;
         /// <summary>
         /// 
@@ -37,6 +45,8 @@ namespace Host.UI.Jobs
                 Dictionary<string, Bitmap2> dict = new Dictionary<string, Bitmap2>();
                 string name = Path.GetFileNameWithoutExtension(fullFilename);
                 GRasterLayer rasterLayer = new GRasterLayer(fullFilename);
+                //reading
+                Summary = "数据读取中";
                 for (int i = 0; i < rasterLayer.BandCount; i++)
                 {
                     GRasterBand band = rasterLayer.BandCollection[i];
@@ -45,6 +55,9 @@ namespace Host.UI.Jobs
                     dict[band.BandName] = bmp2;
                     Process = (double)(i+1) / rasterLayer.BandCount;
                 }
+                //read complete
+                Summary = "读取完毕";
+                Complete = true;
                 OnTaskComplete?.Invoke(Name, name, dict, rasterLayer);
             });
         }

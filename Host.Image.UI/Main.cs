@@ -1,11 +1,6 @@
-﻿using Engine.Brain.AI.DL;
-using Engine.Brain.AI.RL;
-using Engine.Brain.AI.RL.Env;
-using Engine.Brain.Entity;
-using Engine.GIS.Entity;
+﻿using Engine.GIS.Entity;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Arithmetic;
-using Engine.GIS.GOperation.Tools;
 using Host.UI.Jobs;
 using Host.UI.PlotForm;
 using Host.UI.SettingForm;
@@ -226,23 +221,6 @@ namespace Host.UI
             map_listBox.Items.Add(msg);
             map_listBox.SelectedIndex = map_listBox.Items.Count - 1;
         }
-        /// <summary>
-        /// 绘制图像
-        /// </summary>
-        /// <param name="bmp"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="value"></param>
-        private void PaintPoint(Bitmap bmp, int x, int y, byte value)
-        {
-            Graphics g = Graphics.FromImage(bmp);
-            Color c = Color.FromArgb(value, value, value);
-            Pen p = new Pen(c);
-            SolidBrush brush = new SolidBrush(c);
-            g.FillRectangle(brush, new Rectangle(x, y, 1, 1));
-            //g.DrawLine(Pens.Black, new Point(x, y), new Point(bmp.Width, bmp.Height));
-            map_pictureBox.Image = bmp;
-        }
 
         private void PaintBitmap(Bitmap bmp, string nodeName)
         {
@@ -432,11 +410,13 @@ namespace Host.UI
             ToolStripItem item = sender as ToolStripItem;
             switch (item.Name)
             {
+                    //task
                 case "task_toolStripButton":
                     TaskMonitor taskForm = new TaskMonitor();
                     taskForm.Jobs = _jobs;
                     taskForm.ShowDialog();
                     break;
+                    //calucte kappa
                 case "kappa_toolStripButton":
                     KappaForm kappaForm = new KappaForm()
                     {
@@ -444,12 +424,12 @@ namespace Host.UI
                     };
                     kappaForm.ShowDialog();
                     break;
-                //添加图像
+                    //添加图像
                 case "open_toolstripmenuitem":
                 case "open_contextMenuStrip":
                     ReadImage();
                     break;
-                //超像素分割
+                    //超像素分割
                 case "SLIC_toolStripButton":
                 case "SLIC_toolStripMenu":
                     Bitmap bmp = map_pictureBox.Image as Bitmap;
@@ -463,7 +443,7 @@ namespace Host.UI
                     else
                         UpdateStatusLabel("未选中待计算图像，地图区域无图片", STATUE_ENUM.ERROR);
                     break;
-                //super pixel
+                    //super pixel
                 case "SLIC_Center_toolStripButton":
                 case "SLIC_Center_toolStripMenu":
                     OpenFileDialog opg = new OpenFileDialog
@@ -489,7 +469,7 @@ namespace Host.UI
                         }
                     }
                     break;
-                //dqn classification 
+                    //dqn classification 
                 case "DQN_toolStripButton":
                     DQNForm dqnForm = new DQNForm();
                     dqnForm.RasterDic = _rasterDic;
@@ -500,7 +480,7 @@ namespace Host.UI
                         dqnClassifyJob.Start();
                     }
                     break;
-                //cnn classification
+                    //cnn classification
                 case "CNN_toolStripButton":
                     CNNForm cnnForm = new CNNForm();
                     cnnForm.RasterDic = _rasterDic;
@@ -522,8 +502,8 @@ namespace Host.UI
                         rfJob.Start();
                     }
                     break;
-                case "Compare_Plot_toolStripButton":
                     //drawing comparsion multi-reslut curve
+                case "Compare_Plot_toolStripButton":
                     ComparedPlotForm cp_form = new ComparedPlotForm();
                     cp_form.ShowDialog();
                     break;

@@ -19,14 +19,20 @@ namespace Host.UI.Jobs
 
         public string Name => "RFClassificationTask";
 
-        public string Summary { get; private set; }
+        public string Summary { get; private set; } = "";
 
         public double Process { get; private set; } = 0.0;
 
         public DateTime StartTime { get; private set; } = DateTime.Now;
 
         public PlotModel[] PlotModels => throw new NotImplementedException();
-
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool Complete { get; private set; } = false;
+        /// <summary>
+        /// 
+        /// </summary>
         public event OnTaskCompleteHandler OnTaskComplete;
         /// <summary>
         /// 
@@ -43,7 +49,8 @@ namespace Host.UI.Jobs
             _t = new Thread(() =>
             {
                 RF rf = new RF(treeCount);
-                //read samples
+                //training
+                Summary = "随机森林训练中";
                 using (StreamReader sr = new StreamReader(fullFilename))
                 {
                     List<List<double>> inputList = new List<List<double>>();
@@ -66,7 +73,7 @@ namespace Host.UI.Jobs
                     rf.Train(inputs, outputs);
                 }
                 //image classify
-                //bind raster layer
+                Summary = "分类应用中";
                 IRasterLayerCursorTool pRasterLayerCursorTool = new GRasterLayerCursorTool();
                 pRasterLayerCursorTool.Visit(rasterLayer);
                 //GDI graph
@@ -98,6 +105,9 @@ namespace Host.UI.Jobs
                 //保存结果至tmp
                 string fullFileName = Directory.GetCurrentDirectory() + @"\tmp\" + DateTime.Now.ToFileTimeUtc() + ".png";
                 classificationBitmap.Save(fullFileName);
+                //rf complete
+                Summary = "RF训练分类完成";
+                Complete = true;
                 OnTaskComplete?.Invoke(Name, fullFileName);
             });
         }

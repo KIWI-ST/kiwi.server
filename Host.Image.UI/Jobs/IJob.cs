@@ -15,6 +15,10 @@ namespace Host.UI.Jobs
     public interface IJob
     {
         /// <summary>
+        /// indicate job states
+        /// </summary>
+        bool Complete { get; }
+        /// <summary>
         /// 
         /// </summary>
         event OnTaskCompleteHandler OnTaskComplete;

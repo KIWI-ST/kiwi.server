@@ -50,15 +50,16 @@
             // 
             // tree_count_numericUpDown
             // 
-            this.tree_count_numericUpDown.Location = new System.Drawing.Point(301, 60);
+            this.tree_count_numericUpDown.Location = new System.Drawing.Point(194, 60);
             this.tree_count_numericUpDown.Maximum = new decimal(new int[] {
             1000,
             0,
             0,
             0});
             this.tree_count_numericUpDown.Name = "tree_count_numericUpDown";
-            this.tree_count_numericUpDown.Size = new System.Drawing.Size(120, 25);
+            this.tree_count_numericUpDown.Size = new System.Drawing.Size(227, 25);
             this.tree_count_numericUpDown.TabIndex = 1;
+            this.tree_count_numericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.tree_count_numericUpDown.Value = new decimal(new int[] {
             600,
             0,
