@@ -108,6 +108,7 @@
             // 
             // addline_button
             // 
+            this.addline_button.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.addline_button.Location = new System.Drawing.Point(725, 218);
             this.addline_button.Name = "addline_button";
             this.addline_button.Size = new System.Drawing.Size(88, 35);
@@ -118,6 +119,7 @@
             // 
             // update_button
             // 
+            this.update_button.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.update_button.Location = new System.Drawing.Point(742, 445);
             this.update_button.Name = "update_button";
             this.update_button.Size = new System.Drawing.Size(88, 34);
@@ -213,9 +215,10 @@
             // 
             // y_open_button
             // 
-            this.y_open_button.Location = new System.Drawing.Point(592, 116);
+            this.y_open_button.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.y_open_button.Location = new System.Drawing.Point(593, 112);
             this.y_open_button.Name = "y_open_button";
-            this.y_open_button.Size = new System.Drawing.Size(75, 23);
+            this.y_open_button.Size = new System.Drawing.Size(75, 34);
             this.y_open_button.TabIndex = 17;
             this.y_open_button.Text = "打开";
             this.y_open_button.UseVisualStyleBackColor = true;
@@ -223,9 +226,10 @@
             // 
             // x_open_button
             // 
-            this.x_open_button.Location = new System.Drawing.Point(592, 53);
+            this.x_open_button.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.x_open_button.Location = new System.Drawing.Point(593, 48);
             this.x_open_button.Name = "x_open_button";
-            this.x_open_button.Size = new System.Drawing.Size(75, 23);
+            this.x_open_button.Size = new System.Drawing.Size(75, 33);
             this.x_open_button.TabIndex = 16;
             this.x_open_button.Text = "打开";
             this.x_open_button.UseVisualStyleBackColor = true;
