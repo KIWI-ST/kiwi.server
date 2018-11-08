@@ -101,5 +101,29 @@ namespace Engine.GIS.GOperation.Tools
                 }
             return pixels.ToArray();
         }
+        /// <summary>
+        /// 获取raw value of x,y with cov [row,col]
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="row"></param>
+        /// <param name="col"></param>
+        /// <returns></returns>
+        public double[] PickRangeRawValue(int x, int y, int row = 5, int col = 5)
+        {
+            int offset = row / 2;
+            List<double> pixels = new List<double>();
+            for (int i = -offset; i < row - offset; i++)
+                for (int j = -offset; j < col - offset; j++)
+                {
+                    int pi = x + i;
+                    int pj = y + j;
+                    pi = pi <= 0 || pi >= _width ? x : pi;
+                    pj = pj <= 0 || pj >= _height ? y : pj;
+                    pixels.Add(PickRawValue(pi, pj));
+                }
+            return pixels.ToArray();
+        }
+
     }
 }

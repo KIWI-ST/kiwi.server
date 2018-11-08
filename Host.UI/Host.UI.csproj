@@ -90,6 +90,7 @@
   <ItemGroup>
     <Compile Include="Jobs\IJob.cs" />
     <Compile Include="Jobs\JobCNNClassify.cs" />
+    <Compile Include="Jobs\JobCOVRaster.cs" />
     <Compile Include="Jobs\JobDQNClassify.cs" />
     <Compile Include="Jobs\JobReadRaster.cs" />
     <Compile Include="Jobs\JobRFClassify.cs" />
@@ -130,6 +131,12 @@
     </Compile>
     <Compile Include="SettingForm\CNNForm.Designer.cs">
       <DependentUpon>CNNForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SettingForm\COVForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingForm\COVForm.Designer.cs">
+      <DependentUpon>COVForm.cs</DependentUpon>
     </Compile>
     <Compile Include="SettingForm\DLClassifyForm.cs">
       <SubType>Form</SubType>
@@ -194,6 +201,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SettingForm\CNNForm.resx">
       <DependentUpon>CNNForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingForm\COVForm.resx">
+      <DependentUpon>COVForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingForm\DLClassifyForm.resx">
       <DependentUpon>DLClassifyForm.cs</DependentUpon>

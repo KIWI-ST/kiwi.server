@@ -94,6 +94,15 @@ namespace Engine.GIS.GOperation.Tools
         /// <param name="col"></param>
         /// <returns></returns>
         double[] PickRangeNormalValue(int x, int y, int row = 5, int col = 5);
+        /// <summary>
+        /// pick raw value by cov
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="row"></param>
+        /// <param name="col"></param>
+        /// <returns></returns>
+        double[] PickRangeRawValue(int x, int y, int row = 5, int col = 5);
     }
 
     public interface IBandStasticTool : IRasterBandTool

@@ -375,6 +375,7 @@ namespace Host.UI
             switch (taskName)
             {
                 //load image classification result
+                case "COVRasterTask":
                 case "RFClassificationTask":
                 case "CnnClassificationTask":
                 case "DqnClassificationTask":
@@ -410,6 +411,19 @@ namespace Host.UI
             ToolStripItem item = sender as ToolStripItem;
             switch (item.Name)
             {
+                    //cov matrix
+                case "cov_toolStripButton":
+                    COVForm covForm = new COVForm();
+                    covForm.RasterDic = _rasterDic;
+                    if (covForm.ShowDialog() == DialogResult.OK)
+                    {
+                        GRasterBand band1 = _rasterDic[covForm.Target1Key].BandCollection[0];
+                        GRasterBand band2 = _rasterDic[covForm.Target2Key].BandCollection[0];
+                        IJob covRasterJob = new JobCOVRaster(band1,band2);
+                        RegisterJob(covRasterJob);
+                        covRasterJob.Start();
+                    }
+                    break;
                     //task
                 case "task_toolStripButton":
                     TaskMonitor taskForm = new TaskMonitor();
@@ -418,10 +432,8 @@ namespace Host.UI
                     break;
                     //calucte kappa
                 case "kappa_toolStripButton":
-                    KappaForm kappaForm = new KappaForm()
-                    {
-                        RasterDic = _rasterDic
-                    };
+                    KappaForm kappaForm = new KappaForm();
+                    kappaForm.RasterDic = _rasterDic;
                     kappaForm.ShowDialog();
                     break;
                     //添加图像

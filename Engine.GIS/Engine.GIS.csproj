@@ -134,6 +134,7 @@
     <Compile Include="GLayer\GVectorLayer\GReader\OsmReader.cs" />
     <Compile Include="GLayer\GVectorLayer\GReader\ShpReader.cs" />
     <Compile Include="GOperation\Arithmetic\CohenSutherland.cs" />
+    <Compile Include="GOperation\Arithmetic\ConvarianceIndex.cs" />
     <Compile Include="GOperation\Arithmetic\GConvolution.cs" />
     <Compile Include="GOperation\Arithmetic\GRGBCombine.cs" />
     <Compile Include="GOperation\Arithmetic\GVectorPyramid.cs" />

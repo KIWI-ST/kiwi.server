@@ -43,6 +43,7 @@
             this.rf_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.DQN_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.main_toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
+            this.cov_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.kappa_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.Compare_Plot_toolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -154,6 +155,7 @@
             this.rf_toolStripButton,
             this.DQN_toolStripButton,
             this.main_toolStripSeparator,
+            this.cov_toolStripButton,
             this.kappa_toolStripButton,
             this.toolStripSeparator1,
             this.Compare_Plot_toolStripButton,
@@ -221,6 +223,16 @@
             // 
             this.main_toolStripSeparator.Name = "main_toolStripSeparator";
             this.main_toolStripSeparator.Size = new System.Drawing.Size(6, 47);
+            // 
+            // cov_toolStripButton
+            // 
+            this.cov_toolStripButton.Image = global::Host.UI.Properties.Resources.chart_area_64;
+            this.cov_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.cov_toolStripButton.Name = "cov_toolStripButton";
+            this.cov_toolStripButton.Size = new System.Drawing.Size(73, 44);
+            this.cov_toolStripButton.Text = "相关性图";
+            this.cov_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.cov_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
             // 
             // kappa_toolStripButton
             // 
@@ -537,6 +549,7 @@
         private System.Windows.Forms.ToolStripButton CNN_toolStripButton;
         private System.Windows.Forms.ToolStripButton task_toolStripButton;
         private System.Windows.Forms.ToolStripButton rf_toolStripButton;
+        private System.Windows.Forms.ToolStripButton cov_toolStripButton;
     }
 }
 
