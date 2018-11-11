@@ -12,24 +12,20 @@ namespace Host.UI.SettingForm
         public DQNForm()
         {
             InitializeComponent();
-            Epochs = (int)numericUpDown1.Value;
         }
         
 
         Dictionary<string, GRasterLayer> _rasterDic;
 
-        public string SelectedFeatureRasterLayer { get; set; }
+        public string TaskName { get; private set; }
 
-        public string SelectedLabelRasterLayer { get; set; }
+        public string SelectedFeatureRasterLayer { get; private set; }
 
-        public int Epochs { get; set; }
+        public string SelectedLabelRasterLayer { get; private set; }
 
-        /// <summary>
-        /// model
-        /// =1 image classification
-        /// =2 path extract
-        /// </summary>
-        public int Model { get; set; }
+        public int Epochs { get; private set; }
+
+        private string[] _task_names = new string[] {"Image Classification","Road Extraction"};
 
         public Dictionary<string, GRasterLayer> RasterDic
         {
@@ -42,64 +38,41 @@ namespace Host.UI.SettingForm
 
         public void Initial(Dictionary<string, GRasterLayer> rasterDic)
         {
-            comboBox1.Items.Clear();
-            comboBox3.Items.Clear();
-            rasterDic.Keys.ToList().ForEach(p => {
-                comboBox1.Items.Add(p);
-                comboBox3.Items.Add(p);
+            //add task names
+            task_name_comboBox.Items.Clear();
+            Array.ForEach(_task_names, p => {
+                task_name_comboBox.Items.Add(p);
             });
-            comboBox2.Items.Clear();
-            comboBox4.Items.Clear();
+            //add raster keys
+            state_comboBox.Items.Clear();
+            feedback_comboBox.Items.Clear();
             rasterDic.Keys.ToList().ForEach(p => {
-                comboBox2.Items.Add(p);
-                comboBox4.Items.Add(p);
+                state_comboBox.Items.Add(p);
+                feedback_comboBox.Items.Add(p);
             });
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void state_comboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             string key = (sender as ComboBox).SelectedItem as string;
             SelectedFeatureRasterLayer = key;
         }
 
-        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        private void feedback_comboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             string key = (sender as ComboBox).SelectedItem as string;
             SelectedLabelRasterLayer = key;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void task_name_comboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Model = 1;
-            this.Close();
+            TaskName = (sender as ComboBox).SelectedItem as string;
         }
 
-        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        private void ok_button_Click(object sender, EventArgs e)
         {
-            Epochs = (int)(sender as NumericUpDown).Value;
-        }
-
-        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            string key = (sender as ComboBox).SelectedItem as string;
-            SelectedFeatureRasterLayer = key;
-        }
-
-        private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            string key = (sender as ComboBox).SelectedItem as string;
-            SelectedLabelRasterLayer = key;
-        }
-
-        private void numericUpDown2_ValueChanged(object sender, EventArgs e)
-        {
-            Epochs = (int)(sender as NumericUpDown).Value;
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            Model = 2;
-            this.Close();
+            Epochs = (int)(epochs_numericUpDown as NumericUpDown).Value;
+            Close();
         }
     }
 }

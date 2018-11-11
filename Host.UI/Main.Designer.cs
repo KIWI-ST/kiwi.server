@@ -133,7 +133,7 @@
             // 
             this.SLIC_toolStripMenu.Image = global::Host.UI.Properties.Resources.calculator_64;
             this.SLIC_toolStripMenu.Name = "SLIC_toolStripMenu";
-            this.SLIC_toolStripMenu.Size = new System.Drawing.Size(189, 26);
+            this.SLIC_toolStripMenu.Size = new System.Drawing.Size(216, 26);
             this.SLIC_toolStripMenu.Text = "超像素分割";
             this.SLIC_toolStripMenu.Click += new System.EventHandler(this.Map_function_Click);
             // 
@@ -141,7 +141,7 @@
             // 
             this.SLIC_Center_toolStripMenu.Image = global::Host.UI.Properties.Resources.cut_64;
             this.SLIC_Center_toolStripMenu.Name = "SLIC_Center_toolStripMenu";
-            this.SLIC_Center_toolStripMenu.Size = new System.Drawing.Size(189, 26);
+            this.SLIC_Center_toolStripMenu.Size = new System.Drawing.Size(216, 26);
             this.SLIC_Center_toolStripMenu.Text = "超像素特征提取";
             this.SLIC_Center_toolStripMenu.Click += new System.EventHandler(this.Map_function_Click);
             // 
