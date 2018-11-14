@@ -1,7 +1,8 @@
 # kiwi.server
-kiwi.server is a tool set that integrates gdal, accord.net, orleans and so on... 
+kiwi.server is a tool set that integrates gdal, accord.net, orleans and so on... you can use the [released software](https://github.com/axmand/kiwi.server/releases) directly
 
 The commonly used operations are packaged, mainly the following modules
+
 
 ### Engine.GIS ####
 >a little sample style api library based on gdal. 
