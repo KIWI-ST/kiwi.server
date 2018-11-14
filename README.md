@@ -1,5 +1,5 @@
 # kiwi.server
-kiwi.server is a tool set that integrates gdal, tensroflow, orleans and so on... 
+kiwi.server is a tool set that integrates gdal, accord.net, orleans and so on... 
 
 The commonly used operations are packaged, mainly the following modules
 
