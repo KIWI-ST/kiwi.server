@@ -30,7 +30,7 @@ The commonly used operations are packaged, mainly the following modules
 ```
 
 ### Engine.Brain ###
->implemention of some machinelearning algorithm by tensorflowSharp.as Deep Q-Learning:
+>implemention of some machinelearning algorithm, such as Deep Q-Learning:
 ```c#
          //can implement the "IDEnv" interface according to your own needs
          IDEnv env = new DImageEnv(featureRasterLayer, labelRasterLayer);
