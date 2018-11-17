@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Brain", "Engine.Brai
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Host.UI", "Host.UI\Host.UI.csproj", "{1646B48F-6A20-41D0-B9BE-CA8002CB50EA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Examples", "Test.Examples\Test.Examples.csproj", "{128B1393-4DE0-4A69-AF7F-4A9F5F9FEC9A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,14 @@ Global
 		{1646B48F-6A20-41D0-B9BE-CA8002CB50EA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1646B48F-6A20-41D0-B9BE-CA8002CB50EA}.Release|x86.ActiveCfg = Release|Any CPU
 		{1646B48F-6A20-41D0-B9BE-CA8002CB50EA}.Release|x86.Build.0 = Release|Any CPU
+		{128B1393-4DE0-4A69-AF7F-4A9F5F9FEC9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{128B1393-4DE0-4A69-AF7F-4A9F5F9FEC9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{128B1393-4DE0-4A69-AF7F-4A9F5F9FEC9A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{128B1393-4DE0-4A69-AF7F-4A9F5F9FEC9A}.Debug|x86.Build.0 = Debug|Any CPU
+		{128B1393-4DE0-4A69-AF7F-4A9F5F9FEC9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{128B1393-4DE0-4A69-AF7F-4A9F5F9FEC9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{128B1393-4DE0-4A69-AF7F-4A9F5F9FEC9A}.Release|x86.ActiveCfg = Release|Any CPU
+		{128B1393-4DE0-4A69-AF7F-4A9F5F9FEC9A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
