@@ -1,5 +1,5 @@
 # kiwi.server
-kiwi.server is a tool set that integrates gdal, accord.net, orleans and so on... you can use the [released software](https://github.com/axmand/kiwi.server/releases) directly
+kiwi.server is a tool set that integrates gdal, accord.net, orleans... everyone counld use the [released software](https://github.com/axmand/kiwi.server/releases) directly
 
 The commonly used operations are packaged, mainly the following modules
 
