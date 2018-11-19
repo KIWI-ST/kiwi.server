@@ -14,14 +14,14 @@ namespace Engine.GIS.GOperation.Arithmetic
         public static (int[,] matrix, double kappa, int actionsNumber,double oa) Calcute(GRasterLayer truthLayer, GRasterLayer predLayer)
         {
             //statical label band graph
-            IBandStasticTool pBandStaticTool = new GBandStasticTool();
+            IRasterBandStasticTool pBandStaticTool = new GRasterBandStasticTool();
             pBandStaticTool.Visit(truthLayer.BandCollection[0]);
             Dictionary<int,List<Point>> memory = pBandStaticTool.StaisticalRawGraph;
             //key index
             List<int> Keys = memory.Keys.ToList();
             int actionsNumber = Keys.Count;
             int[,] matrix = new int[actionsNumber, actionsNumber];
-            IBandCursorTool pBandCursorTool = new GBandCursorTool();
+            IRasterBandCursorTool pBandCursorTool = new GRasterBandCursorTool();
             pBandCursorTool.Visit(predLayer.BandCollection[0]);
             //
             pBandStaticTool.Visit(predLayer.BandCollection[0]);

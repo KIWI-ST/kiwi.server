@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Engine.GIS.GOperation.Tools
 {
-    public class GBandStasticTool : IBandStasticTool
+    public class GRasterBandStasticTool : IRasterBandStasticTool
     {
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace Engine.GIS.GOperation.Tools
         {
             get {
                 Dictionary<int, List<Point>> memory = new Dictionary<int, List<Point>>();
-                IBandCursorTool pBandCursorTool = new GBandCursorTool();
+                IRasterBandCursorTool pBandCursorTool = new GRasterBandCursorTool();
                 pBandCursorTool.Visit(_pBand);
                 foreach (var (x, y, value) in pBandCursorTool.ValidatedRawCollection)
                 {

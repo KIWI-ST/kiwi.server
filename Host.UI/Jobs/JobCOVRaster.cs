@@ -30,8 +30,8 @@ namespace Host.UI.Jobs
         public JobCOVRaster(GRasterBand target1band, GRasterBand target2band)
         {
             _t = new Thread(() => {
-                IBandCursorTool pRasterBandCursorTool1 = new GBandCursorTool();
-                IBandCursorTool pRasterBandCursorTool2 = new GBandCursorTool();
+                IRasterBandCursorTool pRasterBandCursorTool1 = new GRasterBandCursorTool();
+                IRasterBandCursorTool pRasterBandCursorTool2 = new GRasterBandCursorTool();
                 pRasterBandCursorTool1.Visit(target1band);
                 pRasterBandCursorTool2.Visit(target2band);
                 //

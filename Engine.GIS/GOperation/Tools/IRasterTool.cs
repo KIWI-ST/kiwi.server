@@ -61,7 +61,7 @@ namespace Engine.GIS.GOperation.Tools
     /// <summary>
     /// cursor tool
     /// </summary>
-    public interface IBandCursorTool : IRasterBandTool
+    public interface IRasterBandCursorTool : IRasterBandTool
     {
         /// <summary>
         /// 
@@ -105,7 +105,7 @@ namespace Engine.GIS.GOperation.Tools
         double[] PickRangeRawValue(int x, int y, int row = 5, int col = 5);
     }
 
-    public interface IBandStasticTool : IRasterBandTool
+    public interface IRasterBandStasticTool : IRasterBandTool
     {
         /// <summary>
         /// static raw value query table (convert one-dim to [x,y] two dim]

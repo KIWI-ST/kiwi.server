@@ -8,7 +8,7 @@ namespace Engine.GIS.GOperation.Tools
 
         GRasterLayer _pLayer;
 
-        IBandCursorTool _pBandCursorTool = new GBandCursorTool();
+        IRasterBandCursorTool _pBandCursorTool = new GRasterBandCursorTool();
 
         public double[] PickRawValue(int x,int y)
         {

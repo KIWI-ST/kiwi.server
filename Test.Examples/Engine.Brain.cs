@@ -9,7 +9,7 @@ namespace Test.Examples
         [TestMethod]
         public void TestMethod1()
         {
-            var s = "";
+            Assert.AreEqual(1, 1);
         }
     }
 }

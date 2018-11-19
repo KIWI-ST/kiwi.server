@@ -134,7 +134,7 @@ namespace Engine.Brain.AI.RL.Env
             //set cursor tool to featureRasterLayer
             _pRasterLayerCursorTool.Visit(_featureRasterLayer);
             //statical label raw graph
-            IBandStasticTool pLabelBandStaticTool = new GBandStasticTool();
+            IRasterBandStasticTool pLabelBandStaticTool = new GRasterBandStasticTool();
             pLabelBandStaticTool.Visit(_labelRasterLayer.BandCollection[0]);
             //set visitor band
             _memory = pLabelBandStaticTool.StaisticalRawGraph;

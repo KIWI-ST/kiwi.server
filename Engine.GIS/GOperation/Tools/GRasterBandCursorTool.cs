@@ -6,7 +6,7 @@ namespace Engine.GIS.GOperation.Tools
     /// <summary>
     /// cursor for each band
     /// </summary>
-    public class GBandCursorTool: IBandCursorTool
+    public class GRasterBandCursorTool: IRasterBandCursorTool
     {
         /// <summary>
         /// band width and hight
