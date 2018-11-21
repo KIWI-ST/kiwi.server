@@ -17,6 +17,7 @@ namespace Engine.GIS.GOperation.Tools
     }
     /// <summary>
     /// raster band tool(aim band)
+    /// base interface
     /// </summary>
     public interface IRasterBandTool : IRasterTool
     {
@@ -24,6 +25,7 @@ namespace Engine.GIS.GOperation.Tools
     }
     /// <summary>
     /// raster layer tool(aim layer)
+    /// base interface
     /// </summary>
     public interface IRasterLayerTool : IRasterTool
     {
@@ -105,7 +107,7 @@ namespace Engine.GIS.GOperation.Tools
         double[] PickRangeRawValue(int x, int y, int row = 5, int col = 5);
     }
 
-    public interface IRasterBandStasticTool : IRasterBandTool
+    public interface IRasterBandStatisticTool : IRasterBandTool
     {
         /// <summary>
         /// static raw value query table (convert one-dim to [x,y] two dim]

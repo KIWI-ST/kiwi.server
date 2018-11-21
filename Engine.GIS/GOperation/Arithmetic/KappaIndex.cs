@@ -14,7 +14,7 @@ namespace Engine.GIS.GOperation.Arithmetic
         public static (int[,] matrix, double kappa, int actionsNumber,double oa) Calcute(GRasterLayer truthLayer, GRasterLayer predLayer)
         {
             //statical label band graph
-            IRasterBandStasticTool pBandStaticTool = new GRasterBandStasticTool();
+            IRasterBandStatisticTool pBandStaticTool = new GRasterBandStatisticTool();
             pBandStaticTool.Visit(truthLayer.BandCollection[0]);
             Dictionary<int,List<Point>> memory = pBandStaticTool.StaisticalRawGraph;
             //key index

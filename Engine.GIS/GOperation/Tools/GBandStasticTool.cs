@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Engine.GIS.GOperation.Tools
 {
-    public class GRasterBandStasticTool : IRasterBandStasticTool
+    public class GRasterBandStatisticTool : IRasterBandStatisticTool
     {
 
         /// <summary>

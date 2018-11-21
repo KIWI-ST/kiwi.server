@@ -76,7 +76,7 @@ namespace Engine.Brain.AI.RL.Env
         public void Prepare()
         {
             //
-            IRasterBandStasticTool pBandStasticTool = new GRasterBandStasticTool();
+            IRasterBandStatisticTool pBandStasticTool = new GRasterBandStatisticTool();
             pBandStasticTool.Visit(_labelRasterLayer.BandCollection[0]);
             //
             _pGRasterLayerCursorTool.Visit(_featureRasterLayer);

@@ -19,19 +19,19 @@ namespace Test.Examples
         /// <summary>
         /// feature layer
         /// </summary>
-        string featureFullFilename = System.IO.Directory.GetCurrentDirectory() + @"\Datasets\Band18.tif";
+        string featureFullFilename = Directory.GetCurrentDirectory() + @"\Datasets\Band18.tif";
         /// <summary>
         /// train layer
         /// </summary>
-        string trainFullFilename = System.IO.Directory.GetCurrentDirectory() + @"\Datasets\Train.tif";
+        string trainFullFilename = Directory.GetCurrentDirectory() + @"\Datasets\Train.tif";
         /// <summary>
         /// test layer
         /// </summary>
-        string testFullFilename = System.IO.Directory.GetCurrentDirectory() + @"\Datasets\Test.tif";
+        string testFullFilename = Directory.GetCurrentDirectory() + @"\Datasets\Test.tif";
         /// <summary>
         /// RF samples
         /// </summary>
-        string samplesFullfilename = System.IO.Directory.GetCurrentDirectory() + @"\Datasets\Samples.txt";
+        string samplesFullfilename = Directory.GetCurrentDirectory() + @"\Datasets\Samples.txt";
 
         [TestMethod]
         public void ClassificationByDQN()

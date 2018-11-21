@@ -1,6 +1,7 @@
 ﻿using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Tools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.IO;
 
 namespace Test.Examples
 {
@@ -10,7 +11,7 @@ namespace Test.Examples
         /// <summary>
         /// a raster image file for testing
         /// </summary>
-        string fullFilename = System.IO.Directory.GetCurrentDirectory() + @"\Datasets\Band18.tif";
+        string fullFilename = Directory.GetCurrentDirectory() + @"\Datasets\Band18.tif";
 
         [TestMethod]
         public void ReadRasterLayer()
@@ -42,7 +43,7 @@ namespace Test.Examples
         public void RasterBandStaticTool()
         {
             GRasterLayer rasterLayer = new GRasterLayer(fullFilename);
-            IRasterBandStasticTool pRasterBandStasticTool = new GRasterBandStasticTool();
+            IRasterBandStatisticTool pRasterBandStasticTool = new GRasterBandStatisticTool();
             pRasterBandStasticTool.Visit(rasterLayer.BandCollection[0]);
             var rawGraph = pRasterBandStasticTool.StaisticalRawGraph;
             var rawTable = pRasterBandStasticTool.StatisticalRawQueryTable;
