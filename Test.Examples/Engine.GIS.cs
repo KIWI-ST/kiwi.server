@@ -7,6 +7,9 @@ namespace Test.Examples
     [TestClass]
     public class GISTEST
     {
+        /// <summary>
+        /// a raster image file for testing
+        /// </summary>
         string fullFilename = System.IO.Directory.GetCurrentDirectory() + @"\Datasets\Band18.tif";
 
         [TestMethod]

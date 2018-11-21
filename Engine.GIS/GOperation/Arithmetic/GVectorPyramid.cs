@@ -57,18 +57,16 @@ namespace Engine.GIS.GOperation
         }
 
         #endregion
-        //web墨卡托投影
-        WebMercatorProjection _projection = new WebMercatorProjection();
-        //格网瓦片缓存，缩放层级 : 瓦片集合
-        Dictionary<int, List<GTileElement>> _tileDictionary = new Dictionary<int, List<GTileElement>>();
         /// <summary>
         /// 格网瓦片缓存，缩放层级 : 瓦片集合
         /// </summary>
-        public Dictionary<int, List<GTileElement>> TileDictionary { get => _tileDictionary; }
+        public Dictionary<int, List<GTileElement>> TileDictionary { get; } = new Dictionary<int, List<GTileElement>>();
+
         /// <summary>
         /// web墨卡托投影
         /// </summary>
-        public WebMercatorProjection Projection { get => _projection; }
+        public WebMercatorProjection Projection { get; } = new WebMercatorProjection();
+
         /// <summary>
         /// 构建当前缩放层级的瓦片
         /// </summary>
@@ -76,21 +74,21 @@ namespace Engine.GIS.GOperation
         /// <param name="zoom"></param>
         void Build(GBound bound, int zoom)
         {
-            int _tileSize = _projection.TileSize;
+            int _tileSize = Projection.TileSize;
             //构建裁剪边界的矩形，用于整体裁剪
             IGeometry _boundGeometry = bound.ToInsertPolygon();
             //瓦片多尺度缓存
-            if (_tileDictionary.ContainsKey(zoom))
-                _tileDictionary[zoom].Clear();
+            if (TileDictionary.ContainsKey(zoom))
+                TileDictionary[zoom].Clear();
             else
-                _tileDictionary[zoom] = new List<GTileElement>();
+                TileDictionary[zoom] = new List<GTileElement>();
             //1.获取坐上右下坐标
             Coordinate p0 = bound.Min;
             Coordinate p1 = bound.Max;
             //2.分尺度计算格网位置
             //2.1 转换成尺度下的pixel
-            Coordinate min = _projection.LatlngToPoint(p0, zoom);
-            Coordinate max = _projection.LatlngToPoint(p1, zoom);
+            Coordinate min = Projection.LatlngToPoint(p0, zoom);
+            Coordinate max = Projection.LatlngToPoint(p1, zoom);
             //2.2 计算pixel下边界范围
             GBound pixelBound = new GBound(new List<Coordinate>() { min, max });
             //2.3 通过pixelbound计算range
@@ -105,8 +103,8 @@ namespace Engine.GIS.GOperation
                 {
                     //反算每块瓦片的边界经纬度
                     List<Coordinate> coordinates = new List<Coordinate>();
-                    coordinates.Add(_projection.PointToLatLng(new Coordinate(i * 256, j * 256), zoom));
-                    coordinates.Add(_projection.PointToLatLng(new Coordinate(i * 256 + 256, j * 256 + 256), zoom));
+                    coordinates.Add(Projection.PointToLatLng(new Coordinate(i * 256, j * 256), zoom));
+                    coordinates.Add(Projection.PointToLatLng(new Coordinate(i * 256 + 256, j * 256 + 256), zoom));
                     //
                     GTileElement tile = new GTileElement()
                     {
@@ -115,7 +113,7 @@ namespace Engine.GIS.GOperation
                         Z = zoom,
                         Bound = new GBound(coordinates)
                     };
-                    _tileDictionary[zoom].Add(tile);
+                    TileDictionary[zoom].Add(tile);
                 }
             }
         }

@@ -8,9 +8,9 @@ namespace Engine.GIS.GOperation
     /// </summary>
     public class GoutputRaster
     {
-        GLayer.GRasterLayer.GRasterLayer _rasterLayer;
+        GRasterLayer _rasterLayer;
 
-        public GoutputRaster(GLayer.GRasterLayer.GRasterLayer rasterLayer)
+        public GoutputRaster(GRasterLayer rasterLayer)
         {
             _rasterLayer = rasterLayer;
         }
