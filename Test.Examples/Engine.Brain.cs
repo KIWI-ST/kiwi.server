@@ -53,7 +53,7 @@ namespace Test.Examples
             double[] action = dqn.ChooseAction(state).action;
             int landCoverType = dqn.ActionToRawValue(NP.Argmax(action));
             //do something as you need. i.e. draw landCoverType to bitmap at position ( i , j )
-            //because the training epochs is too small, the result is instability.
+            //the classification results are not stable because of the training epochs are too few.
             Assert.IsTrue(landCoverType>=0);
         }
 
