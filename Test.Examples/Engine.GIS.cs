@@ -7,7 +7,7 @@ namespace Test.Examples
     [TestClass]
     public class GISTEST
     {
-        string fullFilename = System.IO.Directory.GetCurrentDirectory() + @"\Datasets\A_Band18.tif";
+        string fullFilename = System.IO.Directory.GetCurrentDirectory() + @"\Datasets\Band18.tif";
 
         [TestMethod]
         public void ReadRasterLayer()
