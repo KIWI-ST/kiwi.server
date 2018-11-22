@@ -123,13 +123,18 @@
     <Compile Include="AI\DL\CNN.cs" />
     <Compile Include="AI\RL\Net\DNet.cs" />
     <Compile Include="AI\RL\DQN.cs" />
+    <Compile Include="Entity\Word\Haffman.cs" />
+    <Compile Include="Entity\Word\HiddenNeuron.cs" />
+    <Compile Include="Entity\Word\Neuron.cs" />
     <Compile Include="Entity\NP.cs" />
-    <Compile Include="Entity\TensorflowBootstrap.cs" />
+    <Compile Include="Utils\TensorflowBootstrap.cs" />
+    <Compile Include="Entity\Word\WordEntry.cs" />
+    <Compile Include="Entity\Word\WordNeuron.cs" />
     <Compile Include="Extend\ArrayExtend.cs" />
     <Compile Include="Extend\DictionaryExtend.cs" />
     <Compile Include="Extend\ListExtend.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Entity\TensorFactory.cs" />
+    <Compile Include="Utils\TensorFactory.cs" />
     <Compile Include="Repoter\IRepoter.cs" />
   </ItemGroup>
   <ItemGroup>
