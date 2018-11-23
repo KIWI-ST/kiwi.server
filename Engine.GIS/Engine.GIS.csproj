@@ -142,10 +142,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extend\ListExtend.cs" />
-    <Compile Include="GEntity\GBitmap.cs" />
-    <Compile Include="GEntity\GBitmap2.cs" />
-    <Compile Include="GEntity\GBound.cs" />
-    <Compile Include="GEntity\GTileElement.cs" />
+    <Compile Include="Entity\GBitmap.cs" />
+    <Compile Include="Entity\GBitmap2.cs" />
+    <Compile Include="Entity\GBound.cs" />
+    <Compile Include="Entity\GTileElement.cs" />
     <Compile Include="GLayer\GRasterLayer\GRasterBand.cs" />
     <Compile Include="GLayer\GRasterLayer\GRasterLayer.cs" />
     <Compile Include="GLayer\GVectorLayer\GFeatureLayer.cs" />

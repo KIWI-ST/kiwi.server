@@ -123,13 +123,8 @@
     <Compile Include="AI\DL\CNN.cs" />
     <Compile Include="AI\RL\Net\DNet.cs" />
     <Compile Include="AI\RL\DQN.cs" />
-    <Compile Include="Entity\Word\Haffman.cs" />
-    <Compile Include="Entity\Word\HiddenNeuron.cs" />
-    <Compile Include="Entity\Word\Neuron.cs" />
     <Compile Include="Entity\NP.cs" />
     <Compile Include="Utils\TensorflowBootstrap.cs" />
-    <Compile Include="Entity\Word\WordEntry.cs" />
-    <Compile Include="Entity\Word\WordNeuron.cs" />
     <Compile Include="Extend\ArrayExtend.cs" />
     <Compile Include="Extend\DictionaryExtend.cs" />
     <Compile Include="Extend\ListExtend.cs" />
@@ -147,7 +142,9 @@
       <Name>Engine.GIS</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Entity\Word\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
