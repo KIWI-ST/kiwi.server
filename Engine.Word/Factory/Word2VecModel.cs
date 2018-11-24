@@ -126,8 +126,43 @@ namespace Engine.Word.Factory
             //_vocabSize
         }
 
+        #region Net
+
+        private void InitNet()
+        {
+            long a, b;
+            ulong nextRandom = 1;
+            if (Hs > 0)
+            {
+                _syn0 = new float[_vocabSize * Size];
+                for (a = 0; a < _vocabSize; a++)
+                    for (b = 0; b < _layer1Size; b++)
+                        _syn1[a * _layer1Size + b] = 0;
+            }
+            if (Negative > 0)
+            {
+                _syn1Neg = new float[_vocabSize * _layer1Size];
+                for (a = 0; a < _vocabSize; a++)
+                    for (b = 0; b < _layer1Size; b++)
+                        _syn1Neg[a * _layer1Size + b] = 0;
+            }
+            for (a = 0; a < _vocabSize; a++)
+            {
+                for (b = 0; b < _layer1Size; b++)
+                {
+                    nextRandom = nextRandom * 25214903917 + 11;
+                    _syn0[a * _layer1Size + b] = ((nextRandom & 0xFFFF) / (float)65536 - (float)0.5) / _layer1Size;
+                }
+            }
+            //
+
+
+        }
+
+        #endregion
+
         #region training
-        
+
         private void SortVocabularys()
         {
             // Sort the vocabulary and keep </s> at the first position
@@ -140,7 +175,7 @@ namespace Engine.Word.Factory
             for(int i=0; i<size;i++)
             {
                 // Words occuring less than min_count times will be discarded from the vocab
-                if(_vocabularys[i].Cn<MinCount&& i != 0)
+                if(_vocabularys[i].Frequent<MinCount&& i != 0)
                 {
                     _vocabSize--;
                     _vocabularys[i].Word = null;
@@ -151,7 +186,7 @@ namespace Engine.Word.Factory
                     while (_vocabularyHash[hash] != -1)
                         hash = (hash + 1) % VOCABHASHSIZE;
                     _vocabularyHash[hash] = i;
-                    _trainWords += _vocabularys[i].Cn;
+                    _trainWords += _vocabularys[i].Frequent;
                 }
             }
             //
@@ -169,9 +204,9 @@ namespace Engine.Word.Factory
             int j = 0;
             for(int i = 0; i < _vocabSize; i++)
             {
-                if (_vocabularys[i].Cn > _minReduce)
+                if (_vocabularys[i].Frequent > _minReduce)
                 {
-                    _vocabularys[j].Cn = _vocabularys[i].Cn;
+                    _vocabularys[j].Frequent = _vocabularys[i].Frequent;
                     _vocabularys[j].Word = _vocabularys[i].Word;
                     j++;
                 }
@@ -217,7 +252,7 @@ namespace Engine.Word.Factory
                     if(vals.Length == 2)
                     {
                         int index = AddWordToVocabularys(vals[0]);
-                        _vocabularys[index].Cn = int.Parse(vals[1]);
+                        _vocabularys[index].Frequent = int.Parse(vals[1]);
                     }
                 }
                 //
@@ -226,6 +261,17 @@ namespace Engine.Word.Factory
             }
         }
 
+        private void SaveVocabulary(string SaveVocabularyFullFilename)
+        {
+            using (var stream = new FileStream(SaveVocabularyFullFilename, FileMode.OpenOrCreate))
+            {
+                using (var streamWriter = new StreamWriter(stream))
+                {
+                    for (var i = 0; i < _vocabSize; i++)
+                        streamWriter.WriteLine("{0} {1}", _vocabularys[i].Word, _vocabularys[i].Frequent);
+                }
+            }
+        }
         /// <summary>
         /// directly extract vaocabulary from exist file
         /// </summary>
@@ -233,7 +279,9 @@ namespace Engine.Word.Factory
         {
 
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
         public void Train()
         {
             //build vocabulary library
@@ -241,7 +289,11 @@ namespace Engine.Word.Factory
                 ExtractVocabulary("");
             else
                 StatisticVocabulary("");
-            //
+            //save vocabulary
+            if (!string.IsNullOrEmpty(SaveVocabularyFullFilename))
+                SaveVocabulary(SaveVocabularyFullFilename);
+            //output dir
+            if (string.IsNullOrEmpty(OutputFullFilename)) return;
         }
 
         
