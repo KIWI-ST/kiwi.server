@@ -61,7 +61,7 @@ namespace Engine.Word.Entity
             //初始化值为-1的hash数组
             _voca_hash_array = Enumerable.Repeat(-1, _voca_hash_size).ToArray();
             //初始化上限为 max size 的词汇数组
-            _voca_array = new Vocabulary[_voca_max_size];
+            _voca_array = Enumerable.Repeat(new Vocabulary(), _voca_hash_size).ToArray();
         }
 
         private uint TranslateWordHash(string word)
@@ -84,7 +84,7 @@ namespace Engine.Word.Entity
             _voca_array[_voca_size].Frequent = 0;
             _voca_size++;
             //如果词汇超过预设上限，需要重新构造词汇数组
-            if (_voca_size + 2 > _voca_size)
+            if (_voca_size + 2 > _voca_max_size)
             {
                 _voca_max_size += 1000;
                 Array.Resize(ref _voca_array, _voca_max_size);
