@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Entity\HalfmanTree.cs" />
     <Compile Include="Entity\Vocabulary.cs" />
+    <Compile Include="Entity\Lexicon.cs" />
     <Compile Include="Extend\StringExtend.cs" />
     <Compile Include="Factory\Word2VecFactory.cs" />
     <Compile Include="Factory\Word2VecModel.cs" />

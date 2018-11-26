@@ -40,7 +40,7 @@ namespace Test.Examples
         }
 
         [TestMethod]
-        public void RasterBandStaticTool()
+        public void RasterBandStatisticTool()
         {
             GRasterLayer rasterLayer = new GRasterLayer(fullFilename);
             IRasterBandStatisticTool pRasterBandStasticTool = new GRasterBandStatisticTool();

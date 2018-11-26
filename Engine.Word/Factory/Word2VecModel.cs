@@ -31,8 +31,8 @@ namespace Engine.Word.Factory
         #endregion
 
         #region external parameters
-        public string TrainFullFilename { get; set; }
         public string OutputFullFilename { get; set; }
+        public string TrainVocabularyFullFilename { get; set; }
         public string SaveVocabularyFullFilename { get; set; }
         public string ReadVocabularyFullFilename { get; set; }
         public int Binary { get; set; } = 0;
@@ -80,7 +80,7 @@ namespace Engine.Word.Factory
         public Word2VecModel(string trainFullFilename, string outputFullFilename, string saveVocabularyFullFilename, string readVocabularyFullFilename)
         {
             //
-            TrainFullFilename = trainFullFilename;
+            TrainVocabularyFullFilename = trainFullFilename;
             OutputFullFilename = outputFullFilename;
             SaveVocabularyFullFilename = saveVocabularyFullFilename;
             ReadVocabularyFullFilename = readVocabularyFullFilename;
@@ -132,9 +132,10 @@ namespace Engine.Word.Factory
         {
             long a, b;
             ulong nextRandom = 1;
+            _syn0 = new float[_vocabSize * Size];
             if (Hs > 0)
             {
-                _syn0 = new float[_vocabSize * Size];
+                _syn1 = new float[_vocabSize * _layer1Size];
                 for (a = 0; a < _vocabSize; a++)
                     for (b = 0; b < _layer1Size; b++)
                         _syn1[a * _layer1Size + b] = 0;
@@ -280,23 +281,26 @@ namespace Engine.Word.Factory
 
         }
         /// <summary>
-        /// 
+        /// 程序入口
         /// </summary>
         public void Train()
         {
-            //build vocabulary library
+            //1. 构建词汇表，得到 得到_vocabularys 和 _vocabSize
             if (!string.IsNullOrEmpty(ReadVocabularyFullFilename))
-                ExtractVocabulary("");
+                ExtractVocabulary(ReadVocabularyFullFilename);
             else
-                StatisticVocabulary("");
+                StatisticVocabulary(TrainVocabularyFullFilename);
             //save vocabulary
             if (!string.IsNullOrEmpty(SaveVocabularyFullFilename))
                 SaveVocabulary(SaveVocabularyFullFilename);
-            //output dir
             if (string.IsNullOrEmpty(OutputFullFilename)) return;
+
+            //2. 得到_vocabularys 和 _vocabSize 后，构建网络学习相关性
+
+
         }
 
-        
+
         #endregion
 
     }

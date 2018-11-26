@@ -44,31 +44,14 @@ namespace Engine.Word.Entity
             MaxCodeLength = maxCodeLength;
         }
         /// <summary>
-        /// 代表
+        /// 
+        /// 
         /// </summary>
-        /// <param name="codeLength"></param>
-        private void BuildTree()
+        /// <param name="voc"></param>
+        public void Concat(Vocabulary voc)
         {
-            //逐个加入节点构建halfman树
-            long pos1 = VocabularySize - 1;
-            long pos2 = VocabularySize;
-            //单词char
-            char[] code = new char[MaxCodeLength];
-            long[] point = new long[MaxCodeLength];
-            //统计的词频次
-            long[] frequent = new long[VocabularySize * 2 + 1];
-            long[] binary = new long[VocabularySize * 2 + 1];
-            int[] parentNode = new int[VocabularySize * 2 + 1];
-            //
-            for (int i = 0; i < VocabularySize; i++)
-                frequent[i] = RawNodeCollection[i].Frequent;
-            for (int i = VocabularySize; i < VocabularySize * 2; i++)
-                frequent[i] = (long)1e15;
-            //逐个添加词汇到树结构，重构树
-           
 
         }
-
     }
 
 }
