@@ -24,7 +24,15 @@ namespace Test.Examples
             Lexicon lexicon1 = Lexicon.FromVocabularyFile(vocabularyFullFilename);
             lexicon1.SaveLexiconFile(lexiconFullFilename);
             //2. from lexicon file
-            Lexicon lexicon2 = Lexicon.FromExistLexiconFile(lexiconFullFilename);
+            //Lexicon lexicon2 = Lexicon.FromExistLexiconFile(lexiconFullFilename);
+            Assert.AreEqual(1, 1);
+        }
+
+        [TestMethod]
+        public void HalfmanTree()
+        {
+            Lexicon lexicon1 = Lexicon.FromVocabularyFile(vocabularyFullFilename);
+            VocabularyHalfmanTree tree = new VocabularyHalfmanTree(lexicon1);
         }
 
 

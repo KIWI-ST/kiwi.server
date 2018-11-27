@@ -1,6 +1,5 @@
 ﻿using JiebaNet.Segmenter;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -15,7 +14,7 @@ namespace Engine.Word.Entity
         /// <summary>
         /// 单词字母字符串长度上限
         /// </summary>
-        int _max_code_length = 40;
+        public int MAX_CODE_LENGTH { get; private set; } = 40;
 
         /// <summary>
         /// 设置最低词频，对最低词频的此在sort后予以剔除
@@ -28,7 +27,7 @@ namespace Engine.Word.Entity
         /// <summary>
         /// vocabulary size of lexicon
         /// </summary>
-        int _voca_size = 0;
+        public int VocaSize { get; private set; } = 0;
 
         /// <summary>
         /// 记录已经处理过的次总数（用于debug）
@@ -54,6 +53,11 @@ namespace Engine.Word.Entity
         /// vocabulary 
         /// </summary>
         Vocabulary[] _voca_array;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Vocabulary[] VocaArray { get { return _voca_array; } }
 
         /// <summary>
         /// 使用结巴分词
@@ -102,15 +106,15 @@ namespace Engine.Word.Entity
         /// <returns></returns>
         int AddVocabulary(string word)
         {
-            _voca_array[_voca_size].Word = word;
-            _voca_array[_voca_size].Frequent = 0;
-            _voca_size++;
+            _voca_array[VocaSize].Word = word;
+            _voca_array[VocaSize].Frequent = 0;
+            VocaSize++;
             //计算hash并返回索引
             uint hash = TranslateWordHash(word);
             while (_voca_hash_array[hash] != -1)
                 hash = (hash + 1) % _voca_hash_size;
-            _voca_hash_array[hash] = _voca_size - 1;
-            return _voca_size - 1;
+            _voca_hash_array[hash] = VocaSize - 1;
+            return VocaSize - 1;
         }
 
         /// <summary>
@@ -137,17 +141,17 @@ namespace Engine.Word.Entity
         void SortVocabulary()
         {
             //sort vocabulary array
-            Array.Sort(_voca_array, 1, _voca_size - 1);
+            Array.Sort(_voca_array, 1, VocaSize - 1);
             //set hash array with default -1 
             _voca_hash_array = Enumerable.Repeat(-1, _voca_hash_size).ToArray();
-            int size = _voca_size;
+            int size = VocaSize;
             _train_word_count = 0;
             //对预词库此进行处理，如果词频小于预设最小词频，剔除词
             for (int a = 0; a < size; a++)
             {
                 if (_voca_array[a].Frequent < _min_frequent && (a != 0))
                 {
-                    _voca_size--;
+                    VocaSize--;
                     _voca_array[a].Word = null;
                 }
                 else
@@ -160,12 +164,12 @@ namespace Engine.Word.Entity
                     _train_word_count += _voca_array[a].Frequent;
                 }
             }
-            Array.Resize(ref _voca_array, _voca_size + 1);
+            Array.Resize(ref _voca_array, VocaSize + 1);
             //
-            for (int a = 0; a < _voca_size; a++)
+            for (int a = 0; a < VocaSize; a++)
             {
-                _voca_array[a].Code = new char[_max_code_length];
-                _voca_array[a].Point = new int[_max_code_length];
+                _voca_array[a].Code = new char[MAX_CODE_LENGTH];
+                _voca_array[a].Point = new int[MAX_CODE_LENGTH];
             }
         }
 
@@ -177,7 +181,7 @@ namespace Engine.Word.Entity
         {
             using (var stream = new FileStream(lexiconFullFilename, FileMode.OpenOrCreate))
             using (var streamWriter = new StreamWriter(stream))
-                for (var i = 0; i < _voca_size; i++)
+                for (var i = 0; i < VocaSize; i++)
                     streamWriter.WriteLine("{0} {1}", _voca_array[i].Word, _voca_array[i].Frequent);
         }
 
@@ -236,7 +240,7 @@ namespace Engine.Word.Entity
                                 lexicon._voca_array[lexicon.AddVocabulary(word)].Frequent = 1;
                             else
                                 lexicon._voca_array[i].Frequent++;
-                            if (lexicon._voca_size > _voca_hash_size * 0.7)
+                            if (lexicon.VocaSize > _voca_hash_size * 0.7)
                                 lexicon.ReduceVocabulary();
                         }
                     });
