@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using JiebaNet.Segmenter;
+using System;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Engine.Word.Entity
 {
@@ -44,7 +42,7 @@ namespace Engine.Word.Entity
         /// <summary>
         /// 默认最大的词汇量
         /// </summary>
-        int _voca_max_size = 1000;
+        readonly int _voca_max_size = 3000;
 
         /// <summary>
         /// 
@@ -56,14 +54,36 @@ namespace Engine.Word.Entity
         /// </summary>
         Vocabulary[] _voca_array;
 
-        public Lexicon()
+        /// <summary>
+        /// 使用结巴分词
+        /// </summary>
+        JiebaSegmenter _segmenter;
+
+        public Lexicon(JiebaSegmenter segmenter)
         {
+            //分词器
+            _segmenter = segmenter;
             //初始化值为-1的hash数组
             _voca_hash_array = Enumerable.Repeat(-1, _voca_hash_size).ToArray();
             //初始化上限为 max size 的词汇数组
-            _voca_array = Enumerable.Repeat(new Vocabulary(), _voca_hash_size).ToArray();
+            _voca_array = Enumerable.Repeat(new Vocabulary(), _voca_max_size).ToArray();
         }
 
+        /// <summary>
+        /// 拆分句子
+        /// </summary>
+        /// <param name="sentence"></param>
+        /// <returns></returns>
+        public string[] Sgement(string sentence)
+        {
+            return _segmenter.Cut(sentence).ToArray();
+        }
+ 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="word"></param>
+        /// <returns></returns>
         private uint TranslateWordHash(string word)
         {
             int a;
@@ -83,12 +103,6 @@ namespace Engine.Word.Entity
             _voca_array[_voca_size].Word = word;
             _voca_array[_voca_size].Frequent = 0;
             _voca_size++;
-            //如果词汇超过预设上限，需要重新构造词汇数组
-            if (_voca_size + 2 > _voca_max_size)
-            {
-                _voca_max_size += 1000;
-                Array.Resize(ref _voca_array, _voca_max_size);
-            }
             //计算hash并返回索引
             uint hash = TranslateWordHash(word);
             while (_voca_hash_array[hash] != -1)
@@ -174,16 +188,16 @@ namespace Engine.Word.Entity
         /// <returns></returns>
         public static Lexicon FromVocabularyFile(string vocabularyFile)
         {
-            Lexicon lexicon = new Lexicon();
-            Regex regex = new Regex("\\s");
+            JiebaSegmenter segmenter = new JiebaSegmenter();
+            Lexicon lexicon = new Lexicon(segmenter);
             lexicon.AddVocabulary("</s>");
             //读取文本构建词库
             using (StreamReader sr = new StreamReader(vocabularyFile))
             {
                 string line;
-                while(string.IsNullOrEmpty((line = sr.ReadLine()))){
+                while(!string.IsNullOrEmpty((line = sr.ReadLine()))){
                     if (sr.EndOfStream) break;
-                    string[] words = regex.Split(line);
+                    string[] words = lexicon.Sgement(line);
                     Array.ForEach(words, word => {
                         if (!string.IsNullOrWhiteSpace(word)) {
                             lexicon._train_word_count++;
