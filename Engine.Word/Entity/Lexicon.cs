@@ -1,5 +1,6 @@
 ﻿using JiebaNet.Segmenter;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -66,7 +67,8 @@ namespace Engine.Word.Entity
             //初始化值为-1的hash数组
             _voca_hash_array = Enumerable.Repeat(-1, _voca_hash_size).ToArray();
             //初始化上限为 max size 的词汇数组
-            _voca_array = Enumerable.Repeat(new Vocabulary(), _voca_max_size).ToArray();
+            _voca_array = new Vocabulary[_voca_max_size];
+            for (int i = 0; i < _voca_max_size; i++) _voca_array[i] = new Vocabulary();
         }
 
         /// <summary>
@@ -78,7 +80,7 @@ namespace Engine.Word.Entity
         {
             return _segmenter.Cut(sentence).ToArray();
         }
- 
+
         /// <summary>
         /// 
         /// </summary>
@@ -119,7 +121,7 @@ namespace Engine.Word.Entity
         int SearchVocabulary(string word)
         {
             uint hash = TranslateWordHash(word);
-            while(true)
+            while (true)
             {
                 if (_voca_hash_array[hash] == -1) return -1;
                 if (word.Equals(_voca_array[_voca_hash_array[hash]].Word)) return _voca_hash_array[hash];
@@ -134,12 +136,14 @@ namespace Engine.Word.Entity
 
         void SortVocabulary()
         {
-            Array.Sort(_voca_hash_array, 1, _voca_size - 1);
+            //sort vocabulary array
+            Array.Sort(_voca_array, 1, _voca_size - 1);
+            //set hash array with default -1 
             _voca_hash_array = Enumerable.Repeat(-1, _voca_hash_size).ToArray();
             int size = _voca_size;
             _train_word_count = 0;
             //对预词库此进行处理，如果词频小于预设最小词频，剔除词
-            for(int a = 0; a < size; a++)
+            for (int a = 0; a < size; a++)
             {
                 if (_voca_array[a].Frequent < _min_frequent && (a != 0))
                 {
@@ -158,11 +162,23 @@ namespace Engine.Word.Entity
             }
             Array.Resize(ref _voca_array, _voca_size + 1);
             //
-            for(int a=0;a<_voca_size;a++)
+            for (int a = 0; a < _voca_size; a++)
             {
                 _voca_array[a].Code = new char[_max_code_length];
                 _voca_array[a].Point = new int[_max_code_length];
             }
+        }
+
+        /// <summary>
+        /// 保存统计后的字典文件
+        /// </summary>
+        /// <param name="lexiconFullFilename"></param>
+        public void SaveLexiconFile(string lexiconFullFilename)
+        {
+            using (var stream = new FileStream(lexiconFullFilename, FileMode.OpenOrCreate))
+            using (var streamWriter = new StreamWriter(stream))
+                for (var i = 0; i < _voca_size; i++)
+                    streamWriter.WriteLine("{0} {1}", _voca_array[i].Word, _voca_array[i].Frequent);
         }
 
         #region 构建方法
@@ -172,13 +188,10 @@ namespace Engine.Word.Entity
         /// </summary>
         public static Lexicon FromExistLexiconFile(string existLexiconFile)
         {
-            using(StreamReader sr = new StreamReader(existLexiconFile))
+            using (StreamReader sr = new StreamReader(existLexiconFile))
             {
 
             }
-
-
-
             return null;
         }
         /// <summary>
@@ -195,11 +208,14 @@ namespace Engine.Word.Entity
             using (StreamReader sr = new StreamReader(vocabularyFile))
             {
                 string line;
-                while(!string.IsNullOrEmpty((line = sr.ReadLine()))){
+                while (!string.IsNullOrEmpty((line = sr.ReadLine())))
+                {
                     if (sr.EndOfStream) break;
                     string[] words = lexicon.Sgement(line);
-                    Array.ForEach(words, word => {
-                        if (!string.IsNullOrWhiteSpace(word)) {
+                    Array.ForEach(words, word =>
+                    {
+                        if (!string.IsNullOrWhiteSpace(word))
+                        {
                             lexicon._train_word_count++;
                             int i = lexicon.SearchVocabulary(word);
                             if (i == -1)
@@ -219,9 +235,6 @@ namespace Engine.Word.Entity
         }
 
         #endregion
-
-
-
 
     }
 }

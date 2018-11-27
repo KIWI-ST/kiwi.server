@@ -5,7 +5,7 @@ namespace Engine.Word.Entity
     /// <summary>
     /// 
     /// </summary>
-    public class Vocabulary:IComparable<Vocabulary>
+    public class Vocabulary : IComparable<Vocabulary>
     {
         /// <summary>
         /// 当前单词在语料库中统计出现的频次
@@ -30,7 +30,7 @@ namespace Engine.Word.Entity
 
         public int CompareTo(Vocabulary o)
         {
-            return (int)(Frequent - o.Frequent);
+            return (int)(o.Frequent - Frequent);
         }
 
     }

@@ -22,8 +22,9 @@ namespace Test.Examples
         {
             //1. form raw vocabulary file
             Lexicon lexicon1 = Lexicon.FromVocabularyFile(vocabularyFullFilename);
+            lexicon1.SaveLexiconFile(lexiconFullFilename);
             //2. from lexicon file
-            //Lexicon lexicon2 = Lexicon.FromExistLexiconFile(lexiconFullFilename);
+            Lexicon lexicon2 = Lexicon.FromExistLexiconFile(lexiconFullFilename);
         }
 
 

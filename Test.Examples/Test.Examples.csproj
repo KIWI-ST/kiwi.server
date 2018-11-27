@@ -109,9 +109,7 @@
     <Content Include="Datasets\Train.tif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Datasets\word\lexicon.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Datasets\word\lexicon.txt" />
     <Content Include="Datasets\word\vocabulary.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
