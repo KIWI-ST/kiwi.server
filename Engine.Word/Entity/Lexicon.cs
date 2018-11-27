@@ -188,11 +188,25 @@ namespace Engine.Word.Entity
         /// </summary>
         public static Lexicon FromExistLexiconFile(string existLexiconFile)
         {
+            JiebaSegmenter segmenter = new JiebaSegmenter();
+            Lexicon lexicon = new Lexicon(segmenter);
             using (StreamReader sr = new StreamReader(existLexiconFile))
             {
-
+                Regex regex = new Regex("\\s");
+                string line;
+                while (!string.IsNullOrEmpty((line = sr.ReadLine())))
+                {
+                    string[] vals = regex.Split(line);
+                    if (vals.Length == 2)
+                    {
+                        var a = lexicon.AddVocabulary(vals[0]);
+                        lexicon._voca_array[a].Frequent = int.Parse(vals[1]);
+                    }
+                }
+                //
+                lexicon.SortVocabulary();
             }
-            return null;
+            return lexicon;
         }
         /// <summary>
         /// 从原始文本文件中分析词句
