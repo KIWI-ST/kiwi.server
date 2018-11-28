@@ -107,7 +107,7 @@ namespace Engine.Word.Entity
         int AddVocabulary(string word)
         {
             _voca_array[VocaSize].Word = word;
-            _voca_array[VocaSize].Frequent = 0;
+            _voca_array[VocaSize].Weight = 0;
             VocaSize++;
             //计算hash并返回索引
             uint hash = TranslateWordHash(word);
@@ -149,7 +149,7 @@ namespace Engine.Word.Entity
             //对预词库此进行处理，如果词频小于预设最小词频，剔除词
             for (int a = 0; a < size; a++)
             {
-                if (_voca_array[a].Frequent < _min_frequent && (a != 0))
+                if (_voca_array[a].Weight < _min_frequent && (a != 0))
                 {
                     VocaSize--;
                     _voca_array[a].Word = null;
@@ -161,7 +161,7 @@ namespace Engine.Word.Entity
                     while (_voca_hash_array[hash] != -1)
                         hash = (hash + 1) % _voca_hash_size;
                     _voca_hash_array[hash] = a;
-                    _train_word_count += _voca_array[a].Frequent;
+                    _train_word_count += _voca_array[a].Weight;
                 }
             }
             Array.Resize(ref _voca_array, VocaSize + 1);
@@ -182,7 +182,7 @@ namespace Engine.Word.Entity
             using (var stream = new FileStream(lexiconFullFilename, FileMode.OpenOrCreate))
             using (var streamWriter = new StreamWriter(stream))
                 for (var i = 0; i < VocaSize; i++)
-                    streamWriter.WriteLine("{0} {1}", _voca_array[i].Word, _voca_array[i].Frequent);
+                    streamWriter.WriteLine("{0} {1}", _voca_array[i].Word, _voca_array[i].Weight);
         }
 
         #region 构建方法
@@ -204,7 +204,7 @@ namespace Engine.Word.Entity
                     if (vals.Length == 2)
                     {
                         var a = lexicon.AddVocabulary(vals[0]);
-                        lexicon._voca_array[a].Frequent = int.Parse(vals[1]);
+                        lexicon._voca_array[a].Weight = int.Parse(vals[1]);
                     }
                 }
                 //
@@ -237,9 +237,9 @@ namespace Engine.Word.Entity
                             lexicon._train_word_count++;
                             int i = lexicon.SearchVocabulary(word);
                             if (i == -1)
-                                lexicon._voca_array[lexicon.AddVocabulary(word)].Frequent = 1;
+                                lexicon._voca_array[lexicon.AddVocabulary(word)].Weight = 1;
                             else
-                                lexicon._voca_array[i].Frequent++;
+                                lexicon._voca_array[i].Weight++;
                             if (lexicon.VocaSize > _voca_hash_size * 0.7)
                                 lexicon.ReduceVocabulary();
                         }
