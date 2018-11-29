@@ -13,28 +13,32 @@ namespace Test.Examples
         string vocabularyFullFilename = Directory.GetCurrentDirectory() + @"\Datasets\word\vocabulary.txt";
         
         /// <summary>
-        /// 词典数据
+        /// 测试halfman编码的词典数据
         /// </summary>
         string lexiconFullFilename = Directory.GetCurrentDirectory() + @"\Datasets\word\lexicon.txt";
+
+        /// <summary>
+        /// 词典数据
+        /// </summary>
+        string saveLexiconFullFilename = Directory.GetCurrentDirectory() + @"\Datasets\word\savelexicon.txt";
 
         [TestMethod]
         public void ReadVocabularyLibrary()
         {
             //1. form raw vocabulary file
             Lexicon lexicon1 = Lexicon.FromVocabularyFile(vocabularyFullFilename);
-            lexicon1.SaveLexiconFile(lexiconFullFilename);
+            lexicon1.SaveLexiconFile(saveLexiconFullFilename);
             //2. from lexicon file
-            //Lexicon lexicon2 = Lexicon.FromExistLexiconFile(lexiconFullFilename);
+            Lexicon lexicon2 = Lexicon.FromExistLexiconFile(lexiconFullFilename);
             Assert.AreEqual(1, 1);
         }
 
         [TestMethod]
-        public void HalfmanTree()
+        public void VocabularyHalfmanTree()
         {
-            Lexicon lexicon1 = Lexicon.FromVocabularyFile(vocabularyFullFilename);
-            VocabularyHalfmanTree tree = new VocabularyHalfmanTree(lexicon1);
+            Lexicon lexicon = Lexicon.FromExistLexiconFile(lexiconFullFilename);
+            VocabularyHalfmanTree tree = new VocabularyHalfmanTree(lexicon);
         }
-
 
     }
 }

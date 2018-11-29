@@ -1,4 +1,7 @@
-﻿namespace Engine.Word.Entity
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace Engine.Word.Entity
 {
 
     /// <summary>
@@ -35,6 +38,8 @@
 
         Vocabulary[] VocaArray;
 
+        Vocabulary RootVocabulary;
+
         /// <summary>
         /// 
         /// </summary>
@@ -47,28 +52,55 @@
             VocaSize = lexicon.VocaSize;
             VocaArray = lexicon.VocaArray;
             //
-            Initialization();
+            RootVocabulary = InitializationHalfmanTree();
+            InitializationHalfmanCode();
         }
 
         /// <summary>
         /// 
         /// </summary>
-        void Initialization()
+        void InitializationHalfmanCode()
+        {
+            foreach(var vocabulary in VocaArray)
+                HalfmanCode(vocabulary);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        Vocabulary InitializationHalfmanTree()
         {
             int i;
-            ChainHalfmanNode l, p1, p2;
-            HalfmanNode hnew, h, h1, h2;
+            VocabularyChain l, p1, p2;
+            Vocabulary  h, h1, h2;
             //创建seed结点
-            l = new ChainHalfmanNode();
+            l = new VocabularyChain();
             //
-            for(i=0;i<VocaSize;i++)
+            for (i = 0; i < VocaSize; i++)
             {
-                hnew = new HalfmanNode();
-                hnew.Weight = VocaArray[i].Weight;
+                OrderWeight(l, VocaArray[i]);
+                //hnew = new Vocabulary();
+                //hnew.Weight = VocaArray[i].Weight;
+                //OrderWeight(l, hnew);
             }
-        
-
-
+            //处理二叉树结点超过两层的情况
+            while (l.NextVocabulary.NextVocabulary != null)
+            {
+                p1 = l.NextVocabulary;
+                p2 = p1.NextVocabulary;
+                l.NextVocabulary = p2.NextVocabulary;
+                h1 = p1.RootVocabulary;
+                h2 = p2.RootVocabulary;
+                h = new Vocabulary();
+                h.Weight = h1.Weight + h2.Weight;
+                h.LeftChild = h1;
+                h.RightChild = h2;
+                OrderWeight(l, h);
+            }
+            //
+            p1 = l.NextVocabulary;
+            h = p1.RootVocabulary;
+            return h;
         }
 
         /// <summary>
@@ -76,11 +108,50 @@
         /// </summary>
         /// <param name="l">树根结点或者树</param>
         /// <param name="ht">新增结点</param>
-        void OrderWeight(ChainHalfmanNode l,HalfmanNode ht)
+        void OrderWeight(VocabularyChain l, Vocabulary ht)
         {
-
+            VocabularyChain ltmp, lnew, lp;
+            lnew = new VocabularyChain();
+            lnew.RootVocabulary = ht;
+            //
+            lp = l;
+            ltmp = lp.NextVocabulary;
+            //
+            while (ltmp != null)
+            {
+                if (lnew.RootVocabulary.Weight > ltmp.RootVocabulary.Weight)
+                {
+                    ltmp = ltmp.NextVocabulary;
+                    lp = lp.NextVocabulary;
+                }
+                else
+                {
+                    ltmp = null;
+                }
+            }
+            lnew.NextVocabulary = lp.NextVocabulary;
+            lp.NextVocabulary = lnew;
         }
 
+        public void HalfmanCode(Vocabulary vocabulary)
+        {
+            List<int> code = new List<int>();
+            Vocabulary templeVocabulary = vocabulary;
+            //temple vocabulary
+            Vocabulary parent = templeVocabulary.Parent;
+            //假定二叉树的最大深度是 MaxCodeLength
+            while (parent != null)
+            {
+                if (parent.LeftChild == templeVocabulary)
+                    code.Add(0);
+                else
+                    code.Add(1);
+                templeVocabulary = parent;
+                parent = templeVocabulary.Parent;
+            }
+            code.Reverse();
+            vocabulary.Point = code.ToArray();
+        }
 
     }
 }
