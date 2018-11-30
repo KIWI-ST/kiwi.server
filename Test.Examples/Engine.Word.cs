@@ -40,5 +40,11 @@ namespace Test.Examples
             VocabularyHalfmanTree tree = new VocabularyHalfmanTree(lexicon);
         }
 
+        [TestMethod]
+        public void TrainWithSkipGram()
+        {
+
+        }
+
     }
 }
