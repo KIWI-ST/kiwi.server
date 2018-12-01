@@ -1,5 +1,4 @@
 ﻿using Engine.Word.Entity;
-using Engine.Word.Utils;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -22,7 +21,7 @@ namespace Engine.Word.Factory
         /// </summary>
         const int EXPTABLESIZE = 1000;
         const int MAXEXP = 6;
-        const int VOCABHASHSIZE = WordHash.VOCABHASHSIZE;
+        const int VOCABHASHSIZE = 300000000;
         /// <summary>
         /// unigram tablesize
         /// </summary>
@@ -107,18 +106,7 @@ namespace Engine.Word.Factory
 
         #endregion
 
-        private int SearchVocabulary(string word)
-        {
-            uint hash = WordHash.GetWordHash(word);
-            while (true)
-            {
-                if (_vocabularyHash[hash] == -1)
-                    return -1;
-                if (word.Equals(_vocabularys[_vocabularyHash[hash]].Word))
-                    return _vocabularyHash[hash];
-                hash = (hash + 1) % VOCABHASHSIZE;
-            }
-        }
+    
 
         private int AddWordToVocabularys(string word)
         {
@@ -164,70 +152,6 @@ namespace Engine.Word.Factory
 
         #region training
 
-        private void SortVocabularys()
-        {
-            // Sort the vocabulary and keep </s> at the first position
-            Array.Sort(_vocabularys, 1, _vocabSize - 1);
-            //reset hash
-            for (var i = 0; i < VOCABHASHSIZE; i++) _vocabularyHash[i] = -1;
-            //
-            int size = _vocabSize;
-            _trainWords = 0;
-            for(int i=0; i<size;i++)
-            {
-                // Words occuring less than min_count times will be discarded from the vocab
-                if(_vocabularys[i].Weight<MinCount&& i != 0)
-                {
-                    _vocabSize--;
-                    _vocabularys[i].Word = null;
-                }else
-                {
-                    //hash will be re-computed, as after the sorting it is not actual
-                    uint hash = WordHash.GetWordHash(_vocabularys[i].Word);
-                    while (_vocabularyHash[hash] != -1)
-                        hash = (hash + 1) % VOCABHASHSIZE;
-                    _vocabularyHash[hash] = i;
-                    _trainWords += _vocabularys[i].Weight;
-                }
-            }
-            //
-            Array.Resize(ref _vocabularys, _vocabSize + 1);
-            //Allocate memory for the binary tree construction
-            for(int i=0;i<_vocabSize;i++)
-            {
-                _vocabularys[i].Code = new char[MAXCODELENGTH];
-                _vocabularys[i].Point = new int[MAXCODELENGTH];
-            }
-        }
-
-        private void ReduceVocabularys()
-        {
-            int j = 0;
-            for(int i = 0; i < _vocabSize; i++)
-            {
-                if (_vocabularys[i].Weight > _minReduce)
-                {
-                    _vocabularys[j].Weight = _vocabularys[i].Weight;
-                    _vocabularys[j].Word = _vocabularys[i].Word;
-                    j++;
-                }
-                else
-                    _vocabularys[i].Word = null;
-            }
-            //
-            _vocabSize = j;
-            for (int i = 0; i < VOCABHASHSIZE; i++)
-                _vocabularyHash[i] = -1;
-            //
-            for(int i =0;i<_vocabSize;i++)
-            {
-                uint hash = WordHash.GetWordHash(_vocabularys[i].Word);
-                while (_vocabularyHash[hash] != -1)
-                    hash = (hash + 1) % VOCABHASHSIZE;
-                _vocabularyHash[hash] = i;
-            }
-            _minReduce++;
-        }
 
 
         /// <summary>

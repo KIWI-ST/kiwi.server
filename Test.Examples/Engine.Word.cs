@@ -38,6 +38,7 @@ namespace Test.Examples
         {
             Lexicon lexicon = Lexicon.FromExistLexiconFile(lexiconFullFilename);
             VocabularyHalfmanTree tree = new VocabularyHalfmanTree(lexicon);
+            tree.BuildOrUpdate();
         }
 
         [TestMethod]

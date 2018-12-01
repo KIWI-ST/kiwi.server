@@ -12,6 +12,11 @@ namespace Engine.Word.Entity
     public class Lexicon
     {
         /// <summary>
+        /// halfman树
+        /// </summary>
+        VocabularyHalfmanTree _halfmanTree;
+
+        /// <summary>
         /// 单词字母字符串长度上限
         /// </summary>
         public int MAX_CODE_LENGTH { get; private set; } = 40;
@@ -141,7 +146,7 @@ namespace Engine.Word.Entity
         void SortVocabulary()
         {
             //sort vocabulary array
-            Array.Sort(_voca_array, 1, VocaSize - 1);
+            Array.Sort(_voca_array, 0, VocaSize - 1);
             //set hash array with default -1 
             _voca_hash_array = Enumerable.Repeat(-1, _voca_hash_size).ToArray();
             int size = VocaSize;
@@ -164,7 +169,7 @@ namespace Engine.Word.Entity
                     _train_word_count += _voca_array[a].Weight;
                 }
             }
-            Array.Resize(ref _voca_array, VocaSize + 1);
+            Array.Resize(ref _voca_array, VocaSize);
             //
             for (int a = 0; a < VocaSize; a++)
             {
@@ -183,6 +188,24 @@ namespace Engine.Word.Entity
             using (var streamWriter = new StreamWriter(stream))
                 for (var i = 0; i < VocaSize; i++)
                     streamWriter.WriteLine("{0} {1}", _voca_array[i].Word, _voca_array[i].Weight);
+        }
+
+        /// <summary>
+        /// 执行halfman编码
+        /// </summary>
+        public void UpdateHalfmanCode()
+        {
+            _halfmanTree = new VocabularyHalfmanTree(this);
+            _halfmanTree.BuildOrUpdate();
+        }
+
+        /// <summary>
+        /// reference:
+        /// https://blog.csdn.net/qq1483661204/article/details/78975847
+        /// </summary>
+        public void UpdateSubsample()
+        {
+
         }
 
         #region 构建方法
@@ -210,6 +233,7 @@ namespace Engine.Word.Entity
                 //
                 lexicon.SortVocabulary();
             }
+            lexicon.UpdateHalfmanCode();
             return lexicon;
         }
         /// <summary>
@@ -249,6 +273,8 @@ namespace Engine.Word.Entity
                 //2. 排序
                 lexicon.SortVocabulary();
             }
+            //
+            lexicon.UpdateHalfmanCode();
             return lexicon;
         }
 

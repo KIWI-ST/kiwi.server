@@ -47,11 +47,13 @@ namespace Engine.Word.Entity
         public VocabularyHalfmanTree(Lexicon lexicon)
         {
             _lexicon = lexicon;
-            //
             MaxCodeLength = lexicon.MAX_CODE_LENGTH;
             VocaSize = lexicon.VocaSize;
             VocaArray = lexicon.VocaArray;
-            //
+        }
+
+        public void BuildOrUpdate()
+        {
             RootVocabulary = InitializationHalfmanTree();
             InitializationHalfmanCode();
         }
