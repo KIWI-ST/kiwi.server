@@ -164,6 +164,7 @@
     <Compile Include="GOperation\Tools\GRasterBandCursorTool.cs" />
     <Compile Include="GOperation\Tools\GBandStasticTool.cs" />
     <Compile Include="GOperation\Tools\GRasterLayerCursorTool.cs" />
+    <Compile Include="GOperation\Tools\GRasterRPCTool.cs" />
     <Compile Include="GOperation\Tools\IRasterTool.cs" />
     <Compile Include="GProject\GTransformation.cs" />
     <Compile Include="GProject\WebMercatorProjection.cs" />
