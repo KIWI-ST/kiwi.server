@@ -1,6 +1,7 @@
 ﻿using Engine.GIS.Entity;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Arithmetic;
+using Engine.GIS.GOperation.Tools;
 using Host.UI.Jobs;
 using Host.UI.PlotForm;
 using Host.UI.SettingForm;
@@ -295,14 +296,14 @@ namespace Host.UI
             {
                 Multiselect = false,
                 RestoreDirectory = true,
-                Filter = "图像文件|*.img;*.tif;*.tiff;*.bmp;*.jpg;*.png|矢量文件|*.shp"
+                Filter = "图像文件|*.img;*.tif;*.tiff;*.bmp;*.jpg;*.png;*.bin|矢量文件|*.shp"
             };
             #endregion
             if (openfiledialog.ShowDialog() == DialogResult.OK)
             {
                 string fileName = Path.GetFileNameWithoutExtension(openfiledialog.FileName);
                 string extension = Path.GetExtension(openfiledialog.FileName);
-                if (extension == ".tif" || extension == ".tiff" || extension == ".img" || extension == ".bmp" || extension == ".jpg" || extension == ".png")
+                if (extension == ".tif" || extension == ".tiff" || extension == ".img" || extension == ".bmp" || extension == ".jpg" || extension == ".png" || extension == ".bin")
                 {
                     ReadRaster(openfiledialog.FileName);
                 }
@@ -411,6 +412,18 @@ namespace Host.UI
             ToolStripItem item = sender as ToolStripItem;
             switch (item.Name)
             {
+                    //rpc transform
+                case "RPC_ToolStripMenuItem":
+                    RPCForm rpcForm = new RPCForm();
+                    rpcForm.RasterDic = _rasterDic;
+                    if (rpcForm.ShowDialog() == DialogResult.OK)
+                    {
+                        //get a b c d to RPCTool
+                        IRasterRPCTool tool = new GRasterRPCTool(rpcForm.A, rpcForm.B, rpcForm.C, rpcForm.D, rpcForm.RPCParamaters);
+                        tool.Visit(_rasterDic[rpcForm.TargetLayerKey]);
+                        tool.RPCTransform();
+                    }
+                    break;
                     //cov matrix
                 case "cov_toolStripButton":
                     COVForm covForm = new COVForm();

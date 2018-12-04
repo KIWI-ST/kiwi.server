@@ -34,8 +34,7 @@
             this.文件FToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.open_toolstripmenuitem = new System.Windows.Forms.ToolStripMenuItem();
             this.工具TToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.SLIC_toolStripMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.SLIC_Center_toolStripMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.RPC_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.map_toolStrip = new System.Windows.Forms.ToolStrip();
             this.SLIC_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.SLIC_Center_toolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -123,27 +122,17 @@
             // 工具TToolStripMenuItem
             // 
             this.工具TToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.SLIC_toolStripMenu,
-            this.SLIC_Center_toolStripMenu});
+            this.RPC_ToolStripMenuItem});
             this.工具TToolStripMenuItem.Name = "工具TToolStripMenuItem";
             this.工具TToolStripMenuItem.Size = new System.Drawing.Size(70, 24);
             this.工具TToolStripMenuItem.Text = "工具(&T)";
             // 
-            // SLIC_toolStripMenu
+            // RPC_ToolStripMenuItem
             // 
-            this.SLIC_toolStripMenu.Image = global::Host.UI.Properties.Resources.calculator_64;
-            this.SLIC_toolStripMenu.Name = "SLIC_toolStripMenu";
-            this.SLIC_toolStripMenu.Size = new System.Drawing.Size(216, 26);
-            this.SLIC_toolStripMenu.Text = "超像素分割";
-            this.SLIC_toolStripMenu.Click += new System.EventHandler(this.Map_function_Click);
-            // 
-            // SLIC_Center_toolStripMenu
-            // 
-            this.SLIC_Center_toolStripMenu.Image = global::Host.UI.Properties.Resources.cut_64;
-            this.SLIC_Center_toolStripMenu.Name = "SLIC_Center_toolStripMenu";
-            this.SLIC_Center_toolStripMenu.Size = new System.Drawing.Size(216, 26);
-            this.SLIC_Center_toolStripMenu.Text = "超像素特征提取";
-            this.SLIC_Center_toolStripMenu.Click += new System.EventHandler(this.Map_function_Click);
+            this.RPC_ToolStripMenuItem.Name = "RPC_ToolStripMenuItem";
+            this.RPC_ToolStripMenuItem.Size = new System.Drawing.Size(143, 26);
+            this.RPC_ToolStripMenuItem.Text = "RPC校正";
+            this.RPC_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
             // map_toolStrip
             // 
@@ -517,7 +506,6 @@
         private System.Windows.Forms.ToolStripMenuItem 文件FToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem open_toolstripmenuitem;
         private System.Windows.Forms.ToolStripMenuItem 工具TToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem SLIC_toolStripMenu;
         private System.Windows.Forms.ToolStrip map_toolStrip;
         private System.Windows.Forms.StatusStrip map_statusStrip;
         private System.Windows.Forms.SplitContainer splitContainer_main;
@@ -533,7 +521,6 @@
         private System.Windows.Forms.ToolStripMenuItem open_contextMenuStrip;
         private System.Windows.Forms.ContextMenuStrip tree_contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem bandCombine_ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem SLIC_Center_toolStripMenu;
         private System.Windows.Forms.ToolStripButton SLIC_toolStripButton;
         private System.Windows.Forms.ToolStripButton SLIC_Center_toolStripButton;
         private System.Windows.Forms.ToolStripButton DQN_toolStripButton;
@@ -550,6 +537,7 @@
         private System.Windows.Forms.ToolStripButton task_toolStripButton;
         private System.Windows.Forms.ToolStripButton rf_toolStripButton;
         private System.Windows.Forms.ToolStripButton cov_toolStripButton;
+        private System.Windows.Forms.ToolStripMenuItem RPC_ToolStripMenuItem;
     }
 }
 

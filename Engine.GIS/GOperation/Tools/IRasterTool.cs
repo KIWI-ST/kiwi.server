@@ -31,6 +31,15 @@ namespace Engine.GIS.GOperation.Tools
     {
         void Visit(GRasterLayer pLayer);
     }
+
+    /// <summary>
+    /// rpc tool
+    /// </summary>
+    public interface IRasterRPCTool : IRasterLayerTool
+    {
+        void RPCTransform();
+    }
+
     /// <summary>
     /// pick normal value at posiont (x,y) in eachlayer
     /// </summary>
