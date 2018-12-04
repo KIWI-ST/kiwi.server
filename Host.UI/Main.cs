@@ -421,7 +421,7 @@ namespace Host.UI
                         //get a b c d to RPCTool
                         IRasterRPCTool tool = new GRasterRPCTool(rpcForm.A, rpcForm.B, rpcForm.C, rpcForm.D, rpcForm.RPCParamaters);
                         tool.Visit(_rasterDic[rpcForm.TargetLayerKey]);
-                        tool.RPCTransform();
+                        tool.DoRPCRectify();
                     }
                     break;
                     //cov matrix

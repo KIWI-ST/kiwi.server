@@ -37,7 +37,7 @@ namespace Engine.GIS.GOperation.Tools
     /// </summary>
     public interface IRasterRPCTool : IRasterLayerTool
     {
-        void RPCTransform();
+        void DoRPCRectify();
     }
 
     /// <summary>
