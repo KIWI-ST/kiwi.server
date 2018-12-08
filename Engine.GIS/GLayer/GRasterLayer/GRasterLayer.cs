@@ -16,6 +16,8 @@ namespace Engine.GIS.GLayer.GRasterLayer
         {
             //注册gdal库
             Gdal.AllRegister();
+            //记录raster文件数据地址
+            FullFilename = rasterFilename;
             //图层名
             Name = Path.GetFileNameWithoutExtension(rasterFilename);
             //只读方式读取图层
@@ -34,6 +36,12 @@ namespace Engine.GIS.GLayer.GRasterLayer
             }
         }
         #region 属性字段
+
+        /// <summary>
+        /// raster file location
+        /// </summary>
+        public string FullFilename { get; set; }
+
         /// <summary>
         /// Raster data type
         /// </summary>

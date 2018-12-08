@@ -1113,6 +1113,16 @@ namespace Host.UI.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap raw_bin_image {
+            get {
+                object obj = ResourceManager.GetObject("raw_bin_image", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap reload_64 {
             get {
                 object obj = ResourceManager.GetObject("reload_64", resourceCulture);

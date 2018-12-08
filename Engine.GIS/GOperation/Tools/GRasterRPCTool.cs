@@ -1,12 +1,13 @@
 ﻿using Engine.GIS.GLayer.GRasterLayer;
-using OSGeo.GDAL;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using System.IO;
 
 namespace Engine.GIS.GOperation.Tools
 {
-
+    /// <summary>
+    /// RPC 信息文件
+    /// </summary>
     public class RPCInfo
     {
         public double dfSAMP_SCALE { get; set; }
@@ -23,7 +24,6 @@ namespace Engine.GIS.GOperation.Tools
         public double[] adfSAMP_DEN_COEFF { get; set; }
         public double[] adfLINE_NUM_COEFF { get; set; }
         public double[] adfLINE_DEN_COEFF { get; set; }
-
     }
 
     /// <summary>
@@ -46,8 +46,21 @@ namespace Engine.GIS.GOperation.Tools
         /// <summary>
         /// 
         /// </summary>
-        GRasterBandCursorTool _pBandCursorTool;
+        IRasterBandCursorTool _pRasterBandCursorTool = new GRasterBandCursorTool();
 
+        /// <summary>
+        /// export tif 
+        /// </summary>
+        IRasterExportTool _pRasterExportTool = new GRasterExportTool();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="c"></param>
+        /// <param name="d"></param>
+        /// <param name="paramaters"></param>
         public GRasterRPCTool(double[] a, double[] b, double[] c, double[] d, Dictionary<string, double> paramaters)
         {
             _rpcInfo = new RPCInfo()
@@ -67,14 +80,35 @@ namespace Engine.GIS.GOperation.Tools
                 dfLINE_SCALE = paramaters["lineScale"],
                 dfLINE_OFF = paramaters["lineOffset"]
             };
-
-            _pBandCursorTool = new GRasterBandCursorTool();
         }
 
         public void DoRPCRectify()
         {
+            //get file dicrectionary Name
+            string  directoryName = Path.GetDirectoryName(_pLayer.FullFilename);
+            //build ouput fullfilename
+            string outputFullFilename = directoryName + @"\" + _pLayer.Name + "_rpc.tif";
+            //calcute geoTrans
+            double[] nGeoTrans = new double[6];
+            //adExtent lngmin, lngmax, latmin, latmax
+            var (adfExtent, georesolution) = CalcuteImageBoundary(_rpcInfo, _pLayer);
+            nGeoTrans[0] = adfExtent[0];
+            nGeoTrans[3] = adfExtent[3];
+            nGeoTrans[1] = georesolution;
+            nGeoTrans[5] = -georesolution;
+            //
+            int width = Convert.ToInt32((adfExtent[1] - adfExtent[0]) / georesolution);
+            int height = Convert.ToInt32((adfExtent[3] - adfExtent[2]) / georesolution);
+            //
+            _pRasterExportTool.Prepare();
+            //
             foreach (var pBand in _pLayer.BandCollection)
-                DoRPCTransformInEachBand(pBand);
+            {
+                double[] outputBuffer =  DoRPCTransformInEachBand(pBand, nGeoTrans, width, height);
+                _pRasterExportTool.CombineBand(outputBuffer);
+            }
+            //export
+            _pRasterExportTool.Export(nGeoTrans,width,height, outputFullFilename);
         }
 
         public void Visit(GRasterLayer pLayer)
@@ -148,26 +182,14 @@ namespace Engine.GIS.GOperation.Tools
             return (extent, georesolution);
         }
 
-
-        void DoRPCTransformInEachBand(GRasterBand pBand)
+        /// <summary>
+        /// do rpc rectify in each band
+        /// </summary>
+        /// <param name="pBand"></param>
+        double[] DoRPCTransformInEachBand(GRasterBand pBand,double[] nGeoTrans, int width,int height)
         {
-            //
-            _pBandCursorTool.Visit(pBand);
-            //计算输出图像四至范围、大小、仿射变换六参数等信息
-            double[] nGeoTrans = new double[6];
-            //adExtent lngmin, lngmax, latmin, latmax
-            var (adfExtent, georesolution) = CalcuteImageBoundary(_rpcInfo, _pLayer);
-            //
-            nGeoTrans[0] = adfExtent[0];
-            nGeoTrans[3] = adfExtent[3];
-            nGeoTrans[1] = georesolution;
-            nGeoTrans[5] = -georesolution;
-            //
-            int width = Convert.ToInt32((adfExtent[1] - adfExtent[0]) / georesolution);
-            int height = Convert.ToInt32((adfExtent[3] - adfExtent[2]) / georesolution);
-            //
+            _pRasterBandCursorTool.Visit(pBand);
             double[] outputBuffer = new double[width * height];
-            //
             for (int i = 0; i < width; i++)
                 for (int j = 0; j < height; j++)
                 {
@@ -177,24 +199,22 @@ namespace Engine.GIS.GOperation.Tools
                     nPointHeight = _rpcInfo.dfHEIGHT_OFF;
                     //计算经纬度得到行列号
                     var (x, y) = RPCTransformPoint(_rpcInfo, nPointLng, nPointLat, nPointHeight);
-
                     if (x >= 0 && x < pBand.Width && y >= 0 && y < pBand.Height)
-                        outputBuffer[j * width + i] = _pBandCursorTool.PickRawValue((int)x, (int)y);
+                        outputBuffer[j * width + i] = _pRasterBandCursorTool.PickRawValue((int)x, (int)y);
                     else
                         outputBuffer[j * width + i] = 0;
                 }
-            //
-            Driver drv = Gdal.GetDriverByName("GTiff");
-            string[] options = new string[] { "BLOCKXSIZE=" + width, "BLOCKYSIZE=" + height };
-            Dataset ds = drv.Create(@"C:\Users\81596\Desktop\rpc\1.tif", width, height, 1, DataType.GDT_CFloat32, options);
-            Band ba = ds.GetRasterBand(1);
-            if (nGeoTrans != null)
-                ds.SetGeoTransform(nGeoTrans);
-            ba.WriteRaster(0, 0, width, height, outputBuffer, width, height, 0, 0);
-            ds.FlushCache();
+            return outputBuffer;
         }
 
-
+        /// <summary>
+        /// 基于rpc信息 计算像素坐标
+        /// </summary>
+        /// <param name="rpcInfo"></param>
+        /// <param name="lng"></param>
+        /// <param name="lat"></param>
+        /// <param name="h"></param>
+        /// <returns></returns>
         (double pdfPixel, double pdfLine) RPCTransformPoint(RPCInfo rpcInfo, double lng, double lat, double h)
         {
             double diffLong = lng - rpcInfo.dfLONG_OFF;
@@ -217,7 +237,7 @@ namespace Engine.GIS.GOperation.Tools
         }
 
         /// <summary>
-        /// 
+        /// 基于像素坐标计算经纬度坐标
         /// </summary>
         /// <param name="rpcInfo"></param>
         /// <param name="i"></param>

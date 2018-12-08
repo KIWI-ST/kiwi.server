@@ -109,6 +109,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Jobs\IJob.cs" />
+    <Compile Include="Jobs\IJobRPCRectify.cs" />
     <Compile Include="Jobs\JobCNNClassify.cs" />
     <Compile Include="Jobs\JobCOVRaster.cs" />
     <Compile Include="Jobs\JobDQNClassify.cs" />
@@ -722,6 +723,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="globe.ico" />
+    <None Include="Resources\file_picture_216px_1185618_easyicon.net.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

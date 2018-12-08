@@ -375,7 +375,7 @@ namespace Host.UI
         {
             switch (taskName)
             {
-                //load image classification result
+                    //load image classification result
                 case "COVRasterTask":
                 case "RFClassificationTask":
                 case "CnnClassificationTask":
@@ -383,12 +383,15 @@ namespace Host.UI
                     string fullFilename = outputs[0] as string;
                     ReadRaster(fullFilename);
                     break;
-                //load image
+                    //load image
                 case "ReadRasterTask":
                     string nodeName = outputs[0] as string;
                     Dictionary<string, Bitmap2> dict = outputs[1] as Dictionary<string, Bitmap2>;
                     GRasterLayer rasterLayer = outputs[2] as GRasterLayer;
                     UpdateReadRasterUI(nodeName, dict, rasterLayer);
+                    break;
+                    // rpc rester rectify
+                case "RPCRasterRectifyTask":
                     break;
                 default:
                     break;
@@ -415,13 +418,11 @@ namespace Host.UI
                     //rpc transform
                 case "RPC_ToolStripMenuItem":
                     RPCForm rpcForm = new RPCForm();
-                    rpcForm.RasterDic = _rasterDic;
                     if (rpcForm.ShowDialog() == DialogResult.OK)
                     {
-                        //get a b c d to RPCTool
-                        IRasterRPCTool tool = new GRasterRPCTool(rpcForm.A, rpcForm.B, rpcForm.C, rpcForm.D, rpcForm.RPCParamaters);
-                        tool.Visit(_rasterDic[rpcForm.TargetLayerKey]);
-                        tool.DoRPCRectify();
+                        IJob rpcRectifyJob = new IJobRPCRectify(rpcForm.A, rpcForm.B, rpcForm.C, rpcForm.D, rpcForm.RPCParamaters, rpcForm.RawBinRasterFullFilenames);
+                        RegisterJob(rpcRectifyJob);
+                        rpcRectifyJob.Start();
                     }
                     break;
                     //cov matrix

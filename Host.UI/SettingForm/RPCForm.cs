@@ -1,4 +1,4 @@
-﻿using Engine.GIS.GLayer.GRasterLayer;
+﻿using Host.UI.Properties;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,6 +13,9 @@ namespace Host.UI.SettingForm
         public RPCForm()
         {
             InitializeComponent();
+            ImageList imageList = new ImageList();
+            imageList.Images.Add(Resources.raw_bin_image);
+            raw_bin_listView.SmallImageList = imageList;
         }
 
         public Dictionary<string, double> RPCParamaters = new Dictionary<string, double>();
@@ -27,33 +30,7 @@ namespace Host.UI.SettingForm
 
         public double[] D { get { return _abcd[3].ToArray(); } }
 
-        public string TargetLayerKey { get; private set; }
-
-        Dictionary<string, GRasterLayer> _rasterDic;
-
-        public Dictionary<string, GRasterLayer> RasterDic
-        {
-            set
-            {
-                _rasterDic = value;
-                Initial(_rasterDic);
-            }
-        }
-
-        public void Initial(Dictionary<string, GRasterLayer> rasterDic)
-        {
-            rpc_layers_comboBox.Items.Clear();
-            rasterDic.Keys.ToList().ForEach(p =>
-            {
-                rpc_layers_comboBox.Items.Add(p);
-            });
-        }
-
-        private void rpc_layers_comboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            string key = (sender as ComboBox).SelectedItem as string;
-            TargetLayerKey = key;
-        }
+        public List<string> RawBinRasterFullFilenames { get; private set; } = new List<string>();
 
         private void rpc_file_button_Click(object sender, EventArgs e)
         {
@@ -93,10 +70,36 @@ namespace Host.UI.SettingForm
 
         private void ok_button_Click(object sender, EventArgs e)
         {
-            if (TargetLayerKey == null || rpc_file_textBox.Text.Length == 0)
-                MessageBox.Show("必要参数未选择", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            else
+            //if (TargetLayerKey == null || rpc_file_textBox.Text.Length == 0)
+            //    MessageBox.Show("必要参数未选择", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //else
                 Close();
+        }
+
+        /// <summary>
+        /// 添加待rpc校正的bin文件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void add_raw_button_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openfiledialog = new OpenFileDialog
+            {
+                Multiselect = true,
+                RestoreDirectory = true,
+                Filter = "图像文件|*.bin"
+            };
+
+            if (openfiledialog.ShowDialog() == DialogResult.OK)
+            {
+                Array.ForEach(openfiledialog.FileNames, filename => {
+                    if (!RawBinRasterFullFilenames.Contains(filename))
+                    {
+                        RawBinRasterFullFilenames.Add(filename);
+                        raw_bin_listView.Items.Add(filename, 0);
+                    }
+                });
+            }
         }
 
     }
