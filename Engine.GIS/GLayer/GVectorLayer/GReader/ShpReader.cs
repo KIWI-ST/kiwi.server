@@ -80,9 +80,9 @@ namespace Engine.GIS.File
 
         public void Write(string shpfile)
         {
-            var header = ShapefileDataWriter.GetHeader(_feaures.Features.First(), _feaures.Features.Count);
-            var shapeWriter = new ShapefileDataWriter(shpfile, new GeometryFactory()) { Header = header };
-            shapeWriter.Write(_feaures.Features);
+            //var header = ShapefileDataWriter.GetHeader(_feaures.Features.First(), _feaures.Features.Count);
+            //var shapeWriter = new ShapefileDataWriter(shpfile, new GeometryFactory()) { Header = header };
+            //shapeWriter.Write(_feaures.Features);
         }
 
     }
