@@ -163,10 +163,13 @@ namespace Engine.GIS.GOperation.Tools
             nGeoTrans[1] = georesolution;
             nGeoTrans[5] = -georesolution;
             //
-            double[] outputBuffer = new double[pBand.Width * pBand.Height];
+            int width = Convert.ToInt32((adfExtent[1] - adfExtent[0]) / georesolution);
+            int height = Convert.ToInt32((adfExtent[3] - adfExtent[2]) / georesolution);
             //
-            for (int i = 0; i < pBand.Width; i++)
-                for (int j = 0; j < pBand.Height; j++)
+            double[] outputBuffer = new double[width * height];
+            //
+            for (int i = 0; i < width; i++)
+                for (int j = 0; j < height; j++)
                 {
                     double nPointLng, nPointLat, nPointHeight;
                     nPointLng = nGeoTrans[0] + i * nGeoTrans[1] + j * nGeoTrans[2];
@@ -176,19 +179,18 @@ namespace Engine.GIS.GOperation.Tools
                     var (x, y) = RPCTransformPoint(_rpcInfo, nPointLng, nPointLat, nPointHeight);
 
                     if (x >= 0 && x < pBand.Width && y >= 0 && y < pBand.Height)
-                        outputBuffer[j * pBand.Width + i] = _pBandCursorTool.PickRawValue((int)x, (int)y);
+                        outputBuffer[j * width + i] = _pBandCursorTool.PickRawValue((int)x, (int)y);
                     else
-                        outputBuffer[j * pBand.Width + i] = 0;
+                        outputBuffer[j * width + i] = 0;
                 }
             //
             Driver drv = Gdal.GetDriverByName("GTiff");
-            string[] options = new string[] { "BLOCKXSIZE=" + _pLayer.XSize, "BLOCKYSIZE=" + _pLayer.YSize };
-            Dataset ds = drv.Create(@"C:\Users\81596\Desktop\rpc\1.tif", _pLayer.XSize, _pLayer.YSize, 1, DataType.GDT_CFloat32, options);
+            string[] options = new string[] { "BLOCKXSIZE=" + width, "BLOCKYSIZE=" + height };
+            Dataset ds = drv.Create(@"C:\Users\81596\Desktop\rpc\1.tif", width, height, 1, DataType.GDT_CFloat32, options);
             Band ba = ds.GetRasterBand(1);
             if (nGeoTrans != null)
                 ds.SetGeoTransform(nGeoTrans);
-            // GetBufferByte(_pDataSet.RasterXSize, _pDataSet.RasterYSize,byteData)
-            ba.WriteRaster(0, 0, _pLayer.XSize, _pLayer.YSize, outputBuffer, _pLayer.XSize, _pLayer.YSize, 0, 0);
+            ba.WriteRaster(0, 0, width, height, outputBuffer, width, height, 0, 0);
             ds.FlushCache();
         }
 
