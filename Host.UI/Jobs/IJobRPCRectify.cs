@@ -29,17 +29,19 @@ namespace Host.UI.Jobs
         {
             _t = new Thread(() =>
             {
-                IRasterRPCTool pRasterRPCTool = new GRasterRPCTool(a, b, c, d, paramaters);
-                for (int i = 0; i < rawBinRasterFullFilenames.Count; i++)
+                using (IRasterRPCTool pRasterRPCTool = new GRasterRPCTool(a, b, c, d, paramaters))
                 {
-                    string rasterFilename = rawBinRasterFullFilenames[i];
-                    GRasterLayer rasterLayer = new GRasterLayer(rasterFilename);
-                    Summary = string.Format("total:{1}/{2}, RPC rectify for {0} is in progress.... ", rasterLayer.Name, i+1, rawBinRasterFullFilenames.Count);
-                    pRasterRPCTool.Visit(rasterLayer);
-                    pRasterRPCTool.DoRPCRectify();
-                    Process = i / (double)rawBinRasterFullFilenames.Count;
+                    for (int i = 0; i < rawBinRasterFullFilenames.Count; i++)
+                    {
+                        string rasterFilename = rawBinRasterFullFilenames[i];
+                        GRasterLayer rasterLayer = new GRasterLayer(rasterFilename);
+                        Summary = string.Format("total:{1}/{2}, RPC rectify for {0} is in progress.... ", rasterLayer.Name, i + 1, rawBinRasterFullFilenames.Count);
+                        pRasterRPCTool.Visit(rasterLayer);
+                        pRasterRPCTool.DoRPCRectify();
+                        Process = i / (double)rawBinRasterFullFilenames.Count;
+                    }
+                    OnTaskComplete?.Invoke(Name);
                 }
-                OnTaskComplete?.Invoke(Name);
             });
         }
 

@@ -1,4 +1,5 @@
 ﻿using Engine.GIS.GLayer.GRasterLayer;
+using System;
 using System.Collections.Generic;
 
 namespace Engine.GIS.GOperation.Tools
@@ -6,7 +7,7 @@ namespace Engine.GIS.GOperation.Tools
     /// <summary>
     /// cursor for each band
     /// </summary>
-    public class GRasterBandCursorTool: IRasterBandCursorTool
+    public class GRasterBandCursorTool: IRasterBandCursorTool, IDisposable
     {
         /// <summary>
         /// band width and hight
@@ -125,5 +126,10 @@ namespace Engine.GIS.GOperation.Tools
             return pixels.ToArray();
         }
 
+        public void Dispose()
+        {
+            _normalData = null;
+            _rawData = null;
+        }
     }
 }

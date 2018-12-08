@@ -30,7 +30,7 @@ namespace Engine.GIS.GOperation.Tools
     /// reference:
     /// https://www.cnblogs.com/rainbow70626/p/6254406.html
     /// </summary>
-    public class GRasterRPCTool : IRasterRPCTool
+    public class GRasterRPCTool : IRasterRPCTool,IDisposable
     {
 
         /// <summary>
@@ -42,16 +42,6 @@ namespace Engine.GIS.GOperation.Tools
         /// rpc paramaters
         /// </summary>
         RPCInfo _rpcInfo;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        IRasterBandCursorTool _pRasterBandCursorTool = new GRasterBandCursorTool();
-
-        /// <summary>
-        /// export tif 
-        /// </summary>
-        IRasterExportTool _pRasterExportTool = new GRasterExportTool();
 
         /// <summary>
         /// 
@@ -100,15 +90,15 @@ namespace Engine.GIS.GOperation.Tools
             int width = Convert.ToInt32((adfExtent[1] - adfExtent[0]) / georesolution);
             int height = Convert.ToInt32((adfExtent[3] - adfExtent[2]) / georesolution);
             //
-            _pRasterExportTool.Prepare();
-            //
+            IRasterExportTool pRasterExportTool = new GRasterExportTool();
+             pRasterExportTool.Prepare();
             foreach (var pBand in _pLayer.BandCollection)
             {
                 double[] outputBuffer =  DoRPCTransformInEachBand(pBand, nGeoTrans, width, height);
-                _pRasterExportTool.CombineBand(outputBuffer);
+                pRasterExportTool.CombineBand(outputBuffer);
             }
             //export
-            _pRasterExportTool.Export(nGeoTrans,width,height, outputFullFilename);
+            pRasterExportTool.Export(nGeoTrans,width,height, outputFullFilename);
         }
 
         public void Visit(GRasterLayer pLayer)
@@ -188,6 +178,7 @@ namespace Engine.GIS.GOperation.Tools
         /// <param name="pBand"></param>
         double[] DoRPCTransformInEachBand(GRasterBand pBand,double[] nGeoTrans, int width,int height)
         {
+            IRasterBandCursorTool _pRasterBandCursorTool = new GRasterBandCursorTool();
             _pRasterBandCursorTool.Visit(pBand);
             double[] outputBuffer = new double[width * height];
             for (int i = 0; i < width; i++)
@@ -272,6 +263,11 @@ namespace Engine.GIS.GOperation.Tools
             for (int i = 0; i < 20; i++)
                 dfSum += padfTerms[i] * padfCoefs[i];
             return dfSum;
+        }
+
+        public void Dispose()
+        {
+            _pLayer = null;
         }
 
     }

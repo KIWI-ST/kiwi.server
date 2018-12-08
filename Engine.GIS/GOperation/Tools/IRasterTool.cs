@@ -1,5 +1,6 @@
 ﻿using Engine.GIS.GLayer.GRasterLayer;
 using OSGeo.GDAL;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 
@@ -8,7 +9,7 @@ namespace Engine.GIS.GOperation.Tools
     /// <summary>
     /// raster tool
     /// </summary>
-    public interface IRasterTool
+    public interface IRasterTool:IDisposable
     {
        
     }
@@ -26,6 +27,10 @@ namespace Engine.GIS.GOperation.Tools
     /// </summary>
     public interface IRasterLayerTool : IRasterTool
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pLayer"></param>
         void Visit(GRasterLayer pLayer);
     }
 

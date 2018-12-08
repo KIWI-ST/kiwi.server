@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Engine.GIS.GOperation.Tools
 {
-    public class GRasterBandStatisticTool : IRasterBandStatisticTool
+    public class GRasterBandStatisticTool : IRasterBandStatisticTool,IDisposable
     {
 
         /// <summary>
@@ -33,6 +33,11 @@ namespace Engine.GIS.GOperation.Tools
             _height = pBand.Height;
             _normalData = pBand.NormalData;
             _rawData = pBand.RawData;
+        }
+
+        public void Dispose()
+        {
+            _pBand = null;
         }
 
         public double[,] StatisticalRawQueryTable

@@ -1,4 +1,5 @@
 ﻿using OSGeo.GDAL;
+using System;
 using System.Collections.Generic;
 
 namespace Engine.GIS.GOperation.Tools
@@ -7,7 +8,7 @@ namespace Engine.GIS.GOperation.Tools
     /// @example
     /// new GRasterExportTool().Prepare().CombineBand().Export();
     /// </summary>
-    public class GRasterExportTool: IRasterExportTool
+    public class GRasterExportTool: IRasterExportTool, IDisposable
     {
         int _band = 0;
 
@@ -44,5 +45,9 @@ namespace Engine.GIS.GOperation.Tools
             ds.FlushCache();
         }
 
+        public void Dispose()
+        {
+            _bandDict.Clear();
+        }
     }
 }

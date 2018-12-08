@@ -1,12 +1,13 @@
 ﻿using Engine.GIS.GOperation.Arithmetic;
 using OSGeo.GDAL;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 
 namespace Engine.GIS.GLayer.GRasterLayer
 {
-    public class GRasterLayer
+    public class GRasterLayer: IDisposable
     {
         /// <summary>
         /// 构建raster层
@@ -28,6 +29,7 @@ namespace Engine.GIS.GLayer.GRasterLayer
             BandCount = PDataSet.RasterCount;
             //读取band
             BandCollection = new List<GRasterBand>();
+            //
             for (int i = 1; i <= BandCount; i++)
             {
                 Band pBand = PDataSet.GetRasterBand(i);
@@ -73,7 +75,17 @@ namespace Engine.GIS.GLayer.GRasterLayer
         /// <summary>
         /// 波段集合
         /// </summary>
-        public List<GRasterBand> BandCollection { get; }
+        public List<GRasterBand> BandCollection { get; private set; }
+
+        public void Dispose()
+        {
+            for (int i = 0; i < BandCount; i++)
+                BandCollection[i].Dispose();
+            //
+            BandCollection = null;
+            PDataSet.Dispose();
+        }
+
         /// <summary>
         /// 
         /// </summary>
