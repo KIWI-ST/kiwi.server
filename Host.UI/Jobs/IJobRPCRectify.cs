@@ -15,7 +15,7 @@ namespace Host.UI.Jobs
 
         public string Summary { get; private set; } = "";
 
-        public double Process  { get; private set; } = 0.0;
+        public double Process { get; private set; } = 0.0;
 
         public DateTime StartTime { get; private set; } = DateTime.Now;
 
@@ -25,22 +25,21 @@ namespace Host.UI.Jobs
 
         Thread _t;
 
-        public IJobRPCRectify(double[] a, double[] b, double[] c, double[] d, Dictionary<string, double> paramaters,List<string> rawBinRasterFullFilenames)
+        public IJobRPCRectify(double[] a, double[] b, double[] c, double[] d, Dictionary<string, double> paramaters, List<string> rawBinRasterFullFilenames)
         {
             _t = new Thread(() =>
             {
                 IRasterRPCTool pRasterRPCTool = new GRasterRPCTool(a, b, c, d, paramaters);
-
-                for(int i=0;i< rawBinRasterFullFilenames.Count; i++)
+                for (int i = 0; i < rawBinRasterFullFilenames.Count; i++)
                 {
                     string rasterFilename = rawBinRasterFullFilenames[i];
                     GRasterLayer rasterLayer = new GRasterLayer(rasterFilename);
-                    Summary = string.Format("total:{1}/{2}, RPC rectify for {0} is in progress.... ", rasterLayer.Name,i+1,rawBinRasterFullFilenames.Count);
+                    Summary = string.Format("total:{1}/{2}, RPC rectify for {0} is in progress.... ", rasterLayer.Name, i+1, rawBinRasterFullFilenames.Count);
                     pRasterRPCTool.Visit(rasterLayer);
                     pRasterRPCTool.DoRPCRectify();
-                    Process = i+1 / (double)rawBinRasterFullFilenames.Count;
+                    Process = i / (double)rawBinRasterFullFilenames.Count;
                 }
-                 OnTaskComplete?.Invoke(Name);
+                OnTaskComplete?.Invoke(Name);
             });
         }
 
