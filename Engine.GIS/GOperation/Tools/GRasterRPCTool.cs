@@ -265,6 +265,9 @@ namespace Engine.GIS.GOperation.Tools
             return dfSum;
         }
 
+        /// <summary>
+        /// release resource
+        /// </summary>
         public void Dispose()
         {
             _pLayer = null;
