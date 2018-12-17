@@ -1,6 +1,12 @@
 ﻿using Engine.Word.Entity;
+using java.util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
+using java.io;
+using edu.stanford.nlp.pipeline;
+using System;
+using edu.stanford.nlp.ling;
+
 
 namespace Test.Examples
 {
@@ -44,6 +50,30 @@ namespace Test.Examples
         [TestMethod]
         public void TrainWithSkipGram()
         {
+            //解压jar后的根目录
+            var jarRoot = @"stanford-chinese-corenlp-models\";
+
+            // Text for processing
+            var text = "王尼玛跑的很快.";
+
+            // Annotation pipeline configuration
+            //var props = new Properties();
+            //props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref");
+            //props.setProperty("sutime.binders", "0");
+            //
+            string props = "StanfordCoreNLP-chinese.properties";
+            // We should change current directory, so StanfordCoreNLP could find all the model files automatically 
+            var curDir = Environment.CurrentDirectory;
+            Directory.SetCurrentDirectory(jarRoot);
+
+            var pipeline = new StanfordCoreNLP(props);
+            Directory.SetCurrentDirectory(curDir);
+
+            // Annotation
+            var annotation = new Annotation(text);
+            pipeline.annotate(annotation);
+
+            var sentences = annotation.get(typeof(CoreAnnotations.SentencesAnnotation));
 
         }
 
