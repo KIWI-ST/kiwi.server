@@ -48,7 +48,7 @@ namespace Test.Examples
         }
 
         [TestMethod]
-        public void TrainWithSkipGram()
+        public void StanfordCoreNLPForChinese()
         {
             // Text for processing
             var text = "王尼玛跑的很快.";
