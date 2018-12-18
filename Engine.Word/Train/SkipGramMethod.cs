@@ -13,5 +13,8 @@ namespace Engine.Word.Train
     /// </summary>
     public class SkipGramMethod
     {
+
+
+
     }
 }

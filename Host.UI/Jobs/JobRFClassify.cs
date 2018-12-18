@@ -52,7 +52,7 @@ namespace Host.UI.Jobs
                 {
                     List<List<double>> inputList = new List<List<double>>();
                     List<int> outputList = new List<int>();
-                    string text = sr.ReadLine();
+                    string text = sr.ReadLine().Replace("\t",",");
                     do
                     {
                         string[] rawdatas = text.Split(',');
