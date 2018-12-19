@@ -72,6 +72,9 @@ namespace Engine.GIS.GOperation.Tools
             };
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void DoRPCRectify()
         {
             //get file dicrectionary Name
@@ -101,11 +104,22 @@ namespace Engine.GIS.GOperation.Tools
             pRasterExportTool.Export(nGeoTrans,width,height, outputFullFilename);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pLayer"></param>
         public void Visit(GRasterLayer pLayer)
         {
             _pLayer = pLayer;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dfLong"></param>
+        /// <param name="dfLat"></param>
+        /// <param name="dfHeight"></param>
+        /// <returns></returns>
         double[] RPCComputeTerms(double dfLong, double dfLat, double dfHeight)
         {
             double[] padfTerms = new double[20];
