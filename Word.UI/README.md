@@ -1,6 +1,5 @@
 
 # Stanford NLP 词性注记解释 #
-[CnBlogs](https://www.cnblogs.com/tonglin0325/p/6850901.html)
 [Wiki](https://en.wikipedia.org/wiki/Brown_Corpus#Part-of-speech_tags_used)
 [PartOfSpeech](https://stackoverflow.com/questions/1833252/java-stanford-nlp-part-of-speech-labels)
 ## 动词，形容词（4类）:VA、VC、VE、VV ###
