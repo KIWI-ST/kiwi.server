@@ -1,6 +1,8 @@
 
 # Stanford NLP 词性注记解释 #
-========================================
+[CnBlogs](https://www.cnblogs.com/tonglin0325/p/6850901.html)
+[Wiki](https://en.wikipedia.org/wiki/Brown_Corpus#Part-of-speech_tags_used)
+[PartOfSpeech](https://stackoverflow.com/questions/1833252/java-stanford-nlp-part-of-speech-labels)
 ## 动词，形容词（4类）:VA,VC,VE,VV ###
 * 谓词性形容词: **VA**。谓词性形容词大致上相当于英语中的形容词和中文语法中、文学作品里的**静态动词**。我们的谓词性形容词包括两类：
   * 没有宾语且能被“很”修饰的谓语。
