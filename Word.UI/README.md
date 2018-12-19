@@ -1,6 +1,9 @@
 Stanford Parser 标记含义
-参考来源：
-[http://en.wikipedia.org/wiki/Brown_Corpus#Part-of-speech%5Ftags%5Fused]
+
+[WIKI](http://en.wikipedia.org/wiki/Brown_Corpus#Part-of-speech%5Ftags%5Fused) 
+[STACKOVERFLOW](http://stackoverflow.com/questions/1833252/java-stanford-nlp-part-of-speech-labels) 
+[CNBLOGS](http://www.cnblogs.com/supakito/archive/2012/12/12/2814121.html) 
+[CNBLOGS](https://www.cnblogs.com/tonglin0325/p/6850901.html)
 
 关于词性标记
 
