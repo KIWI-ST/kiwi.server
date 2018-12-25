@@ -1,12 +1,11 @@
-﻿using Engine.Word.Entity;
-using java.util;
+﻿using java.util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 using java.io;
 using edu.stanford.nlp.pipeline;
 using System;
 using edu.stanford.nlp.ling;
-
+using Engine.Lexicon.Entity;
 
 namespace Test.Examples
 {
@@ -53,20 +52,14 @@ namespace Test.Examples
             // Text for processing
             var text = "王尼玛跑的很快.";
             // Annotation pipeline configuration
-            //var props = new Properties();
-            //props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref");
-            //props.setProperty("sutime.binders", "0");
-            //
             string props = "StanfordCoreNLP-chinese.properties";
             // We should change current directory, so StanfordCoreNLP could find all the model files automatically 
-            var curDir = Environment.CurrentDirectory;
             var pipeline = new StanfordCoreNLP(props);
             // Annotation
             var annotation = new Annotation(text);
             pipeline.annotate(annotation);
-
+            
             var sentences = annotation.get(typeof(CoreAnnotations.SentencesAnnotation));
-
         }
 
     }

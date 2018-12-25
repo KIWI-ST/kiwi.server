@@ -115,14 +115,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AI\ML\RF.cs" />
-    <Compile Include="AI\RL\Env\ExtractRoadEnv.cs" />
-    <Compile Include="AI\RL\INet.cs" />
-    <Compile Include="AI\RL\IEnv.cs" />
-    <Compile Include="AI\RL\Env\ImageClassifyEnv.cs" />
-    <Compile Include="AI\DL\CNN.cs" />
-    <Compile Include="AI\RL\Net\DNet.cs" />
-    <Compile Include="AI\RL\DQN.cs" />
+    <Compile Include="Model\DL\Language\Layer.cs" />
+    <Compile Include="Model\DL\Language\LSTM.cs" />
+    <Compile Include="Model\ML\RF.cs" />
+    <Compile Include="Model\RL\Env\ExtractRoadEnv.cs" />
+    <Compile Include="Model\RL\INet.cs" />
+    <Compile Include="Model\RL\IEnv.cs" />
+    <Compile Include="Model\RL\Env\ImageClassifyEnv.cs" />
+    <Compile Include="Model\DL\CNN.cs" />
+    <Compile Include="Model\RL\Net\DNet.cs" />
+    <Compile Include="Model\RL\DQN.cs" />
     <Compile Include="Entity\NP.cs" />
     <Compile Include="Utils\TensorflowBootstrap.cs" />
     <Compile Include="Extend\ArrayExtend.cs" />

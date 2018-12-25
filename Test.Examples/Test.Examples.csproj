@@ -202,9 +202,9 @@
       <Project>{82b3cfc7-e05c-46d3-9e91-2f5f4495238e}</Project>
       <Name>Engine.GIS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Engine.Word\Engine.Word.csproj">
-      <Project>{4fae63c4-8568-4cc0-b221-d3dc93133d59}</Project>
-      <Name>Engine.Word</Name>
+    <ProjectReference Include="..\Engine.Lexicon\Engine.Lexicon.csproj">
+      <Project>{d67a6c8e-0a98-4d80-941a-6d8b48cd3370}</Project>
+      <Name>Engine.Lexicon</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
