@@ -246,7 +246,7 @@ namespace Engine.Lexicon.Entity
         /// <summary>
         /// 从已分析存储的辞典载入数据
         /// </summary>
-        public static Lexicon FromExistLexiconFile(string existLexiconFile)
+        public static Lexicon FromExistLexiconFile(string existLexiconFile, EncodeScheme encode = EncodeScheme.Halfman)
         {
             JiebaSegmenter segmenter = new JiebaSegmenter();
             Lexicon lexicon = new Lexicon(segmenter);
@@ -254,7 +254,7 @@ namespace Engine.Lexicon.Entity
             {
                 Regex regex = new Regex("\\s");
                 string line;
-                while (!string.IsNullOrEmpty((line = sr.ReadLine().ClearPunctuation())))
+                while (!string.IsNullOrEmpty((line = sr.ReadLine())))
                 {
                     string[] vals = regex.Split(line);
                     if (vals.Length == 2)
@@ -266,7 +266,13 @@ namespace Engine.Lexicon.Entity
                 //
                 lexicon.SortVocabulary();
             }
-            lexicon.UpdateHalfmanCode();
+            //应用halfman编码
+            if (encode == EncodeScheme.Halfman)
+                lexicon.UpdateHalfmanCode();
+            //应用one-hot编码
+            else if (encode == EncodeScheme.Onehot)
+                lexicon.UpdateOnehotCode();
+            //
             return lexicon;
         }
 

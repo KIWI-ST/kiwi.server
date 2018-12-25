@@ -15,35 +15,34 @@ namespace Test.Examples
         /// <summary>
         /// 原始待统计数据源
         /// </summary>
-        string vocabularyFullFilename = Directory.GetCurrentDirectory() + @"\Datasets\word\vocabulary.txt";
-        
-        /// <summary>
-        /// 测试halfman编码的词典数据
-        /// </summary>
-        string lexiconFullFilename = Directory.GetCurrentDirectory() + @"\Datasets\word\lexicon.txt";
+        readonly string rawTextFullFilename = Directory.GetCurrentDirectory() + @"\Datasets\RawText.txt";
 
         /// <summary>
-        /// 词典数据
+        /// 保存统计后的词频文件
         /// </summary>
-        string saveLexiconFullFilename = Directory.GetCurrentDirectory() + @"\Datasets\word\savelexicon.txt";
+        readonly string saveLexiconFullFilename = Directory.GetCurrentDirectory() + @"\Datasets\lexicon.txt";
 
         [TestMethod]
         public void ReadVocabularyLibrary()
         {
-            //1. form raw vocabulary file
-            Lexicon lexicon1 = Lexicon.FromVocabularyFile(vocabularyFullFilename);
-            lexicon1.SaveLexiconFile(saveLexiconFullFilename);
-            //2. from lexicon file
-            Lexicon lexicon2 = Lexicon.FromExistLexiconFile(lexiconFullFilename);
-            Assert.AreEqual(1, 1);
+            //form raw vocabulary file
+            Lexicon lexicon = Lexicon.FromVocabularyFile(rawTextFullFilename,EncodeScheme.Onehot);
+            lexicon.SaveLexiconFile(saveLexiconFullFilename);
+            Assert.IsTrue(lexicon.VocaSize == 608);
         }
 
         [TestMethod]
-        public void VocabularyHalfmanTree()
+        public void LoadLexiconFormLexiconFile()
         {
-            Lexicon lexicon = Lexicon.FromExistLexiconFile(lexiconFullFilename);
-            VocabularyHalfmanTree tree = new VocabularyHalfmanTree(lexicon);
-            tree.BuildOrUpdate();
+            //from exist lexicon file
+            Lexicon lexicon = Lexicon.FromExistLexiconFile(saveLexiconFullFilename);
+            Assert.IsTrue(lexicon.VocaSize == 608);
+        }
+
+        [TestMethod]
+        public void LearnRawTextByLSTM()
+        {
+
         }
 
         [TestMethod]
@@ -58,7 +57,6 @@ namespace Test.Examples
             // Annotation
             var annotation = new Annotation(text);
             pipeline.annotate(annotation);
-            
             var sentences = annotation.get(typeof(CoreAnnotations.SentencesAnnotation));
         }
 
