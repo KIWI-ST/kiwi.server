@@ -46,7 +46,7 @@ namespace Engine.Brain.Model.DL
         /// </summary>
         double _targetLoss;
 
-        public LSTMNetwork(int vocaSize, int buffersize = 24, int hiddenNeuronsCount = 300, double learningRate = 0.001,double targetLoss =0.01)
+        public LSTMNetwork(int vocaSize, int buffersize = 24, int hiddenNeuronsCount = 300, double learningRate = 0.001,double targetLoss =0.05)
         {
             _vocaSize = vocaSize;
             _bufferSize = buffersize;
@@ -92,7 +92,7 @@ namespace Engine.Brain.Model.DL
         {
             double loss_p = Math.Log(_lexicon.VocaSize);
             //迭代次数和自动存储的迭代轮次
-            int liter = 1, saveInterval = 10;
+            int liter = 1, saveInterval = 5000;
             using (StreamReader sr = new StreamReader(textFullFilename))
             {
                 string rawText = "";

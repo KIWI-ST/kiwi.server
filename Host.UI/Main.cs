@@ -41,10 +41,17 @@ namespace Host.UI
 
         private void Test()
         {
+
             string rawTextFullFilename = Directory.GetCurrentDirectory() + @"\Datasets\RawText.txt";
+            string autosave = Directory.GetCurrentDirectory() + @"\Datasets\autoLstm.bin";
+
             Lexicon lexicon = Lexicon.FromVocabularyFile(rawTextFullFilename, EncodeScheme.Onehot);
+            LSTMNetwork network2 = LSTMNetwork.Load(autosave);
+            network2.LearnFromRawText(rawTextFullFilename, lexicon);
+
+  
             LSTMNetwork network = new LSTMNetwork(lexicon.VocaSize);
-            network.LearnFromRawText(rawTextFullFilename, lexicon);
+            
         }
 
 
