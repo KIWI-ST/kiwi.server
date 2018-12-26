@@ -184,7 +184,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Engine.Word.cs" />
+    <Compile Include="Engine.Lexicon.cs" />
     <Compile Include="Engine.GIS.cs" />
     <Compile Include="Engine.Brain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

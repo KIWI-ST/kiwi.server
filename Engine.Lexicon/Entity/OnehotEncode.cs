@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Engine.Lexicon.Entity
+﻿namespace Engine.Lexicon.Entity
 {
+    /// <summary>
+    /// onehot编码规范
+    /// </summary>
     public class OnehotEncode
     {
         Lexicon _lexicon;
@@ -13,8 +10,6 @@ namespace Engine.Lexicon.Entity
         public int VocaSize { get; }
 
         public Vocabulary[] VocaArray { get; }
-
-        int MaxCodeLength;
 
         public OnehotEncode(Lexicon lexicon)
         {

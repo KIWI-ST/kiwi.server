@@ -76,8 +76,8 @@ namespace Engine.GIS.GeoType
         {
             if (_min == null && _max == null)
             {
-                _min = point.Clone() as Coordinate;
-                _max = point.Clone() as Coordinate;
+                _min = point.Copy() as Coordinate;
+                _max = point.Copy() as Coordinate;
             }
             else
             {

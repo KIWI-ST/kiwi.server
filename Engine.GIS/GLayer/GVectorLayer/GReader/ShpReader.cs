@@ -4,7 +4,6 @@ using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Engine.GIS.File
 {
@@ -64,7 +63,7 @@ namespace Engine.GIS.File
                 Feature feature = new Feature { Geometry = _reader.Geometry };
                 AttributesTable attrs = new AttributesTable();
                 for (int i = 0; i < _header.NumFields; i++)
-                    attrs.AddAttribute(_header.Fields[i].Name, _reader.GetValue(i));
+                    attrs.Add(_header.Fields[i].Name, _reader.GetValue(i));
                 feature.Attributes = attrs;
                 _feaures.Add(feature);
                 _isReaded = true;

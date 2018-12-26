@@ -1,7 +1,6 @@
 ﻿using Engine.GIS.Entity;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Arithmetic;
-using Engine.GIS.GOperation.Tools;
 using Host.UI.Jobs;
 using Host.UI.PlotForm;
 using Host.UI.SettingForm;
