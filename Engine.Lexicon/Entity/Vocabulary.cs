@@ -9,6 +9,7 @@ namespace Engine.Lexicon.Entity
     /// <summary>
     /// 
     /// </summary>
+    [Serializable]
     public class Vocabulary : IComparable<Vocabulary>
     {
         /// <summary>

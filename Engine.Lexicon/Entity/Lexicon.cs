@@ -29,6 +29,7 @@ namespace Engine.Lexicon.Entity
     /// <summary>
     /// 词库
     /// </summary>
+    [Serializable]
     public class Lexicon
     {
         /// <summary>
@@ -83,6 +84,26 @@ namespace Engine.Lexicon.Entity
         /// 
         /// </summary>
         public Dictionary<string, int> DictIndex { get; private set; } = new Dictionary<string, int>();
+
+        /// <summary>
+        /// 字符串编码
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public int Encode(string text)
+        {
+            return DictIndex[text];
+        }
+
+        /// <summary>
+        /// 解码
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public string Decode(int index)
+        {
+            return DictIndex.Where(p => p.Value == index).Single().Key;
+        }
 
         /// <summary>
         /// 使用结巴分词

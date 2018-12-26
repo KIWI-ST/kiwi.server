@@ -1,6 +1,8 @@
-﻿using Engine.GIS.Entity;
+﻿using Engine.Brain.Model.DL;
+using Engine.GIS.Entity;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Arithmetic;
+using Engine.Lexicon.Entity;
 using Host.UI.Jobs;
 using Host.UI.PlotForm;
 using Host.UI.SettingForm;
@@ -36,6 +38,15 @@ namespace Host.UI
         {
             InitializeComponent();
         }
+
+        private void Test()
+        {
+            string rawTextFullFilename = Directory.GetCurrentDirectory() + @"\Datasets\RawText.txt";
+            Lexicon lexicon = Lexicon.FromVocabularyFile(rawTextFullFilename, EncodeScheme.Onehot);
+            LSTMNetwork network = new LSTMNetwork(lexicon.VocaSize);
+            network.LearnFromRawText(rawTextFullFilename, lexicon);
+        }
+
 
         #endregion
 
@@ -414,6 +425,14 @@ namespace Host.UI
             ToolStripItem item = sender as ToolStripItem;
             switch (item.Name)
             {
+                    //lstm test 
+                case "LSTM_toolStripButton":
+                    Thread lstmTestThread = new Thread(() => {
+                        Test();
+                    });
+                    lstmTestThread.IsBackground = true;
+                    lstmTestThread.Start();
+                    break;
                     //rpc transform
                 case "RPC_ToolStripMenuItem":
                     RPCForm rpcForm = new RPCForm();

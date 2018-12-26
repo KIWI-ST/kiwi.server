@@ -3,11 +3,10 @@ using System.Threading.Tasks;
 
 namespace Engine.Brain.Model.DL.Language
 {
+    [Serializable]
     public abstract class Layer
     {
         private readonly Random random = new Random();
-
-        protected readonly ParallelOptions options = new ParallelOptions();
 
         protected const double rmsDecay = 0.95;
 

@@ -117,6 +117,8 @@
   <ItemGroup>
     <Compile Include="Model\DL\Language\Layer.cs" />
     <Compile Include="Model\DL\Language\LSTM.cs" />
+    <Compile Include="Model\DL\Language\SoftMax.cs" />
+    <Compile Include="Model\DL\LSTMNetwork.cs" />
     <Compile Include="Model\ML\RF.cs" />
     <Compile Include="Model\RL\Env\ExtractRoadEnv.cs" />
     <Compile Include="Model\RL\INet.cs" />
@@ -142,6 +144,10 @@
     <ProjectReference Include="..\Engine.GIS\Engine.GIS.csproj">
       <Project>{82b3cfc7-e05c-46d3-9e91-2f5f4495238e}</Project>
       <Name>Engine.GIS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Engine.Lexicon\Engine.Lexicon.csproj">
+      <Project>{D67A6C8E-0A98-4D80-941A-6D8B48CD3370}</Project>
+      <Name>Engine.Lexicon</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
