@@ -27,11 +27,11 @@ namespace Engine.Brain.Model.DL.Language
         private double[] cb_node_output;
         private double[][] cw_node_output;
 
-        public SoftMax(int size_input, int size_output)
+        public SoftMax(int size_input, int size_output, int _bufferSize)
         {
             this.size_output = size_output;
             this.size_input = size_input;
-
+            BufferSize = _bufferSize;
             ResetState();
             ResetParameters();
             ResetGradients();

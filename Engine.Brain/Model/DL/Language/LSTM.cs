@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Engine.Brain.Model.DL.Language
 {
@@ -56,11 +55,13 @@ namespace Engine.Brain.Model.DL.Language
             return size_output * 4 + size_total * size_output * 4;
         }
 
-        public LSTM(int size_input, int size_output)
+        public LSTM(int size_input, int size_output, int bufferSize)
         {
             this.size_output = size_output;
             this.size_input = size_input;
             size_total = size_input + size_output;
+
+            BufferSize = bufferSize;
 
             ResetState();
             ResetParameters();

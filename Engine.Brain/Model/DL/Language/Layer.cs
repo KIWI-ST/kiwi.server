@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 
 namespace Engine.Brain.Model.DL.Language
 {
@@ -10,9 +9,9 @@ namespace Engine.Brain.Model.DL.Language
 
         protected const double rmsDecay = 0.95;
 
-        public static int BufferSize;
+        public int BufferSize { get; set; }
 
-        public static double LearningRate;
+        public double LearningRate { get; set; }
 
         public abstract int Count();
 

@@ -39,25 +39,25 @@ namespace Engine.Brain.Model.DL
         /// <summary>
         /// 自动存储路径
         /// </summary>
-        string _autoSave = Directory.GetCurrentDirectory() + @"\Datasets\autoLstm.bin";
+        string _autoSave = Directory.GetCurrentDirectory() + @"\tmp\autolstm.bin";
 
         /// <summary>
         /// 
         /// </summary>
         double _targetLoss;
 
-        public LSTMNetwork(int vocaSize, int buffersize = 24, int hiddenNeuronsCount = 300, double learningRate = 0.001,double targetLoss =0.05)
+        public LSTMNetwork(int vocaSize, int buffersize = 24, int hiddenNeuronsCount = 300, double learningRate = 0.001, double targetLoss = 0.01)
         {
             _vocaSize = vocaSize;
             _bufferSize = buffersize;
             _targetLoss = targetLoss;
             _hiddenNeuronsCount = hiddenNeuronsCount;
-            Language.Layer.LearningRate = learningRate;
-            Language.Layer.BufferSize = buffersize;
-            layer1 = new Language.LSTM(_vocaSize, _hiddenNeuronsCount);
-            layer2 = new Language.LSTM(_hiddenNeuronsCount, _hiddenNeuronsCount);
-            layer3 = new Language.SoftMax(_hiddenNeuronsCount, _vocaSize);
-
+            layer1 = new Language.LSTM(_vocaSize, _hiddenNeuronsCount, _bufferSize);
+            layer1.LearningRate = learningRate;
+            layer2 = new Language.LSTM(_hiddenNeuronsCount, _hiddenNeuronsCount, _bufferSize);
+            layer2.LearningRate = learningRate;
+            layer3 = new Language.SoftMax(_hiddenNeuronsCount, _vocaSize, _bufferSize);
+            layer3.LearningRate = learningRate;
         }
 
         public void Save(string fileName)
@@ -92,7 +92,7 @@ namespace Engine.Brain.Model.DL
         {
             double loss_p = Math.Log(_lexicon.VocaSize);
             //迭代次数和自动存储的迭代轮次
-            int liter = 1, saveInterval = 5000;
+            int liter = 1, saveInterval = 10;
             using (StreamReader sr = new StreamReader(textFullFilename))
             {
                 string rawText = "";
@@ -111,7 +111,7 @@ namespace Engine.Brain.Model.DL
                         var probs = layer3.Forward(layer2.Forward(layer1.Forward(buffer, reset), reset), reset);
                         // Advance buffer.  
                         var vx = new double[_lexicon.VocaSize];
-                        pos += Language.Layer.BufferSize - 1;
+                        pos += _bufferSize - 1;
                         vx[_lexicon.DictIndex[text[pos]]] = 1;
                         AdvanceBuffer(buffer, vx, bufferSize);
                         // calcute loss
@@ -120,19 +120,35 @@ namespace Engine.Brain.Model.DL
                         layer1.Backward(layer2.Backward(layer3.Backward(grads)));
                     }
                     if (loss_p - _loss > 0)
-                        Language.Layer.LearningRate *= 1.01;
+                        layer1.LearningRate = layer2.LearningRate = layer3.LearningRate = layer1.LearningRate * 1.01;
                     else
-                        Language.Layer.LearningRate *= 0.98;
+                        layer1.LearningRate = layer2.LearningRate = layer3.LearningRate = layer1.LearningRate * 0.98;
                     loss_p = loss_p * 0.8 + _loss * 0.2;
                     liter++;
                     //
-                    if (_loss < _targetLoss || liter% saveInterval == 0)
+                    if (_loss < _targetLoss)
                     {
                         Save(_autoSave);
                         break;
                     }
+                    else if (liter % saveInterval == 0)
+                    {
+                        Save(_autoSave);
+                    }
                 }
             }
+        }
+
+        /// <summary>
+        /// write a brief text
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="lexicon"></param>
+        /// <returns></returns>
+        public string WriteText(string[] text, Lexicon.Entity.Lexicon lexicon)
+        {
+            string generateText = Generate(_bufferSize, text, lexicon, layer3, layer2, layer1);
+            return generateText;
         }
 
         private string Generate(int bufferSize, string[] text, Lexicon.Entity.Lexicon lexicon, Language.Layer layer3, Language.Layer layer2, Language.Layer layer1)
@@ -143,7 +159,7 @@ namespace Engine.Brain.Model.DL
             {
                 var reset = pos == 0;
                 var probs = layer3.Forward(layer2.Forward(layer1.Forward(buffer, reset), reset), reset);
-                int ix = WeightedChoice(probs[Language.Layer.BufferSize - 1]);
+                int ix = WeightedChoice(probs[_bufferSize - 1]);
                 double[] vx = new double[lexicon.VocaSize];
                 vx[ix] = 1;
                 AdvanceBuffer(buffer, vx, bufferSize);
@@ -167,7 +183,7 @@ namespace Engine.Brain.Model.DL
         {
             for (var b = 1; b < bufferSize - 1; b++)
                 buffer[b] = buffer[b + 1];
-            buffer[Language.Layer.BufferSize - 1] = vx;
+            buffer[_bufferSize - 1] = vx;
         }
 
         /// <summary>
@@ -182,7 +198,7 @@ namespace Engine.Brain.Model.DL
         {
             var ls = 0.0;
             var grads = new double[BufferSize][];
-            for (var t = 1; t < Language.Layer.BufferSize; t++)
+            for (var t = 1; t < _bufferSize; t++)
             {
                 grads[t] = probs[t].ToArray();
                 for (var i = 0; i < size_vocab; i++)
@@ -191,7 +207,7 @@ namespace Engine.Brain.Model.DL
                     grads[t][i] -= targets[t][i];
                 }
             }
-            ls = ls / (Language.Layer.BufferSize - 1);
+            ls = ls / (_bufferSize - 1);
             _loss = _loss * 0.99 + ls * 0.01;
             return grads;
         }
