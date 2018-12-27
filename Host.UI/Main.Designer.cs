@@ -344,7 +344,7 @@
             this.tab_mapview.Padding = new System.Windows.Forms.Padding(4);
             this.tab_mapview.Size = new System.Drawing.Size(930, 683);
             this.tab_mapview.TabIndex = 1;
-            this.tab_mapview.Text = "MainView";
+            this.tab_mapview.Text = "MapView";
             this.tab_mapview.UseVisualStyleBackColor = true;
             // 
             // map_splitContainer

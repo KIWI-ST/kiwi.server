@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace Host.UI.Jobs
 {
-    public class IJobRPCRectify : IJob
+    public class JobRPCRectify : IJob
     {
         public bool Complete { get; private set; } = false;
 
@@ -25,7 +25,7 @@ namespace Host.UI.Jobs
 
         Thread _t;
 
-        public IJobRPCRectify(double[] a, double[] b, double[] c, double[] d, Dictionary<string, double> paramaters, List<string> rawBinRasterFullFilenames)
+        public JobRPCRectify(double[] a, double[] b, double[] c, double[] d, Dictionary<string, double> paramaters, List<string> rawBinRasterFullFilenames)
         {
             _t = new Thread(() =>
             {

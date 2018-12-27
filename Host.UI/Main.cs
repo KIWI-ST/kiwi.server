@@ -39,21 +39,6 @@ namespace Host.UI
             InitializeComponent();
         }
 
-        private void Test()
-        {
-            string rawTextFullFilename = Directory.GetCurrentDirectory() + @"\tmp\RawText.txt";
-            string autosave = Directory.GetCurrentDirectory() + @"\tmp\autolstm.bin";
-            Lexicon lexicon = Lexicon.FromVocabularyFile(rawTextFullFilename, EncodeScheme.Onehot);
-            LSTMNetwork network = LSTMNetwork.Load(autosave);
-            //network2.LearnFromRawText(rawTextFullFilename, lexicon);
-            //LSTMNetwork network = new LSTMNetwork(lexicon.VocaSize);
-            network.LearnFromRawText(rawTextFullFilename, lexicon);
-            //string[] text = lexicon.Sgement("船长立即向美国海岸警卫队海上安全办公室报告，并按照指令将搁浅船舶移动1英里以外更深的水域。在这起事故中，海上安全办公室指挥员履行联邦现场协调员的职责");
-            //string rawText =  network.WriteText(text, lexicon);
-
-        }
-
-
         #endregion
 
         #region 缓存管理
@@ -433,18 +418,18 @@ namespace Host.UI
             {
                     //lstm test 
                 case "LSTM_toolStripButton":
-                    Thread lstmTestThread = new Thread(() => {
-                        Test();
-                    });
-                    lstmTestThread.IsBackground = true;
-                    lstmTestThread.Start();
+                    string rawTextFullFilename = Directory.GetCurrentDirectory() + @"\tmp\RawText.txt";
+                    string autosave = Directory.GetCurrentDirectory() + @"\tmp\autolstm.bin";
+                    IJob rnnTrainJob = new JobRNNTrain(rawTextFullFilename, autosave);
+                    RegisterJob(rnnTrainJob);
+                    rnnTrainJob.Start();
                     break;
                     //rpc transform
                 case "RPC_ToolStripMenuItem":
                     RPCForm rpcForm = new RPCForm();
                     if (rpcForm.ShowDialog() == DialogResult.OK)
                     {
-                        IJob rpcRectifyJob = new IJobRPCRectify(rpcForm.A, rpcForm.B, rpcForm.C, rpcForm.D, rpcForm.RPCParamaters, rpcForm.RawBinRasterFullFilenames);
+                        IJob rpcRectifyJob = new JobRPCRectify(rpcForm.A, rpcForm.B, rpcForm.C, rpcForm.D, rpcForm.RPCParamaters, rpcForm.RawBinRasterFullFilenames);
                         RegisterJob(rpcRectifyJob);
                         rpcRectifyJob.Start();
                     }

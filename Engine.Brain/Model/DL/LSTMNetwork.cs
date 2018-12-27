@@ -8,9 +8,21 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Engine.Brain.Model.DL
 {
+    /// <summary>
+    /// event handler
+    /// </summary>
+    /// <param name="loss"></param>
+    /// <param name="liter"></param>
+    public delegate void OnTrainingEventHanlder(double loss, int liter, double progress);
+
     [Serializable]
     public class LSTMNetwork
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        public event OnTrainingEventHanlder OnTrainingProgress;
+
         /// <summary>
         /// 网络结构
         /// </summary>
@@ -45,6 +57,8 @@ namespace Engine.Brain.Model.DL
         /// 
         /// </summary>
         double _targetLoss;
+
+
 
         public LSTMNetwork(int vocaSize, int buffersize = 24, int hiddenNeuronsCount = 300, double learningRate = 0.001, double targetLoss = 0.01)
         {
@@ -118,6 +132,8 @@ namespace Engine.Brain.Model.DL
                         var grads = Loss(probs, buffer, bufferSize, _lexicon.VocaSize);
                         // backward
                         layer1.Backward(layer2.Backward(layer3.Backward(grads)));
+                        //
+                        OnTrainingProgress?.Invoke(_loss, liter, (double)pos/ text.Length);
                     }
                     if (loss_p - _loss > 0)
                         layer1.LearningRate = layer2.LearningRate = layer3.LearningRate = layer1.LearningRate * 1.01;
