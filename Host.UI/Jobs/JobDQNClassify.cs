@@ -56,18 +56,24 @@ namespace Host.UI.Jobs
         /// 
         /// </summary>
         public event OnTaskCompleteHandler OnTaskComplete;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        ImageClassifyEnv _env;
+
         /// <summary>
         /// DQN classify task
         /// </summary>
         /// <param name="featureRasterLayer"></param>
         /// <param name="labelRasterLayer"></param>
         /// <param name="epochs"></param>
-        public JobDQNClassify(GRasterLayer featureRasterLayer, GRasterLayer labelRasterLayer, int epochs = 3000)
+        public JobDQNClassify(GRasterLayer featureRasterLayer, GRasterLayer labelRasterLayer, int epochs = 3000, int sampleSizeLimit = 200)
         {
             _t = new Thread(() =>
             {
-                ImageClassifyEnv env = new ImageClassifyEnv(featureRasterLayer, labelRasterLayer);
-                _dqn = new DQN(env);
+                _env = new ImageClassifyEnv(featureRasterLayer, labelRasterLayer, sampleSizeLimit);
+                _dqn = new DQN(_env);
                 _dqn.SetParameters(epochs: epochs, gamma: _gamma);
                 _dqn.OnLearningLossEventHandler += _dqn_OnLearningLossEventHandler;
                 //training
@@ -117,6 +123,16 @@ namespace Host.UI.Jobs
         {
             Process = progress;
         }
+
+        /// <summary>
+        /// example samples
+        /// </summary>
+        /// <param name="fullFilename"></param>
+        public void Export(string fullFilename)
+        {
+            _env.Export(fullFilename);
+        }
+
         /// <summary>
         /// 
         /// </summary>

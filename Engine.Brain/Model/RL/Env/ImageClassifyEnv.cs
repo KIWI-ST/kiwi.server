@@ -6,6 +6,7 @@ using Engine.GIS.GOperation.Tools;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 
 namespace Engine.Brain.AI.RL.Env
@@ -15,28 +16,40 @@ namespace Engine.Brain.AI.RL.Env
     /// </summary>
     public class ImageClassifyEnv : IEnv
     {
-        Dictionary<int, List<Point>> _memory = new Dictionary<int, List<Point>>();
-
-        int[] _randomSeedKeys;
-
+        /// <summary>
+        /// layer tool
+        /// </summary>
         private IRasterLayerCursorTool _pGRasterLayerCursorTool = new GRasterLayerCursorTool();
 
+        /// <summary>
+        /// input layer and label layer
+        /// </summary>
         private GRasterLayer _featureRasterLayer, _labelRasterLayer;
+
+        /// <summary>
+        /// limitation of every land cover type
+        /// </summary>
+        private readonly int _sampleSizeLimit;
+
         /// <summary>
         /// x,y position
         /// </summary>
         int _current_x, _current_y;
+
         /// <summary>
         /// use one-hot vector represent image class(anno)
         /// </summary>
         double[] _current_classindex;
+
         /// <summary>
         /// 指定观察的图像，和样本所在的层位置
         /// </summary>
         /// <param name="featureRasterLayer"></param>
         /// <param name="sampleIndex"></param>
-        public ImageClassifyEnv(GRasterLayer featureRasterLayer, GRasterLayer labelRasterLayer)
+        public ImageClassifyEnv(GRasterLayer featureRasterLayer, GRasterLayer labelRasterLayer , int sampleSizeLimit = 200)
         {
+            //defalut is 200
+            _sampleSizeLimit = sampleSizeLimit;
             //input feature raster layer
             _featureRasterLayer = featureRasterLayer;
             //groundtruth raster layer
@@ -61,7 +74,7 @@ namespace Engine.Brain.AI.RL.Env
         /// <summary>
         /// 
         /// </summary>
-        public int[] RandomSeedKeys { get { return _randomSeedKeys; } }
+        public int[] RandomSeedKeys { get; private set; }
         /// <summary>
         /// 
         /// </summary>
@@ -69,7 +82,24 @@ namespace Engine.Brain.AI.RL.Env
         /// <summary>
         /// 处理之后的样本集
         /// </summary>
-        public Dictionary<int, List<Point>> Memory { get { return _memory; } }
+        public Dictionary<int, List<Point>> Memory { get; private set; } = new Dictionary<int, List<Point>>();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fullFilename"></param>
+        public void Export(string fullFilename)
+        {
+            using (StreamWriter sw = new StreamWriter(fullFilename))
+            {
+                string str = "";
+                foreach (var element1 in Memory)
+                    foreach (var element2 in element1.Value)
+                        str += string.Join(",", _pGRasterLayerCursorTool.PickRawValue(element2.X, element2.Y)) + "," + element1.Key + "\r\n";
+                sw.Write(str);
+            }
+        }
+
         /// <summary>
         /// 分析标注道路区域
         /// </summary>
@@ -81,9 +111,9 @@ namespace Engine.Brain.AI.RL.Env
             //
             _pGRasterLayerCursorTool.Visit(_featureRasterLayer);
             //将memory限定成4800总量
-            _memory = pBandStasticTool.StaisticalRawGraph;
+            Memory = pBandStasticTool.StaisticalRawGraph;
             //limited the environment _memory size to cetrain number
-            _memory = _memory.LimitedDictionaryCapcaity();
+            Memory = Memory.LimitedDictionaryCapcaity(_sampleSizeLimit);
             //}{debug 保存成.txt
             // using(StreamWriter sw = new StreamWriter(@"C:\Users\81596\Desktop\B\Samples.txt"))
             // {
@@ -112,7 +142,7 @@ namespace Engine.Brain.AI.RL.Env
             ////
             //samplesBitmap.Save(@"C:\Users\81596\Desktop\B\Samples.jpg");
             //
-            _randomSeedKeys = _memory.Keys.ToArray();
+            RandomSeedKeys = Memory.Keys.ToArray();
             //
             (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
         }
@@ -131,10 +161,10 @@ namespace Engine.Brain.AI.RL.Env
         private (int x, int y, double[] classIndex) RandomAccessMemory()
         {
             //use actionNumber represent real types
-            int rawValueIndex = NP.Random(_randomSeedKeys);
-            Point p = _memory[rawValueIndex].RandomTake();
+            int rawValueIndex = NP.Random(RandomSeedKeys);
+            Point p = Memory[rawValueIndex].RandomTake();
             //current one-hot action
-            double[] classIndex = NP.ToOneHot(Array.IndexOf(_randomSeedKeys, rawValueIndex), ActionNum);
+            double[] classIndex = NP.ToOneHot(Array.IndexOf(RandomSeedKeys, rawValueIndex), ActionNum);
             return (p.X, p.Y, classIndex);
         }
         /// <summary>

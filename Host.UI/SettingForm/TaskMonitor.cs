@@ -43,6 +43,18 @@ namespace Host.UI.SettingForm
                 case "accuracy_ToolStripMenuItem":
                     MessageBox.Show(_selected_item.Text);
                     break;
+                case "Sample_Export_ToolStripMenuItem":
+                    int index = _selected_item.Index;
+                    IJob job = _jobs[index];
+                    SaveFileDialog sfg = new SaveFileDialog();
+                    sfg.AddExtension = true;
+                    sfg.DefaultExt = ".tif";
+                    if (sfg.ShowDialog() == DialogResult.OK)
+                    {
+                        string fullFilename = sfg.FileName;
+                        job.Export(fullFilename);
+                    }
+                    break;
                 default:
                     break;
             }

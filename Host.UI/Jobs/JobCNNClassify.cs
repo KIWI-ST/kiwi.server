@@ -84,6 +84,15 @@ namespace Host.UI.Jobs
             });
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fullFilename"></param>
+        public void Export(string fullFilename)
+        {
+
+        }
+
         public void Start()
         {
             StartTime = DateTime.Now;

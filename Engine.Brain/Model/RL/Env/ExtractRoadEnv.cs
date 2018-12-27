@@ -126,6 +126,16 @@ namespace Engine.Brain.AI.RL.Env
             // retrun state
             return Step(null).state;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fullFilename"></param>
+        public void Export(string fullFilename)
+        {
+
+        }
+
         /// <summary>
         /// 分析标注道路区域
         /// </summary>

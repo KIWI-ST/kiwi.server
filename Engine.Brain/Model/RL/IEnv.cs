@@ -9,6 +9,10 @@ namespace Engine.Brain.AI.RL
     public interface IEnv
     {
         /// <summary>
+        /// exprot the sample
+        /// </summary>
+        void Export(string fullFilename);
+        /// <summary>
         /// indicate the action value can be assigned by multi-action value
         /// e.g. 
         /// only support [0001] while the value is true

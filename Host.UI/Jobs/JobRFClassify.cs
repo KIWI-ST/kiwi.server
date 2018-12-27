@@ -108,6 +108,16 @@ namespace Host.UI.Jobs
                 OnTaskComplete?.Invoke(Name, fullFileName);
             });
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fullFilename"></param>
+        public void Export(string fullFilename)
+        {
+
+        }
+
         /// <summary>
         /// 
         /// </summary>

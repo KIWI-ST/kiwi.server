@@ -529,7 +529,7 @@ namespace Host.UI
                         //"Image Classification",
                         if (dqnForm.TaskName == "Image Classification")
                         {
-                            IJob dqnClassifyJob = new JobDQNClassify(_rasterDic[dqnForm.SelectedFeatureRasterLayer], _rasterDic[dqnForm.SelectedLabelRasterLayer], dqnForm.Epochs);
+                            IJob dqnClassifyJob = new JobDQNClassify(_rasterDic[dqnForm.SelectedFeatureRasterLayer], _rasterDic[dqnForm.SelectedLabelRasterLayer], dqnForm.Epochs, dqnForm.SampeSizeLimit);
                             RegisterJob(dqnClassifyJob);
                             dqnClassifyJob.Start();
                         }

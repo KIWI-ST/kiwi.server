@@ -61,6 +61,16 @@ namespace Host.UI.Jobs
                 OnTaskComplete?.Invoke(Name, name, dict, rasterLayer);
             });
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fullFilename"></param>
+        public void Export(string fullFilename)
+        {
+
+        }
+
         /// <summary>
         /// 
         /// </summary>

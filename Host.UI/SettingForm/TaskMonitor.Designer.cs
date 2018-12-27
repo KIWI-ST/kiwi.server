@@ -38,6 +38,8 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.accuracy_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.统计曲线ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+            this.Sample_Export_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.task_contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -87,35 +89,49 @@
             this.result_ToolStripMenuItem,
             this.toolStripMenuItem1,
             this.accuracy_ToolStripMenuItem,
-            this.统计曲线ToolStripMenuItem});
+            this.统计曲线ToolStripMenuItem,
+            this.toolStripMenuItem2,
+            this.Sample_Export_ToolStripMenuItem});
             this.task_contextMenuStrip.Name = "task_contextMenuStrip";
             this.task_contextMenuStrip.ShowImageMargin = false;
-            this.task_contextMenuStrip.Size = new System.Drawing.Size(114, 82);
+            this.task_contextMenuStrip.Size = new System.Drawing.Size(186, 140);
             // 
             // result_ToolStripMenuItem
             // 
             this.result_ToolStripMenuItem.Name = "result_ToolStripMenuItem";
-            this.result_ToolStripMenuItem.Size = new System.Drawing.Size(113, 24);
+            this.result_ToolStripMenuItem.Size = new System.Drawing.Size(185, 24);
             this.result_ToolStripMenuItem.Text = "处理结果";
             this.result_ToolStripMenuItem.Click += new System.EventHandler(this.ToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(110, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(182, 6);
             // 
             // accuracy_ToolStripMenuItem
             // 
             this.accuracy_ToolStripMenuItem.Name = "accuracy_ToolStripMenuItem";
-            this.accuracy_ToolStripMenuItem.Size = new System.Drawing.Size(113, 24);
+            this.accuracy_ToolStripMenuItem.Size = new System.Drawing.Size(185, 24);
             this.accuracy_ToolStripMenuItem.Text = "精度曲线";
             this.accuracy_ToolStripMenuItem.Click += new System.EventHandler(this.ToolStripMenuItem_Click);
             // 
             // 统计曲线ToolStripMenuItem
             // 
             this.统计曲线ToolStripMenuItem.Name = "统计曲线ToolStripMenuItem";
-            this.统计曲线ToolStripMenuItem.Size = new System.Drawing.Size(113, 24);
+            this.统计曲线ToolStripMenuItem.Size = new System.Drawing.Size(185, 24);
             this.统计曲线ToolStripMenuItem.Text = "统计曲线";
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(182, 6);
+            // 
+            // Sample_Export_ToolStripMenuItem
+            // 
+            this.Sample_Export_ToolStripMenuItem.Name = "Sample_Export_ToolStripMenuItem";
+            this.Sample_Export_ToolStripMenuItem.Size = new System.Drawing.Size(185, 24);
+            this.Sample_Export_ToolStripMenuItem.Text = "样本导出";
+            this.Sample_Export_ToolStripMenuItem.Click += new System.EventHandler(this.ToolStripMenuItem_Click);
             // 
             // TaskMonitor
             // 
@@ -145,5 +161,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem accuracy_ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 统计曲线ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem Sample_Export_ToolStripMenuItem;
     }
 }

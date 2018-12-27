@@ -25,6 +25,8 @@ namespace Host.UI.SettingForm
 
         public int Epochs { get; private set; }
 
+        public int SampeSizeLimit { get; private set; }
+
         private string[] _task_names = new string[] {"Image Classification","Road Extraction"};
 
         public Dictionary<string, GRasterLayer> RasterDic
@@ -52,13 +54,13 @@ namespace Host.UI.SettingForm
             });
         }
 
-        private void state_comboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void State_comboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             string key = (sender as ComboBox).SelectedItem as string;
             SelectedFeatureRasterLayer = key;
         }
 
-        private void feedback_comboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void Feedback_comboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             string key = (sender as ComboBox).SelectedItem as string;
             SelectedLabelRasterLayer = key;
@@ -69,9 +71,13 @@ namespace Host.UI.SettingForm
             TaskName = (sender as ComboBox).SelectedItem as string;
         }
 
-        private void ok_button_Click(object sender, EventArgs e)
+        private void Ok_button_Click(object sender, EventArgs e)
         {
+            //训练轮次
             Epochs = (int)(epochs_numericUpDown as NumericUpDown).Value;
+            //样本数量限制参数
+            SampeSizeLimit = (int)(sample_size_numericUpDown as NumericUpDown).Value;
+            //关闭设置窗体
             Close();
         }
     }
