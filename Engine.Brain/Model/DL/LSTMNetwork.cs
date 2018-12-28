@@ -8,21 +8,10 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Engine.Brain.Model.DL
 {
-    /// <summary>
-    /// event handler
-    /// </summary>
-    /// <param name="loss"></param>
-    /// <param name="liter"></param>
-    public delegate void OnTrainingEventHanlder(double loss, int liter, double progress);
 
     [Serializable]
     public class LSTMNetwork
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        public event OnTrainingEventHanlder OnTrainingProgress;
-
         /// <summary>
         /// 网络结构
         /// </summary>
@@ -46,7 +35,7 @@ namespace Engine.Brain.Model.DL
         /// <summary>
         /// loss计算
         /// </summary>
-        double _loss = 0.0;
+        public double Loss { get; private set; } = 0.0;
 
         /// <summary>
         /// 自动存储路径
@@ -58,8 +47,19 @@ namespace Engine.Brain.Model.DL
         /// </summary>
         double _targetLoss;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public double Process { get; private set; } = 0.0;
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="vocaSize"></param>
+        /// <param name="buffersize"></param>
+        /// <param name="hiddenNeuronsCount"></param>
+        /// <param name="learningRate"></param>
+        /// <param name="targetLoss"></param>
         public LSTMNetwork(int vocaSize, int buffersize = 24, int hiddenNeuronsCount = 300, double learningRate = 0.001, double targetLoss = 0.01)
         {
             _vocaSize = vocaSize;
@@ -74,6 +74,10 @@ namespace Engine.Brain.Model.DL
             layer3.LearningRate = learningRate;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fileName"></param>
         public void Save(string fileName)
         {
             FileStream stream = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None);
@@ -81,12 +85,21 @@ namespace Engine.Brain.Model.DL
             stream.Close();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="stream"></param>
         private void Save(Stream stream)
         {
             IFormatter formatter = new BinaryFormatter();
             formatter.Serialize(stream, this);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
         public static LSTMNetwork Load(string fileName)
         {
             FileStream stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
@@ -95,6 +108,11 @@ namespace Engine.Brain.Model.DL
             return network;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <returns></returns>
         private static LSTMNetwork Load(Stream stream)
         {
             IFormatter formatter = new BinaryFormatter();
@@ -102,11 +120,19 @@ namespace Engine.Brain.Model.DL
             return network;
         }
 
+        public int liter { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="textFullFilename"></param>
+        /// <param name="_lexicon"></param>
         public void LearnFromRawText(string textFullFilename, Lexicon.Entity.Lexicon _lexicon)
         {
             double loss_p = Math.Log(_lexicon.VocaSize);
             //迭代次数和自动存储的迭代轮次
-            int liter = 1, saveInterval = 10;
+            liter = 1;
+            int saveInterval = 10;
             using (StreamReader sr = new StreamReader(textFullFilename))
             {
                 string rawText = "";
@@ -129,28 +155,26 @@ namespace Engine.Brain.Model.DL
                         vx[_lexicon.DictIndex[text[pos]]] = 1;
                         AdvanceBuffer(buffer, vx, bufferSize);
                         // calcute loss
-                        var grads = Loss(probs, buffer, bufferSize, _lexicon.VocaSize);
+                        var grads = Cost(probs, buffer, bufferSize, _lexicon.VocaSize);
                         // backward
                         layer1.Backward(layer2.Backward(layer3.Backward(grads)));
                         //
-                        OnTrainingProgress?.Invoke(_loss, liter, (double)pos/ text.Length);
+                        Process = (double)pos / text.Length;
                     }
-                    if (loss_p - _loss > 0)
+                    if (loss_p - Loss > 0)
                         layer1.LearningRate = layer2.LearningRate = layer3.LearningRate = layer1.LearningRate * 1.01;
                     else
                         layer1.LearningRate = layer2.LearningRate = layer3.LearningRate = layer1.LearningRate * 0.98;
-                    loss_p = loss_p * 0.8 + _loss * 0.2;
+                    loss_p = loss_p * 0.8 + Loss * 0.2;
                     liter++;
                     //
-                    if (_loss < _targetLoss)
+                    if (Loss < _targetLoss)
                     {
                         Save(_autoSave);
                         break;
                     }
                     else if (liter % saveInterval == 0)
-                    {
                         Save(_autoSave);
-                    }
                 }
             }
         }
@@ -210,7 +234,7 @@ namespace Engine.Brain.Model.DL
         /// <param name="BufferSize"></param>
         /// <param name="size_vocab"></param>
         /// <returns></returns>
-        private double[][] Loss(double[][] probs, double[][] targets, int BufferSize, int size_vocab)
+        private double[][] Cost(double[][] probs, double[][] targets, int BufferSize, int size_vocab)
         {
             var ls = 0.0;
             var grads = new double[BufferSize][];
@@ -224,7 +248,7 @@ namespace Engine.Brain.Model.DL
                 }
             }
             ls = ls / (_bufferSize - 1);
-            _loss = _loss * 0.99 + ls * 0.01;
+            Loss = Loss * 0.99 + ls * 0.01;
             return grads;
         }
 

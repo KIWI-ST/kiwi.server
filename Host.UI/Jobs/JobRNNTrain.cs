@@ -17,9 +17,24 @@ namespace Host.UI.Jobs
 
         public string Name => "JobRNNTrainingTask";
 
-        public string Summary { get; private set; } = "";
+        public string Summary { get {
 
-        public double Process { get; private set; } = 0.0;
+                if (network == null)
+                    return "";
+                else
+                    return string.Format("loss:{0},liter:{1}", network.Loss, network.liter);
+            } }
+
+        public double Process
+        {
+            get
+            {
+                if (network == null)
+                    return 0;
+                else
+                    return network.Process;
+            }
+        }
 
         public DateTime StartTime { get; private set; } = DateTime.Now;
 
@@ -29,26 +44,19 @@ namespace Host.UI.Jobs
 
         Thread _t;
 
+        LSTMNetwork network; 
+
         public JobRNNTrain(string rawTextFullFilename, string exitsModelFullFilename = null, string lexiconFullFilename = null)
         {
             _t = new Thread(() =>
             {
                 //如果没有字典文件，则从原始文本中构建字典
-                Summary = string.Format("statical lexicon in progress ...");
                 Lexicon lexicon = lexiconFullFilename == null ? Lexicon.FromVocabularyFile(rawTextFullFilename, EncodeScheme.Onehot) : Lexicon.FromExistLexiconFile(lexiconFullFilename, EncodeScheme.Onehot);
-                LSTMNetwork network = !File.Exists(exitsModelFullFilename) ? new LSTMNetwork(lexicon.VocaSize) : LSTMNetwork.Load(exitsModelFullFilename);
-                network.OnTrainingProgress += Network_OnTrainingProgress;
+                network = !File.Exists(exitsModelFullFilename) ? new LSTMNetwork(lexicon.VocaSize) : LSTMNetwork.Load(exitsModelFullFilename);
                 network.LearnFromRawText(rawTextFullFilename,lexicon);
-                //训练中
-                Summary = string.Format("RNN training complete");
+                //训练完成
                 OnTaskComplete?.Invoke(Name);
             });
-        }
-
-        private void Network_OnTrainingProgress(double loss, int liter,double process)
-        {
-            Process = process;
-            Summary = string.Format("Liter:{0}, Loss:{1} ", liter, loss);
         }
 
         public void Export(string fullFilename)
