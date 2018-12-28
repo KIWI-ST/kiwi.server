@@ -36,7 +36,7 @@ namespace Host.UI.Jobs
                 //如果没有字典文件，则从原始文本中构建字典
                 Summary = string.Format("statical lexicon in progress ...");
                 Lexicon lexicon = lexiconFullFilename == null ? Lexicon.FromVocabularyFile(rawTextFullFilename, EncodeScheme.Onehot) : Lexicon.FromExistLexiconFile(lexiconFullFilename, EncodeScheme.Onehot);
-                LSTMNetwork network = exitsModelFullFilename == null&&!File.Exists(exitsModelFullFilename) ? new LSTMNetwork(lexicon.VocaSize) : LSTMNetwork.Load(exitsModelFullFilename);
+                LSTMNetwork network = !File.Exists(exitsModelFullFilename) ? new LSTMNetwork(lexicon.VocaSize) : LSTMNetwork.Load(exitsModelFullFilename);
                 network.OnTrainingProgress += Network_OnTrainingProgress;
                 network.LearnFromRawText(rawTextFullFilename,lexicon);
                 //训练中

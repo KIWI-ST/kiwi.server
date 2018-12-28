@@ -63,7 +63,7 @@ namespace Engine.Lexicon.Entity
         /// <summary>
         /// 默认最大的词汇量
         /// </summary>
-        readonly int _voca_max_size = 3000;
+        readonly int _voca_max_size = 10000;
 
         /// <summary>
         /// 
