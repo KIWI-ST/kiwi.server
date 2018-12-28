@@ -65,6 +65,7 @@
             this.bandCombine_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.bandExport_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.main_notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.map_menuStrip.SuspendLayout();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
@@ -445,6 +446,15 @@
             this.bandExport_ToolStripMenuItem.Text = "Band Export";
             this.bandExport_ToolStripMenuItem.Click += new System.EventHandler(this.Map_treeView_Click);
             // 
+            // main_notifyIcon
+            // 
+            this.main_notifyIcon.BalloonTipText = "toolkit working in the background";
+            this.main_notifyIcon.BalloonTipTitle = "AI-Based Toolkit";
+            this.main_notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("main_notifyIcon.Icon")));
+            this.main_notifyIcon.Text = "please double click to restore the view";
+            this.main_notifyIcon.Visible = true;
+            this.main_notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.main_notifyIcon_MouseDoubleClick);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -460,6 +470,7 @@
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "AI-Based Toolkit";
+            this.Resize += new System.EventHandler(this.Main_Resize);
             this.map_menuStrip.ResumeLayout(false);
             this.map_menuStrip.PerformLayout();
             this.map_toolStrip.ResumeLayout(false);
@@ -523,6 +534,7 @@
         private System.Windows.Forms.ToolStripMenuItem RPC_ToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton LSTM_toolStripButton;
         private System.Windows.Forms.TabPage tab_textview;
+        private System.Windows.Forms.NotifyIcon main_notifyIcon;
     }
 }
 

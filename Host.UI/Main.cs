@@ -39,6 +39,41 @@ namespace Host.UI
             InitializeComponent();
         }
 
+        bool _is_firstBallon = true;
+
+        /// <summary>
+        /// Main UI Management
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Main_Resize(object sender, EventArgs e)
+        {
+            if(WindowState == FormWindowState.Minimized)
+            {
+                main_notifyIcon.Visible = true;
+                //only show at the frist time
+                if (_is_firstBallon)
+                {
+                    main_notifyIcon.ShowBalloonTip(1600);
+                    _is_firstBallon = false;
+                }
+                Hide();
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void main_notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            main_notifyIcon.Visible = false;
+            Show();
+            WindowState = FormWindowState.Normal;
+            Focus();
+        }
+
         #endregion
 
         #region 缓存管理
@@ -628,6 +663,7 @@ namespace Host.UI
         }
 
         #endregion
+
 
     }
 }
