@@ -214,17 +214,14 @@ namespace Host.UI
         {
             if (statue == STATUE_ENUM.ERROR)
             {
-                map_statusLabel.Image = Properties.Resources.smile_sad_64;
                 map_statusLabel.ForeColor = Color.Red;
             }
             else if (statue == STATUE_ENUM.WARNING)
             {
-                map_statusLabel.Image = Properties.Resources.smile_sad_64;
                 map_statusLabel.ForeColor = Color.Red;
             }
             else
             {
-                map_statusLabel.Image = Properties.Resources.smile_64;
                 map_statusLabel.ForeColor = Color.Black;
             }
             //

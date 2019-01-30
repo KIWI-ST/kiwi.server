@@ -96,8 +96,7 @@
             this.工具TToolStripMenuItem});
             this.map_menuStrip.Location = new System.Drawing.Point(0, 0);
             this.map_menuStrip.Name = "map_menuStrip";
-            this.map_menuStrip.Padding = new System.Windows.Forms.Padding(4, 2, 0, 2);
-            this.map_menuStrip.Size = new System.Drawing.Size(1183, 28);
+            this.map_menuStrip.Size = new System.Drawing.Size(887, 25);
             this.map_menuStrip.TabIndex = 0;
             this.map_menuStrip.Text = "menuStrip1";
             // 
@@ -106,7 +105,7 @@
             this.文件FToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.open_toolstripmenuitem});
             this.文件FToolStripMenuItem.Name = "文件FToolStripMenuItem";
-            this.文件FToolStripMenuItem.Size = new System.Drawing.Size(68, 24);
+            this.文件FToolStripMenuItem.Size = new System.Drawing.Size(57, 21);
             this.文件FToolStripMenuItem.Text = "File (&F)";
             // 
             // open_toolstripmenuitem
@@ -115,7 +114,7 @@
             this.open_toolstripmenuitem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.open_toolstripmenuitem.Name = "open_toolstripmenuitem";
             this.open_toolstripmenuitem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.open_toolstripmenuitem.Size = new System.Drawing.Size(208, 26);
+            this.open_toolstripmenuitem.Size = new System.Drawing.Size(177, 22);
             this.open_toolstripmenuitem.Text = "Open (&O)";
             this.open_toolstripmenuitem.Click += new System.EventHandler(this.Map_function_Click);
             // 
@@ -124,13 +123,13 @@
             this.工具TToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.RPC_ToolStripMenuItem});
             this.工具TToolStripMenuItem.Name = "工具TToolStripMenuItem";
-            this.工具TToolStripMenuItem.Size = new System.Drawing.Size(84, 24);
+            this.工具TToolStripMenuItem.Size = new System.Drawing.Size(71, 21);
             this.工具TToolStripMenuItem.Text = "Tools (&T)";
             // 
             // RPC_ToolStripMenuItem
             // 
             this.RPC_ToolStripMenuItem.Name = "RPC_ToolStripMenuItem";
-            this.RPC_ToolStripMenuItem.Size = new System.Drawing.Size(167, 26);
+            this.RPC_ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.RPC_ToolStripMenuItem.Text = "RPC Rectify";
             this.RPC_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
@@ -147,9 +146,9 @@
             this.kappa_toolStripButton,
             this.toolStripSeparator1,
             this.task_toolStripButton});
-            this.map_toolStrip.Location = new System.Drawing.Point(0, 28);
+            this.map_toolStrip.Location = new System.Drawing.Point(0, 25);
             this.map_toolStrip.Name = "map_toolStrip";
-            this.map_toolStrip.Size = new System.Drawing.Size(1183, 47);
+            this.map_toolStrip.Size = new System.Drawing.Size(887, 44);
             this.map_toolStrip.TabIndex = 1;
             this.map_toolStrip.Text = "toolStrip1";
             // 
@@ -158,7 +157,7 @@
             this.LSTM_toolStripButton.Image = global::Host.UI.Properties.Resources.comment_64;
             this.LSTM_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.LSTM_toolStripButton.Name = "LSTM_toolStripButton";
-            this.LSTM_toolStripButton.Size = new System.Drawing.Size(54, 44);
+            this.LSTM_toolStripButton.Size = new System.Drawing.Size(44, 41);
             this.LSTM_toolStripButton.Text = "LSTM";
             this.LSTM_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.LSTM_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
@@ -169,7 +168,7 @@
             this.CNN_toolStripButton.Image = global::Host.UI.Properties.Resources.disk_64;
             this.CNN_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.CNN_toolStripButton.Name = "CNN_toolStripButton";
-            this.CNN_toolStripButton.Size = new System.Drawing.Size(47, 44);
+            this.CNN_toolStripButton.Size = new System.Drawing.Size(40, 41);
             this.CNN_toolStripButton.Text = "CNN";
             this.CNN_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.CNN_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
@@ -179,7 +178,7 @@
             this.rf_toolStripButton.Image = global::Host.UI.Properties.Resources.bulb_off_64;
             this.rf_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.rf_toolStripButton.Name = "rf_toolStripButton";
-            this.rf_toolStripButton.Size = new System.Drawing.Size(47, 44);
+            this.rf_toolStripButton.Size = new System.Drawing.Size(42, 41);
             this.rf_toolStripButton.Text = "  RF  ";
             this.rf_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.rf_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
@@ -189,7 +188,7 @@
             this.DQN_toolStripButton.Image = global::Host.UI.Properties.Resources.laptop_64;
             this.DQN_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.DQN_toolStripButton.Name = "DQN_toolStripButton";
-            this.DQN_toolStripButton.Size = new System.Drawing.Size(48, 44);
+            this.DQN_toolStripButton.Size = new System.Drawing.Size(41, 41);
             this.DQN_toolStripButton.Text = "DQN";
             this.DQN_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.DQN_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
@@ -197,14 +196,14 @@
             // main_toolStripSeparator
             // 
             this.main_toolStripSeparator.Name = "main_toolStripSeparator";
-            this.main_toolStripSeparator.Size = new System.Drawing.Size(6, 47);
+            this.main_toolStripSeparator.Size = new System.Drawing.Size(6, 44);
             // 
             // Compare_Plot_toolStripButton
             // 
             this.Compare_Plot_toolStripButton.Image = global::Host.UI.Properties.Resources.brush_64;
             this.Compare_Plot_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.Compare_Plot_toolStripButton.Name = "Compare_Plot_toolStripButton";
-            this.Compare_Plot_toolStripButton.Size = new System.Drawing.Size(55, 44);
+            this.Compare_Plot_toolStripButton.Size = new System.Drawing.Size(45, 41);
             this.Compare_Plot_toolStripButton.Text = "Curve";
             this.Compare_Plot_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.Compare_Plot_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
@@ -214,7 +213,7 @@
             this.kappa_toolStripButton.Image = global::Host.UI.Properties.Resources.copy_64;
             this.kappa_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.kappa_toolStripButton.Name = "kappa_toolStripButton";
-            this.kappa_toolStripButton.Size = new System.Drawing.Size(59, 44);
+            this.kappa_toolStripButton.Size = new System.Drawing.Size(50, 41);
             this.kappa_toolStripButton.Text = "Kappa";
             this.kappa_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.kappa_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
@@ -222,14 +221,14 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 47);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 44);
             // 
             // task_toolStripButton
             // 
             this.task_toolStripButton.Image = global::Host.UI.Properties.Resources.sum_64;
             this.task_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.task_toolStripButton.Name = "task_toolStripButton";
-            this.task_toolStripButton.Size = new System.Drawing.Size(73, 44);
+            this.task_toolStripButton.Size = new System.Drawing.Size(59, 41);
             this.task_toolStripButton.Text = "Monitor";
             this.task_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.task_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
@@ -241,33 +240,31 @@
             this.empty_statusLabel,
             this.map_processBar,
             this.map_statusLabel});
-            this.map_statusStrip.Location = new System.Drawing.Point(0, 791);
+            this.map_statusStrip.Location = new System.Drawing.Point(0, 631);
             this.map_statusStrip.Name = "map_statusStrip";
-            this.map_statusStrip.Padding = new System.Windows.Forms.Padding(1, 0, 19, 0);
             this.map_statusStrip.ShowItemToolTips = true;
-            this.map_statusStrip.Size = new System.Drawing.Size(1183, 25);
+            this.map_statusStrip.Size = new System.Drawing.Size(887, 22);
             this.map_statusStrip.TabIndex = 2;
             this.map_statusStrip.Text = "statusStrip1";
             // 
             // empty_statusLabel
             // 
             this.empty_statusLabel.Name = "empty_statusLabel";
-            this.empty_statusLabel.Size = new System.Drawing.Size(1093, 20);
+            this.empty_statusLabel.Size = new System.Drawing.Size(811, 20);
             this.empty_statusLabel.Spring = true;
             // 
             // map_processBar
             // 
             this.map_processBar.Name = "map_processBar";
-            this.map_processBar.Size = new System.Drawing.Size(133, 24);
+            this.map_processBar.Size = new System.Drawing.Size(100, 19);
             this.map_processBar.Visible = false;
             // 
             // map_statusLabel
             // 
             this.map_statusLabel.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.map_statusLabel.Image = global::Host.UI.Properties.Resources.smile_64;
             this.map_statusLabel.Name = "map_statusLabel";
             this.map_statusLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.map_statusLabel.Size = new System.Drawing.Size(70, 20);
+            this.map_statusLabel.Size = new System.Drawing.Size(41, 17);
             this.map_statusLabel.Text = "ready";
             this.map_statusLabel.ToolTipText = "指示当前工具运行状态";
             // 
@@ -275,8 +272,7 @@
             // 
             this.splitContainer_main.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.splitContainer_main.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer_main.Location = new System.Drawing.Point(0, 75);
-            this.splitContainer_main.Margin = new System.Windows.Forms.Padding(4);
+            this.splitContainer_main.Location = new System.Drawing.Point(0, 69);
             this.splitContainer_main.Name = "splitContainer_main";
             // 
             // splitContainer_main.Panel1
@@ -286,9 +282,8 @@
             // splitContainer_main.Panel2
             // 
             this.splitContainer_main.Panel2.Controls.Add(this.tabControl2);
-            this.splitContainer_main.Size = new System.Drawing.Size(1183, 716);
-            this.splitContainer_main.SplitterDistance = 236;
-            this.splitContainer_main.SplitterWidth = 5;
+            this.splitContainer_main.Size = new System.Drawing.Size(887, 562);
+            this.splitContainer_main.SplitterDistance = 176;
             this.splitContainer_main.TabIndex = 3;
             // 
             // map_tabControl
@@ -296,20 +291,18 @@
             this.map_tabControl.Controls.Add(this.tab_treeview);
             this.map_tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.map_tabControl.Location = new System.Drawing.Point(0, 0);
-            this.map_tabControl.Margin = new System.Windows.Forms.Padding(4);
             this.map_tabControl.Name = "map_tabControl";
             this.map_tabControl.SelectedIndex = 0;
-            this.map_tabControl.Size = new System.Drawing.Size(232, 712);
+            this.map_tabControl.Size = new System.Drawing.Size(172, 558);
             this.map_tabControl.TabIndex = 0;
             // 
             // tab_treeview
             // 
             this.tab_treeview.Controls.Add(this.map_treeView);
-            this.tab_treeview.Location = new System.Drawing.Point(4, 25);
-            this.tab_treeview.Margin = new System.Windows.Forms.Padding(4);
+            this.tab_treeview.Location = new System.Drawing.Point(4, 22);
             this.tab_treeview.Name = "tab_treeview";
-            this.tab_treeview.Padding = new System.Windows.Forms.Padding(4);
-            this.tab_treeview.Size = new System.Drawing.Size(224, 683);
+            this.tab_treeview.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tab_treeview.Size = new System.Drawing.Size(164, 532);
             this.tab_treeview.TabIndex = 0;
             this.tab_treeview.Text = "TreeView";
             this.tab_treeview.UseVisualStyleBackColor = true;
@@ -317,10 +310,9 @@
             // map_treeView
             // 
             this.map_treeView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.map_treeView.Location = new System.Drawing.Point(4, 4);
-            this.map_treeView.Margin = new System.Windows.Forms.Padding(4);
+            this.map_treeView.Location = new System.Drawing.Point(3, 3);
             this.map_treeView.Name = "map_treeView";
-            this.map_treeView.Size = new System.Drawing.Size(216, 675);
+            this.map_treeView.Size = new System.Drawing.Size(158, 526);
             this.map_treeView.TabIndex = 0;
             this.map_treeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.Map_treeView_NodeMouseClick);
             // 
@@ -330,20 +322,18 @@
             this.tabControl2.Controls.Add(this.tab_textview);
             this.tabControl2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl2.Location = new System.Drawing.Point(0, 0);
-            this.tabControl2.Margin = new System.Windows.Forms.Padding(4);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(938, 712);
+            this.tabControl2.Size = new System.Drawing.Size(703, 558);
             this.tabControl2.TabIndex = 0;
             // 
             // tab_mapview
             // 
             this.tab_mapview.Controls.Add(this.map_splitContainer);
-            this.tab_mapview.Location = new System.Drawing.Point(4, 25);
-            this.tab_mapview.Margin = new System.Windows.Forms.Padding(4);
+            this.tab_mapview.Location = new System.Drawing.Point(4, 22);
             this.tab_mapview.Name = "tab_mapview";
-            this.tab_mapview.Padding = new System.Windows.Forms.Padding(4);
-            this.tab_mapview.Size = new System.Drawing.Size(930, 683);
+            this.tab_mapview.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tab_mapview.Size = new System.Drawing.Size(695, 532);
             this.tab_mapview.TabIndex = 1;
             this.tab_mapview.Text = "MapView";
             this.tab_mapview.UseVisualStyleBackColor = true;
@@ -352,8 +342,8 @@
             // 
             this.map_splitContainer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.map_splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.map_splitContainer.Location = new System.Drawing.Point(4, 4);
-            this.map_splitContainer.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.map_splitContainer.Location = new System.Drawing.Point(3, 3);
+            this.map_splitContainer.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.map_splitContainer.Name = "map_splitContainer";
             this.map_splitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -364,8 +354,9 @@
             // map_splitContainer.Panel2
             // 
             this.map_splitContainer.Panel2.Controls.Add(this.map_listBox);
-            this.map_splitContainer.Size = new System.Drawing.Size(922, 675);
-            this.map_splitContainer.SplitterDistance = 436;
+            this.map_splitContainer.Size = new System.Drawing.Size(689, 526);
+            this.map_splitContainer.SplitterDistance = 339;
+            this.map_splitContainer.SplitterWidth = 3;
             this.map_splitContainer.TabIndex = 1;
             // 
             // map_pictureBox
@@ -373,9 +364,9 @@
             this.map_pictureBox.ContextMenuStrip = this.map_contextMenuStrip;
             this.map_pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.map_pictureBox.Location = new System.Drawing.Point(0, 0);
-            this.map_pictureBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.map_pictureBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.map_pictureBox.Name = "map_pictureBox";
-            this.map_pictureBox.Size = new System.Drawing.Size(918, 432);
+            this.map_pictureBox.Size = new System.Drawing.Size(685, 335);
             this.map_pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.map_pictureBox.TabIndex = 0;
             this.map_pictureBox.TabStop = false;
@@ -387,12 +378,12 @@
             this.open_contextMenuStrip});
             this.map_contextMenuStrip.Name = "map_contextMenuStrip";
             this.map_contextMenuStrip.ShowImageMargin = false;
-            this.map_contextMenuStrip.Size = new System.Drawing.Size(120, 28);
+            this.map_contextMenuStrip.Size = new System.Drawing.Size(106, 26);
             // 
             // open_contextMenuStrip
             // 
             this.open_contextMenuStrip.Name = "open_contextMenuStrip";
-            this.open_contextMenuStrip.Size = new System.Drawing.Size(119, 24);
+            this.open_contextMenuStrip.Size = new System.Drawing.Size(105, 22);
             this.open_contextMenuStrip.Text = "Open (&O)";
             this.open_contextMenuStrip.Click += new System.EventHandler(this.Map_function_Click);
             // 
@@ -400,18 +391,19 @@
             // 
             this.map_listBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.map_listBox.FormattingEnabled = true;
-            this.map_listBox.ItemHeight = 15;
+            this.map_listBox.ItemHeight = 12;
             this.map_listBox.Location = new System.Drawing.Point(0, 0);
-            this.map_listBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.map_listBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.map_listBox.Name = "map_listBox";
-            this.map_listBox.Size = new System.Drawing.Size(918, 231);
+            this.map_listBox.Size = new System.Drawing.Size(685, 180);
             this.map_listBox.TabIndex = 0;
             // 
             // tab_textview
             // 
-            this.tab_textview.Location = new System.Drawing.Point(4, 25);
+            this.tab_textview.Location = new System.Drawing.Point(4, 22);
+            this.tab_textview.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tab_textview.Name = "tab_textview";
-            this.tab_textview.Size = new System.Drawing.Size(930, 683);
+            this.tab_textview.Size = new System.Drawing.Size(696, 544);
             this.tab_textview.TabIndex = 2;
             this.tab_textview.Text = "TextView";
             this.tab_textview.UseVisualStyleBackColor = true;
@@ -425,24 +417,24 @@
             this.bandExport_ToolStripMenuItem});
             this.tree_contextMenuStrip.Name = "tree_contextMenuStrip";
             this.tree_contextMenuStrip.ShowImageMargin = false;
-            this.tree_contextMenuStrip.Size = new System.Drawing.Size(159, 58);
+            this.tree_contextMenuStrip.Size = new System.Drawing.Size(136, 54);
             // 
             // bandCombine_ToolStripMenuItem
             // 
             this.bandCombine_ToolStripMenuItem.Name = "bandCombine_ToolStripMenuItem";
-            this.bandCombine_ToolStripMenuItem.Size = new System.Drawing.Size(158, 24);
+            this.bandCombine_ToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
             this.bandCombine_ToolStripMenuItem.Text = "Layer Stacking";
             this.bandCombine_ToolStripMenuItem.Click += new System.EventHandler(this.Map_treeView_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(155, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(132, 6);
             // 
             // bandExport_ToolStripMenuItem
             // 
             this.bandExport_ToolStripMenuItem.Name = "bandExport_ToolStripMenuItem";
-            this.bandExport_ToolStripMenuItem.Size = new System.Drawing.Size(158, 24);
+            this.bandExport_ToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
             this.bandExport_ToolStripMenuItem.Text = "Band Export";
             this.bandExport_ToolStripMenuItem.Click += new System.EventHandler(this.Map_treeView_Click);
             // 
@@ -457,16 +449,15 @@
             // 
             // Main
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1183, 816);
+            this.ClientSize = new System.Drawing.Size(887, 653);
             this.Controls.Add(this.splitContainer_main);
             this.Controls.Add(this.map_statusStrip);
             this.Controls.Add(this.map_toolStrip);
             this.Controls.Add(this.map_menuStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.map_menuStrip;
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "AI-Based Toolkit";
