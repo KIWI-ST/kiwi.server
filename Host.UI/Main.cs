@@ -48,7 +48,7 @@ namespace Host.UI
         /// <param name="e"></param>
         private void Main_Resize(object sender, EventArgs e)
         {
-            if(WindowState == FormWindowState.Minimized)
+            if (WindowState == FormWindowState.Minimized)
             {
                 main_notifyIcon.Visible = true;
                 //only show at the frist time
@@ -246,7 +246,7 @@ namespace Host.UI
             else
                 map_treeView.Nodes.Add(childrenNode);
             //2.应对picture更新
-            if(_imageDic.ContainsKey(childrenNode.Text))
+            if (_imageDic.ContainsKey(childrenNode.Text))
                 map_pictureBox.Image = _imageDic[childrenNode.Text]?.BMP;
         }
         /// <summary>
@@ -357,11 +357,11 @@ namespace Host.UI
         private void ReadRaster(string fullFilename)
         {
             string name = Path.GetFileNameWithoutExtension(fullFilename);
-            if(map_treeView.Nodes.ContainsKey(name))
+            if (map_treeView.Nodes.ContainsKey(name))
                 Invoke(new UpdateStatusLabelHandler(UpdateStatusLabel), "请勿重复加载影像", STATUE_ENUM.ERROR);
             else
             {
-                TreeNode node = new TreeNode(name){ Name = name };
+                TreeNode node = new TreeNode(name) { Name = name };
                 Invoke(new UpdateTreeNodeHandler(UpdateTreeNode), null, node);
                 IJob readRasterJob = new JobReadRaster(fullFilename);
                 RegisterJob(readRasterJob);
@@ -371,7 +371,7 @@ namespace Host.UI
         /// <summary>
         /// Update Read Raster UI
         /// </summary>
-        private void UpdateReadRasterUI(string nodeName, Dictionary<string, Bitmap2> dict,GRasterLayer rasterLayer)
+        private void UpdateReadRasterUI(string nodeName, Dictionary<string, Bitmap2> dict, GRasterLayer rasterLayer)
         {
             TreeNode node = map_treeView.Nodes[nodeName];
             _imageDic[nodeName] = null;
@@ -411,7 +411,7 @@ namespace Host.UI
         {
             switch (taskName)
             {
-                    //load image classification result
+                //load image classification result
                 case "COVRasterTask":
                 case "RFClassificationTask":
                 case "CnnClassificationTask":
@@ -419,14 +419,14 @@ namespace Host.UI
                     string fullFilename = outputs[0] as string;
                     ReadRaster(fullFilename);
                     break;
-                    //load image
+                //load image
                 case "ReadRasterTask":
                     string nodeName = outputs[0] as string;
                     Dictionary<string, Bitmap2> dict = outputs[1] as Dictionary<string, Bitmap2>;
                     GRasterLayer rasterLayer = outputs[2] as GRasterLayer;
                     UpdateReadRasterUI(nodeName, dict, rasterLayer);
                     break;
-                    // rpc rester rectify
+                // rpc rester rectify
                 case "RPCRasterRectifyTask":
                     break;
                 default:
@@ -451,7 +451,7 @@ namespace Host.UI
             ToolStripItem item = sender as ToolStripItem;
             switch (item.Name)
             {
-                    //lstm test 
+                //lstm test 
                 case "LSTM_toolStripButton":
                     string rawTextFullFilename = Directory.GetCurrentDirectory() + @"\tmp\RawText.txt";
                     string autosave = Directory.GetCurrentDirectory() + @"\tmp\autolstm.bin";
@@ -459,7 +459,7 @@ namespace Host.UI
                     RegisterJob(rnnTrainJob);
                     rnnTrainJob.Start();
                     break;
-                    //rpc transform
+                //rpc transform
                 case "RPC_ToolStripMenuItem":
                     RPCForm rpcForm = new RPCForm();
                     if (rpcForm.ShowDialog() == DialogResult.OK)
@@ -469,7 +469,7 @@ namespace Host.UI
                         rpcRectifyJob.Start();
                     }
                     break;
-                    //cov matrix
+                //cov matrix
                 case "cov_toolStripButton":
                     COVForm covForm = new COVForm();
                     covForm.RasterDic = _rasterDic;
@@ -477,29 +477,29 @@ namespace Host.UI
                     {
                         GRasterBand band1 = _rasterDic[covForm.Target1Key].BandCollection[0];
                         GRasterBand band2 = _rasterDic[covForm.Target2Key].BandCollection[0];
-                        IJob covRasterJob = new JobCOVRaster(band1,band2);
+                        IJob covRasterJob = new JobCOVRaster(band1, band2);
                         RegisterJob(covRasterJob);
                         covRasterJob.Start();
                     }
                     break;
-                    //task
+                //task
                 case "task_toolStripButton":
                     TaskMonitor taskForm = new TaskMonitor();
                     taskForm.Jobs = _jobs;
                     taskForm.ShowDialog();
                     break;
-                    //calucte kappa
+                //calucte kappa
                 case "kappa_toolStripButton":
                     KappaForm kappaForm = new KappaForm();
                     kappaForm.RasterDic = _rasterDic;
                     kappaForm.ShowDialog();
                     break;
-                    //添加图像
+                //添加图像
                 case "open_toolstripmenuitem":
                 case "open_contextMenuStrip":
                     ReadImage();
                     break;
-                    //超像素分割
+                //超像素分割
                 case "SLIC_toolStripButton":
                 case "SLIC_toolStripMenu":
                     Bitmap bmp = map_pictureBox.Image as Bitmap;
@@ -513,7 +513,7 @@ namespace Host.UI
                     else
                         UpdateStatusLabel("未选中待计算图像，地图区域无图片", STATUE_ENUM.ERROR);
                     break;
-                    //super pixel
+                //super pixel
                 case "SLIC_Center_toolStripButton":
                 case "SLIC_Center_toolStripMenu":
                     OpenFileDialog opg = new OpenFileDialog
@@ -539,7 +539,7 @@ namespace Host.UI
                         }
                     }
                     break;
-                    //dqn classification 
+                //dqn classification 
                 case "DQN_toolStripButton":
                     DQNForm dqnForm = new DQNForm();
                     dqnForm.RasterDic = _rasterDic;
@@ -548,7 +548,7 @@ namespace Host.UI
                         //"Image Classification",
                         if (dqnForm.TaskName == "Image Classification")
                         {
-                            IJob dqnClassifyJob = new JobDQNClassify(_rasterDic[dqnForm.SelectedFeatureRasterLayer], _rasterDic[dqnForm.SelectedLabelRasterLayer], dqnForm.Epochs, dqnForm.SampeSizeLimit);
+                            IJob dqnClassifyJob = new JobDQNClassify(_rasterDic[dqnForm.SelectedFeatureRasterLayer], _rasterDic[dqnForm.SelectedLabelRasterLayer], dqnForm.Epochs, dqnForm.SampeSizeLimit, dqnForm.LerpPick);
                             RegisterJob(dqnClassifyJob);
                             dqnClassifyJob.Start();
                         }
@@ -559,7 +559,7 @@ namespace Host.UI
                         }
                     }
                     break;
-                    //cnn classification
+                //cnn classification
                 case "CNN_toolStripButton":
                     CNNForm cnnForm = new CNNForm();
                     cnnForm.RasterDic = _rasterDic;
@@ -570,7 +570,7 @@ namespace Host.UI
                         cnnClassifyJob.Start();
                     }
                     break;
-                    //random forest classification
+                //random forest classification
                 case "rf_toolStripButton":
                     RandomForestForm rfForm = new RandomForestForm();
                     rfForm.RasterDic = _rasterDic;
@@ -581,7 +581,7 @@ namespace Host.UI
                         rfJob.Start();
                     }
                     break;
-                    //drawing comparsion multi-reslut curve
+                //drawing comparsion multi-reslut curve
                 case "Compare_Plot_toolStripButton":
                     ComparedPlotForm cp_form = new ComparedPlotForm();
                     cp_form.ShowDialog();

@@ -27,6 +27,8 @@ namespace Host.UI.SettingForm
 
         public int SampeSizeLimit { get; private set; }
 
+        public bool LerpPick { get; private set; }
+
         private string[] _task_names = new string[] {"Image Classification","Road Extraction"};
 
         public Dictionary<string, GRasterLayer> RasterDic
@@ -77,6 +79,8 @@ namespace Host.UI.SettingForm
             Epochs = (int)(epochs_numericUpDown as NumericUpDown).Value;
             //样本数量限制参数
             SampeSizeLimit = (int)(sample_size_numericUpDown as NumericUpDown).Value;
+            //lerp pick samples
+            LerpPick = !lerpPick_checkBox.Checked;
             //关闭设置窗体
             Close();
         }

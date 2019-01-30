@@ -48,7 +48,7 @@ namespace Host.UI.SettingForm
                     IJob job = _jobs[index];
                     SaveFileDialog sfg = new SaveFileDialog();
                     sfg.AddExtension = true;
-                    sfg.DefaultExt = ".tif";
+                    sfg.DefaultExt = ".txt";
                     if (sfg.ShowDialog() == DialogResult.OK)
                     {
                         string fullFilename = sfg.FileName;

@@ -11,15 +11,33 @@ namespace Engine.Brain.Extend
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="list"></param>
-        /// <param name="batchSize"></param>
+        /// <param name="bacthSize"></param>
         /// <returns></returns>
-        public static List<T> RandomTakeBatch<T>(this List<T> list, int batchSize=200)
+        public static List<T> RandomTakeBatch<T>(this List<T> list, int limitSize = 200)
         {
             int num = list.Count;
-            if (num <= batchSize)
+            List<T> dist = new List<T>();
+            for (int i = 0; i < limitSize; i++)
+            {
+                int key = NP.Random(num);
+                dist.Add(list[key]);
+            }
+            return dist;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="limitSize"></param>
+        /// <returns></returns>
+        public static List<T> LerpTakeBatch<T>(this List<T> list, int limitSize=200)
+        {
+            int num = list.Count;
+            if (num <= limitSize)
                 return list;
             List<T> dist = new List<T>();
-            int lerp = num / batchSize;
+            int lerp = num / limitSize;
             for (int i = 0; i < num; i++)
                 if (i % lerp == 0) dist.Add(list[i]);
             return dist;

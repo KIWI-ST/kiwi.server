@@ -68,11 +68,11 @@ namespace Host.UI.Jobs
         /// <param name="featureRasterLayer"></param>
         /// <param name="labelRasterLayer"></param>
         /// <param name="epochs"></param>
-        public JobDQNClassify(GRasterLayer featureRasterLayer, GRasterLayer labelRasterLayer, int epochs = 3000, int sampleSizeLimit = 200)
+        public JobDQNClassify(GRasterLayer featureRasterLayer, GRasterLayer labelRasterLayer, int epochs = 3000, int sampleSizeLimit = 200, bool lerpPick = true)
         {
             _t = new Thread(() =>
             {
-                _env = new ImageClassifyEnv(featureRasterLayer, labelRasterLayer, sampleSizeLimit);
+                _env = new ImageClassifyEnv(featureRasterLayer, labelRasterLayer, sampleSizeLimit, lerpPick);
                 _dqn = new DQN(_env);
                 _dqn.SetParameters(epochs: epochs, gamma: _gamma);
                 _dqn.OnLearningLossEventHandler += _dqn_OnLearningLossEventHandler;

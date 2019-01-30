@@ -41,12 +41,15 @@ namespace Engine.Brain.AI.RL.Env
         /// </summary>
         double[] _current_classindex;
 
+        //lerp pick samples ,default is true
+        private bool _lerpPick;
+
         /// <summary>
         /// 指定观察的图像，和样本所在的层位置
         /// </summary>
         /// <param name="featureRasterLayer"></param>
         /// <param name="sampleIndex"></param>
-        public ImageClassifyEnv(GRasterLayer featureRasterLayer, GRasterLayer labelRasterLayer , int sampleSizeLimit = 200)
+        public ImageClassifyEnv(GRasterLayer featureRasterLayer, GRasterLayer labelRasterLayer , int sampleSizeLimit = 200, bool lerpPick = true)
         {
             //defalut is 200
             _sampleSizeLimit = sampleSizeLimit;
@@ -54,6 +57,8 @@ namespace Engine.Brain.AI.RL.Env
             _featureRasterLayer = featureRasterLayer;
             //groundtruth raster layer
             _labelRasterLayer = labelRasterLayer;
+            //lerp pick samples ,default is true
+            _lerpPick = lerpPick;
             //num of categories 
             //标注层要求：
             //1.分类按照顺序，从1开始，逐步+1
@@ -113,7 +118,7 @@ namespace Engine.Brain.AI.RL.Env
             //将memory限定成4800总量
             Memory = pBandStasticTool.StaisticalRawGraph;
             //limited the environment _memory size to cetrain number
-            Memory = Memory.LimitedDictionaryCapcaity(_sampleSizeLimit);
+            Memory = Memory.LimitedDictionaryCapcaity(_sampleSizeLimit, _lerpPick);
             //}{debug 保存成.txt
             // using(StreamWriter sw = new StreamWriter(@"C:\Users\81596\Desktop\B\Samples.txt"))
             // {

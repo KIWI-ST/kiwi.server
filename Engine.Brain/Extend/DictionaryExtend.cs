@@ -16,11 +16,17 @@ namespace Engine.Brain.Extend
         /// <param name="dict"></param>
         /// <param name="capaciaty">the maximum sample size of each class</param>
         /// <returns></returns>
-        public static Dictionary<T1, List<T2>> LimitedDictionaryCapcaity<T1, T2>(this Dictionary<T1, List<T2>> dict, int capaciaty = 200) where T2 : new()
+        public static Dictionary<T1, List<T2>> LimitedDictionaryCapcaity<T1, T2>(this Dictionary<T1, List<T2>> dict, int capaciaty = 200, bool learpPick = true) where T2 : new()
         {
             Dictionary<T1, List<T2>> newDic = new Dictionary<T1, List<T2>>();
             foreach (var element in dict)
-                newDic[element.Key] = element.Value.RandomTakeBatch(capaciaty);
+            {
+                if(learpPick)
+                    newDic[element.Key] = element.Value.LerpTakeBatch(capaciaty);
+                else
+                    newDic[element.Key] = element.Value.RandomTakeBatch(capaciaty);
+            }
+                
             return newDic;
         }
     }
