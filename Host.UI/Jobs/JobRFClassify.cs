@@ -85,7 +85,7 @@ namespace Host.UI.Jobs
                     for (int j = 0; j < rasterLayer.YSize; j++)
                     {
                         //get normalized input raw value
-                        double[] raw = pRasterLayerCursorTool.PickRawValue(i, j);
+                        double[] raw = pRasterLayerCursorTool.PickNormalValue(i, j);
                         double[][] inputs = new double[1][];
                         inputs[0] = raw;
                         //}{debug

@@ -562,7 +562,7 @@ namespace Host.UI
                     cnnForm.RasterDic = _rasterDic;
                     if (cnnForm.ShowDialog() == DialogResult.OK)
                     {
-                        IJob cnnClassifyJob = new JobCNNClassify(_rasterDic[cnnForm.SelectedFeatureRasterLayer], _rasterDic[cnnForm.SelectedLabelRasterLayer], cnnForm.Epochs, cnnForm.Model, cnnForm.ImageWidth, cnnForm.ImageHeight, 1);
+                        IJob cnnClassifyJob = new JobCNNClassify(_rasterDic[cnnForm.SelectedFeatureRasterLayer], cnnForm.Epochs, cnnForm.Model, cnnForm.ImageWidth, cnnForm.ImageHeight, 1, cnnForm.FullFilename);
                         RegisterJob(cnnClassifyJob);
                         cnnClassifyJob.Start();
                     }

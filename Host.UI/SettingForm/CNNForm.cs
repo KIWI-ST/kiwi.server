@@ -12,21 +12,37 @@ namespace Host.UI.SettingForm
         {
             InitializeComponent();
         }
-
-        Dictionary<string, GRasterLayer> _rasterDic;
-
+        /// <summary>
+        /// feature Rastery, 待分类图
+        /// </summary>
         public string SelectedFeatureRasterLayer { get; set; }
-
-        public string SelectedLabelRasterLayer { get; set; }
-
+        /// <summary>
+        /// 样本文件地址
+        /// </summary>
+        public string FullFilename { get; private set; }
+        /// <summary>
+        /// 获取图层数据方式， 0 表示单像素逐波段获取
+        /// </summary>
         public int Model { get; set; }
-
+        /// <summary>
+        /// 输入图像宽
+        /// </summary>
         public int ImageWidth { get; set; }
-
+        /// <summary>
+        /// 输入图像高
+        /// </summary>
         public int ImageHeight { get; set; }
-
+        /// <summary>
+        /// 模型训练轮次
+        /// </summary>
         public int Epochs { get; set; }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        Dictionary<string, GRasterLayer> _rasterDic;
+        /// <summary>
+        /// set raster dic
+        /// </summary>
         public Dictionary<string, GRasterLayer> RasterDic
         {
             set
@@ -35,7 +51,10 @@ namespace Host.UI.SettingForm
                 Initial(_rasterDic);
             }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="rasterDic"></param>
         public void Initial(Dictionary<string, GRasterLayer> rasterDic)
         {
             //init feature picked methods combox
@@ -48,12 +67,10 @@ namespace Host.UI.SettingForm
             });
             FeaturePicked_comboBox.SelectedIndex = 0;
             Model = 0;
-            //source and label combox 
-            Source_comboBox.Items.Clear();
-            Label_comboBox.Items.Clear();
+            //combox
+            source_image_comboBox.Items.Clear();
             rasterDic.Keys.ToList().ForEach(p => {
-                Source_comboBox.Items.Add(p);
-                Label_comboBox.Items.Add(p);
+                source_image_comboBox.Items.Add(p);
             });
             //setting value
             Epochs = (int)Epochs_numericUpDown.Value;
@@ -65,12 +82,6 @@ namespace Host.UI.SettingForm
         {
             string key = (sender as ComboBox).SelectedItem as string;
             SelectedFeatureRasterLayer = key;
-        }
-
-        private void Label_comboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            string key = (sender as ComboBox).SelectedItem as string;
-            SelectedLabelRasterLayer = key;
         }
 
         private void Width_numericUpDown_ValueChanged(object sender, EventArgs e)
@@ -95,7 +106,25 @@ namespace Host.UI.SettingForm
 
         private void OK_button_Click(object sender, EventArgs e)
         {
-            Close();
+            if (SelectedFeatureRasterLayer == null)
+            {
+                MessageBox.Show("请先选定待分类的影像");
+            }
+            else
+            {
+                Close();
+            }
+        }
+
+        private void open_sample_button_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog opg = new OpenFileDialog();
+            opg.Filter = "样本文件|*.txt";
+            if (opg.ShowDialog() == DialogResult.OK)
+            {
+                open_sample_textBox.Text = opg.FileName;
+                FullFilename = opg.FileName;
+            }
         }
     }
 }

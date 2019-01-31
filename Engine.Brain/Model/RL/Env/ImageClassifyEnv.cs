@@ -100,7 +100,7 @@ namespace Engine.Brain.AI.RL.Env
                 string str = "";
                 foreach (var element1 in Memory)
                     foreach (var element2 in element1.Value)
-                        str += string.Join(",", _pGRasterLayerCursorTool.PickRawValue(element2.X, element2.Y)) + "," + element1.Key + "\r\n";
+                        str += string.Join(",", _pGRasterLayerCursorTool.PickNormalValue(element2.X, element2.Y)) + "," + element1.Key + "\r\n";
                 sw.Write(str);
             }
         }
