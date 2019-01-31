@@ -3,6 +3,7 @@ using ConvNetSharp.Core.Fluent;
 using ConvNetSharp.Core.Layers;
 using ConvNetSharp.Core.Training;
 using ConvNetSharp.Volume;
+using ConvNetSharp.Volume.Double;
 using Engine.Brain.AI.RL;
 using Engine.Brain.Entity;
 using System;
@@ -17,16 +18,19 @@ namespace Engine.Brain.AI.DL
 
         SgdTrainer<double> _trainer;
 
-        int _channel, _width, _height, _actionNum, _batchSize;
-
-        public CNN(int[] featureNum, int actionNum, int batchSize = 31)
+        int _channel, _width, _height, _actionNum;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="featureNum"></param>
+        /// <param name="actionNum"></param>
+        public CNN(int[] featureNum, int actionNum)
         {
             //get channel
             _channel = featureNum[0];
             _width = featureNum[1];
             _height = featureNum[2];
             _actionNum = actionNum;
-            _batchSize = batchSize;
             //create cnn neural network
             _network = new Net<double>();
             _network.AddLayer(new InputLayer<double>(_width,_height,_channel));
@@ -41,25 +45,32 @@ namespace Engine.Brain.AI.DL
             //create trainer
             _trainer = new SgdTrainer<double>(_network)
             {
-                LearningRate = 0.001,
-                BatchSize = batchSize,
+                LearningRate = 0.01,
                 L2Decay = 0.001,
                 Momentum = 0.9
             };
         }
-
-        public int BatchSize { get => _batchSize;}
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sourceNet"></param>
         public void Accept(INet sourceNet)
         {
             throw new NotImplementedException();
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public string Persistence()
         {
             throw new NotImplementedException();
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public double[] Predict(double[] input)
         {
             var x = BuilderInstance<double>.Volume.From(input, new Shape(_width, _height, _channel));
@@ -69,10 +80,16 @@ namespace Engine.Brain.AI.DL
                 output[i] = y.Get(i);
             return output;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="inputs"></param>
+        /// <param name="outputs"></param>
+        /// <returns></returns>
         public double Train(double[][] inputs, double[][] outputs)
         {
             int batchSize = inputs.GetLength(0);
+            _trainer.BatchSize = batchSize;
             var x = BuilderInstance<double>.Volume.From(NP.ToUnidimensional(inputs), new Shape(_width, _height, _channel, batchSize));
             var y = BuilderInstance<double>.Volume.From(NP.ToUnidimensional(outputs), new Shape(1, 1, _actionNum, batchSize));
             _trainer.Train(x, y);

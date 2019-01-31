@@ -83,7 +83,7 @@ namespace Test.Examples
             //training
             for (int i = 0; i < epochs; i++)
             {
-                int batchSize = cnn.BatchSize;
+                int batchSize = 3;
                 var (states, labels) = env.RandomEval(batchSize);
                 double[][] inputX = new double[batchSize][];
                 for (int j = 0; j < batchSize; j++)
