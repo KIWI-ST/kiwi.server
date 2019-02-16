@@ -583,6 +583,12 @@ namespace Host.UI
                     ComparedPlotForm cp_form = new ComparedPlotForm();
                     cp_form.ShowDialog();
                     break;
+                //make samples in minibatch
+                case "BATCHS_toolStripButton":
+                    BatchExportForm be_form = new BatchExportForm();
+                    be_form.RasterDic = _rasterDic;
+                    be_form.ShowDialog();
+                    break;
                 default:
                     break;
             }

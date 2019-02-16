@@ -132,7 +132,7 @@ namespace Engine.Brain.Model.DL
             double loss_p = Math.Log(_lexicon.VocaSize);
             //迭代次数和自动存储的迭代轮次
             liter = 1;
-            int saveInterval = 10;
+            int saveInterval = 5;
             using (StreamReader sr = new StreamReader(textFullFilename))
             {
                 string rawText = "";
