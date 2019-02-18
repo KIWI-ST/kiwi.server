@@ -41,6 +41,7 @@
             this.rf_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.DQN_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.main_toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
+            this.BATCHS_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.Compare_Plot_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.kappa_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -66,7 +67,7 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.bandExport_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.main_notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.BATCHS_toolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.SVM_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.map_menuStrip.SuspendLayout();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
@@ -141,6 +142,7 @@
             this.map_toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.LSTM_toolStripButton,
             this.CNN_toolStripButton,
+            this.SVM_toolStripButton,
             this.rf_toolStripButton,
             this.DQN_toolStripButton,
             this.main_toolStripSeparator,
@@ -200,6 +202,16 @@
             // 
             this.main_toolStripSeparator.Name = "main_toolStripSeparator";
             this.main_toolStripSeparator.Size = new System.Drawing.Size(6, 47);
+            // 
+            // BATCHS_toolStripButton
+            // 
+            this.BATCHS_toolStripButton.Image = global::Host.UI.Properties.Resources.link_64;
+            this.BATCHS_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.BATCHS_toolStripButton.Name = "BATCHS_toolStripButton";
+            this.BATCHS_toolStripButton.Size = new System.Drawing.Size(60, 44);
+            this.BATCHS_toolStripButton.Text = "Batchs";
+            this.BATCHS_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.BATCHS_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
             // 
             // Compare_Plot_toolStripButton
             // 
@@ -457,15 +469,15 @@
             this.main_notifyIcon.Visible = true;
             this.main_notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.main_notifyIcon_MouseDoubleClick);
             // 
-            // BATCHS_toolStripButton
+            // SVM_toolStripButton
             // 
-            this.BATCHS_toolStripButton.Image = global::Host.UI.Properties.Resources.link_64;
-            this.BATCHS_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.BATCHS_toolStripButton.Name = "BATCHS_toolStripButton";
-            this.BATCHS_toolStripButton.Size = new System.Drawing.Size(60, 44);
-            this.BATCHS_toolStripButton.Text = "Batchs";
-            this.BATCHS_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.BATCHS_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
+            this.SVM_toolStripButton.Image = global::Host.UI.Properties.Resources.auction_64;
+            this.SVM_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.SVM_toolStripButton.Name = "SVM_toolStripButton";
+            this.SVM_toolStripButton.Size = new System.Drawing.Size(64, 44);
+            this.SVM_toolStripButton.Text = "SVML2";
+            this.SVM_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.SVM_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
             // 
             // Main
             // 
@@ -548,6 +560,7 @@
         private System.Windows.Forms.TabPage tab_textview;
         private System.Windows.Forms.NotifyIcon main_notifyIcon;
         private System.Windows.Forms.ToolStripButton BATCHS_toolStripButton;
+        private System.Windows.Forms.ToolStripButton SVM_toolStripButton;
     }
 }
 

@@ -114,10 +114,32 @@ namespace Engine.GIS.GLayer.GRasterLayer
             string[] options = new string[] { "BLOCKXSIZE=" + PDataSet.RasterXSize, "BLOCKYSIZE=" + PDataSet.RasterYSize };
             Dataset ds = drv.Create(fullFileName, PDataSet.RasterXSize, PDataSet.RasterYSize, 1, DataType.GDT_Byte, options);
             Band ba = ds.GetRasterBand(1);
+            //set geotransform by default value
             if (geoTransform != null)
                 ds.SetGeoTransform(geoTransform);
+            else
+                ds.SetGeoTransform(GeoTransform);
             // GetBufferByte(_pDataSet.RasterXSize, _pDataSet.RasterYSize,byteData)
             ba.WriteRaster(0, 0, PDataSet.RasterXSize, PDataSet.RasterYSize, pband.GetRawBuffer(), PDataSet.RasterXSize, PDataSet.RasterYSize, 0, 0);
+            ds.FlushCache();
+        }
+
+        /// <summary>
+        /// 导出经过归一化处理后的图像
+        /// </summary>
+        public void ExprotNormalizedLayer(string fullFilename, double[] geoTransform = null)
+        {
+            Driver drv = Gdal.GetDriverByName("GTiff");
+            string[] options = new string[] { "BLOCKXSIZE=" + PDataSet.RasterXSize, "BLOCKYSIZE=" + PDataSet.RasterYSize };
+            Dataset ds = drv.Create(fullFilename, PDataSet.RasterXSize, PDataSet.RasterYSize, BandCount, DataType.GDT_Float32, options);
+            if (geoTransform != null)
+                ds.SetGeoTransform(geoTransform);
+            for(int i = 1; i < BandCount; i ++)
+            {
+                GRasterBand pband = BandCollection[i-1];
+                Band ba = ds.GetRasterBand(i);
+                ba.WriteRaster(0, 0, PDataSet.RasterXSize, PDataSet.RasterYSize, pband.NormalDataBuffer(), PDataSet.RasterXSize, PDataSet.RasterYSize, 0, 0);
+            }
             ds.FlushCache();
         }
 

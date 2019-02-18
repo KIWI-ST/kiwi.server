@@ -85,7 +85,6 @@ namespace Engine.GIS.GLayer.GRasterLayer
             for (int count = 0; count < RawData.Length; count++)
                 NormalData[count % Width, count / Width] = RawData[count] == 0 ? 0 : (RawData[count] - _min) / scale;
         }
-
         /// <summary>
         /// clearn the error data
         /// </summary>
@@ -142,7 +141,17 @@ namespace Engine.GIS.GLayer.GRasterLayer
         {
             return RawData;
         }
-
+        /// <summary>
+        /// get normal data buffer
+        /// </summary>
+        /// <returns></returns>
+        public double[] NormalDataBuffer()
+        {
+            double[] normalDataBuffer = new double[RawData.Length];
+            for (int count = 0; count < RawData.Length; count++)
+                normalDataBuffer[count] = NormalData[count % Width, count / Width];
+            return normalDataBuffer;
+        }
         /// <summary>
         /// 释放资源
         /// </summary>

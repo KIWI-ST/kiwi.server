@@ -1,4 +1,5 @@
 ﻿using Engine.Brain.Model.DL;
+using Engine.Brain.Model.ML;
 using Engine.GIS.Entity;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Arithmetic;
@@ -412,6 +413,7 @@ namespace Host.UI
                 case "COVRasterTask":
                 case "RFClassificationTask":
                 case "CnnClassificationTask":
+                case "SVMClassificationTask":
                 case "DqnClassificationTask":
                     string fullFilename = outputs[0] as string;
                     ReadRaster(fullFilename);
@@ -588,6 +590,16 @@ namespace Host.UI
                     BatchExportForm be_form = new BatchExportForm();
                     be_form.RasterDic = _rasterDic;
                     be_form.ShowDialog();
+                    break;
+                //svm function
+                case "SVM_toolStripButton":
+                    SVMForm svm_Form = new SVMForm();
+                    svm_Form.RasterDic = _rasterDic;
+                    if (svm_Form.ShowDialog() == DialogResult.OK) {
+                        IJob svmJob = new JobSVMClassify(svm_Form.FullFilename, _rasterDic[svm_Form.FeatureKey]);
+                        RegisterJob(svmJob);
+                        svmJob.Start();
+                    }
                     break;
                 default:
                     break;
