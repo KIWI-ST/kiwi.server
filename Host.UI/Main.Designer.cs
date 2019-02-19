@@ -38,6 +38,7 @@
             this.map_toolStrip = new System.Windows.Forms.ToolStrip();
             this.LSTM_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.CNN_toolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.SVM_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.rf_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.DQN_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.main_toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
@@ -67,7 +68,6 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.bandExport_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.main_notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.SVM_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.map_menuStrip.SuspendLayout();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
@@ -177,6 +177,16 @@
             this.CNN_toolStripButton.Text = "CNN";
             this.CNN_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.CNN_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
+            // 
+            // SVM_toolStripButton
+            // 
+            this.SVM_toolStripButton.Image = global::Host.UI.Properties.Resources.auction_64;
+            this.SVM_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.SVM_toolStripButton.Name = "SVM_toolStripButton";
+            this.SVM_toolStripButton.Size = new System.Drawing.Size(64, 44);
+            this.SVM_toolStripButton.Text = "SVML2";
+            this.SVM_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.SVM_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
             // 
             // rf_toolStripButton
             // 
@@ -468,16 +478,6 @@
             this.main_notifyIcon.Text = "please double click to restore the view";
             this.main_notifyIcon.Visible = true;
             this.main_notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.main_notifyIcon_MouseDoubleClick);
-            // 
-            // SVM_toolStripButton
-            // 
-            this.SVM_toolStripButton.Image = global::Host.UI.Properties.Resources.auction_64;
-            this.SVM_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.SVM_toolStripButton.Name = "SVM_toolStripButton";
-            this.SVM_toolStripButton.Size = new System.Drawing.Size(64, 44);
-            this.SVM_toolStripButton.Text = "SVML2";
-            this.SVM_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.SVM_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
             // 
             // Main
             // 

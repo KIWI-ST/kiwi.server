@@ -1,12 +1,11 @@
 ﻿using ConvNetSharp.Core;
-using ConvNetSharp.Core.Fluent;
 using ConvNetSharp.Core.Layers;
 using ConvNetSharp.Core.Training;
 using ConvNetSharp.Volume;
-using ConvNetSharp.Volume.Double;
 using Engine.Brain.AI.RL;
 using Engine.Brain.Entity;
 using System;
+using System.IO;
 
 namespace Engine.Brain.AI.DL
 
@@ -58,11 +57,17 @@ namespace Engine.Brain.AI.DL
         {
             throw new NotImplementedException();
         }
+
+        public Stream PersistenceMemory()
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public string Persistence()
+        public string PersistencNative()
         {
             throw new NotImplementedException();
         }

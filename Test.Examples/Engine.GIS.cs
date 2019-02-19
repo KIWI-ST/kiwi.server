@@ -77,9 +77,9 @@ namespace Test.Examples
         [TestMethod]
         public void RasterKappaIndexCalcute()
         {
-            string rootFilename = @"C:\Users\81596\Desktop\kiwi.literature\revise\experiment A\";
-            int smapleSize = 250;
-            string suffix = "RF";
+            string rootFilename = @"C:\Users\81596\Desktop\kiwi.literature\revise\experiment B\";
+            string smapleSize = "50";
+            string suffix = "SVML2";
             string lableFilename = "Test.tif";
             GRasterLayer truthLayer = new GRasterLayer(rootFilename + lableFilename);
             string kappaText = "";

@@ -10,12 +10,12 @@ namespace Engine.Brain.Model.ML
 
         MulticlassSupportVectorLearning<Linear> teacher;
 
-
         public SVM(int inputDimension, int outputClasses)
         {
             teacher = new MulticlassSupportVectorLearning<Linear>
             {
                 // using LIBLINEAR's L2-loss SVC dual for each SVM
+                //Learner = (p) => new Accord.MachineLearning.VectorMachines.Learning.LinearCoordinateDescent()
                 Learner = (p) => new LinearDualCoordinateDescent()
                 {
                     Loss = Loss.L2

@@ -94,7 +94,7 @@ namespace Engine.Brain.AI.RL
             return loss;
         }
 
-        public string Persistence()
+        public string PersistencNative()
         {
             string filePath = Directory.GetCurrentDirectory() + @"\tmp\";
             string fileName = filePath + _dqnFilename;
@@ -106,9 +106,17 @@ namespace Engine.Brain.AI.RL
             return fileName;
         }
 
+        public Stream PersistenceMemory()
+        {
+            MemoryStream memory = new MemoryStream();
+            _network.Save(memory);
+            memory.Seek(0, SeekOrigin.Begin);
+            return memory;
+        }
+
         public void Accept(INet sourceNet)
         {
-            _network = Network.Load(sourceNet.Persistence()) as ActivationNetwork;
+            _network = Network.Load(sourceNet.PersistenceMemory()) as ActivationNetwork;
             _teacher = new BackPropagationLearning(_network)
             {
                 LearningRate = _learningRate,

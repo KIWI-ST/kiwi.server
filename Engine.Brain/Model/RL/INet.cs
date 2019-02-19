@@ -1,4 +1,6 @@
-﻿namespace Engine.Brain.AI.RL
+﻿using System.IO;
+
+namespace Engine.Brain.AI.RL
 {
     public interface INet
     {
@@ -10,9 +12,13 @@
         /// <returns>loss</returns>
         double Train(double[][] inputs, double[][] outputs);
         /// <summary>
-        /// 
+        /// persistence in local dir
         /// </summary>
-        string Persistence();
+        string PersistencNative();
+        /// <summary>
+        /// persistence in memory
+        /// </summary>
+        Stream PersistenceMemory();
         /// <summary>
         /// 
         /// </summary>
