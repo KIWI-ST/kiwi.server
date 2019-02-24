@@ -99,6 +99,9 @@ namespace Test.Examples
             double[] normal = pRasterLayerCursorTool.PickNormalValue(50, 50);
             double[] action = cnn.Predict(normal);
             int landCoverType = env.RandomSeedKeys[NP.Argmax(action)];
+            //pred
+            cnn.ToCharacteristicNetwork();
+            double[] action2 = cnn.Predict(normal);
             //do something as you need. i.e. draw landCoverType to bitmap at position ( i , j )
             //the classification results are not stable because of the training epochs are too few.
             Assert.IsTrue(landCoverType >= 0);

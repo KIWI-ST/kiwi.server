@@ -1,4 +1,6 @@
-﻿using Engine.Brain.Model.ML;
+﻿using Engine.Brain.AI.DL;
+using Engine.Brain.Entity;
+using Engine.Brain.Model.ML;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Tools;
 using OxyPlot;
@@ -11,64 +13,90 @@ using System.Threading;
 
 namespace Host.UI.Jobs
 {
-    public class JobSVMClassify : IJob
+    public class JobCNNSVMClassify : IJob
     {
-        public bool Complete { get; private set; } = false;
+        public double Process { get; private set; } = 0.0;
 
-        public string Name => "SVMClassificationTask";
+        public string Name => "CNNSVMClassificationTask";
 
         public string Summary { get; private set; } = "";
-
-        public double Process { get; private set; } = 0.0;
 
         public DateTime StartTime { get; private set; } = DateTime.Now;
 
         public PlotModel[] PlotModels => throw new NotImplementedException();
 
+        public bool Complete { get; private set; } = false;
+
         public event OnTaskCompleteHandler OnTaskComplete;
 
         Thread _t;
 
-        public JobSVMClassify(string fullFilename, GRasterLayer rasterLayer)
+        public JobCNNSVMClassify(GRasterLayer rasterLayer, int epochs, int model, int width, int height, int channel, string sampleFilename)
         {
-            _t = new Thread(() => {
-                Summary = "SVM训练中";
-                L2SVM svm;
+            _t = new Thread(() =>
+            {
+                List<List<double>> inputList = new List<List<double>>();
+                List<int> outputList = new List<int>();
                 List<int> outputKey = new List<int>();
-                using (StreamReader sr = new StreamReader(fullFilename))
+                using (StreamReader sr = new StreamReader(sampleFilename))
                 {
-                    List<List<double>> inputList = new List<List<double>>();
-                    List<int> outputList = new List<int>();
                     string text = sr.ReadLine().Replace("\t", ",");
                     do
                     {
                         string[] rawdatas = text.Split(',');
-                        //make sure the label classes from 0
-                        int output = Convert.ToInt32(rawdatas.Last());
-                        outputList.Add(output);
-                        if (!outputKey.Contains(output)) outputKey.Add(output);
+                        int key = Convert.ToInt32(rawdatas.Last());
+                        outputList.Add(key);
+                        if (!outputKey.Contains(key)) outputKey.Add(key);
                         List<double> inputItem = new List<double>();
                         for (int i = 0; i < rawdatas.Length - 1; i++)
                             inputItem.Add(Convert.ToDouble(rawdatas[i]));
                         inputList.Add(inputItem);
                         text = sr.ReadLine();
                     } while (text != null);
-                    double[][] inputs = new double[inputList.Count][];
-                    int[] outputs = new int[inputList.Count];
-                    for (int i = 0; i < inputList.Count; i++)
-                    {
-                        inputs[i] = inputList[i].ToArray();
-                    }
-                    for(int i = 0; i < inputList.Count; i++)
-                    {
-                         outputs[i] = outputKey.IndexOf(outputList[i]);
-                    }
-                    int inputDiminsion = inputs[0].Length;
-                    int outputDiminsion = outputKey.Count;
-                    svm = new L2SVM(inputDiminsion, outputDiminsion);
-                    svm.Train(inputs, outputs);
                 }
-                Summary = "分类应用中";
+                //create cnn model
+                Summary = "模型训练中";
+                int smapleSize = outputList.Count;
+                int classNum = outputKey.Count;
+                int[] keysArray = outputKey.ToArray();
+                int batchSize = 19;
+                CNN cnn = new CNN(new int[] { channel, width, height }, classNum);
+                //train model
+                for (int i = 0; i < epochs; i++)
+                {
+                    double[][] cnnInputs = new double[batchSize][];
+                    double[][] cnnLabels = new double[batchSize][];
+                    for (int k = 0; k < batchSize; k++)
+                    {
+                        int index = NP.Random(smapleSize);
+                        cnnInputs[k] = inputList[index].ToArray();
+                        cnnLabels[k] = NP.ToOneHot(Array.IndexOf(keysArray, outputList[index]), classNum);
+                    }
+                    double loss = cnn.Train(cnnInputs, cnnLabels);
+                    Process = (double)i / epochs;
+                    Summary = string.Format("loss:{0}", loss);
+                }
+                //training svm
+                Summary = "SVM训练中";
+                //1. convert to characteristic network
+                cnn.ToCharacteristicNetwork();
+                double[][] svmInputs = new double[inputList.Count][];
+                int[] svmOutputs = new int[inputList.Count];
+                //2.recalcute smaples
+                for (int i = 0; i < inputList.Count; i++)
+                {
+                    svmInputs[i] = cnn.Predict(inputList[i].ToArray());
+                }
+                for (int i = 0; i < inputList.Count; i++)
+                {
+                    svmOutputs[i] = outputKey.IndexOf(outputList[i]);
+                }
+                int inputDiminsion = svmInputs[0].Length;
+                int outputDiminsion = outputKey.Count;
+                L2SVM svm = new L2SVM(inputDiminsion, outputDiminsion);
+                svm.Train(svmInputs, svmOutputs);
+                //3.applay classification
+                Summary = "CNNSVM分类应用中";
                 IRasterLayerCursorTool pRasterLayerCursorTool = new GRasterLayerCursorTool();
                 pRasterLayerCursorTool.Visit(rasterLayer);
                 //GDI graph
@@ -85,7 +113,7 @@ namespace Host.UI.Jobs
                         //get normalized input raw value
                         double[] raw = pRasterLayerCursorTool.PickNormalValue(i, j);
                         double[][] inputs = new double[1][];
-                        inputs[0] = raw;
+                        inputs[0] = cnn.Predict(raw);
                         //}{debug
                         int[] ouputs = svm.Predict(inputs);
                         //from 0
@@ -102,24 +130,27 @@ namespace Host.UI.Jobs
                 string fullFileName = Directory.GetCurrentDirectory() + @"\tmp\" + DateTime.Now.ToFileTimeUtc() + ".png";
                 classificationBitmap.Save(fullFileName);
                 //rf complete
-                Summary = "SVM训练分类完成";
+                Summary = "CNNSVM训练分类完成";
                 Complete = true;
                 OnTaskComplete?.Invoke(Name, fullFileName);
             });
         }
-
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fullFilename"></param>
         public void Export(string fullFilename)
         {
-          
-        }
 
+        }
+        /// <summary>
+        /// start task
+        /// </summary>
         public void Start()
         {
             StartTime = DateTime.Now;
             _t.IsBackground = true;
             _t.Start();
         }
-
     }
 }

@@ -68,6 +68,7 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.bandExport_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.main_notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.CNN_SVM_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.map_menuStrip.SuspendLayout();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
@@ -143,6 +144,7 @@
             this.LSTM_toolStripButton,
             this.CNN_toolStripButton,
             this.SVM_toolStripButton,
+            this.CNN_SVM_toolStripButton,
             this.rf_toolStripButton,
             this.DQN_toolStripButton,
             this.main_toolStripSeparator,
@@ -479,6 +481,16 @@
             this.main_notifyIcon.Visible = true;
             this.main_notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.main_notifyIcon_MouseDoubleClick);
             // 
+            // CNN_SVM_toolStripButton
+            // 
+            this.CNN_SVM_toolStripButton.Image = global::Host.UI.Properties.Resources.film_64;
+            this.CNN_SVM_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.CNN_SVM_toolStripButton.Name = "CNN_SVM_toolStripButton";
+            this.CNN_SVM_toolStripButton.Size = new System.Drawing.Size(88, 44);
+            this.CNN_SVM_toolStripButton.Text = "CNN_SVM";
+            this.CNN_SVM_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.CNN_SVM_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -561,6 +573,7 @@
         private System.Windows.Forms.NotifyIcon main_notifyIcon;
         private System.Windows.Forms.ToolStripButton BATCHS_toolStripButton;
         private System.Windows.Forms.ToolStripButton SVM_toolStripButton;
+        private System.Windows.Forms.ToolStripButton CNN_SVM_toolStripButton;
     }
 }
 

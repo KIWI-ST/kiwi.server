@@ -410,6 +410,7 @@ namespace Host.UI
             switch (taskName)
             {
                 //load image classification result
+                case "CNNSVMClassificationTask":
                 case "COVRasterTask":
                 case "RFClassificationTask":
                 case "CnnClassificationTask":
@@ -599,6 +600,16 @@ namespace Host.UI
                         IJob svmJob = new JobSVMClassify(svm_Form.FullFilename, _rasterDic[svm_Form.FeatureKey]);
                         RegisterJob(svmJob);
                         svmJob.Start();
+                    }
+                    break;
+                case "CNN_SVM_toolStripButton":
+                    CNN_SVMFrom c_s_form = new CNN_SVMFrom();
+                    c_s_form.RasterDic = _rasterDic;
+                    if (c_s_form.ShowDialog() == DialogResult.OK)
+                    {
+                        IJob cnnClassifyJob = new JobCNNSVMClassify(_rasterDic[c_s_form.SelectedFeatureRasterLayer], c_s_form.Epochs, c_s_form.Model, c_s_form.ImageWidth, c_s_form.ImageHeight, 1, c_s_form.FullFilename);
+                        RegisterJob(cnnClassifyJob);
+                        cnnClassifyJob.Start();
                     }
                     break;
                 default:

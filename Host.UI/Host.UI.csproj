@@ -111,6 +111,7 @@
     <Compile Include="Jobs\IJob.cs" />
     <Compile Include="Jobs\IJobRPCRectify.cs" />
     <Compile Include="Jobs\JobCNNClassify.cs" />
+    <Compile Include="Jobs\JobCNNSVMClassify.cs" />
     <Compile Include="Jobs\JobCOVRaster.cs" />
     <Compile Include="Jobs\JobDQNClassify.cs" />
     <Compile Include="Jobs\JobReadRaster.cs" />
@@ -154,6 +155,12 @@
     </Compile>
     <Compile Include="SettingForm\BatchExportForm.Designer.cs">
       <DependentUpon>BatchExportForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SettingForm\CNN-SVMForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingForm\CNN-SVMForm.Designer.cs">
+      <DependentUpon>CNN-SVMForm.cs</DependentUpon>
     </Compile>
     <Compile Include="SettingForm\CNNForm.cs">
       <SubType>Form</SubType>
@@ -242,6 +249,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SettingForm\BatchExportForm.resx">
       <DependentUpon>BatchExportForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingForm\CNN-SVMForm.resx">
+      <DependentUpon>CNN-SVMForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingForm\CNNForm.resx">
       <DependentUpon>CNNForm.cs</DependentUpon>

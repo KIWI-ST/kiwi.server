@@ -2,6 +2,7 @@
 using Engine.GIS.GOperation.Arithmetic;
 using Engine.GIS.GOperation.Tools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.IO;
 
 namespace Test.Examples
@@ -77,20 +78,26 @@ namespace Test.Examples
         [TestMethod]
         public void RasterKappaIndexCalcute()
         {
-            string rootFilename = @"C:\Users\81596\Desktop\kiwi.literature\revise\experiment B\";
-            string smapleSize = "50";
-            string suffix = "SVML2";
+            string rootFilename = @"C:\Users\81596\Desktop\kiwi.literature\revise\experiment A\";
+            string smapleSize = "300";
+            //"RF", "DQN", "CNN", "SVML2",
+            string[] suffixs = new string[] { "RF", "DQN", "CNN", "SVML2", "SVM" };
             string lableFilename = "Test.tif";
             GRasterLayer truthLayer = new GRasterLayer(rootFilename + lableFilename);
-            string kappaText = "";
-            string oaText = "";
+            //string kappaText = "";
+            //string oaText = "";
+            string text = "";
             for (int i = 1; i <= 10; i++)
             {
-                string predFilename = string.Format(@"{0}{1}\{2}", rootFilename, smapleSize, suffix + "_" + i + ".tif");
-                GRasterLayer predLayer = new GRasterLayer(predFilename);
-                var (matrix, kappa, actionsNumber, oa) = KappaIndex.Calcute(truthLayer, predLayer);
-                kappaText += string.Format("{0:P}\r\n", kappa).Replace("%","");
-                oaText += string.Format("{0:P}\r\n", oa).Replace("%", "");
+                Array.ForEach(suffixs, suffix => {
+                    string predFilename = string.Format(@"{0}{1}\{2}", rootFilename, smapleSize, suffix + "_" + i + ".tif");
+                    GRasterLayer predLayer = new GRasterLayer(predFilename);
+                    var (matrix, kappa, actionsNumber, oa) = KappaIndex.Calcute(truthLayer, predLayer);
+                    text += string.Format("{0:P}\t", kappa).Replace("%", "") + string.Format("{0:P}\t", oa).Replace("%", "");
+                    //kappaText += string.Format("{0:P}\r\n", kappa).Replace("%", "");
+                    //oaText += string.Format("{0:P}\r\n", oa).Replace("%", "");
+                });
+                text += "\r\n";
             }
             Assert.AreSame(1, 1);
         }

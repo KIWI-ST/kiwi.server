@@ -120,7 +120,7 @@
     <Compile Include="Model\DL\Language\SoftMax.cs" />
     <Compile Include="Model\DL\LSTMNetwork.cs" />
     <Compile Include="Model\ML\RF.cs" />
-    <Compile Include="Model\ML\SVM.cs" />
+    <Compile Include="Model\ML\L2SVM.cs" />
     <Compile Include="Model\RL\Env\ExtractRoadEnv.cs" />
     <Compile Include="Model\RL\INet.cs" />
     <Compile Include="Model\RL\IEnv.cs" />

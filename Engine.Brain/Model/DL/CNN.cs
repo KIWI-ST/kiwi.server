@@ -12,12 +12,14 @@ namespace Engine.Brain.AI.DL
 {
     public class CNN : INet
     {
-
         Net<double> _network;
 
         SgdTrainer<double> _trainer;
 
         int _channel, _width, _height, _actionNum;
+
+        bool _isToCharacteristicNetwork = false;
+
         /// <summary>
         /// 
         /// </summary>
@@ -57,12 +59,26 @@ namespace Engine.Brain.AI.DL
         {
             throw new NotImplementedException();
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        public void ToCharacteristicNetwork()
+        {
+            if (!_isToCharacteristicNetwork)
+            {
+                var layer = _network.Layers[_network.Layers.Count - 1];
+                _network.Layers.Remove(layer);
+                _isToCharacteristicNetwork = true;
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public Stream PersistenceMemory()
         {
             throw new NotImplementedException();
         }
-
         /// <summary>
         /// 
         /// </summary>

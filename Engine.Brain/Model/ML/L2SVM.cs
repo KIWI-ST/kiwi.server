@@ -4,13 +4,13 @@ using Accord.Statistics.Kernels;
 
 namespace Engine.Brain.Model.ML
 {
-    public class SVM
+    public class L2SVM
     {
         MulticlassSupportVectorMachine<Linear> ksvm;
 
         MulticlassSupportVectorLearning<Linear> teacher;
 
-        public SVM(int inputDimension, int outputClasses)
+        public L2SVM(int inputDimension, int outputClasses)
         {
             teacher = new MulticlassSupportVectorLearning<Linear>
             {
