@@ -28,11 +28,21 @@ namespace Host.UI.SettingForm
         /// </summary>
         string pickMethod;
 
-        Dictionary<string, RowCol> _rowcolDict;
+        Dictionary<string, RowCol> ROWCOL_DICT;
+        /// <summary>
+        /// 
+        /// </summary>
+        int[] _masks = new int[] { 1, 3, 5, 7, 9 };
         /// <summary>
         /// pick value methods enmu
         /// </summary>
-        private string[] _PICK_METHODS = new string[] { "Single pixel picked in each band", "Mask picked in each band" };
+        private string[] _PICK_METHODS = new string[] {
+            " Single Pixel picked in each band",
+            " 3x3 Mask picked in each band",
+            " 5x5 Mask picked in each band",
+            " 7x7 Mask picked in each band",
+            " 9x9 Mask picked in each band"
+        };
         /// <summary>
         /// natvie store
         /// </summary>
@@ -52,7 +62,7 @@ namespace Host.UI.SettingForm
         public void Initial(Dictionary<string, GRasterLayer> rasterDic)
         {
             //init rowcol dict
-            _rowcolDict = new Dictionary<string, RowCol>();
+            ROWCOL_DICT = new Dictionary<string, RowCol>();
             //clear item
             RAW_IMAGE_comboBox.Items.Clear();
             LABELED_IMAGE_comboBox.Items.Clear();
@@ -64,15 +74,11 @@ namespace Host.UI.SettingForm
             });
             //clear item
             PICK_METHOD_comboBox.Items.Clear();
-            for(int i=0; i < _PICK_METHODS.Length; i++)
+            for (int i = 0; i < _PICK_METHODS.Length; i++)
             {
                 string pName = _PICK_METHODS[i];
                 PICK_METHOD_comboBox.Items.Add(pName);
-                _rowcolDict[pName] = new RowCol()
-                {
-                    Row = i * 5,
-                    Col = i * 5
-                };
+                ROWCOL_DICT[pName] = new RowCol(_masks[i], _masks[i]);
             }
         }
         /// <summary>
@@ -206,7 +212,7 @@ namespace Host.UI.SettingForm
             EXPORT_PATH_button.Text = string.Format("{0:P}", 0.0);
             Thread t = new Thread(() =>
             {
-                RowCol rowcol = _rowcolDict[pickMethod];
+                RowCol rowcol = ROWCOL_DICT[pickMethod];
                 Directory.CreateDirectory(directory);
                 string indexString = "";
                 GRasterLayer featureLayer = _rasterDic[selectedFeatureLayer], labelLayer = _rasterDic[selectLabelLayer];
@@ -239,5 +245,11 @@ namespace Host.UI.SettingForm
     {
         public int Row { get; set; }
         public int Col { get; set; }
+
+        public RowCol(int row, int col)
+        {
+            Row = row;
+            Col = col;
+        }
     }
 }

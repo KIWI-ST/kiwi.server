@@ -124,8 +124,10 @@
             0,
             0});
             this.SAMPLESIZE_LIMIT_numericUpDown.Name = "SAMPLESIZE_LIMIT_numericUpDown";
+            this.SAMPLESIZE_LIMIT_numericUpDown.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.SAMPLESIZE_LIMIT_numericUpDown.Size = new System.Drawing.Size(136, 21);
             this.SAMPLESIZE_LIMIT_numericUpDown.TabIndex = 7;
+            this.SAMPLESIZE_LIMIT_numericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.SAMPLESIZE_LIMIT_numericUpDown.Value = new decimal(new int[] {
             50,
             0,
@@ -162,6 +164,7 @@
             this.PICK_REPEAT_numericUpDown.Name = "PICK_REPEAT_numericUpDown";
             this.PICK_REPEAT_numericUpDown.Size = new System.Drawing.Size(136, 21);
             this.PICK_REPEAT_numericUpDown.TabIndex = 11;
+            this.PICK_REPEAT_numericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.PICK_REPEAT_numericUpDown.Value = new decimal(new int[] {
             1,
             0,

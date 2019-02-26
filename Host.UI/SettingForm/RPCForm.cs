@@ -14,7 +14,7 @@ namespace Host.UI.SettingForm
         {
             InitializeComponent();
             ImageList imageList = new ImageList();
-            imageList.Images.Add(Resources.raw_bin_image);
+            imageList.Images.Add(Resources.globe);
             raw_bin_listView.SmallImageList = imageList;
         }
 
