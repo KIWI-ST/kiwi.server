@@ -93,29 +93,39 @@ namespace Engine.Brain.AI.RL.Env
         /// 
         /// </summary>
         /// <param name="fullFilename"></param>
-        public void Export(string fullFilename)
+        public void Export(string fullFilename, int row = 1, int col = 1)
         {
-            using (StreamWriter sw = new StreamWriter(fullFilename))
+            if ((row == 1 && col == 1)||(row == 0 && col == 0))
             {
-                string str = "";
-                foreach (var element1 in Memory)
-                    foreach (var element2 in element1.Value)
-                        str += string.Join(",", _pGRasterLayerCursorTool.PickNormalValue(element2.X, element2.Y)) + "," + element1.Key + "\r\n";
-                sw.Write(str);
+                using (StreamWriter sw = new StreamWriter(fullFilename))
+                {
+                    string str = "";
+                    foreach (var element1 in Memory)
+                        foreach (var element2 in element1.Value)
+                            str += string.Join(",", _pGRasterLayerCursorTool.PickNormalValue(element2.X, element2.Y)) + "," + element1.Key + "\r\n";
+                    sw.Write(str);
+                }
+            }
+            else
+            {
+                using (StreamWriter sw = new StreamWriter(fullFilename))
+                {
+                    string str = "";
+                    foreach (var element1 in Memory)
+                        foreach (var element2 in element1.Value)
+                            str += string.Join(",", _pGRasterLayerCursorTool.PickRagneNormalValue(element2.X, element2.Y, row, col)) + "," + element1.Key + "\r\n";
+                    sw.Write(str);
+                }
             }
         }
-
         /// <summary>
         /// 分析标注道路区域
         /// </summary>
         public void Prepare()
         {
-            //
             IRasterBandStatisticTool pBandStasticTool = new GRasterBandStatisticTool();
             pBandStasticTool.Visit(_labelRasterLayer.BandCollection[0]);
-            //
             _pGRasterLayerCursorTool.Visit(_featureRasterLayer);
-            //将memory限定成4800总量
             Memory = pBandStasticTool.StaisticalRawGraph;
             //limited the environment _memory size to cetrain number
             Memory = Memory.LimitedDictionaryCapcaity(_sampleSizeLimit, _lerpPick);

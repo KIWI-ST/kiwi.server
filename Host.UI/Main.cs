@@ -256,13 +256,16 @@ namespace Host.UI
             map_listBox.Items.Add(msg);
             map_listBox.SelectedIndex = map_listBox.Items.Count - 1;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bmp"></param>
+        /// <param name="nodeName"></param>
         private void PaintBitmap(Bitmap bmp, string nodeName)
         {
             _imageDic[nodeName].BMP = bmp;
             map_pictureBox.Image = bmp;
         }
-
         /// <summary>
         /// 更新listbox区域显示内容
         /// </summary>
@@ -309,11 +312,19 @@ namespace Host.UI
         /// <param name="bmp"></param>
         /// <param name="nodeName"></param>
         private delegate void PaintBitmapHandler(Bitmap bmp, string nodeName);
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="plotModel"></param>
         private delegate void PaintPlotModelHandler(PlotModel plotModel);
-
+        /// <summary>
+        /// 
+        /// </summary>
         private delegate void RefreshPlotModelHandler();
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fullFileName"></param>
         private delegate void ReadRasterHandler(string fullFileName);
 
         #endregion

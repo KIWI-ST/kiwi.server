@@ -11,7 +11,7 @@ namespace Engine.Brain.AI.RL
         /// <summary>
         /// exprot the sample
         /// </summary>
-        void Export(string fullFilename);
+        void Export(string fullFilename, int row =1, int col =1);
         /// <summary>
         /// indicate the action value can be assigned by multi-action value
         /// e.g. 

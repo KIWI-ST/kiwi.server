@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Host.UI.SettingForm
@@ -26,10 +27,12 @@ namespace Host.UI.SettingForm
         /// 
         /// </summary>
         string pickMethod;
+
+        Dictionary<string, RowCol> _rowcolDict;
         /// <summary>
         /// pick value methods enmu
         /// </summary>
-        private string[] _PICK_METHODS = new string[] { "Pick pixel value in each band" };
+        private string[] _PICK_METHODS = new string[] { "Single pixel picked in each band", "Mask picked in each band" };
         /// <summary>
         /// natvie store
         /// </summary>
@@ -48,6 +51,8 @@ namespace Host.UI.SettingForm
         //set dict
         public void Initial(Dictionary<string, GRasterLayer> rasterDic)
         {
+            //init rowcol dict
+            _rowcolDict = new Dictionary<string, RowCol>();
             //clear item
             RAW_IMAGE_comboBox.Items.Clear();
             LABELED_IMAGE_comboBox.Items.Clear();
@@ -59,13 +64,69 @@ namespace Host.UI.SettingForm
             });
             //clear item
             PICK_METHOD_comboBox.Items.Clear();
-            Array.ForEach(_PICK_METHODS, p =>
+            for(int i=0; i < _PICK_METHODS.Length; i++)
             {
-                //add item to combox
-                PICK_METHOD_comboBox.Items.Add(p);
-            });
+                string pName = _PICK_METHODS[i];
+                PICK_METHOD_comboBox.Items.Add(pName);
+                _rowcolDict[pName] = new RowCol()
+                {
+                    Row = i * 5,
+                    Col = i * 5
+                };
+            }
         }
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="process"></param>
+        private delegate void UpdateProcessTipHandler(double process);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="process"></param>
+        private void UpdateProcessTip(double process)
+        {
+            if (process == 1.0)
+            {
+                EXPORT_PATH_button.Text = "导出";
+                EXPORT_PATH_button.Enabled = true;
+                MessageBox.Show("样本导出完成");
+            }
+            else
+                EXPORT_PATH_button.Text = string.Format("{0:P}", process);
+        }
+        /// <summary>
+        /// select feature layer
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RAW_IMAGE_comboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string key = (sender as ComboBox).SelectedItem as string;
+            selectedFeatureLayer = key;
+        }
+        /// <summary>
+        /// labeled layer
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void LABELED_IMAGE_comboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string key = (sender as ComboBox).SelectedItem as string;
+            selectLabelLayer = key;
+        }
+        /// <summary>
+        /// pick method
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void PICK_METHOD_comboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string key = (sender as ComboBox).SelectedItem as string;
+            pickMethod = key;
+        }
+        /// <summary>
+        /// 
         /// export file path
         /// </summary>
         /// <param name="sender"></param>
@@ -105,7 +166,10 @@ namespace Host.UI.SettingForm
                 }
             }
         }
-
+        /// <summary>
+        /// clear directory
+        /// </summary>
+        /// <param name="directory"></param>
         private void ClearFolder(string directory)
         {
             foreach (string d in Directory.GetFileSystemEntries(directory))
@@ -129,47 +193,51 @@ namespace Host.UI.SettingForm
                 }
             }
         }
-
+        /// <summary>
+        /// create batch samples in new thread
+        /// </summary>
+        /// <param name="directory"></param>
+        /// <param name="sampleSizeLimit"></param>
+        /// <param name="repeatNum"></param>
+        /// <param name="lerpPick"></param>
         private void ProcessBatchSample(string directory, int sampleSizeLimit, int repeatNum, bool lerpPick)
         {
-            Directory.CreateDirectory(directory);
-            string indexString = "";
-            GRasterLayer featureLayer = _rasterDic[selectedFeatureLayer];
-            GRasterLayer labelLayer = _rasterDic[selectLabelLayer];
-            //build env
-            ImageClassifyEnv env = new ImageClassifyEnv(featureLayer, labelLayer, sampleSizeLimit, lerpPick);
-            for (int i = 0; i < repeatNum; i++)
+            EXPORT_PATH_button.Enabled = false;
+            EXPORT_PATH_button.Text = string.Format("{0:P}", 0.0);
+            Thread t = new Thread(() =>
             {
-                string filename = DateTime.Now.ToFileTimeUtc().ToString() + ".txt";
-                env.Prepare();
-                env.Export(directory + @"\" + filename);
-                indexString += filename + "\r\n";
-            }
-            //save index file
-            using (StreamWriter sw = new StreamWriter(directory + @"\" + "index.be"))
+                RowCol rowcol = _rowcolDict[pickMethod];
+                Directory.CreateDirectory(directory);
+                string indexString = "";
+                GRasterLayer featureLayer = _rasterDic[selectedFeatureLayer], labelLayer = _rasterDic[selectLabelLayer];
+                //build env
+                ImageClassifyEnv env = new ImageClassifyEnv(featureLayer, labelLayer, sampleSizeLimit, lerpPick);
+                for (int i = 0; i < repeatNum; i++)
+                {
+                    string filename = string.Format("{0}_{1}_{2}_{3}", DateTime.Now.ToFileTimeUtc().ToString(), rowcol.Row, rowcol.Col, featureLayer.BandCount) + ".txt";
+                    env.Prepare();
+                    env.Export(directory + @"\" + filename, rowcol.Row, rowcol.Col);
+                    indexString += filename + "\r\n";
+                    Invoke(new UpdateProcessTipHandler(UpdateProcessTip), (double)i / repeatNum);
+                }
+                //save index file
+                using (StreamWriter sw = new StreamWriter(directory + @"\" + "index.be"))
+                {
+                    sw.Write(indexString);
+                }
+                //smaple batch complete
+                Invoke(new UpdateProcessTipHandler(UpdateProcessTip), 1.0);
+            })
             {
-                sw.Write(indexString);
-            }
-            //smaple batch complete
-            MessageBox.Show("样本处理完成");
+                IsBackground = true
+            };
+            t.Start();
         }
+    }
 
-        private void RAW_IMAGE_comboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            string key = (sender as ComboBox).SelectedItem as string;
-            selectedFeatureLayer = key;
-        }
-
-        private void LABELED_IMAGE_comboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            string key = (sender as ComboBox).SelectedItem as string;
-            selectLabelLayer = key;
-        }
-
-        private void PICK_METHOD_comboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            string key = (sender as ComboBox).SelectedItem as string;
-            pickMethod = key;
-        }
+    class RowCol
+    {
+        public int Row { get; set; }
+        public int Col { get; set; }
     }
 }
