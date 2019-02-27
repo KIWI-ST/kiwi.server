@@ -17,6 +17,10 @@ namespace Engine.Brain.AI.RL.Env
     public class ImageClassifyEnv : IEnv
     {
         /// <summary>
+        /// sample collection with labeled value index
+        /// </summary>
+        Dictionary<int, List<Point>> _memory { get; set; } = new Dictionary<int, List<Point>>();
+        /// <summary>
         /// layer tool
         /// </summary>
         private IRasterLayerCursorTool _pGRasterLayerCursorTool = new GRasterLayerCursorTool();
@@ -81,14 +85,9 @@ namespace Engine.Brain.AI.RL.Env
         /// </summary>
         public int[] RandomSeedKeys { get; private set; }
         /// <summary>
-        /// 
+        /// indicate the agent can can do only one-kind action at once, default is ture
         /// </summary>
-        public bool IsSingleAction { get { return true; } }
-        /// <summary>
-        /// 处理之后的样本集
-        /// </summary>
-        public Dictionary<int, List<Point>> Memory { get; private set; } = new Dictionary<int, List<Point>>();
-
+        public bool SingleAction { get { return true; } }
         /// <summary>
         /// 
         /// </summary>
@@ -100,7 +99,7 @@ namespace Engine.Brain.AI.RL.Env
                 using (StreamWriter sw = new StreamWriter(fullFilename))
                 {
                     string str = "";
-                    foreach (var element1 in Memory)
+                    foreach (var element1 in _memory)
                         foreach (var element2 in element1.Value)
                             str += string.Join(",", _pGRasterLayerCursorTool.PickNormalValue(element2.X, element2.Y)) + "," + element1.Key + "\r\n";
                     sw.Write(str);
@@ -111,7 +110,7 @@ namespace Engine.Brain.AI.RL.Env
                 using (StreamWriter sw = new StreamWriter(fullFilename))
                 {
                     string str = "";
-                    foreach (var element1 in Memory)
+                    foreach (var element1 in _memory)
                         foreach (var element2 in element1.Value)
                             str += string.Join(",", _pGRasterLayerCursorTool.PickRagneNormalValue(element2.X, element2.Y, row, col)) + "," + element1.Key + "\r\n";
                     sw.Write(str);
@@ -126,9 +125,9 @@ namespace Engine.Brain.AI.RL.Env
             IRasterBandStatisticTool pBandStasticTool = new GRasterBandStatisticTool();
             pBandStasticTool.Visit(_labelRasterLayer.BandCollection[0]);
             _pGRasterLayerCursorTool.Visit(_featureRasterLayer);
-            Memory = pBandStasticTool.StaisticalRawGraph;
+            _memory = pBandStasticTool.StaisticalRawGraph;
             //limited the environment _memory size to cetrain number
-            Memory = Memory.LimitedDictionaryCapcaity(_sampleSizeLimit, _lerpPick);
+            _memory = _memory.LimitedDictionaryCapcaity(_sampleSizeLimit, _lerpPick);
             //}{debug 保存成.txt
             // using(StreamWriter sw = new StreamWriter(@"C:\Users\81596\Desktop\B\Samples.txt"))
             // {
@@ -157,7 +156,7 @@ namespace Engine.Brain.AI.RL.Env
             ////
             //samplesBitmap.Save(@"C:\Users\81596\Desktop\B\Samples.jpg");
             //
-            RandomSeedKeys = Memory.Keys.ToArray();
+            RandomSeedKeys = _memory.Keys.ToArray();
             //
             (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
         }
@@ -177,7 +176,7 @@ namespace Engine.Brain.AI.RL.Env
         {
             //use actionNumber represent real types
             int rawValueIndex = NP.Random(RandomSeedKeys);
-            Point p = Memory[rawValueIndex].RandomTake();
+            Point p = _memory[rawValueIndex].RandomTake();
             //current one-hot action
             double[] classIndex = NP.ToOneHot(Array.IndexOf(RandomSeedKeys, rawValueIndex), ActionNum);
             return (p.X, p.Y, classIndex);

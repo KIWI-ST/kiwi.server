@@ -232,11 +232,12 @@ namespace Engine.Brain.AI.RL
         {
             double[] input = new double[_featuresNumber + _actionsNumber];
             Dictionary<double[], double> predicts = new Dictionary<double[], double>();
-            //1.create dict to simulate action,based on 
-            if (_env.IsSingleAction)//env.singleAction == true
+            //1.create dict to simulate action,based on singleAction == true
+            if (_env.SingleAction)
                 for (int i = 0; i < _actionsNumber; i++)
                     predicts.Add(NP.ToOneHot(i, _actionsNumber), -1.0);
-            else//2.env.singleAction == false
+            //2.env.singleAction == false
+            else
                 for (int i = 1; i < Math.Pow(2, _actionsNumber); i++)
                 {
                     char[] strOnehot = Convert.ToString(i, 2).PadLeft(_actionsNumber, '0').ToCharArray();

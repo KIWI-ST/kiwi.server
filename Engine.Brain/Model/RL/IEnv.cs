@@ -13,12 +13,12 @@ namespace Engine.Brain.AI.RL
         /// </summary>
         void Export(string fullFilename, int row =1, int col =1);
         /// <summary>
-        /// indicate the action value can be assigned by multi-action value
+        /// indicate the action can be assigned by multi-action value
         /// e.g. 
-        /// only support [0001] while the value is true
-        /// support [1001] while the value is false
+        /// only support [0001] while the value is true, indicate the agent only do one-kind action at once
+        /// support [1001] while the value is false, indicate the agent do two types action at once
         /// </summary>
-        bool IsSingleAction { get; }
+        bool SingleAction { get; }
         /// <summary>
         /// get action - rawValue dictionary map
         /// </summary>
@@ -34,10 +34,6 @@ namespace Engine.Brain.AI.RL
         /// FeatureNum[2] represent image Height if possible
         /// </summary>
         int[] FeatureNum { get; }
-        /// <summary>
-        /// the environment memory
-        /// </summary>
-        Dictionary<int, List<Point>> Memory { get; }
         /// <summary>
         /// 验证数据集
         /// </summary>

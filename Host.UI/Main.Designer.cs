@@ -36,17 +36,18 @@
             this.工具TToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.RPC_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.map_toolStrip = new System.Windows.Forms.ToolStrip();
-            this.LSTM_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.CNN_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.SVM_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.CNN_SVM_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.rf_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.DQN_toolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.CNN_DQN_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.main_toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
-            this.BATCHS_toolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.Compare_Plot_toolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.kappa_toolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.LSTM_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.BATCHS_toolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.kappa_toolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.task_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.map_statusStrip = new System.Windows.Forms.StatusStrip();
             this.empty_statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
@@ -69,7 +70,8 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.bandExport_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.main_notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.map_menuStrip.SuspendLayout();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
@@ -141,16 +143,18 @@
             // 
             this.map_toolStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.map_toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripSeparator3,
             this.CNN_toolStripButton,
-            this.SVM_toolStripButton,
-            this.CNN_SVM_toolStripButton,
-            this.rf_toolStripButton,
             this.DQN_toolStripButton,
+            this.SVM_toolStripButton,
+            this.rf_toolStripButton,
             this.main_toolStripSeparator,
+            this.CNN_SVM_toolStripButton,
+            this.CNN_DQN_toolStripButton,
+            this.toolStripSeparator4,
             this.LSTM_toolStripButton,
             this.toolStripSeparator1,
             this.BATCHS_toolStripButton,
-            this.Compare_Plot_toolStripButton,
             this.kappa_toolStripButton,
             this.toolStripSeparator2,
             this.task_toolStripButton});
@@ -160,20 +164,10 @@
             this.map_toolStrip.TabIndex = 1;
             this.map_toolStrip.Text = "toolStrip1";
             // 
-            // LSTM_toolStripButton
-            // 
-            this.LSTM_toolStripButton.Image = global::Host.UI.Properties.Resources.comment_64;
-            this.LSTM_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.LSTM_toolStripButton.Name = "LSTM_toolStripButton";
-            this.LSTM_toolStripButton.Size = new System.Drawing.Size(44, 41);
-            this.LSTM_toolStripButton.Text = "LSTM";
-            this.LSTM_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.LSTM_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
-            // 
             // CNN_toolStripButton
             // 
             this.CNN_toolStripButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.CNN_toolStripButton.Image = global::Host.UI.Properties.Resources.disk_64;
+            this.CNN_toolStripButton.Image = global::Host.UI.Properties.Resources.calculator;
             this.CNN_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.CNN_toolStripButton.Name = "CNN_toolStripButton";
             this.CNN_toolStripButton.Size = new System.Drawing.Size(40, 41);
@@ -183,17 +177,17 @@
             // 
             // SVM_toolStripButton
             // 
-            this.SVM_toolStripButton.Image = global::Host.UI.Properties.Resources.auction_64;
+            this.SVM_toolStripButton.Image = global::Host.UI.Properties.Resources.weibiaoti1;
             this.SVM_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.SVM_toolStripButton.Name = "SVM_toolStripButton";
-            this.SVM_toolStripButton.Size = new System.Drawing.Size(52, 41);
-            this.SVM_toolStripButton.Text = "SVML2";
+            this.SVM_toolStripButton.Size = new System.Drawing.Size(39, 41);
+            this.SVM_toolStripButton.Text = "SVM";
             this.SVM_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.SVM_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
             // 
             // CNN_SVM_toolStripButton
             // 
-            this.CNN_SVM_toolStripButton.Image = global::Host.UI.Properties.Resources.film_64;
+            this.CNN_SVM_toolStripButton.Image = global::Host.UI.Properties.Resources.jisuan_GPUyunfuwuqi;
             this.CNN_SVM_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.CNN_SVM_toolStripButton.Name = "CNN_SVM_toolStripButton";
             this.CNN_SVM_toolStripButton.Size = new System.Drawing.Size(72, 41);
@@ -203,17 +197,17 @@
             // 
             // rf_toolStripButton
             // 
-            this.rf_toolStripButton.Image = global::Host.UI.Properties.Resources.bulb_off_64;
+            this.rf_toolStripButton.Image = global::Host.UI.Properties.Resources.jisuanqi_2;
             this.rf_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.rf_toolStripButton.Name = "rf_toolStripButton";
-            this.rf_toolStripButton.Size = new System.Drawing.Size(42, 41);
-            this.rf_toolStripButton.Text = "  RF  ";
+            this.rf_toolStripButton.Size = new System.Drawing.Size(34, 41);
+            this.rf_toolStripButton.Text = " RF ";
             this.rf_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.rf_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
             // 
             // DQN_toolStripButton
             // 
-            this.DQN_toolStripButton.Image = global::Host.UI.Properties.Resources.laptop_64;
+            this.DQN_toolStripButton.Image = global::Host.UI.Properties.Resources.jisuan_f;
             this.DQN_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.DQN_toolStripButton.Name = "DQN_toolStripButton";
             this.DQN_toolStripButton.Size = new System.Drawing.Size(41, 41);
@@ -221,14 +215,40 @@
             this.DQN_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.DQN_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
             // 
+            // CNN_DQN_toolStripButton
+            // 
+            this.CNN_DQN_toolStripButton.Image = global::Host.UI.Properties.Resources.kafei;
+            this.CNN_DQN_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.CNN_DQN_toolStripButton.Name = "CNN_DQN_toolStripButton";
+            this.CNN_DQN_toolStripButton.Size = new System.Drawing.Size(74, 41);
+            this.CNN_DQN_toolStripButton.Text = "CNN_DQN";
+            this.CNN_DQN_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.CNN_DQN_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
+            // 
             // main_toolStripSeparator
             // 
             this.main_toolStripSeparator.Name = "main_toolStripSeparator";
             this.main_toolStripSeparator.Size = new System.Drawing.Size(6, 44);
             // 
+            // LSTM_toolStripButton
+            // 
+            this.LSTM_toolStripButton.Enabled = false;
+            this.LSTM_toolStripButton.Image = global::Host.UI.Properties.Resources.hongben;
+            this.LSTM_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.LSTM_toolStripButton.Name = "LSTM_toolStripButton";
+            this.LSTM_toolStripButton.Size = new System.Drawing.Size(44, 41);
+            this.LSTM_toolStripButton.Text = "LSTM";
+            this.LSTM_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.LSTM_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 44);
+            // 
             // BATCHS_toolStripButton
             // 
-            this.BATCHS_toolStripButton.Image = global::Host.UI.Properties.Resources.link_64;
+            this.BATCHS_toolStripButton.Image = global::Host.UI.Properties.Resources.biaoqian;
             this.BATCHS_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.BATCHS_toolStripButton.Name = "BATCHS_toolStripButton";
             this.BATCHS_toolStripButton.Size = new System.Drawing.Size(50, 41);
@@ -236,19 +256,9 @@
             this.BATCHS_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.BATCHS_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
             // 
-            // Compare_Plot_toolStripButton
-            // 
-            this.Compare_Plot_toolStripButton.Image = global::Host.UI.Properties.Resources.brush_64;
-            this.Compare_Plot_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.Compare_Plot_toolStripButton.Name = "Compare_Plot_toolStripButton";
-            this.Compare_Plot_toolStripButton.Size = new System.Drawing.Size(45, 41);
-            this.Compare_Plot_toolStripButton.Text = "Curve";
-            this.Compare_Plot_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.Compare_Plot_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
-            // 
             // kappa_toolStripButton
             // 
-            this.kappa_toolStripButton.Image = global::Host.UI.Properties.Resources.copy_64;
+            this.kappa_toolStripButton.Image = global::Host.UI.Properties.Resources.statisticalchart;
             this.kappa_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.kappa_toolStripButton.Name = "kappa_toolStripButton";
             this.kappa_toolStripButton.Size = new System.Drawing.Size(50, 41);
@@ -256,14 +266,14 @@
             this.kappa_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.kappa_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
             // 
-            // toolStripSeparator1
+            // toolStripSeparator2
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 44);
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 44);
             // 
             // task_toolStripButton
             // 
-            this.task_toolStripButton.Image = global::Host.UI.Properties.Resources.sum_64;
+            this.task_toolStripButton.Image = global::Host.UI.Properties.Resources.设置2;
             this.task_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.task_toolStripButton.Name = "task_toolStripButton";
             this.task_toolStripButton.Size = new System.Drawing.Size(59, 41);
@@ -288,7 +298,7 @@
             // empty_statusLabel
             // 
             this.empty_statusLabel.Name = "empty_statusLabel";
-            this.empty_statusLabel.Size = new System.Drawing.Size(831, 17);
+            this.empty_statusLabel.Size = new System.Drawing.Size(854, 17);
             this.empty_statusLabel.Spring = true;
             // 
             // map_processBar
@@ -339,7 +349,7 @@
             this.tab_treeview.Controls.Add(this.map_treeView);
             this.tab_treeview.Location = new System.Drawing.Point(4, 22);
             this.tab_treeview.Name = "tab_treeview";
-            this.tab_treeview.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tab_treeview.Padding = new System.Windows.Forms.Padding(3);
             this.tab_treeview.Size = new System.Drawing.Size(168, 584);
             this.tab_treeview.TabIndex = 0;
             this.tab_treeview.Text = "TreeView";
@@ -370,7 +380,7 @@
             this.tab_mapview.Controls.Add(this.map_splitContainer);
             this.tab_mapview.Location = new System.Drawing.Point(4, 22);
             this.tab_mapview.Name = "tab_mapview";
-            this.tab_mapview.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tab_mapview.Padding = new System.Windows.Forms.Padding(3);
             this.tab_mapview.Size = new System.Drawing.Size(714, 584);
             this.tab_mapview.TabIndex = 1;
             this.tab_mapview.Text = "MapView";
@@ -381,7 +391,7 @@
             this.map_splitContainer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.map_splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.map_splitContainer.Location = new System.Drawing.Point(3, 3);
-            this.map_splitContainer.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.map_splitContainer.Margin = new System.Windows.Forms.Padding(2);
             this.map_splitContainer.Name = "map_splitContainer";
             this.map_splitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -402,7 +412,7 @@
             this.map_pictureBox.ContextMenuStrip = this.map_contextMenuStrip;
             this.map_pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.map_pictureBox.Location = new System.Drawing.Point(0, 0);
-            this.map_pictureBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.map_pictureBox.Margin = new System.Windows.Forms.Padding(2);
             this.map_pictureBox.Name = "map_pictureBox";
             this.map_pictureBox.Size = new System.Drawing.Size(704, 444);
             this.map_pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -431,7 +441,7 @@
             this.map_listBox.FormattingEnabled = true;
             this.map_listBox.ItemHeight = 12;
             this.map_listBox.Location = new System.Drawing.Point(0, 0);
-            this.map_listBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.map_listBox.Margin = new System.Windows.Forms.Padding(2);
             this.map_listBox.Name = "map_listBox";
             this.map_listBox.Size = new System.Drawing.Size(704, 123);
             this.map_listBox.TabIndex = 0;
@@ -439,9 +449,9 @@
             // tab_textview
             // 
             this.tab_textview.Location = new System.Drawing.Point(4, 22);
-            this.tab_textview.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tab_textview.Margin = new System.Windows.Forms.Padding(2);
             this.tab_textview.Name = "tab_textview";
-            this.tab_textview.Size = new System.Drawing.Size(697, 544);
+            this.tab_textview.Size = new System.Drawing.Size(714, 584);
             this.tab_textview.TabIndex = 2;
             this.tab_textview.Text = "TextView";
             this.tab_textview.UseVisualStyleBackColor = true;
@@ -485,10 +495,15 @@
             this.main_notifyIcon.Visible = true;
             this.main_notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.main_notifyIcon_MouseDoubleClick);
             // 
-            // toolStripSeparator2
+            // toolStripSeparator3
             // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 44);
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 44);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 44);
             // 
             // Main
             // 
@@ -561,7 +576,6 @@
         private System.Windows.Forms.ToolStripMenuItem bandExport_ToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton kappa_toolStripButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripButton Compare_Plot_toolStripButton;
         private System.Windows.Forms.ToolStripButton CNN_toolStripButton;
         private System.Windows.Forms.ToolStripButton task_toolStripButton;
         private System.Windows.Forms.ToolStripButton rf_toolStripButton;
@@ -573,6 +587,9 @@
         private System.Windows.Forms.ToolStripButton SVM_toolStripButton;
         private System.Windows.Forms.ToolStripButton CNN_SVM_toolStripButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripButton CNN_DQN_toolStripButton;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
     }
 }
 
