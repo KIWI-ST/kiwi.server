@@ -27,6 +27,7 @@ namespace Host.UI.Jobs
         public bool Complete { get; private set; } = false;
 
         public event OnTaskCompleteHandler OnTaskComplete;
+        public event OnStateChangedHandler OnStateChanged;
 
         Thread _t;
 

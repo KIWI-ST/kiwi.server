@@ -26,6 +26,7 @@ namespace Host.UI.Jobs
         public PlotModel[] PlotModels => throw new NotImplementedException();
 
         public event OnTaskCompleteHandler OnTaskComplete;
+        public event OnStateChangedHandler OnStateChanged;
 
         Thread _t;
 

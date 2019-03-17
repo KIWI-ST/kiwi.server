@@ -31,6 +31,8 @@ namespace Host.UI.Jobs
         /// 
         /// </summary>
         public event OnTaskCompleteHandler OnTaskComplete;
+        public event OnStateChangedHandler OnStateChanged;
+
         /// <summary>
         /// 
         /// </summary>

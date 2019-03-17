@@ -459,7 +459,7 @@ namespace Host.UI
             ToolStripItem item = sender as ToolStripItem;
             switch (item.Name)
             {
-                    //lstm test 
+                //lstm test 
                 case "LSTM_toolStripButton":
                     string rawTextFullFilename = Directory.GetCurrentDirectory() + @"\tmp\RawText.txt";
                     string autosave = Directory.GetCurrentDirectory() + @"\tmp\autolstm.bin";
@@ -467,7 +467,7 @@ namespace Host.UI
                     RegisterJob(rnnTrainJob);
                     rnnTrainJob.Start();
                     break;
-                    //rpc transform
+                //rpc transform
                 case "RPC_ToolStripMenuItem":
                     RPCForm rpcForm = new RPCForm();
                     if (rpcForm.ShowDialog() == DialogResult.OK)
@@ -477,7 +477,7 @@ namespace Host.UI
                         rpcRectifyJob.Start();
                     }
                     break;
-                    //cov matrix
+                //cov matrix
                 case "cov_toolStripButton":
                     COVForm covForm = new COVForm();
                     covForm.RasterDic = _rasterDic;
@@ -490,24 +490,24 @@ namespace Host.UI
                         covRasterJob.Start();
                     }
                     break;
-                    //task
+                //task
                 case "task_toolStripButton":
                     TaskMonitor taskForm = new TaskMonitor();
                     taskForm.Jobs = _jobs;
                     taskForm.ShowDialog();
                     break;
-                    //calucte kappa
+                //calucte kappa
                 case "kappa_toolStripButton":
                     KappaForm kappaForm = new KappaForm();
                     kappaForm.RasterDic = _rasterDic;
                     kappaForm.ShowDialog();
                     break;
-                    //添加图像
+                //添加图像
                 case "open_toolstripmenuitem":
                 case "open_contextMenuStrip":
                     ReadImage();
                     break;
-                    //超像素分割
+                //超像素分割
                 case "SLIC_toolStripButton":
                 case "SLIC_toolStripMenu":
                     Bitmap bmp = map_pictureBox.Image as Bitmap;
@@ -521,7 +521,7 @@ namespace Host.UI
                     else
                         UpdateStatusLabel("未选中待计算图像，地图区域无图片", STATUE_ENUM.ERROR);
                     break;
-                    //super pixel
+                //super pixel
                 case "SLIC_Center_toolStripButton":
                 case "SLIC_Center_toolStripMenu":
                     OpenFileDialog opg = new OpenFileDialog
@@ -547,7 +547,7 @@ namespace Host.UI
                         }
                     }
                     break;
-                    //dqn classification 
+                //dqn classification 
                 case "DQN_toolStripButton":
                     DQNForm dqnForm = new DQNForm();
                     dqnForm.RasterDic = _rasterDic;
@@ -567,7 +567,7 @@ namespace Host.UI
                         }
                     }
                     break;
-                    //cnn classification
+                //cnn classification
                 case "CNN_toolStripButton":
                     CNNForm cnnForm = new CNNForm();
                     cnnForm.RasterDic = _rasterDic;
@@ -578,7 +578,7 @@ namespace Host.UI
                         cnnClassifyJob.Start();
                     }
                     break;
-                    //random forest classification
+                //random forest classification
                 case "rf_toolStripButton":
                     RandomForestForm rfForm = new RandomForestForm();
                     rfForm.RasterDic = _rasterDic;
@@ -589,28 +589,29 @@ namespace Host.UI
                         rfJob.Start();
                     }
                     break;
-                    //drawing comparsion multi-reslut curve
+                //drawing comparsion multi-reslut curve
                 case "Compare_Plot_toolStripButton":
                     ComparedPlotForm cp_form = new ComparedPlotForm();
                     cp_form.ShowDialog();
                     break;
-                    //make samples in minibatch
+                //make samples in minibatch
                 case "BATCHS_toolStripButton":
                     BatchExportForm be_form = new BatchExportForm();
                     be_form.RasterDic = _rasterDic;
                     be_form.ShowDialog();
                     break;
-                    //svm function
+                //svm function
                 case "SVM_toolStripButton":
                     SVMForm svm_Form = new SVMForm();
                     svm_Form.RasterDic = _rasterDic;
-                    if (svm_Form.ShowDialog() == DialogResult.OK) {
+                    if (svm_Form.ShowDialog() == DialogResult.OK)
+                    {
                         IJob svmJob = new JobSVMClassify(svm_Form.FullFilename, _rasterDic[svm_Form.FeatureKey]);
                         RegisterJob(svmJob);
                         svmJob.Start();
                     }
                     break;
-                    //cnn svm classification
+                //cnn svm classification
                 case "CNN_SVM_toolStripButton":
                     CNN_SVMFrom c_s_form = new CNN_SVMFrom();
                     c_s_form.RasterDic = _rasterDic;
@@ -621,12 +622,22 @@ namespace Host.UI
                         cnnClassifyJob.Start();
                     }
                     break;
-                    //cnn dqn classification
+                //cnn dqn classification
                 case "CNN_DQN_toolStripButton":
                     CNN_DQNForm c_d_form = new CNN_DQNForm();
-                    if(c_d_form.ShowDialog() == DialogResult.OK)
+                    if (c_d_form.ShowDialog() == DialogResult.OK)
                     {
 
+                    }
+                    break;
+                    //lstm + stanford nlp tool -> analysis scenerio
+                case "Parsing_toolStripButton":
+                    ParsingForm p_Form = new ParsingForm();
+                    if(p_Form.ShowDialog() == DialogResult.OK)
+                    {
+                        IJob parsingJob = new JobParsingText(p_Form.TextFullFilename, p_Form.ModelFullFilename, null);
+                        RegisterJob(parsingJob);
+                        parsingJob.Start();
                     }
                     break;
                 default:
