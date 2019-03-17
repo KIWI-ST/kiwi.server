@@ -122,11 +122,11 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(27, 209);
+            this.label3.Location = new System.Drawing.Point(75, 208);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(128, 15);
+            this.label3.Size = new System.Drawing.Size(82, 15);
             this.label3.TabIndex = 7;
-            this.label3.Text = "语言字典[可选]：";
+            this.label3.Text = "语言字典：";
             // 
             // ParsingForm
             // 

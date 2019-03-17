@@ -73,7 +73,6 @@ namespace Engine.Brain.Model.DL
             layer3 = new Language.SoftMax(_hiddenNeuronsCount, _vocaSize, _bufferSize);
             layer3.LearningRate = learningRate;
         }
-
         /// <summary>
         /// 
         /// </summary>
@@ -84,7 +83,6 @@ namespace Engine.Brain.Model.DL
             Save(stream);
             stream.Close();
         }
-
         /// <summary>
         /// 
         /// </summary>
@@ -94,7 +92,6 @@ namespace Engine.Brain.Model.DL
             IFormatter formatter = new BinaryFormatter();
             formatter.Serialize(stream, this);
         }
-
         /// <summary>
         /// 
         /// </summary>
@@ -107,7 +104,6 @@ namespace Engine.Brain.Model.DL
             stream.Close();
             return network;
         }
-
         /// <summary>
         /// 
         /// </summary>
@@ -119,9 +115,7 @@ namespace Engine.Brain.Model.DL
             LSTMNetwork network = (LSTMNetwork)formatter.Deserialize(stream);
             return network;
         }
-
         public int liter { get; private set; }
-
         /// <summary>
         /// 
         /// </summary>
@@ -178,7 +172,6 @@ namespace Engine.Brain.Model.DL
                 }
             }
         }
-
         /// <summary>
         /// write a brief text
         /// </summary>
@@ -187,15 +180,25 @@ namespace Engine.Brain.Model.DL
         /// <returns></returns>
         public string WriteText(string[] text, Lexicon.Entity.Lexicon lexicon)
         {
+            //string generateText = Generate(text.Length+1, text, lexicon, layer3, layer2, layer1);
             string generateText = Generate(_bufferSize, text, lexicon, layer3, layer2, layer1);
             return generateText;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bufferSize"></param>
+        /// <param name="text"></param>
+        /// <param name="lexicon"></param>
+        /// <param name="layer3"></param>
+        /// <param name="layer2"></param>
+        /// <param name="layer1"></param>
+        /// <returns></returns>
         private string Generate(int bufferSize, string[] text, Lexicon.Entity.Lexicon lexicon, Language.Layer layer3, Language.Layer layer2, Language.Layer layer1)
         {
             var buffer = FillBuffer(0, bufferSize, text, lexicon);
             string generatedText = "";
-            for (var pos = 0; pos < 500; pos++)
+            for (var pos = 0; pos < 24; pos++)
             {
                 var reset = pos == 0;
                 var probs = layer3.Forward(layer2.Forward(layer1.Forward(buffer, reset), reset), reset);

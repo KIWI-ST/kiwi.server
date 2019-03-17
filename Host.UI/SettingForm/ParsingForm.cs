@@ -33,7 +33,7 @@ namespace Host.UI.SettingForm
         private void OPEN_LEXICON_button_Click(object sender, EventArgs e)
         {
             OpenFileDialog opg = new OpenFileDialog();
-            opg.Filter = "Bin模型文件|*.lex";
+            opg.Filter = "lexicon字典文件|*.txt";
             if (opg.ShowDialog() == DialogResult.OK)
             {
                 LexiconFullFilename = LEXICON_textBox.Text = opg.FileName;
@@ -41,6 +41,7 @@ namespace Host.UI.SettingForm
         }
         private void OK_button_Click(object sender, EventArgs e)
         {
+            DialogResult = DialogResult.OK;
             this.Close();
         }
     }

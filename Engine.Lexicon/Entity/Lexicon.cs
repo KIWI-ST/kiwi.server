@@ -95,6 +95,11 @@ namespace Engine.Lexicon.Entity
             return DictIndex[text];
         }
 
+        public bool Exist(string text)
+        {
+            return DictIndex.ContainsKey(text);
+        }
+
         /// <summary>
         /// 解码
         /// </summary>

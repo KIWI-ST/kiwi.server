@@ -264,6 +264,14 @@ namespace Host.UI
             map_pictureBox.Image = bmp;
         }
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="msg"></param>
+        private void UpdateTextViewListBox(string msg)
+        {
+            TextView_listBox.Items.Add(msg);
+        }
+        /// <summary>
         /// 更新listbox区域显示内容
         /// </summary>
         /// <param name="msg"></param>
@@ -295,6 +303,11 @@ namespace Host.UI
         /// <param name="msg"></param>
         /// <param name="statue"></param>
         private delegate void UpdateStatusLabelHandler(string msg, STATUE_ENUM statue = STATUE_ENUM.NORMAL);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="msg"></param>
+        private delegate void UpdateTextViewListBoxHandler(string msg);
         /// <summary>
         /// 
         /// </summary>
@@ -402,11 +415,29 @@ namespace Host.UI
         {
             //task complete
             job.OnTaskComplete += Job_OnTaskComplete;
+            //state changed
+            job.OnStateChanged += Job_OnStateChanged;
             //add to jobs
             _jobs.Add(job);
             //print job register information
             string msg = string.Format("time:{0},task:{1} registered", Now, job.Name);
             Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), msg);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="taskName"></param>
+        /// <param name="outputs"></param>
+        private void Job_OnStateChanged(string taskName, params object[] outputs)
+        {
+            switch (taskName)
+            {
+                case "ParsingTextTask":
+                    Invoke(new UpdateTextViewListBoxHandler(UpdateTextViewListBox), outputs[0] as string);
+                    break;
+                default:
+                    break;
+            }
         }
         /// <summary>
         /// job complete
@@ -627,7 +658,7 @@ namespace Host.UI
                     CNN_DQNForm c_d_form = new CNN_DQNForm();
                     if (c_d_form.ShowDialog() == DialogResult.OK)
                     {
-
+                        
                     }
                     break;
                     //lstm + stanford nlp tool -> analysis scenerio
@@ -635,7 +666,10 @@ namespace Host.UI
                     ParsingForm p_Form = new ParsingForm();
                     if(p_Form.ShowDialog() == DialogResult.OK)
                     {
-                        IJob parsingJob = new JobParsingText(p_Form.TextFullFilename, p_Form.ModelFullFilename, null);
+                        //1. tab view change
+                        tabControl2.SelectedIndex = 1;
+                        //2. create job
+                        IJob parsingJob = new JobParsingText(p_Form.TextFullFilename, p_Form.ModelFullFilename, p_Form.LexiconFullFilename);
                         RegisterJob(parsingJob);
                         parsingJob.Start();
                     }

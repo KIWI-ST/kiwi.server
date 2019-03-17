@@ -73,6 +73,7 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.bandExport_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.main_notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.TextView_listBox = new System.Windows.Forms.ListBox();
             this.map_menuStrip.SuspendLayout();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
@@ -90,6 +91,7 @@
             this.map_splitContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.map_pictureBox)).BeginInit();
             this.map_contextMenuStrip.SuspendLayout();
+            this.tab_textview.SuspendLayout();
             this.tree_contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -478,6 +480,7 @@
             // 
             // tab_textview
             // 
+            this.tab_textview.Controls.Add(this.TextView_listBox);
             this.tab_textview.Location = new System.Drawing.Point(4, 25);
             this.tab_textview.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tab_textview.Name = "tab_textview";
@@ -525,6 +528,16 @@
             this.main_notifyIcon.Visible = true;
             this.main_notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.main_notifyIcon_MouseDoubleClick);
             // 
+            // TextView_listBox
+            // 
+            this.TextView_listBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TextView_listBox.FormattingEnabled = true;
+            this.TextView_listBox.ItemHeight = 15;
+            this.TextView_listBox.Location = new System.Drawing.Point(0, 0);
+            this.TextView_listBox.Name = "TextView_listBox";
+            this.TextView_listBox.Size = new System.Drawing.Size(957, 748);
+            this.TextView_listBox.TabIndex = 0;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -561,6 +574,7 @@
             this.map_splitContainer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.map_pictureBox)).EndInit();
             this.map_contextMenuStrip.ResumeLayout(false);
+            this.tab_textview.ResumeLayout(false);
             this.tree_contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -612,6 +626,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripButton Parsing_toolStripButton;
+        private System.Windows.Forms.ListBox TextView_listBox;
     }
 }
 
