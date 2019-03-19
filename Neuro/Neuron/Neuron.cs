@@ -21,11 +21,15 @@ namespace NEURO.Neuron
         /// <summary>
         /// derivative wegiths
         /// </summary>
-        public double[] Dw { get; private set; }
+        public double[] Dw { get; set; }
         /// <summary>
         /// bias
         /// </summary>
-        public double B;
+        public double B { get; private set; }
+        /// <summary>
+        /// delta b
+        /// </summary>
+        public double Db { get; set; }
         /// <summary>
         /// the neuron's output
         /// </summary>
@@ -75,6 +79,17 @@ namespace NEURO.Neuron
             sum += B;
             Output = _function.Function(sum);
             return Output;
+        }
+        /// <summary>
+        /// update weights
+        /// </summary>
+        public void UpdateWeights()
+        {
+            //update weights
+            for (int i = 0; i < W.Length; i++)
+                W[i] += Dw[i];
+            //update bias
+            B += Db;
         }
     }
 }

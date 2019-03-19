@@ -6,14 +6,14 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Neuro.Networks
 {
-    public class NeuralNetwork : INetwork
+    public class DeepNeuralNetwork : INetwork
     {
         public List<ILayer> Layers { get; private set; } = new List<ILayer>();
         public double[] Output { get; private set; }
         /// <summary>
         /// 
         /// </summary>
-        public NeuralNetwork() { }
+        public DeepNeuralNetwork() { }
 
         #region 保存和修改模型
 

@@ -50,12 +50,12 @@
     <Compile Include="Activation\SeluFunction.cs" />
     <Compile Include="Activation\SigmoidFunction.cs" />
     <Compile Include="Loss\SquaredFunction.cs" />
-    <Compile Include="Network\NeuralNetwork.cs" />
+    <Compile Include="Network\DeepNeuralNetwork.cs" />
+    <Compile Include="Network\SequenceNeuralNetwork.cs" />
     <Compile Include="Neuron\Neuron.cs" />
-    <Compile Include="Trainer\BackPropagationTrainer.cs" />
+    <Compile Include="Trainer\MomentuTrainer.cs" />
     <Compile Include="Utils\NP.cs" />
     <Compile Include="Layer\ActivationLayer.cs" />
-    <Compile Include="Trainer\BackPropagationLearning.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

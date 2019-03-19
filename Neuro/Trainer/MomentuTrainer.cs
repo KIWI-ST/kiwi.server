@@ -1,13 +1,12 @@
 ﻿using NEURO;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Neuro.Trainer
 {
-    public class BackPropagationTrainer
+    /// <summary>
+    /// 基于动量法的神经网络训练器
+    /// </summary>
+    public class MomentuTrainer
     {
         //
         double learningRate = 0.1;
@@ -26,7 +25,7 @@ namespace Neuro.Trainer
         /// </summary>
         /// <param name="network"></param>
         /// <param name="loss"></param>
-        public BackPropagationTrainer(INetwork network, ILoss loss)
+        public MomentuTrainer(INetwork network, ILoss loss)
         {
             _network = network;
             _loss = loss;
@@ -36,7 +35,8 @@ namespace Neuro.Trainer
         {
             _network.Compute(input);
             double error = ComputeError(output);
-
+            ComputeDelta(input);
+            UpdateNetworkWeights();
             return error;
         }
 
@@ -51,11 +51,11 @@ namespace Neuro.Trainer
             double e, sum, error = 0;
             //calculate each neuron error at last layer first
             ILayer lastLayer = _network.Layers.Last();
-            for(int i = 0; i < lastLayer.Neurons.Count; i++)
+            for (int i = 0; i < lastLayer.Neurons.Count; i++)
             {
                 INeuron neuron = lastLayer.Neurons[i];
                 double output = neuron.Output;
-                e = desiredOuput[i] - output;
+                e = desiredOuput[i] - output; //使用
                 neuron.Error = e * neuron.Function.Derivative2(output);
                 error += (e * e);
             }
@@ -80,11 +80,51 @@ namespace Neuro.Trainer
         /// 
         /// </summary>
         /// <param name="input"></param>
-        public ComputeDeltaWeights(double[] input)
+        public void ComputeDelta(double[] input)
         {
             ILayer firstLayer = _network.Layers.First();
-
+            //cache frequently used values
+            double cachedMomentum = learningRate * momentum;
+            double cached1mMomentum = learningRate * (1 - momentum);
+            //for each neuron of the layer
+            for (int i = 0; i < firstLayer.Neurons.Count; i++)
+            {
+                INeuron neuron = firstLayer.Neurons[i];
+                double cachedError = neuron.Error * cached1mMomentum;
+                for (int k = 0; k < neuron.W.Length; k++)
+                {
+                    neuron.Dw[k] = cachedMomentum * neuron.Dw[k] + cachedError * input[k];
+                }
+                neuron.Db = cachedMomentum * neuron.Db + cachedError;
+            }
+            for (int k = 1; k < _network.Layers.Count; k++)
+            {
+                ILayer layerPrev = _network.Layers[k - 1];
+                ILayer layer = _network.Layers[k];
+                for (int i = 0; i < layer.Neurons.Count; i++)
+                {
+                    INeuron neuron = layer.Neurons[i];
+                    double cachedError = neuron.Error * cached1mMomentum;
+                    for (int j = 0; j < neuron.W.Length; j++)
+                    {
+                        neuron.Dw[j] = cachedMomentum * neuron.Dw[j] + cachedError * layerPrev.Neurons[j].Output;
+                    }
+                    neuron.Db = cachedMomentum * neuron.Db + cachedError;
+                }
+            }
         }
-
+        /// <summary>
+        /// 更新权重
+        /// </summary>
+        public void UpdateNetworkWeights()
+        {
+            _network.Layers.ForEach(layer =>
+            {
+                layer.Neurons.ForEach(neuron =>
+                {
+                    neuron.UpdateWeights();
+                });
+            });
+        }
     }
 }

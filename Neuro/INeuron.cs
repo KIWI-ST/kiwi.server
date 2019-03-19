@@ -3,6 +3,10 @@
     public interface INeuron
     {
         /// <summary>
+        /// 执行backprop
+        /// </summary>
+        void UpdateWeights();
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="inputs"></param>
@@ -27,15 +31,15 @@
         /// <summary>
         /// 
         /// </summary>
-        double[] B { get; }
-        /// <summary>
-        /// 
-        /// </summary>
         double[] Dw { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        double[] Db { get; set; }
+        double B { get; }
+        /// <summary>
+        /// 
+        /// </summary>
+        double Db { get; set; }
         /// <summary>
         /// 
         /// </summary>
