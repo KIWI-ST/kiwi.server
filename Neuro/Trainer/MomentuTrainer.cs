@@ -30,7 +30,12 @@ namespace Neuro.Trainer
             _network = network;
             _loss = loss;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="output"></param>
+        /// <returns></returns>
         public double Train(double[] input, double[] output)
         {
             _network.Compute(input);
@@ -39,12 +44,19 @@ namespace Neuro.Trainer
             UpdateNetworkWeights();
             return error;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public double TrainEpochs()
         {
             return 0.0;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="desiredOuput"></param>
+        /// <returns></returns>
         public double ComputeError(double[] desiredOuput)
         {
             //pred output
@@ -116,7 +128,7 @@ namespace Neuro.Trainer
         /// <summary>
         /// 更新权重
         /// </summary>
-        public void UpdateNetworkWeights()
+        private void UpdateNetworkWeights()
         {
             _network.Layers.ForEach(layer =>
             {
@@ -126,5 +138,6 @@ namespace Neuro.Trainer
                 });
             });
         }
+
     }
 }

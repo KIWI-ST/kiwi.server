@@ -1,4 +1,5 @@
-﻿using Neuro.Abstract;
+﻿
+using NEURO;
 using System;
 
 namespace Neuro.Activation

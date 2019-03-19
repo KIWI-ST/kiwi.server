@@ -49,7 +49,8 @@
     <Compile Include="Activation\ReluFunction.cs" />
     <Compile Include="Activation\SeluFunction.cs" />
     <Compile Include="Activation\SigmoidFunction.cs" />
-    <Compile Include="Loss\SquaredFunction.cs" />
+    <Compile Include="Loss\CrossEntropyLoss.cs" />
+    <Compile Include="Loss\SquaredLoss.cs" />
     <Compile Include="Network\DeepNeuralNetwork.cs" />
     <Compile Include="Network\SequenceNeuralNetwork.cs" />
     <Compile Include="Neuron\Neuron.cs" />
