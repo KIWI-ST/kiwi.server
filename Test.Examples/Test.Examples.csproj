@@ -58,6 +58,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Cntk.Core.Managed-2.6, Version=2.6.0.0, Culture=neutral, PublicKeyToken=21fff2ec8197defe, processorArchitecture=AMD64">
+      <HintPath>..\packages\CNTK.CPUOnly.2.6.0\lib\netstandard2.0\Cntk.Core.Managed-2.6.dll</HintPath>
+    </Reference>
     <Reference Include="ejml-0.23, Version=0.23.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Stanford.NLP.CoreNLP.3.9.1.0\lib\ejml-0.23.dll</HintPath>
     </Reference>
@@ -178,6 +181,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51" />
     <Reference Include="xom, Version=1.2.10.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Stanford.NLP.CoreNLP.3.9.1.0\lib\xom.dll</HintPath>
@@ -191,6 +195,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <Compile Include="Engine.CNTK.cs" />
+    <None Include="Datasets\mnist_data.zip">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -235,6 +243,12 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\MSTest.TestAdapter.1.4.0\build\net45\MSTest.TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSTest.TestAdapter.1.4.0\build\net45\MSTest.TestAdapter.props'))" />
     <Error Condition="!Exists('..\packages\MSTest.TestAdapter.1.4.0\build\net45\MSTest.TestAdapter.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSTest.TestAdapter.1.4.0\build\net45\MSTest.TestAdapter.targets'))" />
+    <Error Condition="!Exists('..\packages\CNTK.Deps.MKL.2.6.0\build\netstandard2.0\CNTK.Deps.MKL.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CNTK.Deps.MKL.2.6.0\build\netstandard2.0\CNTK.Deps.MKL.targets'))" />
+    <Error Condition="!Exists('..\packages\CNTK.Deps.OpenCV.Zip.2.6.0\build\netstandard2.0\CNTK.Deps.OpenCV.Zip.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CNTK.Deps.OpenCV.Zip.2.6.0\build\netstandard2.0\CNTK.Deps.OpenCV.Zip.targets'))" />
+    <Error Condition="!Exists('..\packages\CNTK.CPUOnly.2.6.0\build\netstandard2.0\CNTK.CPUOnly.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CNTK.CPUOnly.2.6.0\build\netstandard2.0\CNTK.CPUOnly.targets'))" />
   </Target>
   <Import Project="..\packages\MSTest.TestAdapter.1.4.0\build\net45\MSTest.TestAdapter.targets" Condition="Exists('..\packages\MSTest.TestAdapter.1.4.0\build\net45\MSTest.TestAdapter.targets')" />
+  <Import Project="..\packages\CNTK.Deps.MKL.2.6.0\build\netstandard2.0\CNTK.Deps.MKL.targets" Condition="Exists('..\packages\CNTK.Deps.MKL.2.6.0\build\netstandard2.0\CNTK.Deps.MKL.targets')" />
+  <Import Project="..\packages\CNTK.Deps.OpenCV.Zip.2.6.0\build\netstandard2.0\CNTK.Deps.OpenCV.Zip.targets" Condition="Exists('..\packages\CNTK.Deps.OpenCV.Zip.2.6.0\build\netstandard2.0\CNTK.Deps.OpenCV.Zip.targets')" />
+  <Import Project="..\packages\CNTK.CPUOnly.2.6.0\build\netstandard2.0\CNTK.CPUOnly.targets" Condition="Exists('..\packages\CNTK.CPUOnly.2.6.0\build\netstandard2.0\CNTK.CPUOnly.targets')" />
 </Project>

@@ -21,7 +21,7 @@ namespace Test.Examples
         /// </summary>
         string featureFullFilename = Directory.GetCurrentDirectory() + @"\Datasets\Band18.tif";
         /// <summary>
-        /// train layer
+        /// train layerg
         /// </summary>
         string trainFullFilename = Directory.GetCurrentDirectory() + @"\Datasets\Train.tif";
         /// <summary>
@@ -136,6 +136,5 @@ namespace Test.Examples
             }
             Assert.IsTrue(_loss < 1.0);
         }
-
     }
 }
