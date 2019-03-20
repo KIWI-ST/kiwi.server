@@ -68,12 +68,12 @@
             this.open_contextMenuStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.map_listBox = new System.Windows.Forms.ListBox();
             this.tab_textview = new System.Windows.Forms.TabPage();
+            this.TextView_listBox = new System.Windows.Forms.ListBox();
             this.tree_contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.bandCombine_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.bandExport_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.main_notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.TextView_listBox = new System.Windows.Forms.ListBox();
             this.map_menuStrip.SuspendLayout();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
@@ -436,7 +436,7 @@
             // 
             this.map_splitContainer.Panel2.Controls.Add(this.map_listBox);
             this.map_splitContainer.Size = new System.Drawing.Size(949, 740);
-            this.map_splitContainer.SplitterDistance = 472;
+            this.map_splitContainer.SplitterDistance = 488;
             this.map_splitContainer.TabIndex = 1;
             // 
             // map_pictureBox
@@ -446,7 +446,7 @@
             this.map_pictureBox.Location = new System.Drawing.Point(0, 0);
             this.map_pictureBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.map_pictureBox.Name = "map_pictureBox";
-            this.map_pictureBox.Size = new System.Drawing.Size(945, 468);
+            this.map_pictureBox.Size = new System.Drawing.Size(945, 484);
             this.map_pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.map_pictureBox.TabIndex = 0;
             this.map_pictureBox.TabStop = false;
@@ -475,7 +475,7 @@
             this.map_listBox.Location = new System.Drawing.Point(0, 0);
             this.map_listBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.map_listBox.Name = "map_listBox";
-            this.map_listBox.Size = new System.Drawing.Size(945, 260);
+            this.map_listBox.Size = new System.Drawing.Size(945, 244);
             this.map_listBox.TabIndex = 0;
             // 
             // tab_textview
@@ -488,6 +488,16 @@
             this.tab_textview.TabIndex = 2;
             this.tab_textview.Text = "TextView";
             this.tab_textview.UseVisualStyleBackColor = true;
+            // 
+            // TextView_listBox
+            // 
+            this.TextView_listBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TextView_listBox.FormattingEnabled = true;
+            this.TextView_listBox.ItemHeight = 15;
+            this.TextView_listBox.Location = new System.Drawing.Point(0, 0);
+            this.TextView_listBox.Name = "TextView_listBox";
+            this.TextView_listBox.Size = new System.Drawing.Size(957, 748);
+            this.TextView_listBox.TabIndex = 0;
             // 
             // tree_contextMenuStrip
             // 
@@ -527,16 +537,6 @@
             this.main_notifyIcon.Text = "please double click to restore the view";
             this.main_notifyIcon.Visible = true;
             this.main_notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.main_notifyIcon_MouseDoubleClick);
-            // 
-            // TextView_listBox
-            // 
-            this.TextView_listBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TextView_listBox.FormattingEnabled = true;
-            this.TextView_listBox.ItemHeight = 15;
-            this.TextView_listBox.Location = new System.Drawing.Point(0, 0);
-            this.TextView_listBox.Name = "TextView_listBox";
-            this.TextView_listBox.Size = new System.Drawing.Size(957, 748);
-            this.TextView_listBox.TabIndex = 0;
             // 
             // Main
             // 

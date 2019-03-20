@@ -71,8 +71,8 @@
     <Reference Include="ejml-0.23, Version=0.23.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Stanford.NLP.CoreNLP.3.9.1.0\lib\ejml-0.23.dll</HintPath>
     </Reference>
-    <Reference Include="EPPlus, Version=4.5.3.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPPlus.4.5.3\lib\net40\EPPlus.dll</HintPath>
+    <Reference Include="EPPlus, Version=4.5.3.1, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.5.3.1\lib\net40\EPPlus.dll</HintPath>
     </Reference>
     <Reference Include="IKVM.AWT.WinForms, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
       <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.AWT.WinForms.dll</HintPath>
@@ -236,16 +236,16 @@
     <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
-    <Compile Include="PlotForm\ComparedPlotForm.cs">
+    <Compile Include="Forms\ComparedPlotForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PlotForm\ComparedPlotForm.Designer.cs">
+    <Compile Include="Forms\ComparedPlotForm.Designer.cs">
       <DependentUpon>ComparedPlotForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="PlotForm\EmptyPlotForm.cs">
+    <Compile Include="Forms\EmptyPlotForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PlotForm\EmptyPlotForm.Designer.cs">
+    <Compile Include="Forms\EmptyPlotForm.Designer.cs">
       <DependentUpon>EmptyPlotForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -255,109 +255,109 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SettingForm\BandExportForm.cs">
+    <Compile Include="Forms\BandExportForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SettingForm\BandExportForm.Designer.cs">
+    <Compile Include="Forms\BandExportForm.Designer.cs">
       <DependentUpon>BandExportForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SettingForm\BandForm.cs">
+    <Compile Include="Forms\BandForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SettingForm\BandForm.Designer.cs">
+    <Compile Include="Forms\BandForm.Designer.cs">
       <DependentUpon>BandForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SettingForm\BatchExportForm.cs">
+    <Compile Include="Forms\BatchExportForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SettingForm\BatchExportForm.Designer.cs">
+    <Compile Include="Forms\BatchExportForm.Designer.cs">
       <DependentUpon>BatchExportForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SettingForm\CNN-SVMForm.cs">
+    <Compile Include="Forms\CNN-SVMForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SettingForm\CNN-SVMForm.Designer.cs">
+    <Compile Include="Forms\CNN-SVMForm.Designer.cs">
       <DependentUpon>CNN-SVMForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SettingForm\CNNForm.cs">
+    <Compile Include="Forms\CNNForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SettingForm\CNNForm.Designer.cs">
+    <Compile Include="Forms\CNNForm.Designer.cs">
       <DependentUpon>CNNForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SettingForm\CNN_DQNForm.cs">
+    <Compile Include="Forms\CNN_DQNForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SettingForm\CNN_DQNForm.Designer.cs">
+    <Compile Include="Forms\CNN_DQNForm.Designer.cs">
       <DependentUpon>CNN_DQNForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SettingForm\COVForm.cs">
+    <Compile Include="Forms\COVForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SettingForm\COVForm.Designer.cs">
+    <Compile Include="Forms\COVForm.Designer.cs">
       <DependentUpon>COVForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SettingForm\DLClassifyForm.cs">
+    <Compile Include="Forms\DLClassifyForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SettingForm\DLClassifyForm.Designer.cs">
+    <Compile Include="Forms\DLClassifyForm.Designer.cs">
       <DependentUpon>DLClassifyForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SettingForm\DQNForm.cs">
+    <Compile Include="Forms\DQNForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SettingForm\DQNForm.Designer.cs">
+    <Compile Include="Forms\DQNForm.Designer.cs">
       <DependentUpon>DQNForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SettingForm\KappaForm.cs">
+    <Compile Include="Forms\KappaForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SettingForm\KappaForm.Designer.cs">
+    <Compile Include="Forms\KappaForm.Designer.cs">
       <DependentUpon>KappaForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SettingForm\ParsingForm.cs">
+    <Compile Include="Forms\ParsingForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SettingForm\ParsingForm.Designer.cs">
+    <Compile Include="Forms\ParsingForm.Designer.cs">
       <DependentUpon>ParsingForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SettingForm\RandomForestForm.cs">
+    <Compile Include="Forms\RandomForestForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SettingForm\RandomForestForm.Designer.cs">
+    <Compile Include="Forms\RandomForestForm.Designer.cs">
       <DependentUpon>RandomForestForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SettingForm\RPCForm.cs">
+    <Compile Include="Forms\RPCForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SettingForm\RPCForm.Designer.cs">
+    <Compile Include="Forms\RPCForm.Designer.cs">
       <DependentUpon>RPCForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SettingForm\SLICForm.cs">
+    <Compile Include="Forms\SLICForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SettingForm\SLICForm.Designer.cs">
+    <Compile Include="Forms\SLICForm.Designer.cs">
       <DependentUpon>SLICForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SettingForm\SVMForm.cs">
+    <Compile Include="Forms\SVMForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SettingForm\SVMForm.Designer.cs">
+    <Compile Include="Forms\SVMForm.Designer.cs">
       <DependentUpon>SVMForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SettingForm\TaskMonitor.cs">
+    <Compile Include="Forms\TaskMonitor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SettingForm\TaskMonitor.Designer.cs">
+    <Compile Include="Forms\TaskMonitor.Designer.cs">
       <DependentUpon>TaskMonitor.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PlotForm\ComparedPlotForm.resx">
+    <EmbeddedResource Include="Forms\ComparedPlotForm.resx">
       <DependentUpon>ComparedPlotForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PlotForm\EmptyPlotForm.resx">
+    <EmbeddedResource Include="Forms\EmptyPlotForm.resx">
       <DependentUpon>EmptyPlotForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -365,52 +365,52 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="SettingForm\BandExportForm.resx">
+    <EmbeddedResource Include="Forms\BandExportForm.resx">
       <DependentUpon>BandExportForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SettingForm\BandForm.resx">
+    <EmbeddedResource Include="Forms\BandForm.resx">
       <DependentUpon>BandForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SettingForm\BatchExportForm.resx">
+    <EmbeddedResource Include="Forms\BatchExportForm.resx">
       <DependentUpon>BatchExportForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SettingForm\CNN-SVMForm.resx">
+    <EmbeddedResource Include="Forms\CNN-SVMForm.resx">
       <DependentUpon>CNN-SVMForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SettingForm\CNNForm.resx">
+    <EmbeddedResource Include="Forms\CNNForm.resx">
       <DependentUpon>CNNForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SettingForm\CNN_DQNForm.resx">
+    <EmbeddedResource Include="Forms\CNN_DQNForm.resx">
       <DependentUpon>CNN_DQNForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SettingForm\COVForm.resx">
+    <EmbeddedResource Include="Forms\COVForm.resx">
       <DependentUpon>COVForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SettingForm\DLClassifyForm.resx">
+    <EmbeddedResource Include="Forms\DLClassifyForm.resx">
       <DependentUpon>DLClassifyForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SettingForm\DQNForm.resx">
+    <EmbeddedResource Include="Forms\DQNForm.resx">
       <DependentUpon>DQNForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SettingForm\KappaForm.resx">
+    <EmbeddedResource Include="Forms\KappaForm.resx">
       <DependentUpon>KappaForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SettingForm\ParsingForm.resx">
+    <EmbeddedResource Include="Forms\ParsingForm.resx">
       <DependentUpon>ParsingForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SettingForm\RandomForestForm.resx">
+    <EmbeddedResource Include="Forms\RandomForestForm.resx">
       <DependentUpon>RandomForestForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SettingForm\RPCForm.resx">
+    <EmbeddedResource Include="Forms\RPCForm.resx">
       <DependentUpon>RPCForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SettingForm\SLICForm.resx">
+    <EmbeddedResource Include="Forms\SLICForm.resx">
       <DependentUpon>SLICForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SettingForm\SVMForm.resx">
+    <EmbeddedResource Include="Forms\SVMForm.resx">
       <DependentUpon>SVMForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SettingForm\TaskMonitor.resx">
+    <EmbeddedResource Include="Forms\TaskMonitor.resx">
       <DependentUpon>TaskMonitor.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
