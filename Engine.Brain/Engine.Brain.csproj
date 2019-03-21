@@ -115,7 +115,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\DL\LSTM.cs" />
+    <Compile Include="Embed\Embedding.cs" />
     <Compile Include="Model\ML\RF.cs" />
     <Compile Include="Model\ML\L2SVM.cs" />
     <Compile Include="Model\RL\Env\ExtractRoadEnv.cs" />
