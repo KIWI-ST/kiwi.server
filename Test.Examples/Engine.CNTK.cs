@@ -127,7 +127,7 @@ namespace Test.Examples
             Variable layer3 = CreateLinearModel(layer2, 98, device);
             Function classifierOutput = CreateLinearModel(layer3, 10, device);
 
-            Variable loss = CNTKLib.SquaredError(classifierOutput, labels);
+            Variable loss = CNTKLib.CrossEntropyWithSoftmax(classifierOutput, labels);
             Variable evalError = CNTKLib.ClassificationError(classifierOutput, labels);
             //trainer
             TrainingParameterScheduleDouble learningRateSchedule = new TrainingParameterScheduleDouble(0.01, 1);
@@ -135,9 +135,9 @@ namespace Test.Examples
             var trainer = Trainer.CreateTrainer(classifierOutput, loss, evalError, parameterLearners);
             //
             string sss = "";
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 100000; i++)
             {
-                var (input, label) = GenerateValueData(64, 28 * 28, 10, device);
+                var (input, label) = GenerateValueData(29, 28 * 28, 10, device);
 #pragma warning disable 618
                 trainer.TrainMinibatch(new Dictionary<Variable, Value>() { { inputs, input }, { labels, label } }, device);
 #pragma warning restore 618
