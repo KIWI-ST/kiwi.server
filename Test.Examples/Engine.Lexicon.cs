@@ -46,9 +46,9 @@ namespace Test.Examples
         public void LearnRawTextByLSTM()
         {
             //form raw vocabulary file
-            Lexicon lexicon = Lexicon.FromVocabularyFile(rawTextFullFilename, EncodeScheme.Onehot);
-            LSTMNetwork network = new LSTMNetwork(lexicon.VocaSize);
-            network.LearnFromRawText(rawTextFullFilename, lexicon);
+            //Lexicon lexicon = Lexicon.FromVocabularyFile(rawTextFullFilename, EncodeScheme.Onehot);
+            //LSTMNetwork network = new LSTMNetwork(lexicon.VocaSize);
+            //network.LearnFromRawText(rawTextFullFilename, lexicon);
         }
 
         [TestMethod]

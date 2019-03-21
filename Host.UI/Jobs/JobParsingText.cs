@@ -72,33 +72,33 @@ namespace Host.UI.Jobs
                 var sentences = document.get(new CoreAnnotations.SentencesAnnotation().getClass()) as ArrayList;
                 List<string> ners = new List<string>();
                 //lstm
-                var lstmNetwork = LSTMNetwork.Load(modelFullFilename);
-                var lexicon = Engine.Lexicon.Entity.Lexicon.FromExistLexiconFile(lexiconFullFilename, Engine.Lexicon.Entity.EncodeScheme.Onehot);
-                foreach (CoreMap sentence in sentences.toArray())
-                {
-                    OnStateChanged?.Invoke(Name, string.Format("{0} - {1}", DateTime.Now.ToLongDateString() + DateTime.Now.ToLongTimeString(), sentence.ToString()));
-                    // traversing the words in the current sentence
-                    var tokens = sentence.get(new CoreAnnotations.TokensAnnotation().getClass()) as ArrayList;
-                    List<string> words = new List<string>();
-                    foreach (CoreLabel token in tokens.toArray())
-                    {
-                        // this is the text of the token
-                        var word = token.get(new CoreAnnotations.TextAnnotation().getClass()) as string;
-                        // this is the POS tag of the token
-                        var pos = token.get(new CoreAnnotations.PartOfSpeechAnnotation().getClass()) as string;
-                        // this is the this is the NER label of the token
-                        var ne = token.get(new CoreAnnotations.NamedEntityTagAnnotation().getClass()) as string;
-                        //orig by ner
-                        if(ne!=null) OnStateChanged?.Invoke(Name, string.Format("{0} - {1} - {2} - {3}", DateTime.Now.ToLongDateString() + DateTime.Now.ToLongTimeString(), word, pos, ne));
-                        //add to word collection
-                        if(lexicon.Exist(word)) words.Add(word);
-                    }
-                    //
-                    while (words.Count < 24)
-                        words.AddRange(words);
-                    var sentence2 =  lstmNetwork.WriteText(words.ToArray(), lexicon);
-                    OnStateChanged?.Invoke(Name, string.Format("{0} - {1}", DateTime.Now.ToLongDateString() + DateTime.Now.ToLongTimeString(), sentence2.ToString()));
-                }
+                //var lstmNetwork = LSTMNetwork.Load(modelFullFilename);
+                //var lexicon = Engine.Lexicon.Entity.Lexicon.FromExistLexiconFile(lexiconFullFilename, Engine.Lexicon.Entity.EncodeScheme.Onehot);
+                //foreach (CoreMap sentence in sentences.toArray())
+                //{
+                //    OnStateChanged?.Invoke(Name, string.Format("{0} - {1}", DateTime.Now.ToLongDateString() + DateTime.Now.ToLongTimeString(), sentence.ToString()));
+                //    // traversing the words in the current sentence
+                //    var tokens = sentence.get(new CoreAnnotations.TokensAnnotation().getClass()) as ArrayList;
+                //    List<string> words = new List<string>();
+                //    foreach (CoreLabel token in tokens.toArray())
+                //    {
+                //        // this is the text of the token
+                //        var word = token.get(new CoreAnnotations.TextAnnotation().getClass()) as string;
+                //        // this is the POS tag of the token
+                //        var pos = token.get(new CoreAnnotations.PartOfSpeechAnnotation().getClass()) as string;
+                //        // this is the this is the NER label of the token
+                //        var ne = token.get(new CoreAnnotations.NamedEntityTagAnnotation().getClass()) as string;
+                //        //orig by ner
+                //        if(ne!=null) OnStateChanged?.Invoke(Name, string.Format("{0} - {1} - {2} - {3}", DateTime.Now.ToLongDateString() + DateTime.Now.ToLongTimeString(), word, pos, ne));
+                //        //add to word collection
+                //        if(lexicon.Exist(word)) words.Add(word);
+                //    }
+                //    //
+                //    while (words.Count < 24)
+                //        words.AddRange(words);
+                //    var sentence2 =  lstmNetwork.WriteText(words.ToArray(), lexicon);
+                //    OnStateChanged?.Invoke(Name, string.Format("{0} - {1}", DateTime.Now.ToLongDateString() + DateTime.Now.ToLongTimeString(), sentence2.ToString()));
+                //}
             });
         }
         /// <summary>

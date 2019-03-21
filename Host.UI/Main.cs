@@ -494,9 +494,9 @@ namespace Host.UI
                 case "LSTM_toolStripButton":
                     string rawTextFullFilename = Directory.GetCurrentDirectory() + @"\tmp\RawText.txt";
                     string autosave = Directory.GetCurrentDirectory() + @"\tmp\autolstm.bin";
-                    IJob rnnTrainJob = new JobRNNTrain(rawTextFullFilename, autosave);
-                    RegisterJob(rnnTrainJob);
-                    rnnTrainJob.Start();
+                    //IJob rnnTrainJob = new JobRNNTrain(rawTextFullFilename, autosave);
+                    //RegisterJob(rnnTrainJob);
+                    //rnnTrainJob.Start();
                     break;
                 //rpc transform
                 case "RPC_ToolStripMenuItem":

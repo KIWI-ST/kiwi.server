@@ -1,14 +1,13 @@
-﻿using ConvNetSharp.Core;
+﻿using System;
+using System.IO;
+using ConvNetSharp.Core;
 using ConvNetSharp.Core.Layers;
 using ConvNetSharp.Core.Training;
 using ConvNetSharp.Volume;
 using Engine.Brain.AI.RL;
 using Engine.Brain.Entity;
-using System;
-using System.IO;
 
 namespace Engine.Brain.AI.DL
-
 {
     public class CNN : INet
     {
