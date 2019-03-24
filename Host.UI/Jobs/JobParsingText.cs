@@ -1,13 +1,11 @@
-﻿using edu.stanford.nlp.ling;
-using edu.stanford.nlp.pipeline;
-using edu.stanford.nlp.util;
-using Engine.Brain.Model.DL;
-using java.util;
-using OxyPlot;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using edu.stanford.nlp.ling;
+using edu.stanford.nlp.pipeline;
+using java.util;
+using OxyPlot;
 
 namespace Host.UI.Jobs
 {

@@ -98,22 +98,26 @@ namespace Engine.Brain.AI.RL.Env
             {
                 using (StreamWriter sw = new StreamWriter(fullFilename))
                 {
-                    string str = "";
+                    sw.NewLine = "\r\n";
+                    //string str = "";
                     foreach (var element1 in _memory)
                         foreach (var element2 in element1.Value)
-                            str += string.Join(",", _pGRasterLayerCursorTool.PickNormalValue(element2.X, element2.Y)) + "," + element1.Key + "\r\n";
-                    sw.Write(str);
+                            sw.WriteLine(string.Join(",", _pGRasterLayerCursorTool.PickNormalValue(element2.X, element2.Y)) + "," + element1.Key);
+                            //str += string.Join(",", _pGRasterLayerCursorTool.PickNormalValue(element2.X, element2.Y)) + "," + element1.Key + "\r\n";
+                    //sw.Write(str);
                 }
             }
             else
             {
                 using (StreamWriter sw = new StreamWriter(fullFilename))
                 {
-                    string str = "";
+                    sw.NewLine = "\r\n";
+                    //string str = "";
                     foreach (var element1 in _memory)
                         foreach (var element2 in element1.Value)
-                            str += string.Join(",", _pGRasterLayerCursorTool.PickRagneNormalValue(element2.X, element2.Y, row, col)) + "," + element1.Key + "\r\n";
-                    sw.Write(str);
+                            sw.WriteLine(string.Join(",", _pGRasterLayerCursorTool.PickRagneNormalValue(element2.X, element2.Y, row, col)) + "," + element1.Key);
+                            //str += string.Join(",", _pGRasterLayerCursorTool.PickRagneNormalValue(element2.X, element2.Y, row, col)) + "," + element1.Key + "\r\n";
+                            //sw.Write(str);
                 }
             }
         }

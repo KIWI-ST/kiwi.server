@@ -1,9 +1,8 @@
-﻿using edu.stanford.nlp.ling;
+﻿using System.IO;
+using edu.stanford.nlp.ling;
 using edu.stanford.nlp.pipeline;
-using Engine.Brain.Model.DL;
 using Engine.Lexicon.Entity;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.IO;
 
 namespace Test.Examples
 {

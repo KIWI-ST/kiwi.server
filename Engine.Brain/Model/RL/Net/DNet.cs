@@ -58,7 +58,7 @@ namespace Engine.Brain.AI.RL
     /// <summary>
     /// DQN State Prediction NeuralNetwork 
     /// </summary>
-    public class DNet : INet
+    public class DNet : IDNet
     {
         ActivationNetwork _network;
 
@@ -114,7 +114,7 @@ namespace Engine.Brain.AI.RL
             return memory;
         }
 
-        public void Accept(INet sourceNet)
+        public void Accept(IDNet sourceNet)
         {
             _network = Network.Load(sourceNet.PersistenceMemory()) as ActivationNetwork;
             _teacher = new BackPropagationLearning(_network)

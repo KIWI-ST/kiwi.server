@@ -69,11 +69,11 @@ namespace Engine.Brain.AI.RL
         /// <summary>
         /// 决策网络
         /// </summary>
-        private DNet _actorNet;
+        private IDNet _actorNet;
         /// <summary>
         /// 目标网络
         /// </summary>
-        private DNet _criticNet;
+        private IDNet _criticNet;
         /// <summary>
         /// 观察环境
         /// </summary>

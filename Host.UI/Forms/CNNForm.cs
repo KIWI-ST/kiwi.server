@@ -33,6 +33,10 @@ namespace Host.UI.SettingForm
         /// </summary>
         public int ImageHeight { get; set; }
         /// <summary>
+        /// 深度
+        /// </summary>
+        public int ImageDepth { get; set; }
+        /// <summary>
         /// 模型训练轮次
         /// </summary>
         public int Epochs { get; set; }
@@ -59,7 +63,7 @@ namespace Host.UI.SettingForm
         {
             //init feature picked methods combox
             List<string> featurePickedMethods = new List<string>() {
-                "基于像素的多波段输入"
+                "基于Mask的多波段输入"
             };
             FeaturePicked_comboBox.Items.Clear();
             featurePickedMethods.ForEach(p => {
@@ -94,6 +98,11 @@ namespace Host.UI.SettingForm
             ImageHeight = (int)(sender as NumericUpDown).Value;
         }
 
+        private void DEPTH_numericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            ImageDepth = (int)(sender as NumericUpDown).Value;
+        }
+
         private void Epochs_numericUpDown_ValueChanged(object sender, EventArgs e)
         {
             Epochs = (int)(sender as NumericUpDown).Value;
@@ -124,7 +133,27 @@ namespace Host.UI.SettingForm
             {
                 open_sample_textBox.Text = opg.FileName;
                 FullFilename = opg.FileName;
+                string[] parameters = System.IO.Path.GetFileNameWithoutExtension(FullFilename).Split('_');
+                try
+                {
+                    //depth
+                    DEPTH_numericUpDown.Value = Convert.ToDecimal(parameters[parameters.Length - 1]);
+                    ImageDepth = (int)DEPTH_numericUpDown.Value;
+                    //width
+                    Width_numericUpDown.Value = Convert.ToDecimal(parameters[parameters.Length - 2]);
+                    ImageWidth = (int)Width_numericUpDown.Value;
+                    //height
+                    Height_numericUpDown.Value = Convert.ToDecimal(parameters[parameters.Length - 3]);
+                    ImageHeight = (int)Height_numericUpDown.Value;
+                }
+                catch
+                {
+
+                }
+         
             }
         }
+
+
     }
 }

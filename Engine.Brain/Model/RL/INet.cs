@@ -2,7 +2,7 @@
 
 namespace Engine.Brain.AI.RL
 {
-    public interface INet
+    public interface IDNet
     {
         /// <summary>
         /// train the network
@@ -29,6 +29,6 @@ namespace Engine.Brain.AI.RL
         /// copy sourceNet parameters to this Net
         /// </summary>
         /// <param name="sourceNet"></param>
-        void Accept(INet sourceNet);
+        void Accept(IDNet sourceNet);
     }
 }

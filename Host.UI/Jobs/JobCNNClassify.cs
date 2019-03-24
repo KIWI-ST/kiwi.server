@@ -27,41 +27,43 @@ namespace Host.UI.Jobs
         public bool Complete { get; private set; } = false;
 
         public event OnTaskCompleteHandler OnTaskComplete;
+
         public event OnStateChangedHandler OnStateChanged;
 
         Thread _t;
 
         public JobCNNClassify(GRasterLayer featureRasterLayer, int epochs, int model, int width, int height, int channel, string sampleFilename)
         {
-            List<List<double>> inputList = new List<List<double>>();
-            List<int> outputList = new List<int>();
-            List<int> keys = new List<int>();
-            using (StreamReader sr = new StreamReader(sampleFilename))
-            {
-                string text = sr.ReadLine().Replace("\t", ",");
-                do
-                {
-                    string[] rawdatas = text.Split(',');
-                    int key = Convert.ToInt32(rawdatas.Last());
-                    outputList.Add(key);
-                    if (!keys.Contains(key))
-                        keys.Add(key);
-                    List<double> inputItem = new List<double>();
-                    for (int i = 0; i < rawdatas.Length - 1; i++)
-                        inputItem.Add(Convert.ToDouble(rawdatas[i]));
-                    inputList.Add(inputItem);
-                    text = sr.ReadLine();
-                } while (text != null);
-            }
             _t = new Thread(() =>
             {
+                //input list
+                List<List<double>> inputList = new List<List<double>>();
+                List<int> outputList = new List<int>();
+                List<int> keys = new List<int>();
+                using (StreamReader sr = new StreamReader(sampleFilename))
+                {
+                    string text = sr.ReadLine().Replace("\t", ",");
+                    do
+                    {
+                        string[] rawdatas = text.Split(',');
+                        int key = Convert.ToInt32(rawdatas.Last());
+                        outputList.Add(key);
+                        if (!keys.Contains(key))
+                            keys.Add(key);
+                        List<double> inputItem = new List<double>();
+                        for (int i = 0; i < rawdatas.Length - 1; i++)
+                            inputItem.Add(Convert.ToDouble(rawdatas[i]));
+                        inputList.Add(inputItem);
+                        text = sr.ReadLine();
+                    } while (text != null);
+                }
                 //create cnn model
                 Summary = "模型训练中";
                 int smapleSize = outputList.Count;
                 int classNum = keys.Count;
                 int[] keysArray = keys.ToArray();
                 int batchSize = 19;
-                CNN cnn = new CNN(new int[] { channel, width, height }, classNum);
+                LeNet5 cnn = new LeNet5(new int[] { channel, width, height }, classNum);
                 //train model
                 for (int i = 0; i < epochs; i++)
                 {
@@ -93,7 +95,7 @@ namespace Host.UI.Jobs
                     for (int j = 0; j < featureRasterLayer.YSize; j++)
                     {
                         //get normalized input raw value
-                        double[] normal = pRasterLayerCursorTool.PickNormalValue(i, j);
+                        double[] normal = pRasterLayerCursorTool.PickRagneNormalValue(i, j, width, height);
                         //}{debug
                         double[] action = cnn.Predict(normal);
                         //convert action to raw byte value

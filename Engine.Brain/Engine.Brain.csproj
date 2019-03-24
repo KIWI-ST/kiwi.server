@@ -116,6 +116,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Embed\Embedding.cs" />
+    <Compile Include="Model\DL\LeNet5.cs" />
     <Compile Include="Model\ML\RF.cs" />
     <Compile Include="Model\ML\L2SVM.cs" />
     <Compile Include="Model\RL\Env\ExtractRoadEnv.cs" />
@@ -126,6 +127,7 @@
     <Compile Include="Model\DL\CNN.cs" />
     <Compile Include="Model\RL\Net\DNet.cs" />
     <Compile Include="Model\RL\DQN.cs" />
+    <Compile Include="Model\RL\Net\DNet2.cs" />
     <Compile Include="Utils\NP.cs" />
     <Compile Include="Extend\ArrayExtend.cs" />
     <Compile Include="Extend\DictionaryExtend.cs" />
