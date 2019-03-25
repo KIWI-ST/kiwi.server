@@ -701,7 +701,6 @@ namespace Host.UI
                     process.StartInfo.RedirectStandardError = true;
                     process.StartInfo.CreateNoWindow = true;
                     process.Start();
-                    //process.StandardInput.WriteLine("java -mx4g -cp * edu.stanford.nlp.pipeline.StanfordCoreNLPServer -port 9000 -timeout 15000");
                     process.BeginOutputReadLine();
                     process.BeginErrorReadLine();
                     process.OutputDataReceived += (sp, ep) => {
