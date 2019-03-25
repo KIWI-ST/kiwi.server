@@ -1,4 +1,12 @@
-﻿using Engine.GIS.Entity;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Threading;
+using System.Windows.Forms;
+using Engine.GIS.Entity;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Arithmetic;
 using Host.UI.Jobs;
@@ -7,13 +15,6 @@ using Host.UI.SettingForm;
 using Host.UI.SettingForm.SLIC;
 using OfficeOpenXml;
 using OxyPlot;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Threading;
-using System.Windows.Forms;
 
 namespace Host.UI
 {
@@ -29,7 +30,6 @@ namespace Host.UI
 
     public partial class Main : Form
     {
-
         #region 初始化
 
         public Main()
@@ -74,8 +74,22 @@ namespace Host.UI
 
         #endregion
 
-        #region 缓存管理
+        #region 资源释放
+        private void Main_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //释放process缓存
+            _processCache.ForEach(process =>
+            {
+                process.Kill();
+            });
+        }
+        #endregion
 
+        #region 缓存管理
+        /// <summary>
+        /// process cache
+        /// </summary>
+        List<Process> _processCache = new List<Process>();
         /// <summary>
         /// get time string
         /// </summary>
@@ -145,7 +159,6 @@ namespace Host.UI
         #endregion
 
         #region 界面更新
-
         /// <summary>
         /// 保存json结果
         /// </summary>
@@ -250,6 +263,7 @@ namespace Host.UI
         /// <param name="msg"></param>
         private void UpdateMapListBox(string msg)
         {
+            if (msg == null) return;
             map_listBox.Items.Add(msg);
             map_listBox.SelectedIndex = map_listBox.Items.Count - 1;
         }
@@ -674,6 +688,31 @@ namespace Host.UI
                         parsingJob.Start();
                     }
                     break;
+                    //start stanford nlp server
+                case "STAR_NLPSERVER_toolStripButton":
+                    Process process = new Process();
+                    process.StartInfo.WorkingDirectory = Directory.GetCurrentDirectory() + @"\stanford-corenlp-full\";
+                    //process.StartInfo.FileName = "powershell.exe"; //powershell
+                    process.StartInfo.FileName = "java";
+                    process.StartInfo.Arguments = "-mx4g -cp * edu.stanford.nlp.pipeline.StanfordCoreNLPServer -port 9000 -timeout 15000";
+                    process.StartInfo.UseShellExecute = false;
+                    process.StartInfo.RedirectStandardInput = true;
+                    process.StartInfo.RedirectStandardOutput = true;
+                    process.StartInfo.RedirectStandardError = true;
+                    process.StartInfo.CreateNoWindow = true;
+                    process.Start();
+                    //process.StandardInput.WriteLine("java -mx4g -cp * edu.stanford.nlp.pipeline.StanfordCoreNLPServer -port 9000 -timeout 15000");
+                    process.BeginOutputReadLine();
+                    process.BeginErrorReadLine();
+                    process.OutputDataReceived += (sp, ep) => {
+                        Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), ep.Data);
+                    };
+                    process.ErrorDataReceived += (sp, ep) => {
+                        Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), ep.Data);
+                    };
+                    _processCache.Add(process);
+                    STAR_NLPSERVER_toolStripButton.Enabled = false;
+                    break;
                 default:
                     break;
             }
@@ -687,7 +726,6 @@ namespace Host.UI
         {
             ToolStripMenuItem item = sender as ToolStripMenuItem;
             Bitmap2 bmp2 = _imageDic[map_treeView.SelectedNode.Text];
-
             switch (item.Name)
             {
                 case "bandExport_ToolStripMenuItem":
@@ -751,7 +789,6 @@ namespace Host.UI
         }
 
         #endregion
-
 
     }
 }

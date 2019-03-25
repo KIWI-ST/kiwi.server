@@ -103,6 +103,16 @@ namespace Host.UI.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap bofang1 {
+            get {
+                object obj = ResourceManager.GetObject("bofang1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap browser {
             get {
                 object obj = ResourceManager.GetObject("browser", resourceCulture);
@@ -283,6 +293,16 @@ namespace Host.UI.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap icons_start {
+            get {
+                object obj = ResourceManager.GetObject("icons_start", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap jianpan {
             get {
                 object obj = ResourceManager.GetObject("jianpan", resourceCulture);
@@ -456,6 +476,36 @@ namespace Host.UI.Properties {
         internal static System.Drawing.Bitmap shuweiban {
             get {
                 object obj = ResourceManager.GetObject("shuweiban", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap start_24px_1169786_easyicon_net {
+            get {
+                object obj = ResourceManager.GetObject("start_24px_1169786_easyicon_net", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap Start_24px_1192352_easyicon_net {
+            get {
+                object obj = ResourceManager.GetObject("Start_24px_1192352_easyicon_net", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap start_up_32px_1230005_easyicon_net {
+            get {
+                object obj = ResourceManager.GetObject("start_up_32px_1230005_easyicon_net", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

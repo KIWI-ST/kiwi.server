@@ -1,14 +1,15 @@
-﻿using Engine.Brain.AI.DL;
-using Engine.Brain.Entity;
-using Engine.GIS.GLayer.GRasterLayer;
-using Engine.GIS.GOperation.Tools;
-using OxyPlot;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using Engine.Brain.AI.DL;
+using Engine.Brain.AI.RL;
+using Engine.Brain.Entity;
+using Engine.GIS.GLayer.GRasterLayer;
+using Engine.GIS.GOperation.Tools;
+using OxyPlot;
 
 namespace Host.UI.Jobs
 {
@@ -63,7 +64,8 @@ namespace Host.UI.Jobs
                 int classNum = keys.Count;
                 int[] keysArray = keys.ToArray();
                 int batchSize = 19;
-                LeNet5 cnn = new LeNet5(new int[] { channel, width, height }, classNum);
+                //LeNet CNN 
+                IDNet cnn = new SENet(new int[] { channel, width, height }, classNum);
                 //train model
                 for (int i = 0; i < epochs; i++)
                 {

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using CNTK;
+﻿using CNTK;
 
 namespace Engine.Brain.Embed
 {
@@ -13,13 +7,13 @@ namespace Engine.Brain.Embed
     /// </summary>
     public class Embedding
     {
-        static public Function Embed(Variable x, int shape, DeviceDescriptor device, float[][] weights=null, string opName = "")
+        static public Function Embed(Variable x, int shape, DeviceDescriptor device, float[][] weights = null, string opName = "")
         {
             //if(weights == null)
             //{
-                var weightShape = new int[] { shape, NDShape.InferredDimension };
-                var E = new Parameter(weightShape, DataType.Float, CNTKLib.GlorotUniformInitializer(), device, "embedding_"+opName);
-                return CNTKLib.Times(E, x);
+            var weightShape = new int[] { shape, NDShape.InferredDimension };
+            var E = new Parameter(weightShape, DataType.Float, CNTKLib.GlorotUniformInitializer(), device, "embedding_" + opName);
+            return CNTKLib.Times(E, x);
             //}
             //else
             //{

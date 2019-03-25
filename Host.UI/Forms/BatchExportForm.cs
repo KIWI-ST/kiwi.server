@@ -32,7 +32,7 @@ namespace Host.UI.SettingForm
         /// <summary>
         /// 
         /// </summary>
-        int[] _masks = new int[] { 1, 3, 5, 7, 9 };
+        int[] _masks = new int[] { 1, 3, 5, 7, 9, 11, 13, 15, 17, 19 };
         /// <summary>
         /// pick value methods enmu
         /// </summary>
@@ -41,7 +41,8 @@ namespace Host.UI.SettingForm
             " 3x3 Mask picked in each band",
             " 5x5 Mask picked in each band",
             " 7x7 Mask picked in each band",
-            " 9x9 Mask picked in each band"
+            " 9x9 Mask picked in each band",
+            " 11x11 Mask picked in each band"
         };
         /// <summary>
         /// natvie store
@@ -96,7 +97,7 @@ namespace Host.UI.SettingForm
             {
                 EXPORT_PATH_button.Text = "导出";
                 EXPORT_PATH_button.Enabled = true;
-                MessageBox.Show("样本导出完成");
+                MessageBox.Show("样本导出完成", "结果", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
                 EXPORT_PATH_button.Text = string.Format("{0:P}", process);
@@ -145,7 +146,7 @@ namespace Host.UI.SettingForm
             bool lerpPick = !LERP_PICK_checkBox.Checked;
             //
             SaveFileDialog sfg = new SaveFileDialog();
-            sfg.FileName = string.Format("{0}_{1}_{2}_{3}", selectedFeatureLayer + selectLabelLayer, repeatNum, sampleSizeLimit, lerpPick);
+            sfg.FileName = string.Format("{0}_{1}_{2}_LerpPick_{3}", selectedFeatureLayer + selectLabelLayer, pickMethod, sampleSizeLimit, lerpPick);
             sfg.AddExtension = true;
             sfg.DefaultExt = ".be";
             if (sfg.ShowDialog() == DialogResult.OK)
@@ -162,7 +163,7 @@ namespace Host.UI.SettingForm
                     }
                     else
                     {
-                        MessageBox.Show("导出样本取消");
+                        MessageBox.Show("导出样本取消", "结果", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
                 //2.create Directory
@@ -233,10 +234,8 @@ namespace Host.UI.SettingForm
                 }
                 //smaple batch complete
                 Invoke(new UpdateProcessTipHandler(UpdateProcessTip), 1.0);
-            })
-            {
-                IsBackground = true
-            };
+            });
+            t.IsBackground = true;
             t.Start();
         }
     }

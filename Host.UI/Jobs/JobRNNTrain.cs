@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Engine.Brain.Model;
-using Engine.Lexicon.Entity;
+//using Engine.Lexicon.Entity;
 using OxyPlot;
 
 namespace Host.UI.Jobs

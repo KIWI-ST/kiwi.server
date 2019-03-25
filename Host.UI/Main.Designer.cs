@@ -51,6 +51,8 @@
             this.BATCHS_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.kappa_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.STAR_NLPSERVER_toolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.task_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.map_statusStrip = new System.Windows.Forms.StatusStrip();
             this.empty_statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
@@ -162,6 +164,8 @@
             this.BATCHS_toolStripButton,
             this.kappa_toolStripButton,
             this.toolStripSeparator2,
+            this.STAR_NLPSERVER_toolStripButton,
+            this.toolStripSeparator5,
             this.task_toolStripButton});
             this.map_toolStrip.Location = new System.Drawing.Point(0, 28);
             this.map_toolStrip.Name = "map_toolStrip";
@@ -295,6 +299,22 @@
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 47);
+            // 
+            // STAR_NLPSERVER_toolStripButton
+            // 
+            this.STAR_NLPSERVER_toolStripButton.Image = global::Host.UI.Properties.Resources.Start_24px_1192352_easyicon_net;
+            this.STAR_NLPSERVER_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.STAR_NLPSERVER_toolStripButton.Name = "STAR_NLPSERVER_toolStripButton";
+            this.STAR_NLPSERVER_toolStripButton.Size = new System.Drawing.Size(89, 44);
+            this.STAR_NLPSERVER_toolStripButton.Text = "NLPServer";
+            this.STAR_NLPSERVER_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.STAR_NLPSERVER_toolStripButton.ToolTipText = "start stanford nlp server";
+            this.STAR_NLPSERVER_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 47);
             // 
             // task_toolStripButton
             // 
@@ -553,6 +573,7 @@
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "AI-Based Toolkit";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.Resize += new System.EventHandler(this.Main_Resize);
             this.map_menuStrip.ResumeLayout(false);
             this.map_menuStrip.PerformLayout();
@@ -627,6 +648,8 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripButton Parsing_toolStripButton;
         private System.Windows.Forms.ListBox TextView_listBox;
+        private System.Windows.Forms.ToolStripButton STAR_NLPSERVER_toolStripButton;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
     }
 }
 
