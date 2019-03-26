@@ -118,7 +118,7 @@ namespace Engine.GIS.GLayer.GRasterLayer
         /// <param name="pBand"></param>
         /// <param name="percentMin"></param>
         /// <param name="percentMax"></param>
-        private void PercentClipStretch(Band pBand,double percentMin=0.2, double percentMax=0.8)
+        private void PercentClipStretch(Band pBand,double percentMin=0.02, double percentMax=0.98)
         {
             double pdfMin, pdfMax, pdfMean, pdfStdDev;
             pBand.ComputeStatistics(true, out pdfMin, out pdfMax, out pdfMean, out pdfStdDev, null, null);
