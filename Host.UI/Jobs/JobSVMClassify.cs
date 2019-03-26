@@ -26,13 +26,19 @@ namespace Host.UI.Jobs
         public PlotModel[] PlotModels => throw new NotImplementedException();
 
         public event OnTaskCompleteHandler OnTaskComplete;
+
         public event OnStateChangedHandler OnStateChanged;
 
         Thread _t;
 
         public JobSVMClassify(string fullFilename, GRasterLayer rasterLayer)
         {
-            _t = new Thread(() => {
+            _t = new Thread(() =>
+            {
+                string[] parameters = System.IO.Path.GetFileNameWithoutExtension(fullFilename).Split('_');
+                int depth = Convert.ToInt32(parameters[parameters.Length - 1]);
+                int width = Convert.ToInt32(parameters[parameters.Length - 2]);
+                int height = Convert.ToInt32(parameters[parameters.Length - 3]);
                 Summary = "SVM训练中";
                 L2SVM svm;
                 List<int> outputKey = new List<int>();
@@ -60,9 +66,9 @@ namespace Host.UI.Jobs
                     {
                         inputs[i] = inputList[i].ToArray();
                     }
-                    for(int i = 0; i < inputList.Count; i++)
+                    for (int i = 0; i < inputList.Count; i++)
                     {
-                         outputs[i] = outputKey.IndexOf(outputList[i]);
+                        outputs[i] = outputKey.IndexOf(outputList[i]);
                     }
                     int inputDiminsion = inputs[0].Length;
                     int outputDiminsion = outputKey.Count;
@@ -84,7 +90,7 @@ namespace Host.UI.Jobs
                     for (int j = 0; j < rasterLayer.YSize; j++)
                     {
                         //get normalized input raw value
-                        double[] raw = pRasterLayerCursorTool.PickNormalValue(i, j);
+                        double[] raw = pRasterLayerCursorTool.PickRagneNormalValue(i, j, width, height);
                         double[][] inputs = new double[1][];
                         inputs[0] = raw;
                         //}{debug
@@ -112,7 +118,7 @@ namespace Host.UI.Jobs
 
         public void Export(string fullFilename)
         {
-          
+
         }
 
         public void Start()

@@ -33,12 +33,13 @@ namespace Engine.Brain.AI.DL
             //create cnn neural network
             _network = new Net<double>();
             _network.AddLayer(new InputLayer<double>(_width,_height,_channel));
+            _network.AddLayer(new ConvLayer<double>(1, 3, _channel) { Stride = 1, Pad = 2, BiasPref = 0.1f });
+            _network.AddLayer(new ConvLayer<double>(3, 1, _channel) { Stride = 1, Pad = 2, BiasPref = 0.1f });
+            _network.AddLayer(new ReluLayer<double>());
+            _network.AddLayer(new ConvLayer<double>(3, 3, _channel) { Stride = 1, Pad = 2, BiasPref = 0.1f });
             _network.AddLayer(new ConvLayer<double>(3, 3, _channel) { Stride = 1, Pad = 2, BiasPref = 0.1f });
             _network.AddLayer(new ReluLayer<double>());
-            _network.AddLayer(new PoolLayer<double>(2, 2) { Stride = 2 });
-            _network.AddLayer(new ConvLayer<double>(5, 5, 16) { Stride = 1, Pad = 2, BiasPref = 0.1f });
-            _network.AddLayer(new ReluLayer<double>());
-            _network.AddLayer(new PoolLayer<double>(3, 3) { Stride = 3 });
+            _network.AddLayer(new PoolLayer<double>(1, 1) { Stride = 2 });
             _network.AddLayer(new FullyConnLayer<double>(_classNum));
             _network.AddLayer(new SoftmaxLayer<double>(_classNum));
             //create trainer

@@ -31,6 +31,7 @@ namespace Host.UI.Jobs
         /// 
         /// </summary>
         public event OnTaskCompleteHandler OnTaskComplete;
+
         public event OnStateChangedHandler OnStateChanged;
 
         /// <summary>
@@ -47,6 +48,10 @@ namespace Host.UI.Jobs
         {
             _t = new Thread(() =>
             {
+                string[] parameters = System.IO.Path.GetFileNameWithoutExtension(fullFilename).Split('_');
+                int depth = Convert.ToInt32(parameters[parameters.Length - 1]);
+                int width = Convert.ToInt32(parameters[parameters.Length - 2]);
+                int height = Convert.ToInt32(parameters[parameters.Length - 3]);
                 RF rf = new RF(treeCount);
                 //training
                 Summary = "随机森林训练中";
@@ -87,7 +92,7 @@ namespace Host.UI.Jobs
                     for (int j = 0; j < rasterLayer.YSize; j++)
                     {
                         //get normalized input raw value
-                        double[] raw = pRasterLayerCursorTool.PickNormalValue(i, j);
+                        double[] raw = pRasterLayerCursorTool.PickRagneNormalValue(i, j,width,height);
                         double[][] inputs = new double[1][];
                         inputs[0] = raw;
                         //}{debug

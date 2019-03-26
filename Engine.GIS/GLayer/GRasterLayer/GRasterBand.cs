@@ -113,6 +113,16 @@ namespace Engine.GIS.GLayer.GRasterLayer
             }
         }
         /// <summary>
+        /// only normalization
+        /// </summary>
+        private void Normalization()
+        {
+            NormalData = new double[Width, Height];
+            double scale = _max - _min;
+            for (int count = 0; count < RawData.Length; count++)
+                NormalData[count % Width, count / Width] = RawData[count] == 0 ? 0 : (RawData[count] - _min) / scale;
+        }
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="pBand"></param>
@@ -179,7 +189,10 @@ namespace Engine.GIS.GLayer.GRasterLayer
             //remove error data
             CleaningError();
             //stretch pixel data
-            PercentClipStretch(pBand);
+            if (_max - _min > 256)
+                PercentClipStretch(pBand);
+            else
+                Normalization();
         }
         /// <summary>
         /// byte数据流
