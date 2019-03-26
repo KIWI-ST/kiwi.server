@@ -62,3 +62,13 @@ The commonly used operations are packaged, mainly the following modules
 
 ### Host.UI ###
 a winform-based user interface application 
+
+### Engine.NLP ###
+there are servel step to seting before use it:
+>1 install java8, seting 'user' evnironment varibale , example:
+```
+JAVA_HOME: C:\Program Files\Java\jdk1.8.0_111
+CLASSPATH: .;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar;  
+Path: %JAVA_HOME%\bin;%JAVA_HOME%\jre\bin;
+```
+>2 download [stanford nlp] (https://stanfordnlp.github.io/CoreNLP/), decompression and move to Debug , rename flodar name to 'stanford-corenlp-full'
