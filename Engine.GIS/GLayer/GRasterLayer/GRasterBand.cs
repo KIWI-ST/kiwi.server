@@ -146,7 +146,7 @@ namespace Engine.GIS.GLayer.GRasterLayer
                     break;
                 case DataType.GDT_Float32:
                     {
-                        int nBuckets = (int)(pdfMax - pdfMin+0.5);
+                        int nBuckets = Convert.ToInt32(pdfMax - pdfMin+0.5);
                         int[] pBandHistogram = new int[nBuckets];
                         pBand.GetHistogram(-pdfMin-0.5, pdfMax+0.5, nBuckets, pBandHistogram, 0, 0, null, null);
                         ApplyPrecentClipStretch(pBandHistogram, nBuckets, percentMin, percentMax);
@@ -189,7 +189,7 @@ namespace Engine.GIS.GLayer.GRasterLayer
             //remove error data
             CleaningError();
             //stretch pixel data
-            if (_max - _min > 256)
+            if (_stdDev>_max - _min)
                 PercentClipStretch(pBand);
             else
                 Normalization();
