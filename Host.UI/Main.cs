@@ -265,8 +265,8 @@ namespace Host.UI
         private void UpdateMapListBox(string msg)
         {
             if (msg == null) return;
-            map_listBox.Items.Add(msg);
-            map_listBox.SelectedIndex = map_listBox.Items.Count - 1;
+            MAP_listBox.Items.Add(msg);
+            MAP_listBox.SelectedIndex = MAP_listBox.Items.Count - 1;
         }
         /// <summary>
         /// 
@@ -284,13 +284,13 @@ namespace Host.UI
         /// <param name="msg"></param>
         private void UpdateTextViewListBox(string msg)
         {
-            TextView_listBox.Items.Add(msg);
+            TEXTVIEW_listBox.Items.Add(msg);
         }
         /// <summary>
         /// 更新listbox区域显示内容
         /// </summary>
         /// <param name="msg"></param>
-        private delegate void UpdateMapListBoxHandler(string msg);
+        private delegate void UpdateListBoxHandler(string msg);
         /// <summary>
         /// 更新树视图委托
         /// </summary>
@@ -318,11 +318,6 @@ namespace Host.UI
         /// <param name="msg"></param>
         /// <param name="statue"></param>
         private delegate void UpdateStatusLabelHandler(string msg, STATUE_ENUM statue = STATUE_ENUM.NORMAL);
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="msg"></param>
-        private delegate void UpdateTextViewListBoxHandler(string msg);
         /// <summary>
         /// 
         /// </summary>
@@ -436,7 +431,7 @@ namespace Host.UI
             _jobs.Add(job);
             //print job register information
             string msg = string.Format("time:{0},task:{1} registered", Now, job.Name);
-            Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), msg);
+            Invoke(new UpdateListBoxHandler(UpdateMapListBox), msg);
         }
         /// <summary>
         /// 
@@ -448,7 +443,7 @@ namespace Host.UI
             switch (taskName)
             {
                 case "ParsingTextTask":
-                    Invoke(new UpdateTextViewListBoxHandler(UpdateTextViewListBox), outputs[0] as string);
+                    Invoke(new UpdateListBoxHandler(UpdateTextViewListBox), outputs[0] as string);
                     break;
                 default:
                     break;
@@ -488,7 +483,7 @@ namespace Host.UI
             }
             //print completed information
             string msg = string.Format("time:{0},task:{1} completed", Now, taskName);
-            Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), msg);
+            Invoke(new UpdateListBoxHandler(UpdateMapListBox), msg);
         }
 
         #endregion
@@ -505,6 +500,9 @@ namespace Host.UI
             ToolStripItem item = sender as ToolStripItem;
             switch (item.Name)
             {
+                //scenario
+                case "SCENARIO_BUILD_toolStripButton":
+                    break;
                 //lstm test 
                 case "LSTM_toolStripButton":
                     string rawTextFullFilename = Directory.GetCurrentDirectory() + @"\tmp\RawText.txt";
@@ -682,7 +680,7 @@ namespace Host.UI
                     if(p_Form.ShowDialog() == DialogResult.OK)
                     {
                         //1. tab view change
-                        tabControl2.SelectedIndex = 1;
+                        Main_tabControl.SelectedIndex = 1;
                         //2. create job
                         IJob parsingJob = new JobParsingText(p_Form.TextFullFilename, p_Form.ModelFullFilename, p_Form.LexiconFullFilename);
                         RegisterJob(parsingJob);
@@ -691,6 +689,10 @@ namespace Host.UI
                     break;
                     //start stanford nlp server
                 case "STAR_NLPSERVER_toolStripButton":
+                    //change selected index
+                    Main_tabControl.SelectedIndex = 1;
+                    string msg = string.Format("time:{0}, {1}", Now,"NLP Server Starting.......");
+                    Invoke(new UpdateListBoxHandler(UpdateTextViewListBox), msg);
                     Process process = new Process();
                     process.StartInfo.WorkingDirectory = Directory.GetCurrentDirectory() + @"\stanford-corenlp-full\";
                     //process.StartInfo.FileName = "powershell.exe"; //powershell
@@ -704,11 +706,12 @@ namespace Host.UI
                     process.Start();
                     process.BeginOutputReadLine();
                     process.BeginErrorReadLine();
-                    process.OutputDataReceived += (sp, ep) => {
-                        Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), ep.Data);
+                    //register information
+                    process.OutputDataReceived += (processSender, processE) => {
+                        Invoke(new UpdateListBoxHandler(UpdateTextViewListBox), processE.Data);
                     };
-                    process.ErrorDataReceived += (sp, ep) => {
-                        Invoke(new UpdateMapListBoxHandler(UpdateMapListBox), ep.Data);
+                    process.ErrorDataReceived += (processSender, processE) => {
+                        Invoke(new UpdateListBoxHandler(UpdateTextViewListBox), processE.Data);
                     };
                     _processCache.Add(process);
                     STAR_NLPSERVER_toolStripButton.Enabled = false;
