@@ -64,7 +64,7 @@ The commonly used operations are packaged, mainly the following modules
 a winform-based user interface application 
 
 ### Engine.NLP ###
-there are servel step to seting before use it:
+there are servel steps before use it:
 >1 install java8, seting 'user' evnironment varibale , example:
 ```
 JAVA_HOME: C:\Program Files\Java\jdk1.8.0_111
