@@ -65,7 +65,7 @@ namespace Host.UI.Jobs
                 int[] keysArray = keys.ToArray();
                 int batchSize = 19;
                 //LeNet CNN 
-                IDNet cnn = new SENet(new int[] { channel, width, height }, classNum);
+                IDNet cnn = new LeNet5(new int[] { channel, width, height }, classNum);
                 //train model
                 for (int i = 0; i < epochs; i++)
                 {

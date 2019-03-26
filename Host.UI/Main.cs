@@ -80,6 +80,7 @@ namespace Host.UI
             //释放process缓存
             _processCache.ForEach(process =>
             {
+                //process.OutputDataReceived
                 process.Kill();
             });
         }

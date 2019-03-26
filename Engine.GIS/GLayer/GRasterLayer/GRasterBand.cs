@@ -75,15 +75,74 @@ namespace Engine.GIS.GLayer.GRasterLayer
         #endregion
 
         #region 应用拉伸
-        /// <summary>
-        /// apply image stretch
-        /// </summary>
-        private void Normalization()
+        private void ApplyPrecentClipStretch(int[] pBandHistogram,int histLength, double percentMin, double percentMax)
         {
+            int countMin = 0, countMax = 0;
+            int dbMin = 0, dbMax =0;
+            //找出 percentMin的像素的灰度值
+            int percentMinCount = Convert.ToInt32(percentMin * Width * Height), percentMaxCount = Convert.ToInt32(percentMax * Width * Height);
+            for (int i = 0; i < histLength; i++)
+            {
+                countMin += pBandHistogram[i];
+                if (countMin > percentMinCount)
+                {
+                    dbMin = i;
+                    break;
+                }
+            }
+            //找出percnetMax的像素的灰度值
+            for (int k = 0; k < histLength; k++)
+            {
+                countMax += pBandHistogram[k];
+                if (countMax > percentMaxCount)
+                {
+                    dbMax = k;
+                    break;
+                }
+            }
             NormalData = new double[Width, Height];
-            double scale = _max - _min;
+            //calcute scale
             for (int count = 0; count < RawData.Length; count++)
-                NormalData[count % Width, count / Width] = RawData[count] == 0 ? 0 : (RawData[count] - _min) / scale;
+            {
+                if (RawData[count] <= dbMin)
+                    NormalData[count % Width, count / Width] = 0;
+                else if(RawData[count]>=dbMax)
+                    NormalData[count % Width, count / Width] = 1;
+                else
+                    NormalData[count % Width, count / Width]= (RawData[count] - dbMin) / (dbMax - dbMin);
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pBand"></param>
+        /// <param name="percentMin"></param>
+        /// <param name="percentMax"></param>
+        private void PercentClipStretch(Band pBand,double percentMin=0.2, double percentMax=0.8)
+        {
+            double pdfMin, pdfMax, pdfMean, pdfStdDev;
+            pBand.ComputeStatistics(true, out pdfMin, out pdfMax, out pdfMean, out pdfStdDev, null, null);
+            switch (pBand.DataType)
+            {
+                case DataType.GDT_Byte:
+                    {
+                        int nBuckets = 256;
+                        int[] pBandHistogram = new int[nBuckets];
+                        pBand.GetHistogram(-0.5, 255.5, nBuckets, pBandHistogram, 0, 0, null, null);
+                        ApplyPrecentClipStretch(pBandHistogram, nBuckets, percentMin, percentMax);
+                    }
+                    break;
+                case DataType.GDT_UInt16:
+                    break;
+                case DataType.GDT_Float32:
+                    {
+                        int nBuckets = (int)(pdfMax - pdfMin+0.5);
+                        int[] pBandHistogram = new int[nBuckets];
+                        pBand.GetHistogram(-pdfMin-0.5, pdfMax+0.5, nBuckets, pBandHistogram, 0, 0, null, null);
+                        ApplyPrecentClipStretch(pBandHistogram, nBuckets, percentMin, percentMax);
+                    }
+                    break;
+            }
         }
         /// <summary>
         /// clearn the error data
@@ -120,7 +179,7 @@ namespace Engine.GIS.GLayer.GRasterLayer
             //remove error data
             CleaningError();
             //stretch pixel data
-            Normalization();
+            PercentClipStretch(pBand);
         }
         /// <summary>
         /// byte数据流
