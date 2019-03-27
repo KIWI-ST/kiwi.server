@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using Engine.Brain.Model.ML;
+using Engine.Brain.AI.ML;
 using OxyPlot;
 
 namespace Host.UI.Jobs
 {
-    public class JobSVMCSV:IJob
+    class JobRFCSV:IJob
     {
-        public bool Complete { get; private set; } = false;
-
-        public string Name => "SVMCSVClassificationTask";
+        public string Name => "RFCSVClassificationTask";
 
         public string Summary { get; private set; } = "";
 
@@ -21,21 +19,35 @@ namespace Host.UI.Jobs
         public DateTime StartTime { get; private set; } = DateTime.Now;
 
         public PlotModel[] PlotModels => throw new NotImplementedException();
-
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool Complete { get; private set; } = false;
+        /// <summary>
+        /// 
+        /// </summary>
         public event OnTaskCompleteHandler OnTaskComplete;
 
         public event OnStateChangedHandler OnStateChanged;
 
+        /// <summary>
+        /// 
+        /// </summary>
         Thread _t;
-
-        public JobSVMCSV(string sampleFullFilename, string waitFullFilename, string saveFullFilename)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="treeCount"></param>
+        /// <param name="fullFilename"></param>
+        /// <param name="rasterLayer"></param>
+        public JobRFCSV(int treeCount, string smapleFullFilename, string waitFullFilename, string saveFullFilename)
         {
             _t = new Thread(() =>
             {
-                Summary = "SVM训练中";
-                L2SVM svm;
-                List<int> outputKey = new List<int>();
-                using (StreamReader sr = new StreamReader(sampleFullFilename))
+                RF rf = new RF(treeCount);
+                //training
+                Summary = "随机森林训练中";
+                using (StreamReader sr = new StreamReader(smapleFullFilename))
                 {
                     List<List<double>> inputList = new List<List<double>>();
                     List<int> outputList = new List<int>();
@@ -43,10 +55,7 @@ namespace Host.UI.Jobs
                     do
                     {
                         string[] rawdatas = text.Split(',');
-                        //make sure the label classes from 0
-                        int output = Convert.ToInt32(rawdatas.Last());
-                        outputList.Add(output);
-                        if (!outputKey.Contains(output)) outputKey.Add(output);
+                        outputList.Add(Convert.ToInt32(rawdatas.Last()));
                         List<double> inputItem = new List<double>();
                         for (int i = 0; i < rawdatas.Length - 1; i++)
                             inputItem.Add(Convert.ToDouble(rawdatas[i]));
@@ -54,56 +63,55 @@ namespace Host.UI.Jobs
                         text = sr.ReadLine();
                     } while (text != null);
                     double[][] inputs = new double[inputList.Count][];
-                    int[] outputs = new int[inputList.Count];
+                    int[] outputs = outputList.ToArray();
                     for (int i = 0; i < inputList.Count; i++)
-                    {
                         inputs[i] = inputList[i].ToArray();
-                    }
-                    for (int i = 0; i < inputList.Count; i++)
-                    {
-                        outputs[i] = outputKey.IndexOf(outputList[i]);
-                    }
-                    int inputDiminsion = inputs[0].Length;
-                    int outputDiminsion = outputKey.Count;
-                    svm = new L2SVM(inputDiminsion, outputDiminsion);
-                    svm.Train(inputs, outputs);
+                    rf.Train(inputs, outputs);
                 }
+                //image classify
                 Summary = "分类应用中";
-                using (StreamReader sr = new StreamReader(waitFullFilename))
-                {   
-                    using(StreamWriter sw = new StreamWriter(saveFullFilename))
+
+                using(StreamReader sr = new StreamReader(waitFullFilename))
+                {
+                    using (StreamWriter sw = new StreamWriter(saveFullFilename))
                     {
                         Process = 0.0;
                         string text = sr.ReadLine().Replace("\t", ",");
-                        while (text != null)
-                        {
+                        while (text != null){
                             string[] rawdatas = text.Split(',');
                             double[][] inputs = new double[1][];
                             List<double> inputItem = new List<double>();
-                            for (int i = 0; i < rawdatas.Length; i++)
+                            for (int i = 0; i < rawdatas.Length - 1; i++)
                                 inputItem.Add(Convert.ToDouble(rawdatas[i]));
                             inputs[0] = inputItem.ToArray();
-                            int[] ouputs = svm.Predict(inputs);
-                            int classtype = outputKey[ouputs[0]];
+                            int[] ouputs = rf.Predict(inputs);
+                            int classtype = ouputs[0];
                             sw.WriteLine(classtype);
                             text = sr.ReadLine();
                             Process++;
-                        }
+                        } 
                     }
                 }
                 //rf complete
-                Summary = "SVM训练和分类完成";
+                Summary = "RF训练和分类完成";
                 Complete = true;
                 OnTaskComplete?.Invoke(Name, "");
             });
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fullFilename"></param>
         public void Export(string fullFilename)
         {
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="paramaters"></param>
         public void Start()
         {
             StartTime = DateTime.Now;

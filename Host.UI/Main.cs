@@ -623,13 +623,21 @@ namespace Host.UI
                     break;
                 //random forest classification
                 case "rf_toolStripButton":
-                    RandomForestForm rfForm = new RandomForestForm();
+                    RFForm rfForm = new RFForm();
                     rfForm.RasterDic = _rasterDic;
                     if (rfForm.ShowDialog() == DialogResult.OK)
                     {
-                        IJob rfJob = new JobRFClassify(rfForm.TreeCount, rfForm.FullFilename, _rasterDic[rfForm.FeatureKey]);
-                        RegisterJob(rfJob);
-                        rfJob.Start();
+                        if(rfForm.Model == 1)
+                        {
+                            IJob rfJob = new JobRFClassify(rfForm.TreeCount, rfForm.SampleFullFilename, _rasterDic[rfForm.FeatureKey]);
+                            RegisterJob(rfJob);
+                            rfJob.Start();
+                        }else if (rfForm.Model == 2)
+                        {
+                            IJob rfJob2 = new JobRFCSV(rfForm.TreeCount, rfForm.SampleFullFilename, rfForm.WaitFullFilename, rfForm.SaveFullFilename);
+                            RegisterJob(rfJob2);
+                            rfJob2.Start();
+                        }
                     }
                     break;
                 //drawing comparsion multi-reslut curve
@@ -654,12 +662,11 @@ namespace Host.UI
                             IJob svmJob = new JobSVMClassify(svm_Form.SampleFullFilename, _rasterDic[svm_Form.FeatureKey]);
                             RegisterJob(svmJob);
                             svmJob.Start();
-                        }
-                        else if (svm_Form.Model == 2)
+                        }else if (svm_Form.Model == 2)
                         {
-                            IJob svmJob = new JobSVMCSV(svm_Form.SampleFullFilename, svm_Form.WaitFullFilename, svm_Form.SaveFullFilename);
-                            RegisterJob(svmJob);
-                            svmJob.Start();
+                            IJob svmJob2 = new JobSVMCSV(svm_Form.SampleFullFilename, svm_Form.WaitFullFilename, svm_Form.SaveFullFilename);
+                            RegisterJob(svmJob2);
+                            svmJob2.Start();
                         }
                     }
                     break;
