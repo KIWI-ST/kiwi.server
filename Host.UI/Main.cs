@@ -500,7 +500,6 @@ namespace Host.UI
         #endregion
 
         #region UI事件相应方法
-
         /// <summary>
         /// 底图区域功能按钮
         /// </summary>
@@ -646,13 +645,22 @@ namespace Host.UI
                     break;
                 //svm function
                 case "SVM_toolStripButton":
-                    SVMForm svm_Form = new SVMForm();
+                    SVMFrom svm_Form = new SVMFrom();
                     svm_Form.RasterDic = _rasterDic;
                     if (svm_Form.ShowDialog() == DialogResult.OK)
                     {
-                        IJob svmJob = new JobSVMClassify(svm_Form.FullFilename, _rasterDic[svm_Form.FeatureKey]);
-                        RegisterJob(svmJob);
-                        svmJob.Start();
+                        if(svm_Form.Model == 1)
+                        {
+                            IJob svmJob = new JobSVMClassify(svm_Form.SampleFullFilename, _rasterDic[svm_Form.FeatureKey]);
+                            RegisterJob(svmJob);
+                            svmJob.Start();
+                        }
+                        else if (svm_Form.Model == 2)
+                        {
+                            IJob svmJob = new JobSVMCSV(svm_Form.SampleFullFilename, svm_Form.WaitFullFilename, svm_Form.SaveFullFilename);
+                            RegisterJob(svmJob);
+                            svmJob.Start();
+                        }
                     }
                     break;
                 //cnn svm classification

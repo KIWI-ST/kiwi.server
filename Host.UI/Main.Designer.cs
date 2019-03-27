@@ -40,6 +40,7 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.BATCHS_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.kappa_toolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.CNN_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.DQN_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.SVM_toolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -74,12 +75,11 @@
             this.NLP_toolStrip = new System.Windows.Forms.ToolStrip();
             this.STAR_NLPSERVER_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripSplitButton = new System.Windows.Forms.ToolStripSplitButton();
             this.SENTACNE_CLIP_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
-            this.scenarioExtractToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+            this.scenarioExtractToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.map_menuStrip.SuspendLayout();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
@@ -151,7 +151,7 @@
             // RPC_ToolStripMenuItem
             // 
             this.RPC_ToolStripMenuItem.Name = "RPC_ToolStripMenuItem";
-            this.RPC_ToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.RPC_ToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.RPC_ToolStripMenuItem.Text = "RPC Rectify";
             this.RPC_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
@@ -212,10 +212,16 @@
             this.kappa_toolStripButton.Text = "Kappa";
             this.kappa_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 27);
+            // 
             // CNN_toolStripButton
             // 
             this.CNN_toolStripButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.CNN_toolStripButton.Image = global::Host.UI.Properties.Resources.computer;
+            this.CNN_toolStripButton.Image = global::Host.UI.Properties.Resources.tag;
             this.CNN_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.CNN_toolStripButton.Name = "CNN_toolStripButton";
             this.CNN_toolStripButton.Size = new System.Drawing.Size(60, 24);
@@ -224,7 +230,7 @@
             // 
             // DQN_toolStripButton
             // 
-            this.DQN_toolStripButton.Image = global::Host.UI.Properties.Resources.computer;
+            this.DQN_toolStripButton.Image = global::Host.UI.Properties.Resources.tag;
             this.DQN_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.DQN_toolStripButton.Name = "DQN_toolStripButton";
             this.DQN_toolStripButton.Size = new System.Drawing.Size(61, 24);
@@ -233,7 +239,7 @@
             // 
             // SVM_toolStripButton
             // 
-            this.SVM_toolStripButton.Image = global::Host.UI.Properties.Resources.computer;
+            this.SVM_toolStripButton.Image = global::Host.UI.Properties.Resources.tag;
             this.SVM_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.SVM_toolStripButton.Name = "SVM_toolStripButton";
             this.SVM_toolStripButton.Size = new System.Drawing.Size(59, 24);
@@ -242,7 +248,7 @@
             // 
             // rf_toolStripButton
             // 
-            this.rf_toolStripButton.Image = global::Host.UI.Properties.Resources.computer;
+            this.rf_toolStripButton.Image = global::Host.UI.Properties.Resources.tag;
             this.rf_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.rf_toolStripButton.Name = "rf_toolStripButton";
             this.rf_toolStripButton.Size = new System.Drawing.Size(46, 24);
@@ -561,12 +567,6 @@
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(6, 27);
             // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 27);
-            // 
             // toolStripSplitButton
             // 
             this.toolStripSplitButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -585,27 +585,27 @@
             // 
             this.SENTACNE_CLIP_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.dangandai;
             this.SENTACNE_CLIP_ToolStripMenuItem.Name = "SENTACNE_CLIP_ToolStripMenuItem";
-            this.SENTACNE_CLIP_ToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
+            this.SENTACNE_CLIP_ToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
             this.SENTACNE_CLIP_ToolStripMenuItem.Text = "Clip Sentance";
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Image = global::Host.UI.Properties.Resources.gongwenbao;
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(184, 26);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(169, 22);
             this.toolStripMenuItem3.Text = "Orignize";
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(166, 6);
             // 
             // scenarioExtractToolStripMenuItem
             // 
             this.scenarioExtractToolStripMenuItem.Image = global::Host.UI.Properties.Resources.maillist;
             this.scenarioExtractToolStripMenuItem.Name = "scenarioExtractToolStripMenuItem";
-            this.scenarioExtractToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
+            this.scenarioExtractToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
             this.scenarioExtractToolStripMenuItem.Text = "Scenario Extract";
-            // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(181, 6);
             // 
             // Main
             // 

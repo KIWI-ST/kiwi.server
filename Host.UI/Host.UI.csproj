@@ -227,6 +227,7 @@
     <Compile Include="Jobs\JobRFClassify.cs" />
     <Compile Include="Jobs\JobRNNTrain.cs" />
     <Compile Include="Jobs\JobSVMClassify.cs" />
+    <Compile Include="Jobs\JobSVMCSV.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -318,11 +319,11 @@
     <Compile Include="Forms\ParsingForm.Designer.cs">
       <DependentUpon>ParsingForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\RandomForestForm.cs">
+    <Compile Include="Forms\RFForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\RandomForestForm.Designer.cs">
-      <DependentUpon>RandomForestForm.cs</DependentUpon>
+    <Compile Include="Forms\RFForm.Designer.cs">
+      <DependentUpon>RFForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\RPCForm.cs">
       <SubType>Form</SubType>
@@ -395,8 +396,8 @@
     <EmbeddedResource Include="Forms\ParsingForm.resx">
       <DependentUpon>ParsingForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\RandomForestForm.resx">
-      <DependentUpon>RandomForestForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\RFForm.resx">
+      <DependentUpon>RFForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\RPCForm.resx">
       <DependentUpon>RPCForm.cs</DependentUpon>
