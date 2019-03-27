@@ -75,6 +75,11 @@
             this.STAR_NLPSERVER_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSplitButton = new System.Windows.Forms.ToolStripSplitButton();
+            this.SENTACNE_CLIP_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.scenarioExtractToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.map_menuStrip.SuspendLayout();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
@@ -367,7 +372,7 @@
             this.tab_mapview.Location = new System.Drawing.Point(4, 22);
             this.tab_mapview.Name = "tab_mapview";
             this.tab_mapview.Padding = new System.Windows.Forms.Padding(3);
-            this.tab_mapview.Size = new System.Drawing.Size(715, 574);
+            this.tab_mapview.Size = new System.Drawing.Size(678, 574);
             this.tab_mapview.TabIndex = 1;
             this.tab_mapview.Text = "MapView";
             this.tab_mapview.UseVisualStyleBackColor = true;
@@ -388,7 +393,7 @@
             // map_splitContainer.Panel2
             // 
             this.map_splitContainer.Panel2.Controls.Add(this.MAP_listBox);
-            this.map_splitContainer.Size = new System.Drawing.Size(709, 568);
+            this.map_splitContainer.Size = new System.Drawing.Size(672, 568);
             this.map_splitContainer.SplitterDistance = 426;
             this.map_splitContainer.SplitterWidth = 3;
             this.map_splitContainer.TabIndex = 1;
@@ -400,7 +405,7 @@
             this.map_pictureBox.Location = new System.Drawing.Point(0, 0);
             this.map_pictureBox.Margin = new System.Windows.Forms.Padding(2);
             this.map_pictureBox.Name = "map_pictureBox";
-            this.map_pictureBox.Size = new System.Drawing.Size(705, 422);
+            this.map_pictureBox.Size = new System.Drawing.Size(668, 422);
             this.map_pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.map_pictureBox.TabIndex = 0;
             this.map_pictureBox.TabStop = false;
@@ -429,7 +434,7 @@
             this.MAP_listBox.Location = new System.Drawing.Point(0, 0);
             this.MAP_listBox.Margin = new System.Windows.Forms.Padding(2);
             this.MAP_listBox.Name = "MAP_listBox";
-            this.MAP_listBox.Size = new System.Drawing.Size(705, 135);
+            this.MAP_listBox.Size = new System.Drawing.Size(668, 135);
             this.MAP_listBox.TabIndex = 0;
             // 
             // tab_textview
@@ -532,7 +537,8 @@
             this.NLP_toolStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.NLP_toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.STAR_NLPSERVER_toolStripButton,
-            this.toolStripSeparator3});
+            this.toolStripSeparator3,
+            this.toolStripSplitButton});
             this.NLP_toolStrip.Location = new System.Drawing.Point(0, 52);
             this.NLP_toolStrip.Name = "NLP_toolStrip";
             this.NLP_toolStrip.Padding = new System.Windows.Forms.Padding(0);
@@ -560,6 +566,46 @@
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 27);
+            // 
+            // toolStripSplitButton
+            // 
+            this.toolStripSplitButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.SENTACNE_CLIP_ToolStripMenuItem,
+            this.toolStripMenuItem3,
+            this.toolStripMenuItem2,
+            this.scenarioExtractToolStripMenuItem});
+            this.toolStripSplitButton.Image = global::Host.UI.Properties.Resources.browser;
+            this.toolStripSplitButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripSplitButton.Name = "toolStripSplitButton";
+            this.toolStripSplitButton.Size = new System.Drawing.Size(143, 24);
+            this.toolStripSplitButton.Text = "Scenario Process";
+            this.toolStripSplitButton.ToolTipText = "process Sentance";
+            // 
+            // SENTACNE_CLIP_ToolStripMenuItem
+            // 
+            this.SENTACNE_CLIP_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.dangandai;
+            this.SENTACNE_CLIP_ToolStripMenuItem.Name = "SENTACNE_CLIP_ToolStripMenuItem";
+            this.SENTACNE_CLIP_ToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
+            this.SENTACNE_CLIP_ToolStripMenuItem.Text = "Clip Sentance";
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Image = global::Host.UI.Properties.Resources.gongwenbao;
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(184, 26);
+            this.toolStripMenuItem3.Text = "Orignize";
+            // 
+            // scenarioExtractToolStripMenuItem
+            // 
+            this.scenarioExtractToolStripMenuItem.Image = global::Host.UI.Properties.Resources.maillist;
+            this.scenarioExtractToolStripMenuItem.Name = "scenarioExtractToolStripMenuItem";
+            this.scenarioExtractToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
+            this.scenarioExtractToolStripMenuItem.Text = "Scenario Extract";
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(181, 6);
             // 
             // Main
             // 
@@ -660,6 +706,11 @@
         private System.Windows.Forms.ToolStripButton STAR_NLPSERVER_toolStripButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripSplitButton toolStripSplitButton;
+        private System.Windows.Forms.ToolStripMenuItem SENTACNE_CLIP_ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem scenarioExtractToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
     }
 }
 
