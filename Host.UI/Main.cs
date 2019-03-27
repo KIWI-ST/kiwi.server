@@ -80,6 +80,8 @@ namespace Host.UI
             //释放process缓存
             _processCache.ForEach(process =>
             {
+                process.OutputDataReceived -= UpdateProcessOutput;
+                process.ErrorDataReceived -= UpdateProcessOutput;
                 //process.OutputDataReceived
                 process.Kill();
             });
@@ -285,6 +287,15 @@ namespace Host.UI
         private void UpdateTextViewListBox(string msg)
         {
             TEXTVIEW_listBox.Items.Add(msg);
+        }
+        /// <summary>
+        /// update process output
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void UpdateProcessOutput(object sender, DataReceivedEventArgs e)
+        {
+            Invoke(new UpdateListBoxHandler(UpdateTextViewListBox), e.Data);
         }
         /// <summary>
         /// 更新listbox区域显示内容
@@ -500,17 +511,6 @@ namespace Host.UI
             ToolStripItem item = sender as ToolStripItem;
             switch (item.Name)
             {
-                //scenario
-                case "SCENARIO_BUILD_toolStripButton":
-                    break;
-                //lstm test 
-                case "LSTM_toolStripButton":
-                    string rawTextFullFilename = Directory.GetCurrentDirectory() + @"\tmp\RawText.txt";
-                    string autosave = Directory.GetCurrentDirectory() + @"\tmp\autolstm.bin";
-                    //IJob rnnTrainJob = new JobRNNTrain(rawTextFullFilename, autosave);
-                    //RegisterJob(rnnTrainJob);
-                    //rnnTrainJob.Start();
-                    break;
                 //rpc transform
                 case "RPC_ToolStripMenuItem":
                     RPCForm rpcForm = new RPCForm();
@@ -687,11 +687,26 @@ namespace Host.UI
                         parsingJob.Start();
                     }
                     break;
-                    //start stanford nlp server
+                default:
+                    break;
+            }
+        }
+        /// <summary>
+        /// NLP功能栏
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void NLP_funciton_Click(Object sender, EventArgs e)
+        {
+            ToolStripItem item = sender as ToolStripItem;
+            switch (item.Name)
+            {
+                //start stanford nlp server
                 case "STAR_NLPSERVER_toolStripButton":
                     //change selected index
                     Main_tabControl.SelectedIndex = 1;
-                    string msg = string.Format("time:{0}, {1}", Now,"NLP Server Starting.......");
+                    STAR_NLPSERVER_toolStripButton.Enabled = false;
+                    string msg = string.Format("time:{0}, {1}", Now, "NLP Server Starting.......");
                     Invoke(new UpdateListBoxHandler(UpdateTextViewListBox), msg);
                     Process process = new Process();
                     process.StartInfo.WorkingDirectory = Directory.GetCurrentDirectory() + @"\stanford-corenlp-full\";
@@ -707,16 +722,21 @@ namespace Host.UI
                     process.BeginOutputReadLine();
                     process.BeginErrorReadLine();
                     //register information
-                    process.OutputDataReceived += (processSender, processE) => {
-                        Invoke(new UpdateListBoxHandler(UpdateTextViewListBox), processE.Data);
-                    };
-                    process.ErrorDataReceived += (processSender, processE) => {
-                        Invoke(new UpdateListBoxHandler(UpdateTextViewListBox), processE.Data);
-                    };
+                    process.OutputDataReceived += UpdateProcessOutput;
+                    process.ErrorDataReceived += UpdateProcessOutput;
+                    //process cache
                     _processCache.Add(process);
-                    STAR_NLPSERVER_toolStripButton.Enabled = false;
                     break;
-                default:
+                //scenario
+                case "SCENARIO_BUILD_toolStripButton":
+                    break;
+                //lstm test 
+                case "LSTM_toolStripButton":
+                    string rawTextFullFilename = Directory.GetCurrentDirectory() + @"\tmp\RawText.txt";
+                    string autosave = Directory.GetCurrentDirectory() + @"\tmp\autolstm.bin";
+                    //IJob rnnTrainJob = new JobRNNTrain(rawTextFullFilename, autosave);
+                    //RegisterJob(rnnTrainJob);
+                    //rnnTrainJob.Start();
                     break;
             }
         }
