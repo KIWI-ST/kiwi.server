@@ -74,6 +74,7 @@
             this.NLP_toolStrip = new System.Windows.Forms.ToolStrip();
             this.STAR_NLPSERVER_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.map_menuStrip.SuspendLayout();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
@@ -158,6 +159,7 @@
             this.toolStripSeparator1,
             this.BATCHS_toolStripButton,
             this.kappa_toolStripButton,
+            this.toolStripSeparator2,
             this.CNN_toolStripButton,
             this.DQN_toolStripButton,
             this.SVM_toolStripButton,
@@ -208,7 +210,7 @@
             // CNN_toolStripButton
             // 
             this.CNN_toolStripButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.CNN_toolStripButton.Image = global::Host.UI.Properties.Resources.calculator;
+            this.CNN_toolStripButton.Image = global::Host.UI.Properties.Resources.computer;
             this.CNN_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.CNN_toolStripButton.Name = "CNN_toolStripButton";
             this.CNN_toolStripButton.Size = new System.Drawing.Size(60, 24);
@@ -217,7 +219,7 @@
             // 
             // DQN_toolStripButton
             // 
-            this.DQN_toolStripButton.Image = global::Host.UI.Properties.Resources.jisuan_f;
+            this.DQN_toolStripButton.Image = global::Host.UI.Properties.Resources.computer;
             this.DQN_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.DQN_toolStripButton.Name = "DQN_toolStripButton";
             this.DQN_toolStripButton.Size = new System.Drawing.Size(61, 24);
@@ -226,7 +228,7 @@
             // 
             // SVM_toolStripButton
             // 
-            this.SVM_toolStripButton.Image = global::Host.UI.Properties.Resources.weibiaoti1;
+            this.SVM_toolStripButton.Image = global::Host.UI.Properties.Resources.computer;
             this.SVM_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.SVM_toolStripButton.Name = "SVM_toolStripButton";
             this.SVM_toolStripButton.Size = new System.Drawing.Size(59, 24);
@@ -235,7 +237,7 @@
             // 
             // rf_toolStripButton
             // 
-            this.rf_toolStripButton.Image = global::Host.UI.Properties.Resources.jisuanqi_2;
+            this.rf_toolStripButton.Image = global::Host.UI.Properties.Resources.computer;
             this.rf_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.rf_toolStripButton.Name = "rf_toolStripButton";
             this.rf_toolStripButton.Size = new System.Drawing.Size(46, 24);
@@ -249,7 +251,7 @@
             // 
             // CNN_SVM_toolStripButton
             // 
-            this.CNN_SVM_toolStripButton.Image = global::Host.UI.Properties.Resources.jisuan_GPUyunfuwuqi;
+            this.CNN_SVM_toolStripButton.Image = global::Host.UI.Properties.Resources.kafei;
             this.CNN_SVM_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.CNN_SVM_toolStripButton.Name = "CNN_SVM_toolStripButton";
             this.CNN_SVM_toolStripButton.Size = new System.Drawing.Size(92, 24);
@@ -315,7 +317,7 @@
             // 
             this.splitContainer_main.Panel2.Controls.Add(this.Main_tabControl);
             this.splitContainer_main.Size = new System.Drawing.Size(910, 604);
-            this.splitContainer_main.SplitterDistance = 179;
+            this.splitContainer_main.SplitterDistance = 216;
             this.splitContainer_main.TabIndex = 3;
             // 
             // map_tabControl
@@ -325,7 +327,7 @@
             this.map_tabControl.Location = new System.Drawing.Point(0, 0);
             this.map_tabControl.Name = "map_tabControl";
             this.map_tabControl.SelectedIndex = 0;
-            this.map_tabControl.Size = new System.Drawing.Size(175, 600);
+            this.map_tabControl.Size = new System.Drawing.Size(212, 600);
             this.map_tabControl.TabIndex = 0;
             // 
             // tab_treeview
@@ -334,7 +336,7 @@
             this.tab_treeview.Location = new System.Drawing.Point(4, 22);
             this.tab_treeview.Name = "tab_treeview";
             this.tab_treeview.Padding = new System.Windows.Forms.Padding(3);
-            this.tab_treeview.Size = new System.Drawing.Size(167, 574);
+            this.tab_treeview.Size = new System.Drawing.Size(204, 574);
             this.tab_treeview.TabIndex = 0;
             this.tab_treeview.Text = "TreeView";
             this.tab_treeview.UseVisualStyleBackColor = true;
@@ -344,7 +346,7 @@
             this.map_treeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.map_treeView.Location = new System.Drawing.Point(3, 3);
             this.map_treeView.Name = "map_treeView";
-            this.map_treeView.Size = new System.Drawing.Size(161, 568);
+            this.map_treeView.Size = new System.Drawing.Size(198, 568);
             this.map_treeView.TabIndex = 0;
             this.map_treeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.Map_treeView_NodeMouseClick);
             // 
@@ -356,7 +358,7 @@
             this.Main_tabControl.Location = new System.Drawing.Point(0, 0);
             this.Main_tabControl.Name = "Main_tabControl";
             this.Main_tabControl.SelectedIndex = 0;
-            this.Main_tabControl.Size = new System.Drawing.Size(723, 600);
+            this.Main_tabControl.Size = new System.Drawing.Size(686, 600);
             this.Main_tabControl.TabIndex = 0;
             // 
             // tab_mapview
@@ -436,7 +438,7 @@
             this.tab_textview.Location = new System.Drawing.Point(4, 22);
             this.tab_textview.Margin = new System.Windows.Forms.Padding(2);
             this.tab_textview.Name = "tab_textview";
-            this.tab_textview.Size = new System.Drawing.Size(715, 574);
+            this.tab_textview.Size = new System.Drawing.Size(678, 574);
             this.tab_textview.TabIndex = 2;
             this.tab_textview.Text = "TextView";
             this.tab_textview.UseVisualStyleBackColor = true;
@@ -457,7 +459,7 @@
             // splitContainer_textview_bottom.Panel2
             // 
             this.splitContainer_textview_bottom.Panel2.Controls.Add(this.TEXTVIEW_listBox);
-            this.splitContainer_textview_bottom.Size = new System.Drawing.Size(715, 574);
+            this.splitContainer_textview_bottom.Size = new System.Drawing.Size(678, 574);
             this.splitContainer_textview_bottom.SplitterDistance = 424;
             this.splitContainer_textview_bottom.SplitterWidth = 3;
             this.splitContainer_textview_bottom.TabIndex = 0;
@@ -469,8 +471,8 @@
             this.splitContainer_textview_up.Location = new System.Drawing.Point(0, 0);
             this.splitContainer_textview_up.Margin = new System.Windows.Forms.Padding(2);
             this.splitContainer_textview_up.Name = "splitContainer_textview_up";
-            this.splitContainer_textview_up.Size = new System.Drawing.Size(715, 424);
-            this.splitContainer_textview_up.SplitterDistance = 359;
+            this.splitContainer_textview_up.Size = new System.Drawing.Size(678, 424);
+            this.splitContainer_textview_up.SplitterDistance = 394;
             this.splitContainer_textview_up.SplitterWidth = 3;
             this.splitContainer_textview_up.TabIndex = 0;
             // 
@@ -482,7 +484,7 @@
             this.TEXTVIEW_listBox.Location = new System.Drawing.Point(0, 0);
             this.TEXTVIEW_listBox.Margin = new System.Windows.Forms.Padding(2);
             this.TEXTVIEW_listBox.Name = "TEXTVIEW_listBox";
-            this.TEXTVIEW_listBox.Size = new System.Drawing.Size(711, 143);
+            this.TEXTVIEW_listBox.Size = new System.Drawing.Size(674, 143);
             this.TEXTVIEW_listBox.TabIndex = 0;
             // 
             // tree_contextMenuStrip
@@ -552,6 +554,12 @@
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(6, 27);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 27);
             // 
             // Main
             // 
@@ -651,6 +659,7 @@
         private System.Windows.Forms.ToolStrip NLP_toolStrip;
         private System.Windows.Forms.ToolStripButton STAR_NLPSERVER_toolStripButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
     }
 }
 
