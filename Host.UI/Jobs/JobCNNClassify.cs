@@ -37,6 +37,7 @@ namespace Host.UI.Jobs
         {
             _t = new Thread(() =>
             {
+
                 //input list
                 List<List<double>> inputList = new List<List<double>>();
                 List<int> outputList = new List<int>();
@@ -65,7 +66,11 @@ namespace Host.UI.Jobs
                 int[] keysArray = keys.ToArray();
                 int batchSize = 19;
                 //LeNet CNN 
-                IDNet cnn = new LeNet5(new int[] { channel, width, height }, classNum);
+                IDNet cnn = null;
+                if (NP.UseGPUDevice())
+                    cnn = new GLeNet5(new int[] { channel, width, height }, classNum);
+                else
+                    cnn = new LeNet5(new int[] { channel, width, height }, classNum);
                 //train model
                 for (int i = 0; i < epochs; i++)
                 {

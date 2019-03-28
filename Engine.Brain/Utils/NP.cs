@@ -1,11 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ConvNetSharp.Volume.GPU;
 
 namespace Engine.Brain.Entity
 {
     public class NP
     {
+        static int _usedDeice = 0;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static bool GPUEnable()
+        {
+            try
+            {
+                var count = GpuContext.DeviceCount - _usedDeice;
+                return count>0;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public static bool UseGPUDevice()
+        {
+            bool gpu = GPUEnable();
+            _usedDeice++;
+            return gpu;
+        }
+
         /// <summary>
         /// indicate prediction vector equals lable vector
         /// </summary>

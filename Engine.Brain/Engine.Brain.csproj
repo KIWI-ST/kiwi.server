@@ -55,58 +55,10 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Accord, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Accord.3.8.0\lib\net46\Accord.dll</HintPath>
-    </Reference>
-    <Reference Include="Accord.Extensions.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Accord.Extensions.Core.3.0.1\lib\net45\Accord.Extensions.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Accord.Genetic, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Accord.Genetic.3.8.0\lib\net46\Accord.Genetic.dll</HintPath>
-    </Reference>
-    <Reference Include="Accord.MachineLearning, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Accord.MachineLearning.3.8.0\lib\net46\Accord.MachineLearning.dll</HintPath>
-    </Reference>
-    <Reference Include="Accord.MachineLearning.GPL, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Accord.MachineLearning.GPL.3.8.0\lib\net46\Accord.MachineLearning.GPL.dll</HintPath>
-    </Reference>
-    <Reference Include="Accord.Math, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Accord.Math.3.8.0\lib\net46\Accord.Math.dll</HintPath>
-    </Reference>
-    <Reference Include="Accord.Math.Core, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Accord.Math.3.8.0\lib\net46\Accord.Math.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Accord.Neuro, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Accord.Neuro.3.8.0\lib\net46\Accord.Neuro.dll</HintPath>
-    </Reference>
-    <Reference Include="Accord.Statistics, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Accord.Statistics.3.8.0\lib\net46\Accord.Statistics.dll</HintPath>
-    </Reference>
-    <Reference Include="Cntk.Core.Managed-2.6, Version=2.6.0.0, Culture=neutral, PublicKeyToken=21fff2ec8197defe, processorArchitecture=AMD64">
-      <HintPath>..\packages\CNTK.CPUOnly.2.6.0\lib\netstandard2.0\Cntk.Core.Managed-2.6.dll</HintPath>
-    </Reference>
-    <Reference Include="ConvNetSharp.Core, Version=0.4.11.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Cognitio.ConvNetSharp.Core.0.4.11-alpha\lib\net46\ConvNetSharp.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="ConvNetSharp.Volume, Version=0.4.11.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Cognitio.ConvNetSharp.Volume.0.4.11-alpha\lib\net46\ConvNetSharp.Volume.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="OxyPlot, Version=1.0.0.0, Culture=neutral, PublicKeyToken=638079a8f0bd61e9, processorArchitecture=MSIL">
-      <HintPath>..\packages\OxyPlot.Core.1.0.0\lib\net45\OxyPlot.dll</HintPath>
-    </Reference>
-    <Reference Include="OxyPlot.WindowsForms, Version=1.0.0.0, Culture=neutral, PublicKeyToken=245eacd6b5d2d338, processorArchitecture=MSIL">
-      <HintPath>..\packages\OxyPlot.WindowsForms.1.0.0\lib\net45\OxyPlot.WindowsForms.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
-    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -117,6 +69,7 @@
   <ItemGroup>
     <Compile Include="Embed\Embedding.cs" />
     <Compile Include="Model\DL\LeNet5.cs" />
+    <Compile Include="Model\DL\GPU\GLeNet5.cs" />
     <Compile Include="Model\DL\SENet.cs" />
     <Compile Include="Model\ML\RF.cs" />
     <Compile Include="Model\ML\L2SVM.cs" />
@@ -125,7 +78,7 @@
     <Compile Include="Model\RL\INet.cs" />
     <Compile Include="Model\RL\IEnv.cs" />
     <Compile Include="Model\RL\Env\ImageClassifyEnv.cs" />
-    <Compile Include="Model\DL\CNN.cs" />
+    <Compile Include="Model\DL\GPU\GCNN.cs" />
     <Compile Include="Model\RL\Net\DNet.cs" />
     <Compile Include="Model\RL\DQN.cs" />
     <Compile Include="Model\RL\Net\DNet2.cs" />
@@ -138,27 +91,80 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Engine.Conv\ConvNetSharp.Core\ConvNetSharp.Core.csproj">
+      <Project>{2848323e-0e83-4db1-9ebd-4d661a490408}</Project>
+      <Name>ConvNetSharp.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Engine.Conv\ConvNetSharp.Volume.GPU\ConvNetSharp.Volume.GPU.csproj">
+      <Project>{9cb5363f-3533-4033-a941-dd2b2103fc86}</Project>
+      <Name>ConvNetSharp.Volume.GPU</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Engine.Conv\ConvNetSharp.Volume\ConvNetSharp.Volume.csproj">
+      <Project>{fb640530-f499-47b5-9ea5-36c9a9d9b144}</Project>
+      <Name>ConvNetSharp.Volume</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Engine.GIS\Engine.GIS.csproj">
       <Project>{82b3cfc7-e05c-46d3-9e91-2f5f4495238e}</Project>
       <Name>Engine.GIS</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <PackageReference Include="Accord">
+      <Version>3.8.0</Version>
+    </PackageReference>
+    <PackageReference Include="Accord.Extensions.Core">
+      <Version>3.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="Accord.MachineLearning.GPL">
+      <Version>3.8.0</Version>
+    </PackageReference>
+    <PackageReference Include="Accord.Neuro">
+      <Version>3.8.0</Version>
+    </PackageReference>
+    <PackageReference Include="CNTK.CPUOnly">
+      <Version>2.6.0</Version>
+    </PackageReference>
+    <PackageReference Include="CNTK.Deps.MKL">
+      <Version>2.6.0</Version>
+    </PackageReference>
+    <PackageReference Include="CNTK.Deps.OpenCV.Zip">
+      <Version>2.6.0</Version>
+    </PackageReference>
+    <PackageReference Include="ManagedCuda-CUBLAS.NETStandard">
+      <Version>9.1.300</Version>
+    </PackageReference>
+    <PackageReference Include="ManagedCuda-CudaDNN.NETStandard">
+      <Version>9.1.300</Version>
+    </PackageReference>
+    <PackageReference Include="ManagedCuda-CUFFT.NETStandard">
+      <Version>9.1.300</Version>
+    </PackageReference>
+    <PackageReference Include="ManagedCuda-CURAND.NETStandard">
+      <Version>9.1.300</Version>
+    </PackageReference>
+    <PackageReference Include="ManagedCuda-CUSOLVE.NETStandard">
+      <Version>9.1.300</Version>
+    </PackageReference>
+    <PackageReference Include="ManagedCuda-CUSPARSE.NETStandard">
+      <Version>9.1.300</Version>
+    </PackageReference>
+    <PackageReference Include="ManagedCuda-NVRTC.NETStandard">
+      <Version>9.1.300</Version>
+    </PackageReference>
+    <PackageReference Include="ManagedCuda.NETStandard">
+      <Version>9.1.300</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>12.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="OxyPlot.WindowsForms">
+      <Version>1.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="System.ValueTuple">
+      <Version>4.5.0</Version>
+    </PackageReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Accord.3.8.0\build\Accord.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Accord.3.8.0\build\Accord.targets'))" />
-    <Error Condition="!Exists('..\packages\CNTK.Deps.MKL.2.6.0\build\netstandard2.0\CNTK.Deps.MKL.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CNTK.Deps.MKL.2.6.0\build\netstandard2.0\CNTK.Deps.MKL.targets'))" />
-    <Error Condition="!Exists('..\packages\CNTK.Deps.OpenCV.Zip.2.6.0\build\netstandard2.0\CNTK.Deps.OpenCV.Zip.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CNTK.Deps.OpenCV.Zip.2.6.0\build\netstandard2.0\CNTK.Deps.OpenCV.Zip.targets'))" />
-    <Error Condition="!Exists('..\packages\CNTK.CPUOnly.2.6.0\build\netstandard2.0\CNTK.CPUOnly.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CNTK.CPUOnly.2.6.0\build\netstandard2.0\CNTK.CPUOnly.targets'))" />
-  </Target>
-  <Import Project="..\packages\Accord.3.8.0\build\Accord.targets" Condition="Exists('..\packages\Accord.3.8.0\build\Accord.targets')" />
-  <Import Project="..\packages\CNTK.Deps.MKL.2.6.0\build\netstandard2.0\CNTK.Deps.MKL.targets" Condition="Exists('..\packages\CNTK.Deps.MKL.2.6.0\build\netstandard2.0\CNTK.Deps.MKL.targets')" />
-  <Import Project="..\packages\CNTK.Deps.OpenCV.Zip.2.6.0\build\netstandard2.0\CNTK.Deps.OpenCV.Zip.targets" Condition="Exists('..\packages\CNTK.Deps.OpenCV.Zip.2.6.0\build\netstandard2.0\CNTK.Deps.OpenCV.Zip.targets')" />
-  <Import Project="..\packages\CNTK.CPUOnly.2.6.0\build\netstandard2.0\CNTK.CPUOnly.targets" Condition="Exists('..\packages\CNTK.CPUOnly.2.6.0\build\netstandard2.0\CNTK.CPUOnly.targets')" />
 </Project>

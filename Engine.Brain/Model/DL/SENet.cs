@@ -4,6 +4,7 @@ using ConvNetSharp.Core;
 using ConvNetSharp.Core.Layers;
 using ConvNetSharp.Core.Training;
 using ConvNetSharp.Volume;
+using ConvNetSharp.Volume.GPU.Double;
 using Engine.Brain.AI.RL;
 using Engine.Brain.Entity;
 
@@ -25,6 +26,11 @@ namespace Engine.Brain.AI.DL
         /// <param name="classNum">分类总数</param>
         public SENet(int[] featureNum, int classNum)
         {
+            //gpu instance
+            if (NP.UseGPUDevice())
+                BuilderInstance.Volume = new VolumeBuilder();
+            else
+                BuilderInstance.Volume = new ConvNetSharp.Volume.Double.VolumeBuilder();
             //get channel
             _channel = featureNum[0];
             _width = featureNum[1];

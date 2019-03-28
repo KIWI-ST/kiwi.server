@@ -1,8 +1,10 @@
-﻿using Engine.GIS.GLayer.GRasterLayer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
+using Engine.Brain.Entity;
+using Engine.GIS.GLayer.GRasterLayer;
 
 namespace Host.UI.SettingForm
 {
@@ -12,6 +14,18 @@ namespace Host.UI.SettingForm
         {
             InitializeComponent();
         }
+
+        #region Worker 检查GPU状态
+
+        delegate void UpdateLabelHandler(string msg);
+
+        private void UpdateLabel(string msg)
+        {
+            GPU_Status_label.Text = msg;
+        }
+
+        #endregion
+
         /// <summary>
         /// feature Rastery, 待分类图
         /// </summary>
@@ -80,6 +94,19 @@ namespace Host.UI.SettingForm
             Epochs = (int)Epochs_numericUpDown.Value;
             ImageWidth = (int)Width_numericUpDown.Value;
             ImageHeight = (int)Height_numericUpDown.Value;
+            //
+            Thread thread = new Thread(() =>
+            {
+                string text = "GPU检查"; //GPU禁用
+                if (NP.GPUEnable())
+                    text = "GPU就绪";
+                else
+                    text = "GPU禁用";
+                if(InvokeRequired)
+                    Invoke(new UpdateLabelHandler(UpdateLabel), text);
+            });
+            thread.IsBackground = true;
+            thread.Start();
         }
 
         private void Source_comboBox_SelectedIndexChanged(object sender, EventArgs e)
