@@ -39,9 +39,10 @@ namespace Host.UI.Jobs
                 {
                     List<List<double>> inputList = new List<List<double>>();
                     List<int> outputList = new List<int>();
-                    string text = sr.ReadLine().Replace("\t", ",");
+                    string text = sr.ReadLine().Replace("\t", ",").Replace("N/A", "0");
                     do
                     {
+                        text = text.Replace("N/A", "0");
                         string[] rawdatas = text.Split(',');
                         //make sure the label classes from 0
                         int output = Convert.ToInt32(rawdatas.Last());
@@ -74,9 +75,10 @@ namespace Host.UI.Jobs
                     using(StreamWriter sw = new StreamWriter(saveFullFilename))
                     {
                         Process = 0.0;
-                        string text = sr.ReadLine().Replace("\t", ",");
+                        string text = sr.ReadLine().Replace("\t", ",").Replace("N/A","0");
                         while (text != null)
                         {
+                            text = text.Replace("N/A", "0");
                             string[] rawdatas = text.Split(',');
                             double[][] inputs = new double[1][];
                             List<double> inputItem = new List<double>();
