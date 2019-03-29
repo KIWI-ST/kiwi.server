@@ -1,6 +1,6 @@
 ﻿namespace Host.UI.SettingForm
 {
-    partial class CNN_SVMFrom
+    partial class CNNSVMFrom
     {
         /// <summary>
         /// Required designer variable.

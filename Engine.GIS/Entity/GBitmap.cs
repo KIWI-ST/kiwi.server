@@ -53,5 +53,21 @@ namespace Engine.GIS.GEntity
             bmp.UnlockBits(bmpData); //解锁内存区域
             return bmp;
         }
+        /// <summary>
+        /// convert byte buffer to bitmap
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
+        public static Bitmap ToGrayBitmap(byte[] buffer, int width, int height)
+        {
+            Bitmap bmp = new Bitmap(width, height, PixelFormat.Format8bppIndexed);
+            BitmapData bmpData = bmp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
+            IntPtr iptr = bmpData.Scan0;
+            System.Runtime.InteropServices.Marshal.Copy(buffer, 0, iptr, width * height);
+            bmp.UnlockBits(bmpData);
+            return bmp;
+        }
     }
 }

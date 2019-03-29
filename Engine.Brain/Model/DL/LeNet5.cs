@@ -9,7 +9,7 @@ using Engine.Brain.Entity;
 
 namespace Engine.Brain.AI.DL
 {
-    public class LeNet5 : IDNet
+    public class LeNet5 : IDCnnNet
     {
         Net<double> _network;
         SgdTrainer<double> _trainer;

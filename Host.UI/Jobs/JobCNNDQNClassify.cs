@@ -3,28 +3,28 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Engine.Brain.AI.DL;
 using Engine.Brain.AI.RL;
 using Engine.Brain.Entity;
+using Engine.Brain.Model.RL.Env;
 using Engine.GIS.GEntity;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Tools;
-using OxyPlot;
 
 namespace Host.UI.Jobs
 {
-    public class JobCNNClassify : IJob
+    public class JobCNNDQNClassify:IJob
     {
         public double Process { get; private set; } = 0.0;
 
-        public string Name => "CnnClassificationTask";
+        public string Name => "CnnDqnClassificationTask";
 
         public string Summary { get; private set; } = "";
 
         public DateTime StartTime { get; private set; } = DateTime.Now;
-
-        public PlotModel[] PlotModels => throw new NotImplementedException();
 
         public bool Complete { get; private set; } = false;
 
@@ -34,15 +34,14 @@ namespace Host.UI.Jobs
 
         Thread _t;
 
-        public JobCNNClassify(GRasterLayer featureRasterLayer, int epochs, int model, int width, int height, int channel, string sampleFilename)
+        public JobCNNDQNClassify(GRasterLayer featureRasterLayer, int epochs, int model, int width, int height, int channel, string sampleFilename)
         {
             _t = new Thread(() =>
             {
-
                 //input list
                 List<List<double>> inputList = new List<List<double>>();
                 List<int> outputList = new List<int>();
-                List<int> keys = new List<int>();
+                List<int> outputKey = new List<int>();
                 using (StreamReader sr = new StreamReader(sampleFilename))
                 {
                     string text = sr.ReadLine().Replace("\t", ",");
@@ -51,8 +50,8 @@ namespace Host.UI.Jobs
                         string[] rawdatas = text.Split(',');
                         int key = Convert.ToInt32(rawdatas.Last());
                         outputList.Add(key);
-                        if (!keys.Contains(key))
-                            keys.Add(key);
+                        if (!outputKey.Contains(key))
+                            outputKey.Add(key);
                         List<double> inputItem = new List<double>();
                         for (int i = 0; i < rawdatas.Length - 1; i++)
                             inputItem.Add(Convert.ToDouble(rawdatas[i]));
@@ -63,11 +62,11 @@ namespace Host.UI.Jobs
                 //create cnn model
                 Summary = "模型训练中";
                 int smapleSize = outputList.Count;
-                int classNum = keys.Count;
-                int[] keysArray = keys.ToArray();
+                int classNum = outputKey.Count;
+                int[] keysArray = outputKey.ToArray();
                 int batchSize = 19;
                 //LeNet CNN 
-                IDNet cnn = null;
+                IDCnnNet cnn = null;
                 if (NP.UseGPUDevice())
                     cnn = new GLeNet5(new int[] { channel, width, height }, classNum);
                 else
@@ -87,7 +86,25 @@ namespace Host.UI.Jobs
                     Process = (double)i / epochs;
                     Summary = string.Format("loss:{0}", loss);
                 }
-                //
+                //训练DQN
+                Summary = "DQN训练中";
+                cnn.ToCharacteristicNetwork();
+                double[][] svmInputs = new double[inputList.Count][];
+                int[] svmOutputs = new int[inputList.Count];
+                //2.recalcute smaples
+                for (int i = 0; i < inputList.Count; i++)
+                {
+                    svmInputs[i] = cnn.Predict(inputList[i].ToArray());
+                }
+                for (int i = 0; i < inputList.Count; i++)
+                {
+                    svmOutputs[i] = outputKey.IndexOf(outputList[i]);
+                }
+                SamplesEnv _env = new SamplesEnv(svmInputs, svmOutputs);
+                DQN dqn = new DQN(_env);
+                dqn.SetParameters();
+                dqn.OnLearningLossEventHandler += Dqn_OnLearningLossEventHandler;
+                dqn.Learn();
                 //classify
                 Summary = "分类应用中";
                 IRasterLayerCursorTool pRasterLayerCursorTool = new GRasterLayerCursorTool();
@@ -102,9 +119,9 @@ namespace Host.UI.Jobs
                         //get normalized input raw value
                         double[] normal = pRasterLayerCursorTool.PickRagneNormalValue(i, j, width, height);
                         //}{debug
-                        double[] action = cnn.Predict(normal);
+                        var (action, q) = dqn.ChooseAction(normal);
+                        int gray = dqn.ActionToRawValue(NP.Argmax(action));
                         //convert action to raw byte value
-                        int gray = keys.ToArray()[NP.Argmax(action)];
                         buffer[i + featureRasterLayer.XSize + featureRasterLayer.YSize] = Convert.ToByte(gray);
                         //report progress
                         Process = (double)(seed++) / totalPixels;
@@ -119,6 +136,12 @@ namespace Host.UI.Jobs
                 OnTaskComplete?.Invoke(Name, fullFileName);
             });
         }
+
+        private void Dqn_OnLearningLossEventHandler(double loss, double totalReward, double accuracy, double progress, string epochesTime)
+        {
+            Process = progress;
+        }
+
         /// <summary>
         /// 
         /// </summary>

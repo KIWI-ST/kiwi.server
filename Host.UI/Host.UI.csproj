@@ -82,6 +82,7 @@
     <Compile Include="Jobs\IJob.cs" />
     <Compile Include="Jobs\IJobRPCRectify.cs" />
     <Compile Include="Jobs\JobCNNClassify.cs" />
+    <Compile Include="Jobs\JobCNNDQNClassify.cs" />
     <Compile Include="Jobs\JobCNNSVMClassify.cs" />
     <Compile Include="Jobs\JobCOVRaster.cs" />
     <Compile Include="Jobs\JobDQNClassify.cs" />
@@ -97,12 +98,6 @@
     </Compile>
     <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\ComparedPlotForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ComparedPlotForm.Designer.cs">
-      <DependentUpon>ComparedPlotForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\EmptyPlotForm.cs">
       <SubType>Form</SubType>
@@ -147,11 +142,11 @@
     <Compile Include="Forms\LeNetForm.Designer.cs">
       <DependentUpon>LeNetForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\CNN_DQNForm.cs">
+    <Compile Include="Forms\CNN-DQNForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\CNN_DQNForm.Designer.cs">
-      <DependentUpon>CNN_DQNForm.cs</DependentUpon>
+    <Compile Include="Forms\CNN-DQNForm.Designer.cs">
+      <DependentUpon>CNN-DQNForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\COVForm.cs">
       <SubType>Form</SubType>
@@ -216,9 +211,6 @@
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ComparedPlotForm.resx">
-      <DependentUpon>ComparedPlotForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\EmptyPlotForm.resx">
       <DependentUpon>EmptyPlotForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -242,8 +234,8 @@
     <EmbeddedResource Include="Forms\LeNetForm.resx">
       <DependentUpon>LeNetForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\CNN_DQNForm.resx">
-      <DependentUpon>CNN_DQNForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\CNN-DQNForm.resx">
+      <DependentUpon>CNN-DQNForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\COVForm.resx">
       <DependentUpon>COVForm.cs</DependentUpon>

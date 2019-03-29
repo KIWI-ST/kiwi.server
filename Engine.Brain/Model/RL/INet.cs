@@ -31,4 +31,10 @@ namespace Engine.Brain.AI.RL
         /// <param name="sourceNet"></param>
         void Accept(IDNet sourceNet);
     }
+
+    public interface IDCnnNet:IDNet
+    {
+        void ToCharacteristicNetwork();
+    }
+
 }

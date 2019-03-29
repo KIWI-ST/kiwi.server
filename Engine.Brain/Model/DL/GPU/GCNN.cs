@@ -10,7 +10,7 @@ using ConvNetSharp.Volume.GPU.Double;
 
 namespace Engine.Brain.AI.DL
 {
-    public class CNN : IDNet
+    public class CNN : IDCnnNet
     {
         Net<double> _network;
 

@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace Host.UI.SettingForm
 {
-    public partial class CNN_DQNForm : Form
+    public partial class CNNDQNForm : Form
     {
-        public CNN_DQNForm()
+        public CNNDQNForm()
         {
             InitializeComponent();
         }

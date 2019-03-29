@@ -23,52 +23,38 @@ namespace Host.UI.Jobs
         /// <summary>
         /// 
         /// </summary>
-        void Export(string fullFilename);
-
-        /// <summary>
-        /// indicate job states
-        /// </summary>
-        bool Complete { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
         event OnTaskCompleteHandler OnTaskComplete;
-
         /// <summary>
         /// 
         /// </summary>
         event OnStateChangedHandler OnStateChanged;
-
+        /// <summary>
+        /// 
+        /// </summary>
+        void Export(string fullFilename);
+        /// <summary>
+        /// indicate job states
+        /// </summary>
+        bool Complete { get; }
         /// <summary>
         /// job name
         /// </summary>
         string Name { get; }
-
         /// <summary>
         /// reslut summary
         /// </summary>
         string Summary { get; }
-
         /// <summary>
         /// progress
         /// </summary>
         double Process { get; }
-
         /// <summary>
         /// 
         /// </summary>
         DateTime StartTime { get; }
-
         /// <summary>
         /// start thread 
         /// </summary>
         void Start();
-
-        /// <summary>
-        /// plot models
-        /// </summary>
-        PlotModel[] PlotModels { get; }
     }
-
 }

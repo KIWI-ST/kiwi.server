@@ -10,7 +10,7 @@ using Engine.Brain.Entity;
 
 namespace Engine.Brain.AI.DL
 {
-    public class SENet : IDNet
+    public class SENet : IDCnnNet
     {
         Net<double> _network;
         SgdTrainer<double> _trainer;

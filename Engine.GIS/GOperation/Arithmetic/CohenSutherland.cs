@@ -1,6 +1,6 @@
-﻿using Engine.GIS.GeoType;
+﻿using System.Collections.Generic;
+using Engine.GIS.GeoType;
 using GeoAPI.Geometries;
-using System.Collections.Generic;
 
 namespace Engine.GIS.GOperation.Arithmetic
 {

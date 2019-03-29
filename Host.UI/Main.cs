@@ -640,11 +640,6 @@ namespace Host.UI
                         }
                     }
                     break;
-                //drawing comparsion multi-reslut curve
-                case "Compare_Plot_toolStripButton":
-                    ComparedPlotForm cp_form = new ComparedPlotForm();
-                    cp_form.ShowDialog();
-                    break;
                 //make samples in minibatch
                 case "BATCHS_toolStripButton":
                     BatchExportForm be_form = new BatchExportForm();
@@ -672,7 +667,7 @@ namespace Host.UI
                     break;
                 //cnn svm classification
                 case "CNN_SVM_toolStripButton":
-                    CNN_SVMFrom c_s_form = new CNN_SVMFrom();
+                    CNNSVMFrom c_s_form = new CNNSVMFrom();
                     c_s_form.RasterDic = _rasterDic;
                     if (c_s_form.ShowDialog() == DialogResult.OK)
                     {
@@ -683,7 +678,7 @@ namespace Host.UI
                     break;
                 //cnn dqn classification
                 case "CNN_DQN_toolStripButton":
-                    CNN_DQNForm c_d_form = new CNN_DQNForm();
+                    CNNDQNForm c_d_form = new CNNDQNForm();
                     if (c_d_form.ShowDialog() == DialogResult.OK)
                     {
                         

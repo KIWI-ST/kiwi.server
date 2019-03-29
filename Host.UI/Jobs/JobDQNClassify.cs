@@ -1,13 +1,13 @@
-﻿using Engine.Brain.AI.RL;
+﻿using System;
+using System.Drawing;
+using System.IO;
+using System.Threading;
+using Engine.Brain.AI.RL;
 using Engine.Brain.AI.RL.Env;
 using Engine.Brain.Entity;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Tools;
 using OxyPlot;
-using System;
-using System.Drawing;
-using System.IO;
-using System.Threading;
 
 namespace Host.UI.Jobs
 {
@@ -56,6 +56,7 @@ namespace Host.UI.Jobs
         /// 
         /// </summary>
         public event OnTaskCompleteHandler OnTaskComplete;
+
         public event OnStateChangedHandler OnStateChanged;
 
         /// <summary>
