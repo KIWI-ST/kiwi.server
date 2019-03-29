@@ -8,9 +8,9 @@ using Engine.GIS.GLayer.GRasterLayer;
 
 namespace Host.UI.SettingForm
 {
-    public partial class CNNForm : Form
+    public partial class LeNetForm : Form
     {
-        public CNNForm()
+        public LeNetForm()
         {
             InitializeComponent();
         }

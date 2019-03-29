@@ -591,7 +591,7 @@ namespace Host.UI
                     }
                     break;
                 //dqn classification 
-                case "DQN_toolStripButton":
+                case "DQN_ToolStripMenuItem":
                     DQNForm dqnForm = new DQNForm();
                     dqnForm.RasterDic = _rasterDic;
                     if (dqnForm.ShowDialog() == DialogResult.OK)
@@ -611,8 +611,8 @@ namespace Host.UI
                     }
                     break;
                 //cnn classification
-                case "CNN_toolStripButton":
-                    CNNForm cnnForm = new CNNForm();
+                case "LeNet_ToolStripMenuItem":
+                    LeNetForm cnnForm = new LeNetForm();
                     cnnForm.RasterDic = _rasterDic;
                     if (cnnForm.ShowDialog() == DialogResult.OK)
                     {
@@ -622,7 +622,7 @@ namespace Host.UI
                     }
                     break;
                 //random forest classification
-                case "rf_toolStripButton":
+                case "RF_ToolStripMenuItem":
                     RFForm rfForm = new RFForm();
                     rfForm.RasterDic = _rasterDic;
                     if (rfForm.ShowDialog() == DialogResult.OK)
@@ -652,7 +652,7 @@ namespace Host.UI
                     be_form.ShowDialog();
                     break;
                 //svm function
-                case "SVM_toolStripButton":
+                case "SVM_ToolStripMenuItem":
                     SVMFrom svm_Form = new SVMFrom();
                     svm_Form.RasterDic = _rasterDic;
                     if (svm_Form.ShowDialog() == DialogResult.OK)

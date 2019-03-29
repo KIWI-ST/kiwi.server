@@ -141,11 +141,11 @@
     <Compile Include="Forms\CNN-SVMForm.Designer.cs">
       <DependentUpon>CNN-SVMForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\CNNForm.cs">
+    <Compile Include="Forms\LeNetForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\CNNForm.Designer.cs">
-      <DependentUpon>CNNForm.cs</DependentUpon>
+    <Compile Include="Forms\LeNetForm.Designer.cs">
+      <DependentUpon>LeNetForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\CNN_DQNForm.cs">
       <SubType>Form</SubType>
@@ -239,8 +239,8 @@
     <EmbeddedResource Include="Forms\CNN-SVMForm.resx">
       <DependentUpon>CNN-SVMForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\CNNForm.resx">
-      <DependentUpon>CNNForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\LeNetForm.resx">
+      <DependentUpon>LeNetForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\CNN_DQNForm.resx">
       <DependentUpon>CNN_DQNForm.cs</DependentUpon>
