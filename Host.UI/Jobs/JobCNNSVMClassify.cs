@@ -1,15 +1,14 @@
-﻿using Engine.Brain.AI.DL;
-using Engine.Brain.Entity;
-using Engine.Brain.Model.ML;
-using Engine.GIS.GLayer.GRasterLayer;
-using Engine.GIS.GOperation.Tools;
-using OxyPlot;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using Engine.Brain.Model.DL.GPU;
+using Engine.Brain.Model.ML;
+using Engine.Brain.Utils;
+using Engine.GIS.GLayer.GRasterLayer;
+using Engine.GIS.GOperation.Tools;
 
 namespace Host.UI.Jobs
 {
@@ -22,8 +21,6 @@ namespace Host.UI.Jobs
         public string Summary { get; private set; } = "";
 
         public DateTime StartTime { get; private set; } = DateTime.Now;
-
-        public PlotModel[] PlotModels => throw new NotImplementedException();
 
         public bool Complete { get; private set; } = false;
 
@@ -80,7 +77,7 @@ namespace Host.UI.Jobs
                 //training svm
                 Summary = "SVM训练中";
                 //1. convert to characteristic network
-                cnn.ToCharacteristicNetwork();
+                cnn.ConvertToExtractNetwork();
                 double[][] svmInputs = new double[inputList.Count][];
                 int[] svmOutputs = new int[inputList.Count];
                 //2.recalcute smaples

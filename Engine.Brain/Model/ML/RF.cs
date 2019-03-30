@@ -1,8 +1,11 @@
 ﻿using Accord.MachineLearning.DecisionTrees;
 
-namespace Engine.Brain.AI.ML
+namespace Engine.Brain.Model.ML
 {
-    public class RF
+    /// <summary>
+    /// random forest
+    /// </summary>
+    public class RF: IDSupervised
     {
         RandomForestLearning _teacher;
 

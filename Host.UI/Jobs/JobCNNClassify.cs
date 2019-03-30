@@ -4,13 +4,13 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using Engine.Brain.AI.DL;
-using Engine.Brain.AI.RL;
-using Engine.Brain.Entity;
+using Engine.Brain.Model;
+using Engine.Brain.Model.DL;
+using Engine.Brain.Model.DL.GPU;
+using Engine.Brain.Utils;
 using Engine.GIS.GEntity;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Tools;
-using OxyPlot;
 
 namespace Host.UI.Jobs
 {
@@ -24,8 +24,6 @@ namespace Host.UI.Jobs
 
         public DateTime StartTime { get; private set; } = DateTime.Now;
 
-        public PlotModel[] PlotModels => throw new NotImplementedException();
-
         public bool Complete { get; private set; } = false;
 
         public event OnTaskCompleteHandler OnTaskComplete;
@@ -34,7 +32,7 @@ namespace Host.UI.Jobs
 
         Thread _t;
 
-        public JobCNNClassify(GRasterLayer featureRasterLayer, int epochs, int model, int width, int height, int channel, string sampleFilename)
+        public JobCNNClassify(GRasterLayer rasterLayer, int epochs, int model, int width, int height, int channel, string sampleFilename)
         {
             _t = new Thread(() =>
             {
@@ -91,13 +89,13 @@ namespace Host.UI.Jobs
                 //classify
                 Summary = "分类应用中";
                 IRasterLayerCursorTool pRasterLayerCursorTool = new GRasterLayerCursorTool();
-                pRasterLayerCursorTool.Visit(featureRasterLayer);
+                pRasterLayerCursorTool.Visit(rasterLayer);
                 int seed = 0;
-                int totalPixels = featureRasterLayer.XSize * featureRasterLayer.YSize;
+                int totalPixels = rasterLayer.XSize * rasterLayer.YSize;
                 byte[] buffer = new byte[totalPixels];
                 //应用dqn对图像分类
-                for (int i = 0; i < featureRasterLayer.XSize; i++)
-                    for (int j = 0; j < featureRasterLayer.YSize; j++)
+                for (int i = 0; i < rasterLayer.XSize; i++)
+                    for (int j = 0; j < rasterLayer.YSize; j++)
                     {
                         //get normalized input raw value
                         double[] normal = pRasterLayerCursorTool.PickRagneNormalValue(i, j, width, height);
@@ -105,13 +103,13 @@ namespace Host.UI.Jobs
                         double[] action = cnn.Predict(normal);
                         //convert action to raw byte value
                         int gray = keys.ToArray()[NP.Argmax(action)];
-                        buffer[i + featureRasterLayer.XSize + featureRasterLayer.YSize] = Convert.ToByte(gray);
+                        buffer[j * rasterLayer.XSize + i] = Convert.ToByte(gray);
                         //report progress
                         Process = (double)(seed++) / totalPixels;
                     }
                 //保存结果至tmp
                 string fullFileName = Directory.GetCurrentDirectory() + @"\tmp\" + DateTime.Now.ToFileTimeUtc() + ".png";
-                Bitmap classificationBitmap = GBitmap.ToGrayBitmap(buffer, featureRasterLayer.XSize, featureRasterLayer.YSize);
+                Bitmap classificationBitmap = GBitmap.ToGrayBitmap(buffer, rasterLayer.XSize, rasterLayer.YSize);
                 classificationBitmap.Save(fullFileName);
                 //complete
                 Summary = "CNN训练分类完成";

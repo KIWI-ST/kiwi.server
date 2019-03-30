@@ -4,13 +4,12 @@ using ConvNetSharp.Core;
 using ConvNetSharp.Core.Layers;
 using ConvNetSharp.Core.Training;
 using ConvNetSharp.Volume;
-using Engine.Brain.AI.RL;
-using Engine.Brain.Entity;
 using ConvNetSharp.Volume.GPU.Double;
+using Engine.Brain.Utils;
 
-namespace Engine.Brain.AI.DL
+namespace Engine.Brain.Model.DL.GPU
 {
-    public class CNN : IDCnnNet
+    public class CNN : IDCovNet
     {
         Net<double> _network;
 
@@ -64,7 +63,7 @@ namespace Engine.Brain.AI.DL
         /// <summary>
         /// 
         /// </summary>
-        public void ToCharacteristicNetwork()
+        public void ConvertToExtractNetwork()
         {
             if (!_isToCharacteristicNetwork)
             {

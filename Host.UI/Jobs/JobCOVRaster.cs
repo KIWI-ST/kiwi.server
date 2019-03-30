@@ -5,7 +5,6 @@ using System.Threading;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Arithmetic;
 using Engine.GIS.GOperation.Tools;
-using OxyPlot;
 
 namespace Host.UI.Jobs
 {
@@ -21,9 +20,8 @@ namespace Host.UI.Jobs
 
         public DateTime StartTime { get; private set; } = DateTime.Now;
 
-        public PlotModel[] PlotModels => throw new NotImplementedException();
-
         public event OnTaskCompleteHandler OnTaskComplete;
+
         public event OnStateChangedHandler OnStateChanged;
 
         Thread _t;

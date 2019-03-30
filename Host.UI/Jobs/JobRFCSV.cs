@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using Engine.Brain.AI.ML;
-using OxyPlot;
+using Engine.Brain.Model.ML;
 
 namespace Host.UI.Jobs
 {
@@ -17,8 +16,6 @@ namespace Host.UI.Jobs
         public double Process { get; private set; } = 0.0;
 
         public DateTime StartTime { get; private set; } = DateTime.Now;
-
-        public PlotModel[] PlotModels => throw new NotImplementedException();
         /// <summary>
         /// 
         /// </summary>

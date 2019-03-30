@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using Engine.Brain.Entity;
+using Engine.Brain.Utils;
 using Engine.GIS.GLayer.GRasterLayer;
 
 namespace Host.UI.SettingForm

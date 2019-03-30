@@ -1,11 +1,9 @@
-﻿using Engine.Brain.Entity;
-using Engine.Brain.Extend;
-using OxyPlot;
-using OxyPlot.Axes;
-using OxyPlot.Series;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Engine.Brain.Extend;
+using Engine.Brain.Model;
+using Engine.Brain.Utils;
 
 namespace Engine.Brain.AI.RL
 {
@@ -96,18 +94,6 @@ namespace Engine.Brain.AI.RL
         readonly int _featuresNumber;
         //输入action长度
         readonly int _actionsNumber;
-        //
-        LineSeries _lossLine = new LineSeries();
-        //
-        LineSeries _accuracyLine = new LineSeries();
-        //
-        LineSeries _rewardLine = new LineSeries();
-        //
-        public PlotModel LossPlotModel { get; } = new PlotModel();
-        //
-        public PlotModel AccuracyModel { get; } = new PlotModel();
-        //
-        public PlotModel RewardModel { get; } = new PlotModel();
         /// <summary>
         /// 
         /// </summary>
@@ -126,66 +112,6 @@ namespace Engine.Brain.AI.RL
             _criticNet = new DNet(_env.FeatureNum, _actionsNumber);
         }
         /// <summary>
-        /// 初始化plotModel
-        /// </summary>
-        private void InitPoltModel()
-        {
-            //缩放比例
-            const double scale = 1.04;
-            //loss line
-            //LossPlotModel.LegendArea.Add(new LineAnnotation { Slope = 0.1, Intercept = 1, Text = "LineAnnotation", ToolTip = "This is a tool tip for the LineAnnotation" });
-            LossPlotModel.Series.Add(_lossLine);
-            LossPlotModel.Axes.Add(new LinearAxis()
-            {
-                Position = AxisPosition.Bottom,
-                Minimum = 0,
-                Maximum = _epoches * scale
-            });
-            LossPlotModel.Axes.Add(new LinearAxis()
-            {
-                Position = AxisPosition.Left,
-                Minimum = 0,
-                Maximum = 1,
-                Title = "Loss",
-            });
-            //LossPlotModel.Title = "Loss";
-            //accuracy line
-            AccuracyModel.Series.Add(_accuracyLine);
-            AccuracyModel.Axes.Add(new LinearAxis()
-            {
-                Position = AxisPosition.Bottom,
-                Minimum = 0,
-                Maximum = _epoches * scale
-            });
-            AccuracyModel.Axes.Add(new LinearAxis()
-            {
-                Position = AxisPosition.Left,
-                Minimum = 0,
-                Maximum = 1,
-                Title = "Accuracy",
-            });
-            //AccuracyModel.Title = "Accuracy";
-            //reward line
-            RewardModel.Series.Add(_rewardLine);
-            RewardModel.Axes.Add(new LinearAxis()
-            {
-                Position = AxisPosition.Bottom,
-                Minimum = 0,
-                Maximum = _epoches * scale,
-                FontSize = 26,
-                Title = "Training Epochs"
-            });
-            RewardModel.Axes.Add(new LinearAxis()
-            {
-                Position = AxisPosition.Left,
-                Minimum = -_forward,
-                Maximum = _forward,
-                FontSize = 26,
-                Title = "Reward",
-            });
-            //RewardModel.Title = "Reward";
-        }
-        /// <summary>
         /// 设置运行参数
         /// </summary>
         /// <param name="epochs"></param>
@@ -195,8 +121,6 @@ namespace Engine.Brain.AI.RL
             _epoches = epochs;
             //设置gamma, 表示对连续状态的计算
             _gamma = gamma;
-            //构造plot绘制图
-            InitPoltModel();
         }
         /// <summary>
         /// convert action to raw byte value
@@ -429,12 +353,6 @@ namespace Engine.Brain.AI.RL
             PreRemember(_memoryCapacity);
             for (int e = 1; e <= _epoches; e++)
             {
-                //if(e==500|| e == 1000|| e == 1500|| e == 2000|| e == 2500|| e == 3000|| e == 3500)
-                //{
-                //    var s = _usedSamples;
-                //    var s1 = _usedInfos;
-                //}
-                //reset environment every epoches
                 double[] state = _env.Reset();
                 DateTime now = DateTime.Now;
                 double loss = 0, accuracy = 0, totalRewards = 0;
@@ -460,12 +378,6 @@ namespace Engine.Brain.AI.RL
                 accuracy = Accuracy();
                 //report learning progress
                 OnLearningLossEventHandler?.Invoke(loss, totalRewards, accuracy, (float)e / _epoches, (DateTime.Now - now).TotalSeconds.ToString());
-                //loss
-                _lossLine.Points.Add(new DataPoint(e, loss));
-                //accuracy
-                _accuracyLine.Points.Add(new DataPoint(e, accuracy));
-                //reward
-                _rewardLine.Points.Add(new DataPoint(e, totalRewards));
             }
         }
 

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using ConvNetSharp.Volume.GPU;
 
-namespace Engine.Brain.Entity
+namespace Engine.Brain.Utils
 {
-    public class NP
+    public partial class NP
     {
         static int _usedDeice = 0;
         /// <summary>

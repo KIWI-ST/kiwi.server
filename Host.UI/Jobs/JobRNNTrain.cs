@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Engine.Brain.Model;
-//using Engine.Lexicon.Entity;
-using OxyPlot;
+﻿//using Engine.Lexicon.Entity;
 
 namespace Host.UI.Jobs
 {

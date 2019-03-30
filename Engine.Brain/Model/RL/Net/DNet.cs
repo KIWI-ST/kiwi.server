@@ -1,8 +1,9 @@
-﻿using Accord.Math;
+﻿using System;
+using System.IO;
+using Accord.Math;
 using Accord.Neuro;
 using Accord.Neuro.Learning;
-using System;
-using System.IO;
+using Engine.Brain.Model;
 
 namespace Engine.Brain.AI.RL
 {

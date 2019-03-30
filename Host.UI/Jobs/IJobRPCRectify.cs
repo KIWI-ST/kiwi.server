@@ -1,9 +1,8 @@
-﻿using Engine.GIS.GLayer.GRasterLayer;
-using Engine.GIS.GOperation.Tools;
-using OxyPlot;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using Engine.GIS.GLayer.GRasterLayer;
+using Engine.GIS.GOperation.Tools;
 
 namespace Host.UI.Jobs
 {
@@ -18,10 +17,13 @@ namespace Host.UI.Jobs
         public double Process { get; private set; } = 0.0;
 
         public DateTime StartTime { get; private set; } = DateTime.Now;
-
-        public PlotModel[] PlotModels => throw new NotImplementedException();
-
+        /// <summary>
+        /// 
+        /// </summary>
         public event OnTaskCompleteHandler OnTaskComplete;
+        /// <summary>
+        /// 
+        /// </summary>
         public event OnStateChangedHandler OnStateChanged;
 
         Thread _t;

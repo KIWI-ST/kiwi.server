@@ -1,5 +1,4 @@
-﻿using OxyPlot;
-using System;
+﻿using System;
 
 namespace Host.UI.Jobs
 {

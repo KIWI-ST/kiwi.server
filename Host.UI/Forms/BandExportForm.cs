@@ -1,8 +1,8 @@
-﻿using Engine.GIS.GLayer.GRasterLayer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Engine.GIS.GLayer.GRasterLayer;
 
 namespace Host.UI.SettingForm
 {

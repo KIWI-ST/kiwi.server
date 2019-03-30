@@ -1,13 +1,13 @@
-﻿using Engine.Brain.Model.ML;
-using Engine.GIS.GLayer.GRasterLayer;
-using Engine.GIS.GOperation.Tools;
-using OxyPlot;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using Engine.Brain.Model.ML;
+using Engine.GIS.GEntity;
+using Engine.GIS.GLayer.GRasterLayer;
+using Engine.GIS.GOperation.Tools;
 
 namespace Host.UI.Jobs
 {
@@ -23,8 +23,6 @@ namespace Host.UI.Jobs
 
         public DateTime StartTime { get; private set; } = DateTime.Now;
 
-        public PlotModel[] PlotModels => throw new NotImplementedException();
-
         public event OnTaskCompleteHandler OnTaskComplete;
 
         public event OnStateChangedHandler OnStateChanged;
@@ -35,7 +33,7 @@ namespace Host.UI.Jobs
         {
             _t = new Thread(() =>
             {
-                string[] parameters = System.IO.Path.GetFileNameWithoutExtension(fullFilename).Split('_');
+                string[] parameters = Path.GetFileNameWithoutExtension(fullFilename).Split('_');
                 int depth = Convert.ToInt32(parameters[parameters.Length - 1]);
                 int width = Convert.ToInt32(parameters[parameters.Length - 2]);
                 int height = Convert.ToInt32(parameters[parameters.Length - 3]);
@@ -79,11 +77,9 @@ namespace Host.UI.Jobs
                 IRasterLayerCursorTool pRasterLayerCursorTool = new GRasterLayerCursorTool();
                 pRasterLayerCursorTool.Visit(rasterLayer);
                 //GDI graph
-                Bitmap classificationBitmap = new Bitmap(rasterLayer.XSize, rasterLayer.YSize);
-                Graphics g = Graphics.FromImage(classificationBitmap);
-                //
                 int seed = 0;
                 int totalPixels = rasterLayer.XSize * rasterLayer.YSize;
+                byte[] buffer = new byte[totalPixels];
                 Process = 0.0;
                 //应用dqn对图像分类
                 for (int i = 0; i < rasterLayer.XSize; i++)
@@ -97,16 +93,13 @@ namespace Host.UI.Jobs
                         int[] ouputs = svm.Predict(inputs);
                         //from 0
                         int gray = outputKey[ouputs[0]];
-                        //convert action to raw byte value
-                        Color c = Color.FromArgb(gray, gray, gray);
-                        Pen p = new Pen(c);
-                        SolidBrush brush = new SolidBrush(c);
-                        g.FillRectangle(brush, new Rectangle(i, j, 1, 1));
+                        buffer[j*rasterLayer.XSize + i] = Convert.ToByte(gray);
                         //report progress
                         Process = (double)seed++ / totalPixels;
                     }
                 //保存结果至tmp
                 string fullFileName = Directory.GetCurrentDirectory() + @"\tmp\" + DateTime.Now.ToFileTimeUtc() + ".png";
+                Bitmap classificationBitmap = GBitmap.ToGrayBitmap(buffer, rasterLayer.XSize, rasterLayer.YSize);
                 classificationBitmap.Save(fullFileName);
                 //rf complete
                 Summary = "SVM训练分类完成";

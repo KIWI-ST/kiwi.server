@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using Engine.Brain.AI.DL;
 using Engine.Brain.AI.RL;
-using Engine.Brain.Entity;
+using Engine.Brain.Model;
+using Engine.Brain.Model.DL;
+using Engine.Brain.Model.DL.GPU;
 using Engine.Brain.Model.RL.Env;
+using Engine.Brain.Utils;
 using Engine.GIS.GEntity;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Tools;
@@ -66,7 +66,7 @@ namespace Host.UI.Jobs
                 int[] keysArray = outputKey.ToArray();
                 int batchSize = 19;
                 //LeNet CNN 
-                IDCnnNet cnn = null;
+                IDCovNet cnn = null;
                 if (NP.UseGPUDevice())
                     cnn = new GLeNet5(new int[] { channel, width, height }, classNum);
                 else
@@ -88,7 +88,7 @@ namespace Host.UI.Jobs
                 }
                 //训练DQN
                 Summary = "DQN训练中";
-                cnn.ToCharacteristicNetwork();
+                cnn.ConvertToExtractNetwork();
                 double[][] svmInputs = new double[inputList.Count][];
                 int[] svmOutputs = new int[inputList.Count];
                 //2.recalcute smaples

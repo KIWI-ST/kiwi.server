@@ -4,10 +4,9 @@ using System.IO;
 using System.Threading;
 using Engine.Brain.AI.RL;
 using Engine.Brain.AI.RL.Env;
-using Engine.Brain.Entity;
+using Engine.Brain.Utils;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Tools;
-using OxyPlot;
 
 namespace Host.UI.Jobs
 {
@@ -36,10 +35,6 @@ namespace Host.UI.Jobs
         /// run process
         /// </summary>
         public double Process { get; private set; } = 0.0;
-        /// <summary>
-        /// polt models
-        /// </summary>
-        public PlotModel[] PlotModels => new PlotModel[] { _dqn.RewardModel, _dqn.LossPlotModel, _dqn.AccuracyModel };
         /// <summary>
         /// task start time
         /// </summary>

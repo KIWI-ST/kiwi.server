@@ -1,10 +1,10 @@
-﻿using Engine.Brain.Entity;
-using Engine.Brain.Extend;
-using Engine.GIS.GLayer.GRasterLayer;
-using Engine.GIS.GOperation.Tools;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Engine.Brain.Extend;
+using Engine.Brain.Utils;
+using Engine.GIS.GLayer.GRasterLayer;
+using Engine.GIS.GOperation.Tools;
 
 namespace Engine.Brain.AI.RL.Env
 {

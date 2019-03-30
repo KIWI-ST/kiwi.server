@@ -4,7 +4,10 @@ using Accord.Statistics.Kernels;
 
 namespace Engine.Brain.Model.ML
 {
-    public class L2SVM
+    /// <summary>
+    /// support vector machines
+    /// </summary>
+    public class L2SVM: IDSupervised
     {
         MulticlassSupportVectorMachine<Linear> ksvm;
 

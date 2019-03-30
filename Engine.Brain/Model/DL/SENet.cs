@@ -5,12 +5,11 @@ using ConvNetSharp.Core.Layers;
 using ConvNetSharp.Core.Training;
 using ConvNetSharp.Volume;
 using ConvNetSharp.Volume.GPU.Double;
-using Engine.Brain.AI.RL;
-using Engine.Brain.Entity;
+using Engine.Brain.Utils;
 
-namespace Engine.Brain.AI.DL
+namespace Engine.Brain.Model.DL
 {
-    public class SENet : IDCnnNet
+    public class SENet : IDCovNet
     {
         Net<double> _network;
         SgdTrainer<double> _trainer;
@@ -42,12 +41,12 @@ namespace Engine.Brain.AI.DL
             _network.AddLayer(new ConvLayer<double>(5, 5, _channel));
             _network.AddLayer(new ConvLayer<double>(3, 3, _channel));
             //1. 构建se结构 
-            //reference : https://arxiv.org/pdf/1709.01507.pdf
-            _network.AddLayer(new ConvNetSharp.Core.Layers.PoolLayer<double>(1, 1)); //poll 层，综合特征
-            _network.AddLayer(new FullyConnLayer<double>(1)); //简化channel层，得到维度综合
-            _network.AddLayer(new ReluLayer<double>());
-            _network.AddLayer(new FullyConnLayer<double>(_channel)); //还原channel
-            _network.AddLayer(new SigmoidLayer<double>());
+            ////reference : https://arxiv.org/pdf/1709.01507.pdf
+            //_network.AddLayer(new PoolLayer<double>(1, 1)); //poll 层，综合特征
+            //_network.AddLayer(new FullyConnLayer<double>(1)); //简化channel层，得到维度综合
+            //_network.AddLayer(new ReluLayer<double>());
+            //_network.AddLayer(new FullyConnLayer<double>(_channel)); //还原channel
+            //_network.AddLayer(new SigmoidLayer<double>());
             //2.softmax分类
             _network.AddLayer(new FullyConnLayer<double>(_classNum));
             _network.AddLayer(new SoftmaxLayer<double>(_classNum));
@@ -70,7 +69,7 @@ namespace Engine.Brain.AI.DL
         /// <summary>
         /// 
         /// </summary>
-        public void ToCharacteristicNetwork()
+        public void ConvertToExtractNetwork()
         {
             if (!_isToCharacteristicNetwork)
             {

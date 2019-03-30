@@ -4,12 +4,11 @@ using ConvNetSharp.Core;
 using ConvNetSharp.Core.Layers;
 using ConvNetSharp.Core.Training;
 using ConvNetSharp.Volume;
-using Engine.Brain.AI.RL;
-using Engine.Brain.Entity;
+using Engine.Brain.Utils;
 
-namespace Engine.Brain.AI.DL
+namespace Engine.Brain.Model.DL
 {
-    public class LeNet5 : IDCnnNet
+    public class LeNet5 : IDCovNet
     {
         Net<double> _network;
         SgdTrainer<double> _trainer;
@@ -17,7 +16,7 @@ namespace Engine.Brain.AI.DL
         private int _width;
         private int _height;
         private int _classNum;
-        bool _isToCharacteristicNetwork = false;
+        bool _isExtractNetwork = false;
         /// <summary>
         /// 
         /// </summary>
@@ -63,17 +62,17 @@ namespace Engine.Brain.AI.DL
         /// <summary>
         /// 
         /// </summary>
-        public void ToCharacteristicNetwork()
+        public void ConvertToExtractNetwork()
         {
-            if (!_isToCharacteristicNetwork)
+            if (!_isExtractNetwork)
             {
                 var layer = _network.Layers[_network.Layers.Count - 1];
                 _network.Layers.Remove(layer);
-                _isToCharacteristicNetwork = true;
+                _isExtractNetwork = true;
             }
         }
         /// <summary>
-        /// 
+        /// 7
         /// </summary>
         /// <returns></returns>
         public Stream PersistenceMemory()

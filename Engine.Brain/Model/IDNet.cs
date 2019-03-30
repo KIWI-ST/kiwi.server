@@ -1,7 +1,10 @@
 ﻿using System.IO;
 
-namespace Engine.Brain.AI.RL
+namespace Engine.Brain.Model
 {
+    /// <summary>
+    /// DNN结构网络
+    /// </summary>
     public interface IDNet
     {
         /// <summary>
@@ -12,6 +15,12 @@ namespace Engine.Brain.AI.RL
         /// <returns>loss</returns>
         double Train(double[][] inputs, double[][] outputs);
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        double[] Predict(double[] input);
+        /// <summary>
         /// persistence in local dir
         /// </summary>
         string PersistencNative();
@@ -20,21 +29,11 @@ namespace Engine.Brain.AI.RL
         /// </summary>
         Stream PersistenceMemory();
         /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        double[] Predict(double[] input);
-        /// <summary>
         /// copy sourceNet parameters to this Net
         /// </summary>
         /// <param name="sourceNet"></param>
         void Accept(IDNet sourceNet);
     }
 
-    public interface IDCnnNet:IDNet
-    {
-        void ToCharacteristicNetwork();
-    }
 
 }

@@ -1,8 +1,8 @@
-﻿using Engine.Brain.AI.RL;
-using Engine.Brain.Entity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Engine.Brain.AI.RL;
+using Engine.Brain.Utils;
 
 namespace Engine.Brain.Model.RL.Env
 {

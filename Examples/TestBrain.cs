@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Engine.Brain.AI.DL;
-using Engine.Brain.AI.ML;
 using Engine.Brain.AI.RL;
 using Engine.Brain.AI.RL.Env;
-using Engine.Brain.Entity;
+using Engine.Brain.Model.DL.GPU;
+using Engine.Brain.Model.ML;
+using Engine.Brain.Utils;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Tools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -98,7 +98,7 @@ namespace Examples
             double[] action = cnn.Predict(normal);
             int landCoverType = env.RandomSeedKeys[NP.Argmax(action)];
             //pred
-            cnn.ToCharacteristicNetwork();
+            cnn.ConvertToExtractNetwork();
             double[] action2 = cnn.Predict(normal);
             //do something as you need. i.e. draw landCoverType to bitmap at position ( i , j )
             //the classification results are not stable because of the training epochs are too few.

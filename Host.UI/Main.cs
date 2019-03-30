@@ -10,11 +10,9 @@ using Engine.GIS.Entity;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Arithmetic;
 using Host.UI.Jobs;
-using Host.UI.PlotForm;
 using Host.UI.SettingForm;
 using Host.UI.SettingForm.SLIC;
 using OfficeOpenXml;
-using OxyPlot;
 
 namespace Host.UI
 {
@@ -343,11 +341,6 @@ namespace Host.UI
         /// <param name="bmp"></param>
         /// <param name="nodeName"></param>
         private delegate void PaintBitmapHandler(Bitmap bmp, string nodeName);
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="plotModel"></param>
-        private delegate void PaintPlotModelHandler(PlotModel plotModel);
         /// <summary>
         /// 
         /// </summary>

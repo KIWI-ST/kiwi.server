@@ -1,13 +1,13 @@
-﻿using Accord.Math;
-using Engine.Brain.Entity;
-using Engine.Brain.Extend;
-using Engine.GIS.GLayer.GRasterLayer;
-using Engine.GIS.GOperation.Tools;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using Accord.Math;
+using Engine.Brain.Extend;
+using Engine.Brain.Utils;
+using Engine.GIS.GLayer.GRasterLayer;
+using Engine.GIS.GOperation.Tools;
 
 namespace Engine.Brain.AI.RL.Env
 {

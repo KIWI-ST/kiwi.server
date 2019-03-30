@@ -5,7 +5,6 @@ using System.Threading;
 using edu.stanford.nlp.ling;
 using edu.stanford.nlp.pipeline;
 using java.util;
-using OxyPlot;
 
 namespace Host.UI.Jobs
 {
@@ -23,10 +22,6 @@ namespace Host.UI.Jobs
         /// run process
         /// </summary>
         public double Process { get; private set; } = 0.0;
-        /// <summary>
-        /// polt models
-        /// </summary>
-        public PlotModel[] PlotModels => throw new NotImplementedException();
         /// <summary>
         /// task start time
         /// </summary>
