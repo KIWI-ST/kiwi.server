@@ -187,8 +187,8 @@
             this.CNN_SVM_toolStripButton.Image = global::Host.UI.Properties.Resources.mingpai;
             this.CNN_SVM_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.CNN_SVM_toolStripButton.Name = "CNN_SVM_toolStripButton";
-            this.CNN_SVM_toolStripButton.Size = new System.Drawing.Size(87, 44);
-            this.CNN_SVM_toolStripButton.Text = "CNN-SVM";
+            this.CNN_SVM_toolStripButton.Size = new System.Drawing.Size(57, 44);
+            this.CNN_SVM_toolStripButton.Text = "CSVM";
             this.CNN_SVM_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.CNN_SVM_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
             // 
@@ -197,8 +197,8 @@
             this.CNN_DQN_toolStripButton.Image = global::Host.UI.Properties.Resources.kafei;
             this.CNN_DQN_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.CNN_DQN_toolStripButton.Name = "CNN_DQN_toolStripButton";
-            this.CNN_DQN_toolStripButton.Size = new System.Drawing.Size(88, 44);
-            this.CNN_DQN_toolStripButton.Text = "CNN-DQN";
+            this.CNN_DQN_toolStripButton.Size = new System.Drawing.Size(58, 44);
+            this.CNN_DQN_toolStripButton.Text = "CDQN";
             this.CNN_DQN_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.CNN_DQN_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
             // 
@@ -220,8 +220,8 @@
             this.SINGLE_toolStripDropDownButton.Image = global::Host.UI.Properties.Resources.duorou;
             this.SINGLE_toolStripDropDownButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.SINGLE_toolStripDropDownButton.Name = "SINGLE_toolStripDropDownButton";
-            this.SINGLE_toolStripDropDownButton.Size = new System.Drawing.Size(125, 44);
-            this.SINGLE_toolStripDropDownButton.Text = "Haplomethod";
+            this.SINGLE_toolStripDropDownButton.Size = new System.Drawing.Size(67, 44);
+            this.SINGLE_toolStripDropDownButton.Text = "Haplo";
             this.SINGLE_toolStripDropDownButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             // 
             // RF_ToolStripMenuItem
