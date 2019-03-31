@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using CNTK;
 using ConvNetSharp.Core;
 using ConvNetSharp.Core.Layers;
 using ConvNetSharp.Core.Training;
@@ -22,7 +23,7 @@ namespace Engine.Brain.Model.DL
         /// </summary>
         /// <param name="featureNum"></param>
         /// <param name="classNum">分类总数</param>
-        public LeNet5(int[] featureNum, int classNum)
+        public LeNet5(int[] featureNum, int classNum, string deviceName)
         {
             //get channel
             _channel = featureNum[0];
@@ -51,6 +52,12 @@ namespace Engine.Brain.Model.DL
                 Momentum = 0.9
             };
         }
+
+        private Function CreateLeNetModel(Variable input)
+        {
+            return CNTKLib.Abs(input);
+        }
+
         /// <summary>
         /// 
         /// </summary>
