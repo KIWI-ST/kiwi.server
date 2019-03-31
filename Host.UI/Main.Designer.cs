@@ -77,8 +77,6 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.bandExport_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.main_notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
-            this.combinedFrameworkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ApplyModel_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.map_menuStrip.SuspendLayout();
@@ -214,9 +212,7 @@
             this.SVM_ToolStripMenuItem,
             this.toolStripMenuItem4,
             this.ConvNet_ToolStripMenuItem,
-            this.DQN_ToolStripMenuItem,
-            this.toolStripMenuItem2,
-            this.combinedFrameworkToolStripMenuItem});
+            this.DQN_ToolStripMenuItem});
             this.SINGLE_toolStripDropDownButton.Image = global::Host.UI.Properties.Resources.duorou;
             this.SINGLE_toolStripDropDownButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.SINGLE_toolStripDropDownButton.Name = "SINGLE_toolStripDropDownButton";
@@ -586,17 +582,6 @@
             this.main_notifyIcon.Visible = true;
             this.main_notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.main_notifyIcon_MouseDoubleClick);
             // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(308, 6);
-            // 
-            // combinedFrameworkToolStripMenuItem
-            // 
-            this.combinedFrameworkToolStripMenuItem.Name = "combinedFrameworkToolStripMenuItem";
-            this.combinedFrameworkToolStripMenuItem.Size = new System.Drawing.Size(311, 26);
-            this.combinedFrameworkToolStripMenuItem.Text = "Combined Framework";
-            // 
             // ApplyModel_toolStripButton
             // 
             this.ApplyModel_toolStripButton.Image = global::Host.UI.Properties.Resources.notes;
@@ -710,8 +695,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripDropDownButton NLP_toolStripDropDownButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
-        private System.Windows.Forms.ToolStripMenuItem combinedFrameworkToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton ApplyModel_toolStripButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
     }
