@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CNTK;
 
@@ -11,6 +12,14 @@ namespace Engine.Brain.Utils
     {
         public static class CNTK
         {
+            /// <summary>
+            /// deivces collection
+            /// </summary>
+            static Dictionary<string, DeviceDescriptor> devices = DeviceDescriptor.AllDevices().ToDictionary(device => string.Format("{0}-{1}", device.Id,device.Type), device => device);
+            /// <summary>
+            /// get device map collection
+            /// </summary>
+            public static List<string> DeviceCollection { get { return devices.Keys.ToList(); } }
             /// <summary>
             /// the inputDim dim must less then outputDim
             /// </summary>
@@ -30,10 +39,10 @@ namespace Engine.Brain.Utils
                 projectionMap.CopyFrom(new NDArrayView(new int[] { 1, 1, inputDim, outputDim }, projectionMapValues, (uint)projectionMapValues.Count(), device));
                 return new Constant(projectionMap);
             }
-			/// <summary>
+            /// <summary>
             /// RestNet Model Helper Function
             /// </summary>
-			public static class ResNet
+            public static class ResNet
             {
                 /// <summary>
                 /// 

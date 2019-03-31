@@ -5,7 +5,7 @@ using Accord.Neuro;
 using Accord.Neuro.Learning;
 using Engine.Brain.Model;
 
-namespace Engine.Brain.AI.RL
+namespace Engine.Brain.Model.DL
 {
     /// <summary>
     /// Selu激活函数

@@ -8,7 +8,7 @@ using Engine.Brain.Utils;
 
 namespace Engine.Brain.Model.DL
 {
-    public class LeNet5 : IDCovNet
+    public class LeNet5 : IDConvNet
     {
         Net<double> _network;
         SgdTrainer<double> _trainer;

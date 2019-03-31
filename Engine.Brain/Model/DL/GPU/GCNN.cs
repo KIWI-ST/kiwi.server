@@ -9,7 +9,7 @@ using Engine.Brain.Utils;
 
 namespace Engine.Brain.Model.DL.GPU
 {
-    public class CNN : IDCovNet
+    public class CNN : IDConvNet
     {
         Net<double> _network;
 

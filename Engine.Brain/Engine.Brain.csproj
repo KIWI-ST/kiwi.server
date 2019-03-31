@@ -67,7 +67,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\DL\GPU\GResNet50.cs" />
+    <Compile Include="Model\DL\ResNet50.cs" />
     <Compile Include="Model\DL\LeNet5.cs" />
     <Compile Include="Model\DL\GPU\GLeNet5.cs" />
     <Compile Include="Model\DL\SENet.cs" />
@@ -81,9 +81,9 @@
     <Compile Include="Model\RL\IEnv.cs" />
     <Compile Include="Model\RL\Env\ImageClassifyEnv.cs" />
     <Compile Include="Model\DL\GPU\GCNN.cs" />
-    <Compile Include="Model\RL\Net\DNet.cs" />
+    <Compile Include="Model\DL\DNet.cs" />
     <Compile Include="Model\RL\DQN.cs" />
-    <Compile Include="Model\RL\Net\DNet2.cs" />
+    <Compile Include="Utils\NP.CNN.cs" />
     <Compile Include="Utils\NP.cs" />
     <Compile Include="Extend\ArrayExtend.cs" />
     <Compile Include="Extend\DictionaryExtend.cs" />
@@ -125,13 +125,19 @@
     <PackageReference Include="Accord.Neuro">
       <Version>3.8.0</Version>
     </PackageReference>
-    <PackageReference Include="CNTK.CPUOnly">
+    <PackageReference Include="CNTK.Deps.Cuda">
+      <Version>2.6.0</Version>
+    </PackageReference>
+    <PackageReference Include="CNTK.Deps.cuDNN">
       <Version>2.6.0</Version>
     </PackageReference>
     <PackageReference Include="CNTK.Deps.MKL">
       <Version>2.6.0</Version>
     </PackageReference>
     <PackageReference Include="CNTK.Deps.OpenCV.Zip">
+      <Version>2.6.0</Version>
+    </PackageReference>
+    <PackageReference Include="CNTK.GPU">
       <Version>2.6.0</Version>
     </PackageReference>
     <PackageReference Include="ManagedCuda-CUBLAS.NETStandard">
@@ -165,6 +171,8 @@
       <Version>4.5.0</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Model\RL\Net\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -130,23 +130,17 @@
     <Compile Include="Forms\CNN-SVMForm.Designer.cs">
       <DependentUpon>CNN-SVMForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\LeNetForm.cs">
+    <Compile Include="Forms\ConvForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\LeNetForm.Designer.cs">
-      <DependentUpon>LeNetForm.cs</DependentUpon>
+    <Compile Include="Forms\ConvForm.Designer.cs">
+      <DependentUpon>ConvForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\CNN-DQNForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\CNN-DQNForm.Designer.cs">
       <DependentUpon>CNN-DQNForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\COVForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\COVForm.Designer.cs">
-      <DependentUpon>COVForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\DLClassifyForm.cs">
       <SubType>Form</SubType>
@@ -222,14 +216,11 @@
     <EmbeddedResource Include="Forms\CNN-SVMForm.resx">
       <DependentUpon>CNN-SVMForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\LeNetForm.resx">
-      <DependentUpon>LeNetForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\ConvForm.resx">
+      <DependentUpon>ConvForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\CNN-DQNForm.resx">
       <DependentUpon>CNN-DQNForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\COVForm.resx">
-      <DependentUpon>COVForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\DLClassifyForm.resx">
       <DependentUpon>DLClassifyForm.cs</DependentUpon>

@@ -513,75 +513,22 @@ namespace Host.UI
                         rpcRectifyJob.Start();
                     }
                     break;
-                //cov matrix
-                case "cov_toolStripButton":
-                    COVForm covForm = new COVForm();
-                    covForm.RasterDic = _rasterDic;
-                    if (covForm.ShowDialog() == DialogResult.OK)
-                    {
-                        GRasterBand band1 = _rasterDic[covForm.Target1Key].BandCollection[0];
-                        GRasterBand band2 = _rasterDic[covForm.Target2Key].BandCollection[0];
-                        IJob covRasterJob = new JobCOVRaster(band1, band2);
-                        RegisterJob(covRasterJob);
-                        covRasterJob.Start();
-                    }
-                    break;
                 //task
-                case "task_toolStripButton":
-                    TaskMonitor taskForm = new TaskMonitor();
-                    taskForm.Jobs = _jobs;
-                    taskForm.ShowDialog();
+                case "Map_task_toolStripButton":
+                    TaskMonitor mapTaskForm = new TaskMonitor();
+                    mapTaskForm.Jobs = _jobs;
+                    mapTaskForm.ShowDialog();
                     break;
                 //calucte kappa
-                case "kappa_toolStripButton":
+                case "Kappa_toolStripButton":
                     KappaForm kappaForm = new KappaForm();
                     kappaForm.RasterDic = _rasterDic;
                     kappaForm.ShowDialog();
                     break;
                 //添加图像
-                case "open_toolstripmenuitem":
-                case "open_contextMenuStrip":
+                case "Open_toolstripmenuitem":
+                case "Open_contextMenuStrip":
                     ReadImage();
-                    break;
-                //超像素分割
-                case "SLIC_toolStripButton":
-                case "SLIC_toolStripMenu":
-                    Bitmap bmp = map_pictureBox.Image as Bitmap;
-                    if (bmp != null)
-                    {
-                        ThreadStart slic_ts = delegate { RunSLIC(bmp); };
-                        Thread slic_t = new Thread(slic_ts);
-                        slic_t.IsBackground = true;
-                        slic_t.Start();
-                    }
-                    else
-                        UpdateStatusLabel("未选中待计算图像，地图区域无图片", STATUE_ENUM.ERROR);
-                    break;
-                //super pixel
-                case "SLIC_Center_toolStripButton":
-                case "SLIC_Center_toolStripMenu":
-                    OpenFileDialog opg = new OpenFileDialog
-                    {
-                        Filter = "JSON文件|*.json"
-                    };
-                    if (opg.ShowDialog() == DialogResult.OK)
-                    {
-                        //1.读取center中心
-                        using (StreamReader sr = new StreamReader(opg.FileName))
-                        {
-                            List<byte> colors = new List<byte>();
-                            Center[] centers = SuperPixelSegment.ReadCenter(sr.ReadToEnd());
-                            //2.设置使用图层
-                            SLICForm centerApplyForm = new SLICForm();
-                            if (centerApplyForm.ShowDialog() == DialogResult.OK)
-                            {
-                                ThreadStart s = delegate { RunCenter(centerApplyForm.FileNameCollection, centers); };
-                                Thread t = new Thread(s);
-                                t.IsBackground = true;
-                                t.Start();
-                            }
-                        }
-                    }
                     break;
                 //dqn classification 
                 case "DQN_ToolStripMenuItem":
@@ -604,14 +551,14 @@ namespace Host.UI
                     }
                     break;
                 //cnn classification
-                case "LeNet_ToolStripMenuItem":
-                    LeNetForm cnnForm = new LeNetForm();
-                    cnnForm.RasterDic = _rasterDic;
+                case "ConvNet_ToolStripMenuItem":
+                    CNNForm cnnForm = new CNNForm();
                     if (cnnForm.ShowDialog() == DialogResult.OK)
                     {
-                        IJob cnnClassifyJob = new JobCNNClassify(_rasterDic[cnnForm.SelectedFeatureRasterLayer], cnnForm.Epochs, cnnForm.Model, cnnForm.ImageWidth, cnnForm.ImageHeight, cnnForm.ImageDepth, cnnForm.FullFilename);
-                        RegisterJob(cnnClassifyJob);
-                        cnnClassifyJob.Start();
+                        //}{debug
+                        //IJob cnnClassifyJob = new JobCNNClassify(_rasterDic[cnnForm.SelectedFeatureRasterLayer], cnnForm.Epochs, cnnForm.Model, cnnForm.ImageWidth, cnnForm.ImageHeight, cnnForm.ImageDepth, cnnForm.FullFilename);
+                        //RegisterJob(cnnClassifyJob);
+                        //cnnClassifyJob.Start();
                     }
                     break;
                 //random forest classification
@@ -675,19 +622,6 @@ namespace Host.UI
                     if (c_d_form.ShowDialog() == DialogResult.OK)
                     {
                         
-                    }
-                    break;
-                    //lstm + stanford nlp tool -> analysis scenerio
-                case "Parsing_toolStripButton":
-                    ParsingForm p_Form = new ParsingForm();
-                    if(p_Form.ShowDialog() == DialogResult.OK)
-                    {
-                        //1. tab view change
-                        Main_tabControl.SelectedIndex = 1;
-                        //2. create job
-                        IJob parsingJob = new JobParsingText(p_Form.TextFullFilename, p_Form.ModelFullFilename, p_Form.LexiconFullFilename);
-                        RegisterJob(parsingJob);
-                        parsingJob.Start();
                     }
                     break;
                 default:

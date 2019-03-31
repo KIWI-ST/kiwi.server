@@ -1,7 +1,7 @@
 ﻿using CNTK;
 using Engine.Brain.Utils;
 
-namespace Engine.Brain.Model.DL.GPU
+namespace Engine.Brain.Model.DL
 {
     /// <summary>
     /// reference CNTK ResNet
@@ -9,6 +9,7 @@ namespace Engine.Brain.Model.DL.GPU
     /// </summary>
     public class GResNet50
     {
+        Function _net;
 
         public GResNet50()
         {
@@ -17,7 +18,7 @@ namespace Engine.Brain.Model.DL.GPU
             int[] outputDim = { numClasses };
             var input = CNTKLib.InputVariable(inputDim, DataType.Double, "Images");
             var y = CNTKLib.InputVariable(outputDim, DataType.Double, "Labels");
-            
+            //_net = CreateResNetModel(input, numClasses, )
 
         }
 

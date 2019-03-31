@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Engine.Brain.Extend;
 using Engine.Brain.Model;
+using Engine.Brain.Model.DL;
 using Engine.Brain.Utils;
 
 namespace Engine.Brain.AI.RL

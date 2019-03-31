@@ -66,10 +66,7 @@ namespace Host.UI.Jobs
                 int batchSize = 19;
                 //LeNet CNN 
                 IDNet cnn = null;
-                if (NP.UseGPUDevice())
-                    cnn = new GLeNet5(new int[] { channel, width, height }, classNum);
-                else
-                    cnn = new LeNet5(new int[] { channel, width, height }, classNum);
+                cnn = new GLeNet5(new int[] { channel, width, height }, classNum);
                 //train model
                 for (int i = 0; i < epochs; i++)
                 {

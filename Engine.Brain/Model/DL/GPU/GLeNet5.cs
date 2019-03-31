@@ -9,7 +9,7 @@ using Engine.Brain.Utils;
 
 namespace Engine.Brain.Model.DL.GPU
 {
-    public class GLeNet5 : IDCovNet
+    public class GLeNet5 : IDConvNet
     {
         Net<double> _network;
         SgdTrainer<double> _trainer;

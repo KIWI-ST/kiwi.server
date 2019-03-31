@@ -68,7 +68,6 @@ namespace Examples
         [TestMethod]
         public void ClassificationByCNN()
         {
-            NP.GPUEnable();
             double _loss = 1.0;
             //training epochs
             int epochs = 1000;

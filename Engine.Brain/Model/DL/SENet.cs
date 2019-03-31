@@ -9,7 +9,7 @@ using Engine.Brain.Utils;
 
 namespace Engine.Brain.Model.DL
 {
-    public class SENet : IDCovNet
+    public class SENet : IDConvNet
     {
         Net<double> _network;
         SgdTrainer<double> _trainer;
@@ -25,11 +25,7 @@ namespace Engine.Brain.Model.DL
         /// <param name="classNum">分类总数</param>
         public SENet(int[] featureNum, int classNum)
         {
-            //gpu instance
-            if (NP.UseGPUDevice())
-                BuilderInstance.Volume = new VolumeBuilder();
-            else
-                BuilderInstance.Volume = new ConvNetSharp.Volume.Double.VolumeBuilder();
+             BuilderInstance.Volume = new ConvNetSharp.Volume.Double.VolumeBuilder();
             //get channel
             _channel = featureNum[0];
             _width = featureNum[1];

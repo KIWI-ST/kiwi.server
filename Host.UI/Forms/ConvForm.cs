@@ -1,31 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using System.Windows.Forms;
 using Engine.Brain.Utils;
-using Engine.GIS.GLayer.GRasterLayer;
 
 namespace Host.UI.SettingForm
 {
-    public partial class LeNetForm : Form
+    public partial class CNNForm : Form
     {
-        public LeNetForm()
+        public CNNForm()
         {
             InitializeComponent();
+            Initial();
         }
-
-        #region Worker 检查GPU状态
-
-        delegate void UpdateLabelHandler(string msg);
-
-        private void UpdateLabel(string msg)
-        {
-            GPU_Status_label.Text = msg;
-        }
-
-        #endregion
-
         /// <summary>
         /// feature Rastery, 待分类图
         /// </summary>
@@ -34,10 +20,6 @@ namespace Host.UI.SettingForm
         /// 样本文件地址
         /// </summary>
         public string FullFilename { get; private set; }
-        /// <summary>
-        /// 获取图层数据方式， 0 表示单像素逐波段获取
-        /// </summary>
-        public int Model { get; set; }
         /// <summary>
         /// 输入图像宽
         /// </summary>
@@ -55,64 +37,48 @@ namespace Host.UI.SettingForm
         /// </summary>
         public int Epochs { get; set; }
         /// <summary>
-        /// 
+        /// 获取计算设备名
         /// </summary>
-        Dictionary<string, GRasterLayer> _rasterDic;
-        /// <summary>
-        /// set raster dic
-        /// </summary>
-        public Dictionary<string, GRasterLayer> RasterDic
-        {
-            set
-            {
-                _rasterDic = value;
-                Initial(_rasterDic);
-            }
-        }
+        public string DeviceName { get; private set; }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="rasterDic"></param>
-        public void Initial(Dictionary<string, GRasterLayer> rasterDic)
+        public void Initial()
         {
-            //init feature picked methods combox
-            List<string> featurePickedMethods = new List<string>() {
-                "基于Mask的多波段输入"
-            };
-            FeaturePicked_comboBox.Items.Clear();
-            featurePickedMethods.ForEach(p => {
-                FeaturePicked_comboBox.Items.Add(p);
-            });
-            FeaturePicked_comboBox.SelectedIndex = 0;
-            Model = 0;
-            //combox
-            source_image_comboBox.Items.Clear();
-            rasterDic.Keys.ToList().ForEach(p => {
-                source_image_comboBox.Items.Add(p);
-            });
-            //setting value
-            Epochs = (int)Epochs_numericUpDown.Value;
-            ImageWidth = (int)Width_numericUpDown.Value;
-            ImageHeight = (int)Height_numericUpDown.Value;
-            //
-            Thread thread = new Thread(() =>
+            //convNet types
+            List<string> convTypes = NP.CNN.ConvNetCollection;
+            if (convTypes != null&&convTypes.Count>0)
             {
-                string text = "GPU检查"; //GPU禁用
-                if (NP.GPUEnable())
-                    text = "GPU就绪";
-                else
-                    text = "GPU禁用";
-                if(InvokeRequired)
-                    Invoke(new UpdateLabelHandler(UpdateLabel), text);
-            });
-            thread.IsBackground = true;
-            thread.Start();
+                ConvType_comboBox.Items.Clear();
+                convTypes.ForEach(modelType => {
+                    ConvType_comboBox.Items.Add(modelType);
+                });
+                ConvType_comboBox.SelectedIndex = 0;
+            }
+            //check devices name
+            List<string> devices = NP.CNTK.DeviceCollection;
+            device_comboBox.Items.Clear();
+            if (devices != null&&devices.Count>0)
+            {
+                devices.ForEach(device => {
+                    device_comboBox.Items.Add(device);
+                });
+                //select index 0 as default
+                device_comboBox.SelectedIndex = 0;
+            }
         }
 
         private void Source_comboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             string key = (sender as ComboBox).SelectedItem as string;
             SelectedFeatureRasterLayer = key;
+        }
+
+        private void Device_comboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string key = (sender as ComboBox).SelectedItem as string;
+            DeviceName = key;
         }
 
         private void Width_numericUpDown_ValueChanged(object sender, EventArgs e)
@@ -135,21 +101,9 @@ namespace Host.UI.SettingForm
             Epochs = (int)(sender as NumericUpDown).Value;
         }
 
-        private void FeaturePicked_comboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Model = FeaturePicked_comboBox.SelectedIndex;
-        }
-
         private void OK_button_Click(object sender, EventArgs e)
         {
-            if (SelectedFeatureRasterLayer == null)
-            {
-                MessageBox.Show("请先选定待分类的影像");
-            }
-            else
-            {
-                Close();
-            }
+            Close();
         }
 
         private void open_sample_button_Click(object sender, EventArgs e)
@@ -175,12 +129,10 @@ namespace Host.UI.SettingForm
                 }
                 catch
                 {
-
+                    MessageBox.Show("样本文件不符合规范，请使用MiniBatch制作样本", "样本命名错误",  MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-         
             }
         }
-
 
     }
 }

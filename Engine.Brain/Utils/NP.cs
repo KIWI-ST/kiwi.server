@@ -1,44 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ConvNetSharp.Volume.GPU;
 
 namespace Engine.Brain.Utils
 {
     public partial class NP
     {
-        static int _usedDeice = 0;
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public static bool GPUEnable()
-        {
-            try
-            {
-                var count = GpuContext.DeviceCount - _usedDeice;
-                return count>0;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        public static bool UseGPUDevice()
-        {
-            bool gpu = GPUEnable();
-            _usedDeice++;
-            return gpu;
-        }
-
         /// <summary>
         /// indicate prediction vector equals lable vector
         /// </summary>
         /// <param name="pred"></param>
         /// <param name="label"></param>
         /// <returns></returns>
-        public static bool Equal(double[] pred,double[] label)
+        public static bool Equal(double[] pred, double[] label)
         {
             int predCount = pred.Length;
             int labelCount = label.Length;
@@ -130,9 +104,9 @@ namespace Engine.Brain.Utils
             var list = input.ToList();
             int rows = list.Count;
             int cols = list[0].Length;
-            int totalCount = rows*cols;
+            int totalCount = rows * cols;
             double[] output = new double[totalCount];
-            for(int i = 0; i < totalCount; i++)
+            for (int i = 0; i < totalCount; i++)
                 output[i] = input[i / cols][i % cols];
             return output;
         }
@@ -272,7 +246,7 @@ namespace Engine.Brain.Utils
             return output;
         }
 
-       public static double  CalcuteAccuracy(double[][] predict, double[][] label)
+        public static double CalcuteAccuracy(double[][] predict, double[][] label)
         {
             int predCount = predict.GetLength(0);
             int labelCount = predict.GetLength(0);
@@ -280,7 +254,7 @@ namespace Engine.Brain.Utils
                 return 0.0;
             double right = 0.0;
             for (int i = 0; i < predCount; i++)
-                right += Equal(predict[i], label[i])?1:0;
+                right += Equal(predict[i], label[i]) ? 1 : 0;
             return right / predCount;
         }
 
