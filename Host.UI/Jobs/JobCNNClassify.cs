@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using Engine.Brain.Model;
-using Engine.Brain.Model.DL;
 using Engine.Brain.Model.DL.GPU;
 using Engine.Brain.Utils;
 using Engine.GIS.GEntity;

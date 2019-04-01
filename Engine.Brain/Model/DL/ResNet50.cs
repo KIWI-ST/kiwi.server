@@ -1,4 +1,5 @@
-﻿using CNTK;
+﻿using System.Collections.Generic;
+using CNTK;
 using Engine.Brain.Utils;
 
 namespace Engine.Brain.Model.DL
@@ -9,17 +10,47 @@ namespace Engine.Brain.Model.DL
     /// </summary>
     public class GResNet50
     {
-        Function _net;
-
-        public GResNet50()
+        //input and output variable
+        Variable inputVariable, outputVariable;
+        int[] inputDim, outputDim;
+        Function lossFunction;
+        Function classifierOutput;
+        Trainer trainer;
+        DeviceDescriptor device;
+        
+        public GResNet50(int width, int height, int channel, int ouputClasses, string deviceName)
         {
-            int numClasses = 10;
-            int[] inputDim = { 32, 32, 3 };
-            int[] outputDim = { numClasses };
-            var input = CNTKLib.InputVariable(inputDim, DataType.Double, "Images");
-            var y = CNTKLib.InputVariable(outputDim, DataType.Double, "Labels");
-            //_net = CreateResNetModel(input, numClasses, )
+            device = NP.CNTK.GetDeviceByName(deviceName);
+            inputDim = new int[] { width, height, channel };
+            outputDim = new int[] { ouputClasses };
+            inputVariable = CNTKLib.InputVariable(inputDim, DataType.Double, "Images");
+            outputVariable = CNTKLib.InputVariable(outputDim, DataType.Double, "Labels");
+            classifierOutput = CreateResNetModel(inputVariable, ouputClasses, device, "pred");
+            lossFunction = CNTKLib.CrossEntropyWithSoftmax(classifierOutput, outputVariable, "lossfunction");
+            var prediction = CNTKLib.ClassificationError(classifierOutput, outputVariable, 5, "predictionError");
+            var learningRatePerSample = new TrainingParameterScheduleDouble(0.0078125, 1);
+            trainer = Trainer.CreateTrainer(classifierOutput, lossFunction, prediction, new List<Learner> { Learner.SGDLearner(classifierOutput.Parameters(), learningRatePerSample) });
+        }
 
+        public double Train(double[][] inputs, double[][] outputs)
+        {
+            Value inputsValue = Value.CreateBatch(NDShape.CreateNDShape(inputDim), NP.ToUnidimensional(inputs), device);
+            Value outputsValue = Value.CreateBatch(NDShape.CreateNDShape(outputDim), NP.ToUnidimensional(outputs), device);
+            var miniBatch = new Dictionary<Variable, Value>()
+            {
+                {
+                    inputVariable,
+                    inputsValue
+                },
+                {
+                    outputVariable,
+                    outputsValue
+                }
+            };
+#pragma warning disable 618
+            trainer.TrainMinibatch(miniBatch, false, device);
+#pragma warning restore 618
+            return trainer.PreviousMinibatchLossAverage();
         }
 
         private Function CreateResNetModel(Variable input, int numOutputClasses, DeviceDescriptor device, string outputName)
@@ -56,9 +87,9 @@ namespace Engine.Brain.Model.DL
             var pool = CNTKLib.Pooling(rn3_3, PoolingType.Average,
                 new int[] { poolW, poolH, 1 }, new int[] { poolhStride, poolvStride, 1 });
             // Output DNN layer
-            var outTimesParams = new Parameter(new int[] { numOutputClasses, 1, 1, cMap3 }, DataType.Float,
+            var outTimesParams = new Parameter(new int[] { numOutputClasses, 1, 1, cMap3 }, DataType.Double,
                 CNTKLib.GlorotUniformInitializer(fc1WScale, 1, 0), device);
-            var outBiasParams = new Parameter(new int[] { numOutputClasses }, (float)fc1BValue, device, "");
+            var outBiasParams = new Parameter(new int[] { numOutputClasses }, fc1BValue, device, "");
             return CNTKLib.Plus(CNTKLib.Times(outTimesParams, pool), outBiasParams, outputName);
         }
     }

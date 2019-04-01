@@ -67,6 +67,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\DL\GDNet.cs" />
     <Compile Include="Model\DL\ResNet50.cs" />
     <Compile Include="Model\DL\LeNet5.cs" />
     <Compile Include="Model\DL\GPU\GLeNet5.cs" />
@@ -170,8 +171,6 @@
       <Version>4.5.0</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\RL\Net\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -39,7 +39,7 @@ namespace Engine.Brain.AI.RL
         /// </summary>
         /// <param name="batchSize"></param>
         /// <returns></returns>
-        (List<double[]> states, double[][] labels) RandomEval(int batchSize = 64);
+        (List<double[]> states, double[][] labels) RandomEval(int pickWidth=5, int pickHight=5,int batchSize = 64);
         /// <summary>
         /// get sate/reward/q/sate next(state_) (one hot)
         /// </summary>

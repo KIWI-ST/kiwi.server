@@ -3,12 +3,12 @@ using System;
 
 namespace Engine.GIS.GOperation.Tools
 {
-    public class GRasterLayerCursorTool : IRasterLayerCursorTool,IDisposable
+    public class GRasterLayerCursorTool : IRasterLayerCursorTool, IDisposable
     {
 
         GRasterLayer _pLayer;
 
-        public double[] PickRawValue(int x,int y)
+        public double[] PickRawValue(int x, int y)
         {
             IRasterBandCursorTool pBandCursorTool = new GRasterBandCursorTool();
             double[] normalValueArray = new double[_pLayer.BandCollection.Count];

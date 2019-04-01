@@ -132,33 +132,6 @@ namespace Engine.Brain.AI.RL.Env
             _memory = pBandStasticTool.StaisticalRawGraph;
             //limited the environment _memory size to cetrain number
             _memory = _memory.LimitedDictionaryCapcaity(_sampleSizeLimit, _lerpPick);
-            //}{debug 保存成.txt
-            // using(StreamWriter sw = new StreamWriter(@"C:\Users\81596\Desktop\B\Samples.txt"))
-            // {
-            //     string str="";
-            //     foreach (var element1 in _memory)
-            //         foreach (var element2 in element1.Value)
-            //             str += string.Join(",",_pGRasterLayerCursorTool.PickRawValue(element2.X, element2.Y)) + "," + element1.Key + "\r\n";
-            //     sw.Write(str);
-            // }
-            //random seeds
-            //}{debug 保存图位置
-            //Bitmap samplesBitmap = new Bitmap(_featureRasterLayer.XSize, _featureRasterLayer.YSize);
-            //Graphics g = Graphics.FromImage(samplesBitmap);
-            //Color c;
-            //Pen p;
-            //SolidBrush brush;
-            //foreach (var element1 in _memory)
-            //    foreach (var element2 in element1.Value)
-            //    {
-            //        int gray = element1.Key;
-            //        c = Color.FromArgb(gray, gray, gray);
-            //        p = new Pen(c);
-            //        brush = new SolidBrush(c);
-            //        g.FillRectangle(brush, new Rectangle(element2.X, element2.Y, 1, 1));
-            //    }
-            ////
-            //samplesBitmap.Save(@"C:\Users\81596\Desktop\B\Samples.jpg");
             //
             RandomSeedKeys = _memory.Keys.ToArray();
             //
@@ -190,14 +163,14 @@ namespace Engine.Brain.AI.RL.Env
         /// </summary>
         /// <param name="batchSize"></param>
         /// <returns></returns>
-        public (List<double[]> states, double[][] labels) RandomEval(int batchSize = 64)
+        public (List<double[]> states, double[][] labels) RandomEval(int pickWidth = 5, int pickHeight = 5, int batchSize = 64)
         {
             List<double[]> states = new List<double[]>();
             double[][] labels = new double[batchSize][];
             for (int i = 0; i < batchSize; i++)
             {
                 var (x, y, classIndex) = RandomAccessMemory();
-                double[] normal = _pGRasterLayerCursorTool.PickNormalValue(x, y);
+                double[] normal = _pGRasterLayerCursorTool.PickRagneNormalValue(x, y, pickWidth, pickHeight);
                 states.Add(normal);
                 labels[i] = classIndex;
             }

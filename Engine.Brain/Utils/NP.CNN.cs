@@ -23,7 +23,7 @@ namespace Engine.Brain.Utils
             /// <param name="height"></param>
             /// <param name="channel"></param>
             /// <param name="classNum"></param>
-            public static IDNet creator(string name, int width, int height, int channel, int classNum)
+            public static IDConvNet creator(string name, int width, int height, int channel, int classNum)
             {
                 return null;
             }
