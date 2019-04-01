@@ -47,7 +47,7 @@ namespace Host.UI.SettingForm
         public void Initial()
         {
             //convNet types
-            List<string> convTypes = NP.CNN.ConvNetCollection;
+            List<string> convTypes = NP.Model.ConvNetCollection;
             if (convTypes != null&&convTypes.Count>0)
             {
                 ConvType_comboBox.Items.Clear();

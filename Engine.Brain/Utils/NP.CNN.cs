@@ -7,7 +7,7 @@ namespace Engine.Brain.Utils
 {
     public partial class NP
     {
-        public static class CNN
+        public static class Model
         {
             public static List<string> ConvNetCollection {
                 get {

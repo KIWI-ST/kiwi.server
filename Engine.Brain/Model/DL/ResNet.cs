@@ -8,17 +8,16 @@ namespace Engine.Brain.Model.DL
     /// reference CNTK ResNet
     /// https://github.com/Microsoft/CNTK/blob/master/Examples/TrainingCSharp/Common/CifarResNetClassifier.cs
     /// </summary>
-    public class GResNet50
+    public class ResNet
     {
         //input and output variable
         Variable inputVariable, outputVariable;
         int[] inputDim, outputDim;
-        Function lossFunction;
         Function classifierOutput;
         Trainer trainer;
         DeviceDescriptor device;
         
-        public GResNet50(int width, int height, int channel, int ouputClasses, string deviceName)
+        public ResNet(int width, int height, int channel, int ouputClasses, string deviceName)
         {
             device = NP.CNTK.GetDeviceByName(deviceName);
             inputDim = new int[] { width, height, channel };
@@ -26,7 +25,7 @@ namespace Engine.Brain.Model.DL
             inputVariable = CNTKLib.InputVariable(inputDim, DataType.Double, "Images");
             outputVariable = CNTKLib.InputVariable(outputDim, DataType.Double, "Labels");
             classifierOutput = CreateResNetModel(inputVariable, ouputClasses, device, "pred");
-            lossFunction = CNTKLib.CrossEntropyWithSoftmax(classifierOutput, outputVariable, "lossfunction");
+            var lossFunction = CNTKLib.CrossEntropyWithSoftmax(classifierOutput, outputVariable, "lossfunction");
             var prediction = CNTKLib.ClassificationError(classifierOutput, outputVariable, 5, "predictionError");
             var learningRatePerSample = new TrainingParameterScheduleDouble(0.0078125, 1);
             trainer = Trainer.CreateTrainer(classifierOutput, lossFunction, prediction, new List<Learner> { Learner.SGDLearner(classifierOutput.Parameters(), learningRatePerSample) });
@@ -34,19 +33,7 @@ namespace Engine.Brain.Model.DL
 
         public double Train(double[][] inputs, double[][] outputs)
         {
-            Value inputsValue = Value.CreateBatch(NDShape.CreateNDShape(inputDim), NP.ToUnidimensional(inputs), device);
-            Value outputsValue = Value.CreateBatch(NDShape.CreateNDShape(outputDim), NP.ToUnidimensional(outputs), device);
-            var miniBatch = new Dictionary<Variable, Value>()
-            {
-                {
-                    inputVariable,
-                    inputsValue
-                },
-                {
-                    outputVariable,
-                    outputsValue
-                }
-            };
+            var miniBatch = NP.CNTK.CreateMiniBatch(inputs, outputs, inputVariable, outputVariable, device);
 #pragma warning disable 618
             trainer.TrainMinibatch(miniBatch, false, device);
 #pragma warning restore 618
@@ -70,12 +57,12 @@ namespace Engine.Brain.Model.DL
             var rn1_2 = NP.CNTK.ResNet.ResNetNode(rn1_1, cMap1, kernelWidth, kernelHeight, convWScale, convBValue, scValue, bnTimeConst, true /*spatial*/, device);
             var rn1_3 = NP.CNTK.ResNet.ResNetNode(rn1_2, cMap1, kernelWidth, kernelHeight, convWScale, convBValue, scValue, bnTimeConst, false /*spatial*/, device);
             int cMap2 = 32;
-            var rn2_1_wProj = NP.CNTK.GetProjectionMap(cMap2, cMap1, device);
+            var rn2_1_wProj = NP.CNTK.ResNet.GetProjectionMap(cMap2, cMap1, device);
             var rn2_1 = NP.CNTK.ResNet.ResNetNodeInc(rn1_3, cMap2, kernelWidth, kernelHeight, convWScale, convBValue, scValue, bnTimeConst, true /*spatial*/, rn2_1_wProj, device);
             var rn2_2 = NP.CNTK.ResNet.ResNetNode(rn2_1, cMap2, kernelWidth, kernelHeight, convWScale, convBValue, scValue, bnTimeConst, false /*spatial*/, device);
             var rn2_3 = NP.CNTK.ResNet.ResNetNode(rn2_2, cMap2, kernelWidth, kernelHeight, convWScale, convBValue, scValue, bnTimeConst, true /*spatial*/, device);
             int cMap3 = 64;
-            var rn3_1_wProj = NP.CNTK.GetProjectionMap(cMap3, cMap2, device);
+            var rn3_1_wProj = NP.CNTK.ResNet.GetProjectionMap(cMap3, cMap2, device);
             var rn3_1 = NP.CNTK.ResNet.ResNetNodeInc(rn2_3, cMap3, kernelWidth, kernelHeight, convWScale, convBValue, scValue, bnTimeConst, true /*spatial*/, rn3_1_wProj, device);
             var rn3_2 = NP.CNTK.ResNet.ResNetNode(rn3_1, cMap3, kernelWidth, kernelHeight, convWScale, convBValue, scValue, bnTimeConst, false /*spatial*/, device);
             var rn3_3 = NP.CNTK.ResNet.ResNetNode(rn3_2, cMap3, kernelWidth, kernelHeight, convWScale, convBValue, scValue, bnTimeConst, false /*spatial*/, device);

@@ -67,9 +67,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\DL\GDNet.cs" />
-    <Compile Include="Model\DL\ResNet50.cs" />
-    <Compile Include="Model\DL\LeNet5.cs" />
+    <Compile Include="Model\DL\LeNet.cs" />
+    <Compile Include="Model\DL\ResNet.cs" />
     <Compile Include="Model\DL\GPU\GLeNet5.cs" />
     <Compile Include="Model\IDConvNet.cs" />
     <Compile Include="Model\IDSupervised.cs" />

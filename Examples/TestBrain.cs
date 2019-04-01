@@ -82,7 +82,7 @@ namespace Examples
             for (int i = 0; i < epochs; i++)
             {
                 int batchSize = 3;
-                var (states, labels) = env.RandomEval(1,1,batchSize);
+                var (states, labels) = env.RandomEval(1, 1, batchSize);
                 double[][] inputX = new double[batchSize][];
                 for (int j = 0; j < batchSize; j++)
                     inputX[j] = states[j];
@@ -111,26 +111,33 @@ namespace Examples
             var devicesName = NP.CNTK.DeviceCollection[0];
             double _loss = 1.0;
             //training epochs
-            int epochs = 1000;
+            int epochs = 10;
             GRasterLayer featureLayer = new GRasterLayer(featureFullFilename);
             GRasterLayer labelLayer = new GRasterLayer(trainFullFilename);
             //create environment for agent exploring
             IEnv env = new ImageClassifyEnv(featureLayer, labelLayer);
             //assume 18dim equals 3x6 (image)
-            GResNet50 cnn = new GResNet50(32,32,3, env.ActionNum,devicesName);
+            ResNet cnn = new ResNet(32, 32, 3, 10, devicesName);
             //training
             for (int i = 0; i < epochs; i++)
             {
                 int batchSize = 11;
-                var (states, labels) = env.RandomEval(32,32,batchSize);
+                var (states, labels) = env.RandomEval(32, 32, batchSize);
                 double[][] inputX = new double[batchSize][];
+                double[][] outputX = new double[batchSize][];
                 for (int j = 0; j < batchSize; j++)
                 {
                     double[] arr = new double[32 * 32 * 3];
                     Array.Copy(states[j], arr, 32 * 32 * 3);
-                   inputX[j] = arr;
+                    inputX[j] = arr;
                 }
-                _loss = cnn.Train(inputX, labels);
+                for(int j = 0; j < batchSize; j++)
+                {
+                    double[] arr = new double[10];
+                    Array.Copy(labels[i], arr, 10);
+                    outputX[j] = arr;
+                }
+                _loss = cnn.Train(inputX, outputX);
             }
             //in general, loss is less than 5
             //Assert.IsTrue(_loss < 5.0);
