@@ -26,16 +26,16 @@ namespace Engine.Brain.Model.DL
             var classifierOutput = CreateFullyChannelNetwork(inputVariable, c, outputClassNum);
             var trainingLoss = CNTKLib.CrossEntropyWithSoftmax(classifierOutput, outputVariable);
             var prediction = CNTKLib.ClassificationError(classifierOutput, outputVariable);
-            TrainingParameterScheduleDouble learningRatePerSample = new TrainingParameterScheduleDouble(0.003125, 1);
+            TrainingParameterScheduleDouble learningRatePerSample = new TrainingParameterScheduleDouble(0.00178125, 1);
             IList<Learner> parameterLearners = new List<Learner>() { Learner.SGDLearner(classifierOutput.Parameters(), learningRatePerSample) };
             trainer = Trainer.CreateTrainer(classifierOutput, trainingLoss, prediction, parameterLearners);
         }
 
         private Function CreateFullyChannelNetwork(Variable input, int inputChannel, int outputClassNum)
         {
-            int[] channels = new int[] { inputChannel, Math.Max(inputChannel/2, 3), Math.Max(inputChannel/3, 3), Math.Max(inputChannel/4, 3) };
-            Function pooling1 = NP.CNTK.ConvolutionWithMaxPooling(input, 3, 1, channels[0], channels[1], 1, 1, 3, 3, device);
-            Function pooling2 = NP.CNTK.ConvolutionWithMaxPooling(pooling1, 1, 3, channels[1], channels[2], 1, 1, 3, 3, device);
+            int[] channels = new int[] { inputChannel, inputChannel, Math.Max(inputChannel / 2, 3), Math.Max(inputChannel / 3, 2), Math.Max(inputChannel / 3, 1) };
+            Function pooling1 = NP.CNTK.ConvolutionWithMaxPooling(input, 3, 3, channels[0], channels[1], 1, 1, 3, 3, device);
+            Function pooling2 = NP.CNTK.ConvolutionWithMaxPooling(pooling1, 3, 3, channels[1], channels[2], 1, 1, 3, 3, device);
             Function pooling3 = NP.CNTK.ConvolutionWithMaxPooling(pooling2, 3, 3, channels[2], channels[3], 1, 1, 3, 3, device);
             Function pooling4 = NP.CNTK.ConvolutionWithMaxPooling(pooling3, 3, 3, channels[3], channels[4], 1, 1, 3, 3, device);
             return NP.CNTK.Dense(pooling4, outputClassNum, device, "ouput");
@@ -43,25 +43,15 @@ namespace Engine.Brain.Model.DL
 
         public double Train(double[][] inputs, double[][] outputs)
         {
-            Value inputsValue = Value.CreateBatch(NDShape.CreateNDShape(inputDim), NP.ToUnidimensional(inputs), device);
-            Value outputsValue = Value.CreateBatch(NDShape.CreateNDShape(outputDim), NP.ToUnidimensional(outputs), device);
-            var miniBatch = new Dictionary<Variable, Value>()
+            //ensure that data is destroyed after use
+            using (Value inputsValue = Value.CreateBatch(NDShape.CreateNDShape(inputDim), NP.ToUnidimensional(inputs), device))
+            using (Value outputsValue = Value.CreateBatch(NDShape.CreateNDShape(outputDim), NP.ToUnidimensional(outputs), device))
             {
-                {
-                    inputVariable,
-                    inputsValue
-                },
-                {
-                    outputVariable,
-                    outputsValue
-                }
-            };
-#pragma warning disable 618
-            trainer.TrainMinibatch(miniBatch, false, device);
-#pragma warning restore 618
-            return trainer.PreviousMinibatchLossAverage();
+                var miniBatch = new Dictionary<Variable, Value>() { { inputVariable, inputsValue }, { outputVariable, outputsValue } };
+                trainer.TrainMinibatch(miniBatch, true, device);
+                return trainer.PreviousMinibatchEvaluationAverage();
+            }
         }
-
 
         public void Accept(IDNet sourceNet)
         {

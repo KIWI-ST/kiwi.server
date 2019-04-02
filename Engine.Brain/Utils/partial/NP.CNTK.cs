@@ -74,7 +74,7 @@ namespace Engine.Brain.Utils
             {
                 int inputDim = input.Shape[0];
                 int[] i = { outputDim, inputDim };
-                var timesParam = new Parameter(i, DataType.Float,
+                var timesParam = new Parameter(i, DataType.Double,
                 CNTKLib.GlorotUniformInitializer(
                     CNTKLib.DefaultParamInitScale,
                     CNTKLib.SentinelValueForInferParamInitRank,

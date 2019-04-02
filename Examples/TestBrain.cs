@@ -106,39 +106,31 @@ namespace Examples
         }
 
         [TestMethod]
-        public void ClassificationByResNet50()
+        public void ClassificationByCNTKNet()
         {
             var devicesName = NP.CNTK.DeviceCollection[0];
             double _loss = 1.0;
             //training epochs
-            int epochs = 10;
+            int epochs = 100;
             GRasterLayer featureLayer = new GRasterLayer(featureFullFilename);
             GRasterLayer labelLayer = new GRasterLayer(trainFullFilename);
             //create environment for agent exploring
             IEnv env = new ImageClassifyEnv(featureLayer, labelLayer);
             //assume 18dim equals 3x6 (image)
-            ResNet cnn = new ResNet(32, 32, 3, 10, devicesName);
+            LeNet cnn = new LeNet(11, 11, 18, env.ActionNum, devicesName);
+            string lossText = "";
             //training
             for (int i = 0; i < epochs; i++)
             {
-                int batchSize = 11;
-                var (states, labels) = env.RandomEval(32, 32, batchSize);
+                int batchSize = 31;
+                var (states, labels) = env.RandomEval(11, 11, batchSize);
                 double[][] inputX = new double[batchSize][];
-                double[][] outputX = new double[batchSize][];
                 for (int j = 0; j < batchSize; j++)
-                {
-                    double[] arr = new double[32 * 32 * 3];
-                    Array.Copy(states[j], arr, 32 * 32 * 3);
-                    inputX[j] = arr;
-                }
-                for(int j = 0; j < batchSize; j++)
-                {
-                    double[] arr = new double[10];
-                    Array.Copy(labels[i], arr, 10);
-                    outputX[j] = arr;
-                }
-                _loss = cnn.Train(inputX, outputX);
+                    inputX[j] = states[j];
+                _loss = cnn.Train(inputX, labels);
+                lossText += _loss + "\r\n";
             }
+            string sss = "";
             //in general, loss is less than 5
             //Assert.IsTrue(_loss < 5.0);
             //apply cnn to classify featureLayer

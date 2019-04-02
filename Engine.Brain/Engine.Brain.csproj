@@ -82,7 +82,7 @@
     <Compile Include="Model\DL\GPU\GCNN.cs" />
     <Compile Include="Model\DL\DNet.cs" />
     <Compile Include="Model\RL\DQN.cs" />
-    <Compile Include="Utils\NP.CNN.cs" />
+    <Compile Include="Utils\partial\NP.Model.cs" />
     <Compile Include="Utils\NP.cs" />
     <Compile Include="Extend\ArrayExtend.cs" />
     <Compile Include="Extend\DictionaryExtend.cs" />
@@ -91,7 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <Compile Include="Utils\NP.CNTK.cs" />
+    <Compile Include="Utils\partial\NP.CNTK.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine.Conv\ConvNetSharp.Core\ConvNetSharp.Core.csproj">
