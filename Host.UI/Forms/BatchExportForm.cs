@@ -42,7 +42,10 @@ namespace Host.UI.SettingForm
             " 5x5 Mask picked in each band",
             " 7x7 Mask picked in each band",
             " 9x9 Mask picked in each band",
-            " 11x11 Mask picked in each band"
+            " 11x11 Mask picked in each band",
+            " 13x13 Mask picked in each band",
+            " 15x15 Mask picked in each band",
+            " 17x17 Mask picked in each band"
         };
         /// <summary>
         /// natvie store

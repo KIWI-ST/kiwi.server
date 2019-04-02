@@ -451,10 +451,10 @@ namespace Host.UI
             switch (taskName)
             {
                 case "ParsingTextTask":
-                    Invoke(new UpdateListBoxHandler(UpdateTextViewListBox), outputs[0] as string);
+                    Invoke(new UpdateListBoxHandler(UpdateMapListBox), outputs[0] as string);
                     break;
                 default:
-                    Invoke(new UpdateListBoxHandler(UpdateTextViewListBox), outputs[0] as string);
+                    Invoke(new UpdateListBoxHandler(UpdateMapListBox), outputs[0] as string);
                     break;
             }
         }
