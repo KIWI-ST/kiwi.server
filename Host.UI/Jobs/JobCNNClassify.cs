@@ -1,22 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using Engine.Brain.Model;
 using Engine.Brain.Model.DL;
 using Engine.Brain.Utils;
+using Engine.GIS.GEntity;
+using Engine.GIS.GLayer.GRasterLayer;
+using Engine.GIS.GOperation.Tools;
 
 namespace Host.UI.Jobs
 {
     /// <summary>
     /// this job train cnn model only
     /// </summary>
-    public class JobCNNTraining : IJob
+    public class JobCNNClassify : IJob
     {
         public double Process { get; private set; } = 0.0;
 
-        public string Name => "CnnTrainingTask";
+        public string Name => "CnnClassificationTask";
 
         public string Summary { get; private set; } = "";
 
@@ -30,7 +34,7 @@ namespace Host.UI.Jobs
 
         Thread _t;
 
-        public JobCNNTraining(string netName,string sampleFilename, string saveModelFilename, int epochs, int width, int height, int channel, string deviceName)
+        public JobCNNClassify(GRasterLayer rasterLayer,string netName,string sampleFilename, string saveModelFilename, int epochs, int width, int height, int channel, string deviceName)
         {
             _t = new Thread(() =>
             {
@@ -78,8 +82,51 @@ namespace Host.UI.Jobs
                     Process = (double)i / epochs;
                     Summary = string.Format("loss:{0}", loss);
                 }
-                //
-                OnTaskComplete?.Invoke(Name, "train complete, model saved in");
+                //save cnn model
+                string modelFilename = cnn.PersistencNative();
+                OnStateChanged?.Invoke(Name, string.Format("train complete, model saved in:{0}", modelFilename));
+                //classify
+                IRasterLayerCursorTool pRasterLayerCursorTool = new GRasterLayerCursorTool();
+                pRasterLayerCursorTool.Visit(rasterLayer);
+                int seed = 0;
+                int totalPixels = rasterLayer.XSize * rasterLayer.YSize;
+                byte[] buffer = new byte[totalPixels];
+
+                for(int j = 0; j < rasterLayer.YSize; j++)
+                {
+                    double[][] inputs = new double[rasterLayer.XSize][];
+                    for(int i=0;i<rasterLayer.XSize;i++)
+                        inputs[i] = pRasterLayerCursorTool.PickRagneNormalValue(i, j, width, height);
+                    double[][] preds = cnn.Predicts(inputs);
+                    for(int i=0;i< rasterLayer.XSize; i++)
+                    {
+                        double[] pred = preds[i];
+                        int gray = keys.ToArray()[NP.Argmax(pred)];
+                        buffer[j * rasterLayer.XSize + i] = Convert.ToByte(gray);
+                        Process = (double)(seed++) / totalPixels;
+                    }
+                }
+
+                //for (int i = 0; i < rasterLayer.XSize; i++)
+                //    for (int j = 0; j < rasterLayer.YSize; j++)
+                //    {
+                //        //get normalized input raw value
+                //        double[] normal = pRasterLayerCursorTool.PickRagneNormalValue(i, j, width, height);
+                //        //convert action to raw byte value
+                //        double[] pred = cnn.Predict(normal);
+                //        int gray = keys.ToArray()[NP.Argmax(pred)];
+                //        buffer[j * rasterLayer.XSize + i] = Convert.ToByte(gray);
+                //        //report progress
+                        
+                //    }
+                //save result
+                string fullFileName = Directory.GetCurrentDirectory() + @"\tmp\" + DateTime.Now.ToFileTimeUtc() + ".png";
+                Bitmap classificationBitmap = GBitmap.ToGrayBitmap(buffer, rasterLayer.XSize, rasterLayer.YSize);
+                classificationBitmap.Save(fullFileName);
+                //complete
+                Summary = "CNN训练分类完成";
+                Complete = true;
+                OnTaskComplete?.Invoke(Name, fullFileName);
             });
         }
         /// <summary>

@@ -45,6 +45,8 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.ConvType_comboBox = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.RasterLayer_comboBox = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.Epochs_numericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Width_numericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Height_numericUpDown)).BeginInit();
@@ -55,7 +57,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(28, 231);
+            this.label4.Location = new System.Drawing.Point(52, 283);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(82, 15);
             this.label4.TabIndex = 6;
@@ -63,7 +65,7 @@
             // 
             // Epochs_numericUpDown
             // 
-            this.Epochs_numericUpDown.Location = new System.Drawing.Point(116, 228);
+            this.Epochs_numericUpDown.Location = new System.Drawing.Point(147, 279);
             this.Epochs_numericUpDown.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Epochs_numericUpDown.Maximum = new decimal(new int[] {
             1000000000,
@@ -84,7 +86,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(236, 233);
+            this.label5.Location = new System.Drawing.Point(264, 284);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(82, 15);
             this.label5.TabIndex = 8;
@@ -93,7 +95,7 @@
             // OK_button
             // 
             this.OK_button.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.OK_button.Location = new System.Drawing.Point(467, 226);
+            this.OK_button.Location = new System.Drawing.Point(467, 276);
             this.OK_button.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.OK_button.Name = "OK_button";
             this.OK_button.Size = new System.Drawing.Size(93, 30);
@@ -221,7 +223,7 @@
             // device_comboBox
             // 
             this.device_comboBox.FormattingEnabled = true;
-            this.device_comboBox.Location = new System.Drawing.Point(325, 229);
+            this.device_comboBox.Location = new System.Drawing.Point(352, 280);
             this.device_comboBox.Name = "device_comboBox";
             this.device_comboBox.Size = new System.Drawing.Size(107, 23);
             this.device_comboBox.TabIndex = 22;
@@ -244,7 +246,7 @@
             this.groupBox1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(599, 186);
+            this.groupBox1.Size = new System.Drawing.Size(613, 186);
             this.groupBox1.TabIndex = 23;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "基础设置";
@@ -268,12 +270,32 @@
             this.label8.TabIndex = 22;
             this.label8.Text = "模型结构：";
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(37, 223);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(97, 15);
+            this.label3.TabIndex = 24;
+            this.label3.Text = "待分类图像：";
+            // 
+            // RasterLayer_comboBox
+            // 
+            this.RasterLayer_comboBox.FormattingEnabled = true;
+            this.RasterLayer_comboBox.Location = new System.Drawing.Point(147, 220);
+            this.RasterLayer_comboBox.Name = "RasterLayer_comboBox";
+            this.RasterLayer_comboBox.Size = new System.Drawing.Size(312, 23);
+            this.RasterLayer_comboBox.TabIndex = 25;
+            this.RasterLayer_comboBox.SelectedIndexChanged += new System.EventHandler(this.RasterLayer_comboBox_SelectedIndexChanged);
+            // 
             // ConvForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(599, 291);
+            this.ClientSize = new System.Drawing.Size(613, 335);
+            this.Controls.Add(this.RasterLayer_comboBox);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.device_comboBox);
             this.Controls.Add(this.OK_button);
@@ -313,5 +335,7 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.ComboBox ConvType_comboBox;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ComboBox RasterLayer_comboBox;
     }
 }

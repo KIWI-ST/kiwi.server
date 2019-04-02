@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using CNTK;
+using Engine.Brain.Model;
+using Engine.Brain.Model.DL;
 
 namespace Engine.Brain.Utils
 {
@@ -26,6 +28,18 @@ namespace Engine.Brain.Utils
             /// get device map collection
             /// </summary>
             public static List<string> DeviceCollection { get { return devices.Keys.ToList(); } }
+           
+            public static IDConvNet LoadModel(string modelFilename, string deviceName)
+            {
+                string modelType = System.IO.Path.GetFileNameWithoutExtension(modelFilename).Split('_').Last();
+                var device = devices[deviceName];
+                var outputClassifier = Function.Load(modelFilename, device);
+                if(modelType== typeof(FullyChannelNet).Name)
+                    return new FullyChannelNet(outputClassifier, deviceName);
+                else
+                    return null;
+            }
+
             /// <summary>
             /// 
             /// </summary>

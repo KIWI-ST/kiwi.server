@@ -81,7 +81,7 @@
   <ItemGroup>
     <Compile Include="Jobs\IJob.cs" />
     <Compile Include="Jobs\IJobRPCRectify.cs" />
-    <Compile Include="Jobs\JobCNNTraining.cs" />
+    <Compile Include="Jobs\JobCNNClassify.cs" />
     <Compile Include="Jobs\JobCNNDQNClassify.cs" />
     <Compile Include="Jobs\JobCNNSVMClassify.cs" />
     <Compile Include="Jobs\JobCOVRaster.cs" />

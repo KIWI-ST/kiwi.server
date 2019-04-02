@@ -111,18 +111,18 @@ namespace Examples
             //set device
             var devicesName = NP.CNTK.DeviceCollection[0];
             //training epochs
-            int epochs = 100;
+            int epochs =3000;
             GRasterLayer featureLayer = new GRasterLayer(featureFullFilename);
             GRasterLayer labelLayer = new GRasterLayer(trainFullFilename);
             //create environment for agent exploring
             IEnv env = new ImageClassifyEnv(featureLayer, labelLayer);
             //assume 18dim equals 3x6 (image)
-            FullyChannelNet cnn = new FullyChannelNet(11, 11, 18, env.ActionNum, devicesName);
+            IDConvNet cnn = new FullyChannelNet(11, 11, 18, env.ActionNum, devicesName);
             string lossText = "";
             //training
             for (int i = 0; i < epochs; i++)
             {
-                int batchSize = 31;
+                int batchSize = 29;
                 var (states, labels) = env.RandomEval(11, 11, batchSize);
                 double[][] inputX = new double[batchSize][];
                 for (int j = 0; j < batchSize; j++)
@@ -130,6 +130,19 @@ namespace Examples
                 var loss = cnn.Train(inputX, labels);
                 lossText += loss + "\r\n";
             }
+            string modelFilename = cnn.PersistencNative();
+            //training2
+            IDConvNet cnn2 = NP.CNTK.LoadModel(modelFilename, devicesName);
+            for (int i = 0; i < epochs; i++)
+            {
+                var (states, labels) = env.RandomEval(11, 11);
+                var pred = cnn2.Predict(states[0]);
+
+                var predText = NP.Argmax(pred);
+                var labeText = NP.Argmax(labels[0]);
+
+            }
+
             //in general, loss is less than 5
             //Assert.IsTrue(_loss < 5.0);
             //apply cnn to classify featureLayer
@@ -145,6 +158,15 @@ namespace Examples
             //do something as you need. i.e. draw landCoverType to bitmap at position ( i , j )
             //the classification results are not stable because of the training epochs are too few.
             //Assert.IsTrue(landCoverType >= 0);
+        }
+
+        [TestMethod]
+        public void SaveAndLoad()
+        {
+            var devicesName = NP.CNTK.DeviceCollection[0];
+            IDConvNet cnn = new FullyChannelNet(11, 11, 18, 10, devicesName);
+            string modelFilename = cnn.PersistencNative();
+            IDConvNet cnn2 = NP.CNTK.LoadModel(modelFilename, devicesName);
         }
 
         [TestMethod]

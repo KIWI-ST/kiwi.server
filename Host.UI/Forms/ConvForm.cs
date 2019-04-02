@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Engine.Brain.Utils;
+using Engine.GIS.GLayer.GRasterLayer;
 
 namespace Host.UI.SettingForm
 {
@@ -11,7 +13,6 @@ namespace Host.UI.SettingForm
         public ConvForm()
         {
             InitializeComponent();
-            Initial();
         }
         /// <summary>
         /// 
@@ -46,10 +47,29 @@ namespace Host.UI.SettingForm
         /// </summary>
         public string DeviceName { get; private set; }
         /// <summary>
+        /// raster layer name
+        /// </summary>
+        public string RasterLayerName { get; private set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        Dictionary<string, GRasterLayer> _rasterDic;
+        /// <summary>
+        /// set raster dic
+        /// </summary>
+        public Dictionary<string, GRasterLayer> RasterDic
+        {
+            set
+            {
+                _rasterDic = value;
+                Initial(_rasterDic);
+            }
+        }
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="rasterDic"></param>
-        public void Initial()
+        public void Initial(Dictionary<string, GRasterLayer> rasterDic)
         {
             //convNet types
             List<string> convTypes = NP.Model.ConvNetCollection;
@@ -77,6 +97,11 @@ namespace Host.UI.SettingForm
                 //device name
                 DeviceName = device_comboBox.Items[0].ToString();
             }
+            //source image select 
+            RasterLayer_comboBox.Items.Clear();
+            rasterDic.Keys.ToList().ForEach(raster => {
+                RasterLayer_comboBox.Items.Add(raster);
+            });
         }
 
         private void Device_comboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -88,6 +113,12 @@ namespace Host.UI.SettingForm
         {
             string key = (sender as ComboBox).SelectedItem as string;
             NetName = key;
+        }
+
+        private void RasterLayer_comboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string key = (sender as ComboBox).SelectedItem as string;
+            RasterLayerName = key;
         }
 
         private void Width_numericUpDown_ValueChanged(object sender, EventArgs e)
@@ -144,6 +175,5 @@ namespace Host.UI.SettingForm
                 }
             }
         }
-
     }
 }

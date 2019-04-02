@@ -3,7 +3,6 @@ using System.IO;
 using Accord.Math;
 using Accord.Neuro;
 using Accord.Neuro.Learning;
-using Engine.Brain.Model;
 
 namespace Engine.Brain.Model.DL
 {
@@ -95,9 +94,9 @@ namespace Engine.Brain.Model.DL
             return loss;
         }
 
-        public string PersistencNative()
+        public string PersistencNative(string modelFilename = null)
         {
-            string filePath = Directory.GetCurrentDirectory() + @"\tmp\";
+            string filePath = modelFilename ==null? Directory.GetCurrentDirectory() + @"\tmp\": modelFilename;
             string fileName = filePath + _dqnFilename;
             if (!Directory.Exists(filePath))
                 Directory.CreateDirectory(filePath);

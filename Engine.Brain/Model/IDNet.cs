@@ -23,7 +23,7 @@ namespace Engine.Brain.Model
         /// <summary>
         /// persistence in local dir
         /// </summary>
-        string PersistencNative();
+        string PersistencNative(string modelFilename = null);
         /// <summary>
         /// persistence in memory
         /// </summary>

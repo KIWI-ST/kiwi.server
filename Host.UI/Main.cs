@@ -454,6 +454,7 @@ namespace Host.UI
                     Invoke(new UpdateListBoxHandler(UpdateTextViewListBox), outputs[0] as string);
                     break;
                 default:
+                    Invoke(new UpdateListBoxHandler(UpdateTextViewListBox), outputs[0] as string);
                     break;
             }
         }
@@ -557,9 +558,10 @@ namespace Host.UI
                 //cnn classification
                 case "ConvNet_ToolStripMenuItem":
                     ConvForm convForm = new ConvForm();
+                    convForm.RasterDic = _rasterDic;
                     if (convForm.ShowDialog() == DialogResult.OK)
                     {
-                        IJob cnnTrainingJob = new JobCNNTraining(convForm.NetName, convForm.SampleFilename, convForm.SaveModelFilename, convForm.Epochs, convForm.ImageWidth, convForm.ImageHeight, convForm.ImageDepth, convForm.DeviceName);
+                        IJob cnnTrainingJob = new JobCNNClassify(_rasterDic[convForm.RasterLayerName], convForm.NetName, convForm.SampleFilename, convForm.SaveModelFilename, convForm.Epochs, convForm.ImageWidth, convForm.ImageHeight, convForm.ImageDepth, convForm.DeviceName);
                         RegisterJob(cnnTrainingJob);
                         cnnTrainingJob.Start();
                     }
