@@ -67,7 +67,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\DL\FullyChannelNet.cs" />
+    <Compile Include="Model\DL\FullyChannelNet9.cs" />
     <Compile Include="Model\DL\ResNet.cs" />
     <Compile Include="Model\IDConvNet.cs" />
     <Compile Include="Model\IDSupervised.cs" />

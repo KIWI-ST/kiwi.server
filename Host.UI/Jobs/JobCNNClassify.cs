@@ -66,7 +66,7 @@ namespace Host.UI.Jobs
                 int[] keysArray = keys.ToArray();
                 int batchSize = 31;
                 //LeNet CNN 
-                IDConvNet cnn = new FullyChannelNet(width, height, channel, classNum, deviceName);
+                IDConvNet cnn = new FullyChannelNet9(width, height, channel, classNum, deviceName);
                 //train model
                 for (int i = 0; i < epochs; i++)
                 {

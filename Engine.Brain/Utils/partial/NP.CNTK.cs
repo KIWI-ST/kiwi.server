@@ -34,8 +34,8 @@ namespace Engine.Brain.Utils
                 string modelType = System.IO.Path.GetFileNameWithoutExtension(modelFilename).Split('_').Last();
                 var device = devices[deviceName];
                 var outputClassifier = Function.Load(modelFilename, device);
-                if(modelType== typeof(FullyChannelNet).Name)
-                    return new FullyChannelNet(outputClassifier, deviceName);
+                if(modelType== typeof(FullyChannelNet9).Name)
+                    return new FullyChannelNet9(outputClassifier, deviceName);
                 else
                     return null;
             }

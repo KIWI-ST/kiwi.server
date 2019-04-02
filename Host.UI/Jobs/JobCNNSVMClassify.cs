@@ -59,7 +59,7 @@ namespace Host.UI.Jobs
                 int outputClassNum = outputKey.Count;
                 int[] keysArray = outputKey.ToArray();
                 int batchSize = 19;
-                IDConvNet cnn = new FullyChannelNet(width, height, channel, outputClassNum, deviceName);
+                IDConvNet cnn = new FullyChannelNet9(width, height, channel, outputClassNum, deviceName);
                 //train model
                 for (int i = 0; i < epochs; i++)
                 {

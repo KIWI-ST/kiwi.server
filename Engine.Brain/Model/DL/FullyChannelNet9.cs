@@ -7,7 +7,13 @@ using Engine.Brain.Utils;
 
 namespace Engine.Brain.Model.DL
 {
-    public class FullyChannelNet : IDConvNet
+    /// <summary>
+    /// fully channel net with 9 layers
+    /// 4 pooling layer
+    /// 4 conv layer
+    /// 1 dense layer
+    /// </summary>
+    public class FullyChannelNet9 : IDConvNet
     {
         /// <summary>
         /// store traind epochs
@@ -37,7 +43,7 @@ namespace Engine.Brain.Model.DL
         /// <param name="c"></param>
         /// <param name="outputClassNum"></param>
         /// <param name="deviceName"></param>
-        public FullyChannelNet(int w, int h, int c, int outputClassNum, string deviceName)
+        public FullyChannelNet9(int w, int h, int c, int outputClassNum, string deviceName)
         {
             device = NP.CNTK.GetDeviceByName(deviceName);
             int[] inputDim = new int[] { w, h, c };
@@ -47,7 +53,7 @@ namespace Engine.Brain.Model.DL
             classifierOutput = CreateFullyChannelNetwork(inputVariable, c, outputClassNum);
             var trainingLoss = CNTKLib.CrossEntropyWithSoftmax(classifierOutput, outputVariable);
             var prediction = CNTKLib.ClassificationError(classifierOutput, outputVariable);
-            TrainingParameterScheduleDouble learningRatePerSample = new TrainingParameterScheduleDouble(0.0005, 1); //0.00178125
+            TrainingParameterScheduleDouble learningRatePerSample = new TrainingParameterScheduleDouble(0.00178125, 1); //0.00178125
             TrainingParameterScheduleDouble momentumTimeConstant = CNTKLib.MomentumAsTimeConstantSchedule(256);
             IList<Learner> parameterLearners = new List<Learner>() { Learner.MomentumSGDLearner(classifierOutput.Parameters(), learningRatePerSample, momentumTimeConstant, true) };
             trainer = Trainer.CreateTrainer(classifierOutput, trainingLoss, prediction, parameterLearners);
@@ -57,7 +63,7 @@ namespace Engine.Brain.Model.DL
         /// </summary>
         /// <param name="model"></param>
         /// <param name="deviceName"></param>
-        public FullyChannelNet(Function model, string deviceName)
+        public FullyChannelNet9(Function model, string deviceName)
         {
             device = NP.CNTK.GetDeviceByName(deviceName);
             inputVariable = model.Inputs.First(v => v.Name == "inputVariable");
@@ -65,7 +71,7 @@ namespace Engine.Brain.Model.DL
             classifierOutput = model;
             var trainingLoss = CNTKLib.CrossEntropyWithSoftmax(classifierOutput, outputVariable);
             var prediction = CNTKLib.ClassificationError(classifierOutput, outputVariable);
-            TrainingParameterScheduleDouble learningRatePerSample = new TrainingParameterScheduleDouble(0.0005, 1); //0.00178125
+            TrainingParameterScheduleDouble learningRatePerSample = new TrainingParameterScheduleDouble(0.00178125, 1); //0.00178125
             TrainingParameterScheduleDouble momentumTimeConstant = CNTKLib.MomentumAsTimeConstantSchedule(256);
             IList<Learner> parameterLearners = new List<Learner>() { Learner.MomentumSGDLearner(classifierOutput.Parameters(), learningRatePerSample, momentumTimeConstant, true) };
             trainer = Trainer.CreateTrainer(classifierOutput, trainingLoss, prediction, parameterLearners);
@@ -73,7 +79,7 @@ namespace Engine.Brain.Model.DL
 
         private Function CreateFullyChannelNetwork(Variable input, int inputChannel, int outputClassNum)
         {
-            int[] channels = new int[] { inputChannel, inputChannel, Math.Max(inputChannel / 2, 3), Math.Max(inputChannel / 3, 2), Math.Max(inputChannel / 3, 1) };
+            int[] channels = new int[] { inputChannel, inputChannel, Math.Max(inputChannel / 2, 3), Math.Max(inputChannel / 3, 3), Math.Max(inputChannel / 3, 3) };
             Function pooling1 = NP.CNTK.ConvolutionWithMaxPooling(input, 3, 3, channels[0], channels[1], 1, 1, 3, 3, device);
             Function pooling2 = NP.CNTK.ConvolutionWithMaxPooling(pooling1, 3, 3, channels[1], channels[2], 1, 1, 3, 3, device);
             Function pooling3 = NP.CNTK.ConvolutionWithMaxPooling(pooling2, 3, 3, channels[2], channels[3], 1, 1, 3, 3, device);
@@ -111,7 +117,7 @@ namespace Engine.Brain.Model.DL
 
         public string PersistencNative(string modelFilename = null)
         {
-            modelFilename = modelFilename ?? string.Format(@"{0}\tmp\{1}_{2}_{3}_{4}_{5}_{6}.net", Directory.GetCurrentDirectory(), DateTime.Now.ToFileTimeUtc(), inputVariable.Shape[0], inputVariable.Shape[1], inputVariable.Shape[2], traindEpochs, typeof(FullyChannelNet).Name);
+            modelFilename = modelFilename ?? string.Format(@"{0}\tmp\{1}_{2}_{3}_{4}_{5}_{6}.net", Directory.GetCurrentDirectory(), DateTime.Now.ToFileTimeUtc(), inputVariable.Shape[0], inputVariable.Shape[1], inputVariable.Shape[2], traindEpochs, typeof(FullyChannelNet9).Name);
             classifierOutput.Save(modelFilename);
             return modelFilename;
         }

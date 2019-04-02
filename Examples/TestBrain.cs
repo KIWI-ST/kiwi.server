@@ -117,7 +117,7 @@ namespace Examples
             //create environment for agent exploring
             IEnv env = new ImageClassifyEnv(featureLayer, labelLayer);
             //assume 18dim equals 3x6 (image)
-            IDConvNet cnn = new FullyChannelNet(11, 11, 18, env.ActionNum, devicesName);
+            IDConvNet cnn = new FullyChannelNet9(11, 11, 18, env.ActionNum, devicesName);
             string lossText = "";
             //training
             for (int i = 0; i < epochs; i++)
@@ -164,7 +164,7 @@ namespace Examples
         public void SaveAndLoad()
         {
             var devicesName = NP.CNTK.DeviceCollection[0];
-            IDConvNet cnn = new FullyChannelNet(11, 11, 18, 10, devicesName);
+            IDConvNet cnn = new FullyChannelNet9(11, 11, 18, 10, devicesName);
             string modelFilename = cnn.PersistencNative();
             IDConvNet cnn2 = NP.CNTK.LoadModel(modelFilename, devicesName);
         }
