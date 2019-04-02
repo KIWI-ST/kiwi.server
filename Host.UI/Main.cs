@@ -556,13 +556,12 @@ namespace Host.UI
                     break;
                 //cnn classification
                 case "ConvNet_ToolStripMenuItem":
-                    CNNForm cnnForm = new CNNForm();
-                    if (cnnForm.ShowDialog() == DialogResult.OK)
+                    ConvForm convForm = new ConvForm();
+                    if (convForm.ShowDialog() == DialogResult.OK)
                     {
-                        //}{debug
-                        //IJob cnnClassifyJob = new JobCNNClassify(_rasterDic[cnnForm.SelectedFeatureRasterLayer], cnnForm.Epochs, cnnForm.Model, cnnForm.ImageWidth, cnnForm.ImageHeight, cnnForm.ImageDepth, cnnForm.FullFilename);
-                        //RegisterJob(cnnClassifyJob);
-                        //cnnClassifyJob.Start();
+                        IJob cnnTrainingJob = new JobCNNTraining(convForm.NetName, convForm.SampleFilename, convForm.SaveModelFilename, convForm.Epochs, convForm.ImageWidth, convForm.ImageHeight, convForm.ImageDepth, convForm.DeviceName);
+                        RegisterJob(cnnTrainingJob);
+                        cnnTrainingJob.Start();
                     }
                     break;
                 //random forest classification
@@ -615,9 +614,15 @@ namespace Host.UI
                     c_s_form.RasterDic = _rasterDic;
                     if (c_s_form.ShowDialog() == DialogResult.OK)
                     {
-                        IJob cnnClassifyJob = new JobCNNSVMClassify(_rasterDic[c_s_form.SelectedFeatureRasterLayer], c_s_form.Epochs, c_s_form.Model, c_s_form.ImageWidth, c_s_form.ImageHeight, 1, c_s_form.FullFilename);
-                        RegisterJob(cnnClassifyJob);
-                        cnnClassifyJob.Start();
+                        //IJob cnnClassifyJob = new JobCNNSVMClassify(
+                        //    _rasterDic[c_s_form.SelectedFeatureRasterLayer],
+                        //    c_s_form.Epochs, 
+                        //    c_s_form.Model,
+                        //    c_s_form.ImageWidth, 
+                        //    c_s_form.ImageHeight, 
+                        //    1, c_s_form.FullFilename);
+                        //RegisterJob(cnnClassifyJob);
+                        //cnnClassifyJob.Start();
                     }
                     break;
                 //cnn dqn classification

@@ -7,7 +7,6 @@ using System.Threading;
 using Engine.Brain.AI.RL;
 using Engine.Brain.Model;
 using Engine.Brain.Model.DL;
-using Engine.Brain.Model.DL.GPU;
 using Engine.Brain.Model.RL.Env;
 using Engine.Brain.Utils;
 using Engine.GIS.GEntity;
@@ -34,7 +33,7 @@ namespace Host.UI.Jobs
 
         Thread _t;
 
-        public JobCNNDQNClassify(GRasterLayer featureRasterLayer, int epochs, int model, int width, int height, int channel, string sampleFilename)
+        public JobCNNDQNClassify(GRasterLayer featureRasterLayer, string sampleFilename, int epochs, int model, int width, int height, int channel, string deviceName)
         {
             _t = new Thread(() =>
             {
@@ -66,8 +65,7 @@ namespace Host.UI.Jobs
                 int[] keysArray = outputKey.ToArray();
                 int batchSize = 19;
                 //LeNet CNN 
-                IDConvNet cnn = null;
-                cnn = new GLeNet5(new int[] { channel, width, height }, classNum);
+                IDConvNet cnn = new FullyChannelNet(width, height, channel, classNum, deviceName);
                 //train model
                 for (int i = 0; i < epochs; i++)
                 {

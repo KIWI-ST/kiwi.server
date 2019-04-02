@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using Engine.Brain.Model;
-using Engine.Brain.Model.DL.GPU;
+using Engine.Brain.Model.DL;
 using Engine.Brain.Utils;
-using Engine.GIS.GEntity;
-using Engine.GIS.GLayer.GRasterLayer;
-using Engine.GIS.GOperation.Tools;
 
 namespace Host.UI.Jobs
 {
-    public class JobCNNClassify : IJob
+    /// <summary>
+    /// this job train cnn model only
+    /// </summary>
+    public class JobCNNTraining : IJob
     {
         public double Process { get; private set; } = 0.0;
 
-        public string Name => "CnnClassificationTask";
+        public string Name => "CnnTrainingTask";
 
         public string Summary { get; private set; } = "";
 
@@ -31,11 +30,10 @@ namespace Host.UI.Jobs
 
         Thread _t;
 
-        public JobCNNClassify(GRasterLayer rasterLayer, int epochs, int model, int width, int height, int channel, string sampleFilename)
+        public JobCNNTraining(string netName,string sampleFilename, string saveModelFilename, int epochs, int width, int height, int channel, string deviceName)
         {
             _t = new Thread(() =>
             {
-
                 //input list
                 List<List<double>> inputList = new List<List<double>>();
                 List<int> outputList = new List<int>();
@@ -62,10 +60,9 @@ namespace Host.UI.Jobs
                 int smapleSize = outputList.Count;
                 int classNum = keys.Count;
                 int[] keysArray = keys.ToArray();
-                int batchSize = 19;
+                int batchSize = 31;
                 //LeNet CNN 
-                IDNet cnn = null;
-                cnn = new GLeNet5(new int[] { channel, width, height }, classNum);
+                IDConvNet cnn = new FullyChannelNet(width, height, channel, classNum, deviceName);
                 //train model
                 for (int i = 0; i < epochs; i++)
                 {
@@ -82,35 +79,7 @@ namespace Host.UI.Jobs
                     Summary = string.Format("loss:{0}", loss);
                 }
                 //
-                //classify
-                Summary = "分类应用中";
-                IRasterLayerCursorTool pRasterLayerCursorTool = new GRasterLayerCursorTool();
-                pRasterLayerCursorTool.Visit(rasterLayer);
-                int seed = 0;
-                int totalPixels = rasterLayer.XSize * rasterLayer.YSize;
-                byte[] buffer = new byte[totalPixels];
-                //应用dqn对图像分类
-                for (int i = 0; i < rasterLayer.XSize; i++)
-                    for (int j = 0; j < rasterLayer.YSize; j++)
-                    {
-                        //get normalized input raw value
-                        double[] normal = pRasterLayerCursorTool.PickRagneNormalValue(i, j, width, height);
-                        //}{debug
-                        double[] action = cnn.Predict(normal);
-                        //convert action to raw byte value
-                        int gray = keys.ToArray()[NP.Argmax(action)];
-                        buffer[j * rasterLayer.XSize + i] = Convert.ToByte(gray);
-                        //report progress
-                        Process = (double)(seed++) / totalPixels;
-                    }
-                //保存结果至tmp
-                string fullFileName = Directory.GetCurrentDirectory() + @"\tmp\" + DateTime.Now.ToFileTimeUtc() + ".png";
-                Bitmap classificationBitmap = GBitmap.ToGrayBitmap(buffer, rasterLayer.XSize, rasterLayer.YSize);
-                classificationBitmap.Save(fullFileName);
-                //complete
-                Summary = "CNN训练分类完成";
-                Complete = true;
-                OnTaskComplete?.Invoke(Name, fullFileName);
+                OnTaskComplete?.Invoke(Name, "train complete, model saved in");
             });
         }
         /// <summary>

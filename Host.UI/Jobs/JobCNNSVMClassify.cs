@@ -4,7 +4,8 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using Engine.Brain.Model.DL.GPU;
+using Engine.Brain.Model;
+using Engine.Brain.Model.DL;
 using Engine.Brain.Model.ML;
 using Engine.Brain.Utils;
 using Engine.GIS.GLayer.GRasterLayer;
@@ -29,7 +30,7 @@ namespace Host.UI.Jobs
 
         Thread _t;
 
-        public JobCNNSVMClassify(GRasterLayer rasterLayer, int epochs, int model, int width, int height, int channel, string sampleFilename)
+        public JobCNNSVMClassify(GRasterLayer rasterLayer, int epochs, int model, int width, int height, int channel, string sampleFilename,string deviceName)
         {
             _t = new Thread(() =>
             {
@@ -55,10 +56,10 @@ namespace Host.UI.Jobs
                 //create cnn model
                 Summary = "模型训练中";
                 int smapleSize = outputList.Count;
-                int classNum = outputKey.Count;
+                int outputClassNum = outputKey.Count;
                 int[] keysArray = outputKey.ToArray();
                 int batchSize = 19;
-                CNN cnn = new CNN(new int[] { channel, width, height }, classNum);
+                IDConvNet cnn = new FullyChannelNet(width, height, channel, outputClassNum, deviceName);
                 //train model
                 for (int i = 0; i < epochs; i++)
                 {
@@ -68,7 +69,7 @@ namespace Host.UI.Jobs
                     {
                         int index = NP.Random(smapleSize);
                         cnnInputs[k] = inputList[index].ToArray();
-                        cnnLabels[k] = NP.ToOneHot(Array.IndexOf(keysArray, outputList[index]), classNum);
+                        cnnLabels[k] = NP.ToOneHot(Array.IndexOf(keysArray, outputList[index]), outputClassNum);
                     }
                     double loss = cnn.Train(cnnInputs, cnnLabels);
                     Process = (double)i / epochs;

@@ -73,27 +73,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ManagedCuda-CUBLAS.NETStandard">
-      <Version>9.1.300</Version>
-    </PackageReference>
-    <PackageReference Include="ManagedCuda-CudaDNN.NETStandard">
-      <Version>9.1.300</Version>
-    </PackageReference>
-    <PackageReference Include="ManagedCuda-CUFFT.NETStandard">
-      <Version>9.1.300</Version>
-    </PackageReference>
-    <PackageReference Include="ManagedCuda-CURAND.NETStandard">
-      <Version>9.1.300</Version>
-    </PackageReference>
-    <PackageReference Include="ManagedCuda-CUSOLVE.NETStandard">
-      <Version>9.1.300</Version>
-    </PackageReference>
-    <PackageReference Include="ManagedCuda-CUSPARSE.NETStandard">
-      <Version>9.1.300</Version>
-    </PackageReference>
-    <PackageReference Include="ManagedCuda-NVRTC.NETStandard">
-      <Version>9.1.300</Version>
-    </PackageReference>
     <PackageReference Include="MSTest.TestAdapter">
       <Version>1.4.0</Version>
     </PackageReference>

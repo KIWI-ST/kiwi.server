@@ -1,6 +1,6 @@
 ﻿namespace Host.UI.SettingForm
 {
-    partial class CNNForm
+    partial class ConvForm
     {
         /// <summary>
         /// Required designer variable.
@@ -45,9 +45,6 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.ConvType_comboBox = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.SaveModel_textBox = new System.Windows.Forms.TextBox();
-            this.SaveModel_button = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Epochs_numericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Width_numericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Height_numericUpDown)).BeginInit();
@@ -58,7 +55,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(52, 231);
+            this.label4.Location = new System.Drawing.Point(28, 231);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(82, 15);
             this.label4.TabIndex = 6;
@@ -66,10 +63,10 @@
             // 
             // Epochs_numericUpDown
             // 
-            this.Epochs_numericUpDown.Location = new System.Drawing.Point(147, 226);
+            this.Epochs_numericUpDown.Location = new System.Drawing.Point(116, 228);
             this.Epochs_numericUpDown.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Epochs_numericUpDown.Maximum = new decimal(new int[] {
-            1000000,
+            1000000000,
             0,
             0,
             0});
@@ -78,7 +75,7 @@
             this.Epochs_numericUpDown.TabIndex = 7;
             this.Epochs_numericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.Epochs_numericUpDown.Value = new decimal(new int[] {
-            100000,
+            10000,
             0,
             0,
             0});
@@ -87,7 +84,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(275, 231);
+            this.label5.Location = new System.Drawing.Point(236, 233);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(82, 15);
             this.label5.TabIndex = 8;
@@ -96,7 +93,7 @@
             // OK_button
             // 
             this.OK_button.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.OK_button.Location = new System.Drawing.Point(467, 336);
+            this.OK_button.Location = new System.Drawing.Point(467, 226);
             this.OK_button.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.OK_button.Name = "OK_button";
             this.OK_button.Size = new System.Drawing.Size(93, 30);
@@ -190,7 +187,7 @@
             this.open_button.TabIndex = 17;
             this.open_button.Text = "打开";
             this.open_button.UseVisualStyleBackColor = true;
-            this.open_button.Click += new System.EventHandler(this.open_sample_button_Click);
+            this.open_button.Click += new System.EventHandler(this.Open_button_Click);
             // 
             // label2
             // 
@@ -224,9 +221,9 @@
             // device_comboBox
             // 
             this.device_comboBox.FormattingEnabled = true;
-            this.device_comboBox.Location = new System.Drawing.Point(363, 227);
+            this.device_comboBox.Location = new System.Drawing.Point(325, 229);
             this.device_comboBox.Name = "device_comboBox";
-            this.device_comboBox.Size = new System.Drawing.Size(85, 23);
+            this.device_comboBox.Size = new System.Drawing.Size(107, 23);
             this.device_comboBox.TabIndex = 22;
             this.device_comboBox.SelectedIndexChanged += new System.EventHandler(this.Device_comboBox_SelectedIndexChanged);
             // 
@@ -247,7 +244,7 @@
             this.groupBox1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(608, 186);
+            this.groupBox1.Size = new System.Drawing.Size(599, 186);
             this.groupBox1.TabIndex = 23;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "基础设置";
@@ -259,6 +256,7 @@
             this.ConvType_comboBox.Name = "ConvType_comboBox";
             this.ConvType_comboBox.Size = new System.Drawing.Size(308, 28);
             this.ConvType_comboBox.TabIndex = 23;
+            this.ConvType_comboBox.SelectedIndexChanged += new System.EventHandler(this.ConvType_comboBox_SelectedIndexChanged);
             // 
             // label8
             // 
@@ -270,42 +268,12 @@
             this.label8.TabIndex = 22;
             this.label8.Text = "模型结构：";
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(22, 287);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(112, 15);
-            this.label3.TabIndex = 24;
-            this.label3.Text = "模型存储位置：";
-            // 
-            // SaveModel_textBox
-            // 
-            this.SaveModel_textBox.Location = new System.Drawing.Point(147, 283);
-            this.SaveModel_textBox.Margin = new System.Windows.Forms.Padding(4);
-            this.SaveModel_textBox.Name = "SaveModel_textBox";
-            this.SaveModel_textBox.Size = new System.Drawing.Size(312, 25);
-            this.SaveModel_textBox.TabIndex = 25;
-            // 
-            // SaveModel_button
-            // 
-            this.SaveModel_button.Location = new System.Drawing.Point(467, 280);
-            this.SaveModel_button.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.SaveModel_button.Name = "SaveModel_button";
-            this.SaveModel_button.Size = new System.Drawing.Size(93, 30);
-            this.SaveModel_button.TabIndex = 26;
-            this.SaveModel_button.Text = "打开";
-            this.SaveModel_button.UseVisualStyleBackColor = true;
-            // 
-            // CNNForm
+            // ConvForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(608, 386);
-            this.Controls.Add(this.SaveModel_button);
-            this.Controls.Add(this.SaveModel_textBox);
-            this.Controls.Add(this.label3);
+            this.ClientSize = new System.Drawing.Size(599, 291);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.device_comboBox);
             this.Controls.Add(this.OK_button);
@@ -313,7 +281,7 @@
             this.Controls.Add(this.Epochs_numericUpDown);
             this.Controls.Add(this.label4);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.Name = "CNNForm";
+            this.Name = "ConvForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "ConvNetForm";
             ((System.ComponentModel.ISupportInitialize)(this.Epochs_numericUpDown)).EndInit();
@@ -343,9 +311,6 @@
         private System.Windows.Forms.NumericUpDown DEPTH_numericUpDown;
         private System.Windows.Forms.ComboBox device_comboBox;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox SaveModel_textBox;
-        private System.Windows.Forms.Button SaveModel_button;
         private System.Windows.Forms.ComboBox ConvType_comboBox;
         private System.Windows.Forms.Label label8;
     }

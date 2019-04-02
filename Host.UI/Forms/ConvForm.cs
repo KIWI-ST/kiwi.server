@@ -1,25 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 using Engine.Brain.Utils;
 
 namespace Host.UI.SettingForm
 {
-    public partial class CNNForm : Form
+    public partial class ConvForm : Form
     {
-        public CNNForm()
+        public ConvForm()
         {
             InitializeComponent();
             Initial();
         }
         /// <summary>
-        /// feature Rastery, 待分类图
+        /// 
         /// </summary>
-        public string SelectedFeatureRasterLayer { get; set; }
+        public string NetName { get; private set; }
+        /// <summary>
+        /// savemodel
+        /// </summary>
+        public string SaveModelFilename { get; private set;  }
         /// <summary>
         /// 样本文件地址
         /// </summary>
-        public string FullFilename { get; private set; }
+        public string SampleFilename { get; private set; }
         /// <summary>
         /// 输入图像宽
         /// </summary>
@@ -54,7 +59,10 @@ namespace Host.UI.SettingForm
                 convTypes.ForEach(modelType => {
                     ConvType_comboBox.Items.Add(modelType);
                 });
+                //set 0 as default
                 ConvType_comboBox.SelectedIndex = 0;
+                //net name
+                NetName = ConvType_comboBox.Items[0].ToString();
             }
             //check devices name
             List<string> devices = NP.CNTK.DeviceCollection;
@@ -66,19 +74,20 @@ namespace Host.UI.SettingForm
                 });
                 //select index 0 as default
                 device_comboBox.SelectedIndex = 0;
+                //device name
+                DeviceName = device_comboBox.Items[0].ToString();
             }
-        }
-
-        private void Source_comboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            string key = (sender as ComboBox).SelectedItem as string;
-            SelectedFeatureRasterLayer = key;
         }
 
         private void Device_comboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             string key = (sender as ComboBox).SelectedItem as string;
             DeviceName = key;
+        }
+        private void ConvType_comboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string key = (sender as ComboBox).SelectedItem as string;
+            NetName = key;
         }
 
         private void Width_numericUpDown_ValueChanged(object sender, EventArgs e)
@@ -103,18 +112,20 @@ namespace Host.UI.SettingForm
 
         private void OK_button_Click(object sender, EventArgs e)
         {
+            Epochs = Convert.ToInt32(Epochs_numericUpDown.Value);
+            SaveModelFilename = string.Format(@"{0}\tmp\{1}_{2}_{3}_{4}_{5}.model", Directory.GetCurrentDirectory(), DateTime.Now.ToFileTimeUtc(),ImageWidth, ImageHeight, ImageDepth, Epochs);
             Close();
         }
 
-        private void open_sample_button_Click(object sender, EventArgs e)
+        private void Open_button_Click(object sender, EventArgs e)
         {
             OpenFileDialog opg = new OpenFileDialog();
             opg.Filter = "样本文件|*.txt";
             if (opg.ShowDialog() == DialogResult.OK)
             {
                 open_sample_textBox.Text = opg.FileName;
-                FullFilename = opg.FileName;
-                string[] parameters = System.IO.Path.GetFileNameWithoutExtension(FullFilename).Split('_');
+                SampleFilename = opg.FileName;
+                string[] parameters = Path.GetFileNameWithoutExtension(SampleFilename).Split('_');
                 try
                 {
                     //depth

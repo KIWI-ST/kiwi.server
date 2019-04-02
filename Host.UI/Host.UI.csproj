@@ -81,7 +81,7 @@
   <ItemGroup>
     <Compile Include="Jobs\IJob.cs" />
     <Compile Include="Jobs\IJobRPCRectify.cs" />
-    <Compile Include="Jobs\JobCNNClassify.cs" />
+    <Compile Include="Jobs\JobCNNTraining.cs" />
     <Compile Include="Jobs\JobCNNDQNClassify.cs" />
     <Compile Include="Jobs\JobCNNSVMClassify.cs" />
     <Compile Include="Jobs\JobCOVRaster.cs" />
@@ -281,30 +281,6 @@
     </PackageReference>
     <PackageReference Include="IKVM">
       <Version>8.1.5717</Version>
-    </PackageReference>
-    <PackageReference Include="ManagedCuda-CUBLAS.NETStandard">
-      <Version>9.1.300</Version>
-    </PackageReference>
-    <PackageReference Include="ManagedCuda-CudaDNN.NETStandard">
-      <Version>9.1.300</Version>
-    </PackageReference>
-    <PackageReference Include="ManagedCuda-CUFFT.NETStandard">
-      <Version>9.1.300</Version>
-    </PackageReference>
-    <PackageReference Include="ManagedCuda-CURAND.NETStandard">
-      <Version>9.1.300</Version>
-    </PackageReference>
-    <PackageReference Include="ManagedCuda-CUSOLVE.NETStandard">
-      <Version>9.1.300</Version>
-    </PackageReference>
-    <PackageReference Include="ManagedCuda-CUSPARSE.NETStandard">
-      <Version>9.1.300</Version>
-    </PackageReference>
-    <PackageReference Include="ManagedCuda-NVRTC.NETStandard">
-      <Version>9.1.300</Version>
-    </PackageReference>
-    <PackageReference Include="ManagedCuda.NETStandard">
-      <Version>9.1.300</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Office.Interop.Excel">
       <Version>15.0.4795.1000</Version>

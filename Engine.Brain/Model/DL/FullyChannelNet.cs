@@ -6,28 +6,38 @@ using Engine.Brain.Utils;
 
 namespace Engine.Brain.Model.DL
 {
-    public class LeNet : IDConvNet
+    public class FullyChannelNet : IDConvNet
     {
-        Variable inputVariable, outputVariable;
-
-        int[] inputDim, outputDim;
-
-        DeviceDescriptor device;
-
+        /// <summary>
+        /// trainer function
+        /// </summary>
         Trainer trainer;
+        /// <summary>
+        /// model
+        /// </summary>
+        Function classifierOutput;
+        /// <summary>
+        /// input and output
+        /// </summary>
+        Variable inputVariable, outputVariable;
+        /// <summary>
+        /// 
+        /// </summary>
+        readonly DeviceDescriptor device;
 
-        public LeNet(int w, int h, int c, int outputClassNum, string deviceName)
+        public FullyChannelNet(int w, int h, int c, int outputClassNum, string deviceName)
         {
             device = NP.CNTK.GetDeviceByName(deviceName);
-            inputDim = new int[] { w, h, c };
-            outputDim = new int[] { outputClassNum };
+            int[] inputDim = new int[] { w, h, c };
+            int[] outputDim = new int[] { outputClassNum };
             inputVariable = Variable.InputVariable(NDShape.CreateNDShape(inputDim), DataType.Double, "inputVariable");
             outputVariable = Variable.InputVariable(NDShape.CreateNDShape(outputDim), DataType.Double, "outputVariable");
-            var classifierOutput = CreateFullyChannelNetwork(inputVariable, c, outputClassNum);
+            classifierOutput = CreateFullyChannelNetwork(inputVariable, c, outputClassNum);
             var trainingLoss = CNTKLib.CrossEntropyWithSoftmax(classifierOutput, outputVariable);
             var prediction = CNTKLib.ClassificationError(classifierOutput, outputVariable);
-            TrainingParameterScheduleDouble learningRatePerSample = new TrainingParameterScheduleDouble(0.00178125, 1);
-            IList<Learner> parameterLearners = new List<Learner>() { Learner.SGDLearner(classifierOutput.Parameters(), learningRatePerSample) };
+            TrainingParameterScheduleDouble learningRatePerSample = new TrainingParameterScheduleDouble(0.0005, 1); //0.00178125
+            TrainingParameterScheduleDouble momentumTimeConstant = CNTKLib.MomentumAsTimeConstantSchedule(256);
+            IList<Learner> parameterLearners = new List<Learner>() { Learner.MomentumSGDLearner(classifierOutput.Parameters(), learningRatePerSample, momentumTimeConstant, true) };
             trainer = Trainer.CreateTrainer(classifierOutput, trainingLoss, prediction, parameterLearners);
         }
 
@@ -44,8 +54,8 @@ namespace Engine.Brain.Model.DL
         public double Train(double[][] inputs, double[][] outputs)
         {
             //ensure that data is destroyed after use
-            using (Value inputsValue = Value.CreateBatch(NDShape.CreateNDShape(inputDim), NP.ToUnidimensional(inputs), device))
-            using (Value outputsValue = Value.CreateBatch(NDShape.CreateNDShape(outputDim), NP.ToUnidimensional(outputs), device))
+            using (Value inputsValue = Value.CreateBatch(inputVariable.Shape, NP.ToUnidimensional(inputs), device))
+            using (Value outputsValue = Value.CreateBatch(outputVariable.Shape, NP.ToUnidimensional(outputs), device))
             {
                 var miniBatch = new Dictionary<Variable, Value>() { { inputVariable, inputsValue }, { outputVariable, outputsValue } };
                 trainer.TrainMinibatch(miniBatch, true, device);
@@ -70,6 +80,9 @@ namespace Engine.Brain.Model.DL
 
         public string PersistencNative()
         {
+
+
+
             throw new NotImplementedException();
         }
 

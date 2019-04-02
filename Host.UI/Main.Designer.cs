@@ -45,6 +45,8 @@
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
             this.ConvNet_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DQN_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.ApplyModel_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.BATCHS_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.Kappa_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -77,8 +79,6 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.bandExport_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.main_notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.ApplyModel_toolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.map_menuStrip.SuspendLayout();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
@@ -134,7 +134,7 @@
             this.Open_toolstripmenuitem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.Open_toolstripmenuitem.Name = "Open_toolstripmenuitem";
             this.Open_toolstripmenuitem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.Open_toolstripmenuitem.Size = new System.Drawing.Size(216, 26);
+            this.Open_toolstripmenuitem.Size = new System.Drawing.Size(208, 26);
             this.Open_toolstripmenuitem.Text = "Open (&O)";
             this.Open_toolstripmenuitem.Click += new System.EventHandler(this.Map_function_Click);
             // 
@@ -254,6 +254,20 @@
             this.DQN_ToolStripMenuItem.Size = new System.Drawing.Size(311, 26);
             this.DQN_ToolStripMenuItem.Text = "Deep Q Network";
             this.DQN_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 47);
+            // 
+            // ApplyModel_toolStripButton
+            // 
+            this.ApplyModel_toolStripButton.Image = global::Host.UI.Properties.Resources.notes;
+            this.ApplyModel_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ApplyModel_toolStripButton.Name = "ApplyModel_toolStripButton";
+            this.ApplyModel_toolStripButton.Size = new System.Drawing.Size(66, 44);
+            this.ApplyModel_toolStripButton.Text = "Classify";
+            this.ApplyModel_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             // 
             // BATCHS_toolStripButton
             // 
@@ -581,20 +595,6 @@
             this.main_notifyIcon.Text = "please double click to restore the view";
             this.main_notifyIcon.Visible = true;
             this.main_notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.main_notifyIcon_MouseDoubleClick);
-            // 
-            // ApplyModel_toolStripButton
-            // 
-            this.ApplyModel_toolStripButton.Image = global::Host.UI.Properties.Resources.notes;
-            this.ApplyModel_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.ApplyModel_toolStripButton.Name = "ApplyModel_toolStripButton";
-            this.ApplyModel_toolStripButton.Size = new System.Drawing.Size(66, 44);
-            this.ApplyModel_toolStripButton.Text = "Classify";
-            this.ApplyModel_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 47);
             // 
             // Main
             // 

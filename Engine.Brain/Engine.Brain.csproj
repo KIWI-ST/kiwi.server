@@ -67,9 +67,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\DL\LeNet.cs" />
+    <Compile Include="Model\DL\FullyChannelNet.cs" />
     <Compile Include="Model\DL\ResNet.cs" />
-    <Compile Include="Model\DL\GPU\GLeNet5.cs" />
     <Compile Include="Model\IDConvNet.cs" />
     <Compile Include="Model\IDSupervised.cs" />
     <Compile Include="Model\ML\RF.cs" />
@@ -79,7 +78,6 @@
     <Compile Include="Model\IDNet.cs" />
     <Compile Include="Model\RL\IEnv.cs" />
     <Compile Include="Model\RL\Env\ImageClassifyEnv.cs" />
-    <Compile Include="Model\DL\GPU\GCNN.cs" />
     <Compile Include="Model\DL\DNet.cs" />
     <Compile Include="Model\RL\DQN.cs" />
     <Compile Include="Utils\partial\NP.Model.cs" />
@@ -94,18 +92,6 @@
     <Compile Include="Utils\partial\NP.CNTK.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Engine.Conv\ConvNetSharp.Core\ConvNetSharp.Core.csproj">
-      <Project>{2848323e-0e83-4db1-9ebd-4d661a490408}</Project>
-      <Name>ConvNetSharp.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Engine.Conv\ConvNetSharp.Volume.GPU\ConvNetSharp.Volume.GPU.csproj">
-      <Project>{9cb5363f-3533-4033-a941-dd2b2103fc86}</Project>
-      <Name>ConvNetSharp.Volume.GPU</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Engine.Conv\ConvNetSharp.Volume\ConvNetSharp.Volume.csproj">
-      <Project>{fb640530-f499-47b5-9ea5-36c9a9d9b144}</Project>
-      <Name>ConvNetSharp.Volume</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Engine.GIS\Engine.GIS.csproj">
       <Project>{82b3cfc7-e05c-46d3-9e91-2f5f4495238e}</Project>
       <Name>Engine.GIS</Name>
@@ -138,30 +124,6 @@
     </PackageReference>
     <PackageReference Include="CNTK.GPU">
       <Version>2.6.0</Version>
-    </PackageReference>
-    <PackageReference Include="ManagedCuda-CUBLAS.NETStandard">
-      <Version>9.1.300</Version>
-    </PackageReference>
-    <PackageReference Include="ManagedCuda-CudaDNN.NETStandard">
-      <Version>9.1.300</Version>
-    </PackageReference>
-    <PackageReference Include="ManagedCuda-CUFFT.NETStandard">
-      <Version>9.1.300</Version>
-    </PackageReference>
-    <PackageReference Include="ManagedCuda-CURAND.NETStandard">
-      <Version>9.1.300</Version>
-    </PackageReference>
-    <PackageReference Include="ManagedCuda-CUSOLVE.NETStandard">
-      <Version>9.1.300</Version>
-    </PackageReference>
-    <PackageReference Include="ManagedCuda-CUSPARSE.NETStandard">
-      <Version>9.1.300</Version>
-    </PackageReference>
-    <PackageReference Include="ManagedCuda-NVRTC.NETStandard">
-      <Version>9.1.300</Version>
-    </PackageReference>
-    <PackageReference Include="ManagedCuda.NETStandard">
-      <Version>9.1.300</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>12.0.1</Version>
