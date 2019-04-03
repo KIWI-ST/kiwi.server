@@ -277,6 +277,18 @@ namespace Engine.Brain.Utils
                     right += Math.Abs(predict[i, j] - label[i, j]) < 0.1f ? 1f : 0f;
             return right / (dim0 * dim1);
         }
+        /// <summary>
+        /// 余弦计算文本相似度
+        /// https://www.cnblogs.com/airnew/p/9563703.html
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
+        /// <returns></returns>
+        public static double Cosine(double[] source, double[] target)
+        {
+            if (source.Length != target.Length) throw new Exception("Error: Distance, source and target length must be same");
+            return 0.0;
+        }
 
         public static double[] Plus(double[] source, double[] target)
         {
