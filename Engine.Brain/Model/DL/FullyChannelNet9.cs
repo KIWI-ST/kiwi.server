@@ -122,8 +122,9 @@ namespace Engine.Brain.Model.DL
             return modelFilename;
         }
 
-        public double[] Predict(double[] input)
+        public double[] Predict(params object[] inputs)
         {
+            double[] input = inputs[0] as double[];
             using (Value inputsValue = Value.CreateBatch(inputVariable.Shape, input, device))
             {
                 var inputDict = new Dictionary<Variable, Value>() { { inputVariable, inputsValue } };

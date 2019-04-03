@@ -124,8 +124,9 @@ namespace Engine.Brain.Model.DL
             };
         }
 
-        public double[] Predict(double[] input)
+        public double[] Predict(params object[] inputs)
         {
+            double[] input = inputs[0] as double[];
             double[] output = _network.Compute(input);
             return output;
         }

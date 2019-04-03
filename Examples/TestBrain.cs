@@ -32,7 +32,11 @@ namespace Examples
         /// <summary>
         /// RF samples
         /// </summary>
-        string samplesFullfilename = Directory.GetCurrentDirectory() + @"\Datasets\Samples.txt";
+        string samplesFullFilename = Directory.GetCurrentDirectory() + @"\Datasets\Samples.txt";
+        /// <summary>
+        /// glove model 
+        /// </summary>
+        string gloveFullFilename = Directory.GetCurrentDirectory()+ @"\Datasets\glove.6B.300d.txt";
 
         [TestMethod]
         public void ClassificationByDQN()
@@ -106,6 +110,27 @@ namespace Examples
         }
 
         [TestMethod]
+        public void EmbeddingNet()
+        {
+            EmbeddingNet net = new EmbeddingNet(gloveFullFilename);
+            net.Initialization();
+
+            var man = net.Predict("man");
+            var woman = net.Predict("woman");
+
+            var king = net.Predict("king");
+            var queen = net.Predict("queen");
+
+            var s1 = NP.Sub(king, man);
+            var queen2 = NP.Plus(s1, woman);
+
+            var s4 = NP.Sub(queen, queen2);
+            var s5 = NP.Len(s4);
+
+        }
+
+
+        [TestMethod]
         public void TrainFullyChannelNet()
         {
             //set device
@@ -175,7 +200,7 @@ namespace Examples
             double _loss = 1.0;
             //Randforest Method
             RF rf = new RF(30);
-            using (StreamReader sr = new StreamReader(samplesFullfilename))
+            using (StreamReader sr = new StreamReader(samplesFullFilename))
             {
                 List<List<double>> inputList = new List<List<double>>();
                 List<int> outputList = new List<int>();

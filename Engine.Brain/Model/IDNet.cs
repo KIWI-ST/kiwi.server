@@ -19,7 +19,7 @@ namespace Engine.Brain.Model
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        double[] Predict(double[] input);
+        double[] Predict(params object[] inputs);
         /// <summary>
         /// persistence in local dir
         /// </summary>

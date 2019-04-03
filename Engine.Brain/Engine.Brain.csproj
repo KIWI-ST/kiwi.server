@@ -67,6 +67,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\DL\EmbeddingNet.cs" />
     <Compile Include="Model\DL\FullyChannelNet9.cs" />
     <Compile Include="Model\DL\ResNet.cs" />
     <Compile Include="Model\IDConvNet.cs" />
@@ -90,6 +91,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <Compile Include="Utils\partial\NP.CNTK.cs" />
+    <Compile Include="Utils\partial\NP.FromKeras.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine.GIS\Engine.GIS.csproj">

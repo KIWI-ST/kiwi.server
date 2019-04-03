@@ -278,5 +278,31 @@ namespace Engine.Brain.Utils
             return right / (dim0 * dim1);
         }
 
+        public static double[] Plus(double[] source, double[] target)
+        {
+            if (source.Length != target.Length) throw new Exception("Error: Distance, source and target length must be same");
+            double[] r = new double[source.Length];
+            for (int i = 0; i < source.Length; i++)
+                r[i] = source[i] + target[i];
+            return r;
+        }
+
+        public static double[] Sub(double[] source, double[] target)
+        {
+            if (source.Length != target.Length) throw new Exception("Error: Distance, source and target length must be same");
+            double[] r = new double[source.Length];
+            for (int i = 0; i < source.Length; i++)
+                r[i] = source[i] - target[i];
+            return r;
+        }
+
+        public static double Len(double[] source)
+        {
+            double sum = 0;
+            for (int i = 0; i < source.Length; i++)
+                sum += source[i]* source[i];
+            return Math.Sqrt(sum);
+        }
+
     }
 }
