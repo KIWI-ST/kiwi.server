@@ -147,8 +147,6 @@ namespace Examples
                 var outputData = outputVal.GetDenseData<float>(classifierOutput.Output);
                 sss += trainer.PreviousMinibatchLossAverage().ToString() + "\r\n";
             }
-            //
-            string ssssss = "";
         }
 
     }

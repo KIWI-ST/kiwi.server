@@ -4,32 +4,16 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Threading;
 using System.Windows.Forms;
-using Engine.Brain.AI.RL;
-using Engine.Brain.AI.RL.Env;
-using Engine.Brain.Model.DL;
-using Engine.Brain.Utils;
 using Engine.GIS.Entity;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Arithmetic;
 using Host.UI.Jobs;
 using Host.UI.SettingForm;
-using Host.UI.SettingForm.SLIC;
 using OfficeOpenXml;
 
 namespace Host.UI
 {
-    /// <summary>
-    /// 标识颜色
-    /// </summary>
-    public enum STATUE_ENUM
-    {
-        ERROR = 0,
-        NORMAL = 1,
-        WARNING = 2
-    }
-
     public partial class Main : Form
     {
         #region 初始化
@@ -134,7 +118,7 @@ namespace Host.UI
                 dt.Rows.Add(dt.NewRow());
             for (int k = 0; k < count; k++)
             {
-                Invoke(new UpdateStatusLabelHandler(UpdateStatusLabel), "应用超像素中心计算开始，进度 " + k + "/" + fileNameCollection.Count, STATUE_ENUM.WARNING);
+                Invoke(new UpdateStatusLabelHandler(UpdateStatusLabel), "应用超像素中心计算开始，进度 " + k + "/" + fileNameCollection.Count);
                 string fileName = fileNameCollection[k];
                 Bitmap bmp = new Bitmap(fileName);
                 //添加1列
@@ -153,7 +137,7 @@ namespace Host.UI
         /// <param name="bmp"></param>
         private void RunSLIC(Bitmap bmp)
         {
-            Invoke(new UpdateStatusLabelHandler(UpdateStatusLabel), "超像素中心计算开始...", STATUE_ENUM.WARNING);
+            Invoke(new UpdateStatusLabelHandler(UpdateStatusLabel), "超像素中心计算开始...");
             SlicPackage pkg = SuperPixelSegment.Run(bmp, 10000, 3, Color.White);
             Invoke(new SaveJsonHandler(SaveJson), pkg.CENTER);
             Invoke(new SaveJsonHandler(SaveJson), pkg.Label);
@@ -226,21 +210,8 @@ namespace Host.UI
         /// </summary>
         /// <param name="msg"></param>
         /// <param name="statue"></param>
-        private void UpdateStatusLabel(string msg, STATUE_ENUM statue = STATUE_ENUM.NORMAL)
+        private void UpdateStatusLabel(string msg)
         {
-            if (statue == STATUE_ENUM.ERROR)
-            {
-                map_statusLabel.ForeColor = Color.Red;
-            }
-            else if (statue == STATUE_ENUM.WARNING)
-            {
-                map_statusLabel.ForeColor = Color.Red;
-            }
-            else
-            {
-                map_statusLabel.ForeColor = Color.Black;
-            }
-            //
             map_statusLabel.Text = msg;
         }
         /// <summary>
@@ -283,21 +254,13 @@ namespace Host.UI
             map_pictureBox.Image = bmp;
         }
         /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="msg"></param>
-        private void UpdateTextViewListBox(string msg)
-        {
-            TEXTVIEW_listBox.Items.Add(msg);
-        }
-        /// <summary>
         /// update process output
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void UpdateProcessOutput(object sender, DataReceivedEventArgs e)
         {
-            Invoke(new UpdateListBoxHandler(UpdateTextViewListBox), e.Data);
+            Invoke(new UpdateListBoxHandler(UpdateMapListBox), e.Data);
         }
         /// <summary>
         /// 更新listbox区域显示内容
@@ -330,7 +293,7 @@ namespace Host.UI
         /// </summary>
         /// <param name="msg"></param>
         /// <param name="statue"></param>
-        private delegate void UpdateStatusLabelHandler(string msg, STATUE_ENUM statue = STATUE_ENUM.NORMAL);
+        private delegate void UpdateStatusLabelHandler(string msg);
         /// <summary>
         /// 
         /// </summary>
@@ -395,7 +358,7 @@ namespace Host.UI
         {
             string name = Path.GetFileNameWithoutExtension(fullFilename);
             if (map_treeView.Nodes.ContainsKey(name))
-                Invoke(new UpdateStatusLabelHandler(UpdateStatusLabel), "请勿重复加载影像", STATUE_ENUM.ERROR);
+                Invoke(new UpdateStatusLabelHandler(UpdateStatusLabel), "请勿重复打开相同的影像!");
             else
             {
                 TreeNode node = new TreeNode(name) { Name = name };
@@ -652,10 +615,9 @@ namespace Host.UI
                 //start stanford nlp server
                 case "STAR_NLPSERVER_toolStripButton":
                     //change selected index
-                    Main_tabControl.SelectedIndex = 1;
                     STAR_NLPSERVER_toolStripButton.Enabled = false;
                     string msg = string.Format("time:{0}, {1}", Now, "NLP Server Starting.......");
-                    Invoke(new UpdateListBoxHandler(UpdateTextViewListBox), msg);
+                    Invoke(new UpdateListBoxHandler(UpdateMapListBox), msg);
                     Process process = new Process();
                     process.StartInfo.WorkingDirectory = Directory.GetCurrentDirectory() + @"\stanford-corenlp-full\";
                     //process.StartInfo.FileName = "powershell.exe"; //powershell

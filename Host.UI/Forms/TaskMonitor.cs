@@ -14,6 +14,8 @@ namespace Host.UI.SettingForm
 
         List<IJob> _jobs;
 
+        ListViewItem _selected_item;
+
         Timer _t = new Timer();
 
         public List<IJob> Jobs
@@ -23,11 +25,6 @@ namespace Host.UI.SettingForm
                 LoadTaskInforList(value);
             }
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        ListViewItem _selected_item;
 
         private void task_listView_MouseClick(object sender, MouseEventArgs e)
         {
@@ -62,7 +59,7 @@ namespace Host.UI.SettingForm
 
         private void LoadTaskInforList(List<IJob> jobList)
         {
-            task_listView.Items.Clear();
+            Task_listView.Items.Clear();
             for (int i = 0; i < jobList.Count; i++)
             {
                 IJob job = jobList[i];
@@ -70,7 +67,7 @@ namespace Host.UI.SettingForm
                 lvi.SubItems[0].Text = job.Name;
                 lvi.SubItems.Add(string.Format("process:{0:P}", job.Process));
                 lvi.SubItems.Add(job.Summary);
-                task_listView.Items.Add(lvi);
+                Task_listView.Items.Add(lvi);
             }
             //
             _t.Tick += T_Tick;
@@ -85,11 +82,11 @@ namespace Host.UI.SettingForm
         {
             //update process and remark
             //only update task list views
-            for (int i = 0; i < task_listView.Items.Count; i++)
+            for (int i = 0; i < Task_listView.Items.Count; i++)
             {
                 IJob job = _jobs[i];
                 if (job.Complete) continue;
-                ListViewItem lvi = task_listView.Items[i];
+                ListViewItem lvi = Task_listView.Items[i];
                 lvi.SubItems[0].Text = job.Name;
                 lvi.SubItems[1].Text = string.Format("process:{0:P}", job.Process);
                 lvi.SubItems[2].Text = job.Summary;
