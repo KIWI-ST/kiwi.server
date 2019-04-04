@@ -2,13 +2,15 @@
 using System.IO;
 using System.Linq;
 using System.Text;
+using Engine.Brain.Utils;
 
 namespace Engine.Brain.Model.DL
 {
     /// <summary>
+    /// https://github.com/stanfordnlp/GloVe
     /// embedding net aims to use model instead of training it
     /// </summary>
-    public class EmbeddingNet : IDNet
+    public class GloVeNet : IDNet
     {
         /// <summary>
         /// 
@@ -27,7 +29,7 @@ namespace Engine.Brain.Model.DL
         /// </summary>
         string _modelFilename;
 
-        public EmbeddingNet(string modelFilename)
+        public GloVeNet(string modelFilename)
         {
             _modelFilename = modelFilename;
         }
@@ -37,7 +39,7 @@ namespace Engine.Brain.Model.DL
             embeddingsIndex = PreprocessEmbeddings(_modelFilename);
         }
 
-        public Dictionary<string, double[]> PreprocessEmbeddings(string modelFilename)
+        private Dictionary<string, double[]> PreprocessEmbeddings(string modelFilename)
         {
             var embeddings_index = new Dictionary<string, double[]>();
             foreach (var line in File.ReadLines(modelFilename, Encoding.UTF8))
@@ -45,6 +47,8 @@ namespace Engine.Brain.Model.DL
                 var values = line.Split(' ');
                 var word = values[0];
                 var coefs = values.Skip(1).Select(v => double.Parse(v)).ToArray();
+                //var d = NP.Len(coefs);
+                //embeddings_index[word] = coefs.Select(v=>v/d).ToArray();
                 embeddings_index[word] = coefs;
             }
             MaxWordsNum = embeddings_index.Keys.Count;

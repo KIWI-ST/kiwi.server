@@ -112,20 +112,18 @@ namespace Examples
         [TestMethod]
         public void EmbeddingNet()
         {
-            EmbeddingNet net = new EmbeddingNet(gloveFullFilename);
+            GloVeNet net = new GloVeNet(gloveFullFilename);
             net.Initialization();
 
-            var man = net.Predict("man");
-            var woman = net.Predict("woman");
+            var beijing = net.Predict("beijing");
+            var china = net.Predict("china");
 
-            var king = net.Predict("king");
-            var queen = net.Predict("queen");
+            var havana = net.Predict("havana");
+            var cuba = net.Predict("cuba");
 
-            var s1 = NP.Sub(king, man);
-            var queen2 = NP.Plus(s1, woman);
+            var pred = NP.Plus(NP.Sub(china, beijing), havana);
 
-            var s4 = NP.Sub(queen, queen2);
-            var s5 = NP.Len(s4);
+            var s = "";
 
         }
 
