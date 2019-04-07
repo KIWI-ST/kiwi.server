@@ -36,7 +36,7 @@ namespace Examples
         /// <summary>
         /// glove model 
         /// </summary>
-        string gloveFullFilename = Directory.GetCurrentDirectory()+ @"\Datasets\glove.6B.300d.txt";
+        string gloveFullFilename = Directory.GetCurrentDirectory()+ @"\Datasets\glove.6B.100d.txt";
 
         [TestMethod]
         public void ClassificationByDQN()

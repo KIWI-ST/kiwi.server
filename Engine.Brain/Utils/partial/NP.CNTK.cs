@@ -28,7 +28,12 @@ namespace Engine.Brain.Utils
             /// get device map collection
             /// </summary>
             public static List<string> DeviceCollection { get { return devices.Keys.ToList(); } }
-           
+           /// <summary>
+           /// load IConvNet type model
+           /// </summary>
+           /// <param name="modelFilename"></param>
+           /// <param name="deviceName"></param>
+           /// <returns></returns>
             public static IDConvNet LoadModel(string modelFilename, string deviceName)
             {
                 string modelType = System.IO.Path.GetFileNameWithoutExtension(modelFilename).Split('_').Last();
@@ -39,7 +44,26 @@ namespace Engine.Brain.Utils
                 else
                     return null;
             }
-
+            /// <summary>
+            /// load data from binary file
+            /// </summary>
+            /// <param name="binaryFilename"></param>
+            /// <param name="numRows"></param>
+            /// <param name="numCols"></param>
+            /// <returns></returns>
+            public static double[][] LoadBinary(string binaryFilename, int numRows, int numCols)
+            {
+                var buffer = new byte[sizeof(float) * numRows * numCols];
+                var dst = new double[numRows][];
+                using (var reader = new System.IO.BinaryReader(System.IO.File.OpenRead(binaryFilename)))
+                    reader.Read(buffer, 0, buffer.Length);
+                for (int row = 0; row < dst.Length; row++)
+                {
+                    dst[row] = new double[numCols];
+                    Buffer.BlockCopy(buffer, row * numCols * sizeof(float), dst[row], 0, numCols * sizeof(float));
+                }
+                return dst;
+            }
             /// <summary>
             /// 
             /// </summary>
