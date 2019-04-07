@@ -27,6 +27,8 @@ namespace Engine.Brain.Model.DL
         /// </summary>
         Dictionary<string, double[]>  embeddingsIndex;
 
+        public double[][] embedding_weights = null;
+
         /// <summary>
         /// 
         /// </summary>
@@ -91,6 +93,20 @@ namespace Engine.Brain.Model.DL
             EmbeddingDimNum = embeddings_index.Values.First().Length;
             return embeddings_index;
         }
+
+        private void PreprocessRawText(string acimbFilename)
+        {
+            List<string> texts;
+            List<float> labels;
+
+        }
+
+        private void PreprocessImdb()
+        {
+
+        }
+
+
 
         public void Accept(IDNet sourceNet)
         {
