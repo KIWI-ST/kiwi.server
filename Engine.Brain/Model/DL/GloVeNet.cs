@@ -51,10 +51,16 @@ namespace Engine.Brain.Model.DL
             _modelFilename = modelFilename;
         }
 
+        private void CreateModel()
+        {
+
+        }
+
+
         public void UseGloVeWordEmebdding(string imdbDir)
         {
             var (xTrain, yTrain, xValid, yValid, tokenizer, texts, labels) = PreprocessRawText(imdbDir);
-
+            embedding_weights = ComputeEmbeddingMatrix(tokenizer);
         }
         /// <summary>
         /// 计算W矩阵
