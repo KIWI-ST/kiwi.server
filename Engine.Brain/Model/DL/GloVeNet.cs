@@ -103,6 +103,10 @@ namespace Engine.Brain.Model.DL
 
         private void PreprocessImdb()
         {
+            //1. load  imdb text 
+
+
+            //2. tokenizer 
 
         }
 
