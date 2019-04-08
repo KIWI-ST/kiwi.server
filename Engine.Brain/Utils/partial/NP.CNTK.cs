@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using CNTK;
 using Engine.Brain.Model;
 using Engine.Brain.Model.DL;
@@ -61,6 +62,36 @@ namespace Engine.Brain.Utils
                 {
                     dst[row] = new double[numCols];
                     Buffer.BlockCopy(buffer, row * numCols * sizeof(float), dst[row], 0, numCols * sizeof(float));
+                }
+                return dst;
+            }
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <typeparam name="T"></typeparam>
+            /// <returns></returns>
+            public static int SizeOf<T>() where T : struct
+            {
+                return Marshal.SizeOf(default(T));
+            }
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <typeparam name="T"></typeparam>
+            /// <param name="src"></param>
+            /// <returns></returns>
+            public static T[] ConvertJaggedArrayToSingleDimensionalArray<T>(T[][] src) where T:struct
+            {
+                var numRows = src.Length;
+                var numColumns = src[0].Length;
+                var numBytesInRow = numColumns * SizeOf<T>();
+                var dst = new T[numRows * numColumns];
+                var dstOffset = 0;
+                for (int row = 0; row < numRows; row++)
+                {
+                    System.Diagnostics.Debug.Assert(src[row].Length == numColumns);
+                    System.Buffer.BlockCopy(src[row], 0, dst, dstOffset, numBytesInRow);
+                    dstOffset += numBytesInRow;
                 }
                 return dst;
             }
@@ -144,6 +175,39 @@ namespace Engine.Brain.Utils
             /// <summary>
             /// 
             /// </summary>
+            /// <param name="x"></param>
+            /// <param name="shape"></param>
+            /// <param name="device"></param>
+            /// <param name="weights"></param>
+            /// <param name="name"></param>
+            /// <returns></returns>
+            public static Function Embedding(Variable x, int shape, DeviceDescriptor device, double[][] weights = null, string name = "")
+            {
+                if(weights==null)
+                {
+                    var weightShape = new int[] { shape, NDShape.InferredDimension };
+                    var E = new Parameter(
+                        weightShape,
+                        DataType.Double,
+                        CNTKLib.GlorotUniformInitializer(),
+                        device,
+                        name);
+                    return CNTKLib.Times(E, x);
+                }
+                else
+                {
+                    var weight_shape = new int[] { shape, x.Shape.Dimensions[0] };
+                    System.Diagnostics.Debug.Assert(shape == weights[0].Length);
+                    System.Diagnostics.Debug.Assert(weight_shape[1] == weights.Length);
+                    var w = ConvertJaggedArrayToSingleDimensionalArray(weights);
+                    var ndArrayView = new NDArrayView(weight_shape, w, device, readOnly: true);
+                    var E = new Constant(ndArrayView, name: "fixed_embedding_" + name);
+                    return CNTKLib.Times(E, x);
+                }
+            }
+            /// <summary>
+            /// 
+            /// </summary>
             /// <param name="inputs"></param>
             /// <param name="outputs"></param>
             /// <returns></returns>
@@ -153,6 +217,42 @@ namespace Engine.Brain.Utils
                 Value outputsValue = Value.CreateBatch(outputVariable.Shape, NP.ToUnidimensional(outputs), device);
                 var miniBatch = new Dictionary<Variable, Value>() { { inputVariable, inputsValue }, { outputVariable, outputsValue } };
                 return miniBatch;
+            }
+            /// <summary>
+            /// learning rate reduce
+            /// </summary>
+            public class ReduceLROnPlateau
+            {
+                readonly Learner learner;
+                double lr = 0;
+                double best_metric = 1e-5;
+                int slot_since_last_update = 0;
+
+                public ReduceLROnPlateau(Learner learner, double lr)
+                {
+                    this.learner = learner;
+                    this.lr = lr;
+                }
+                public bool update(double current_metric)
+                {
+                    bool should_stop = false;
+                    if (current_metric < best_metric)
+                    {
+                        best_metric = current_metric;
+                        slot_since_last_update = 0;
+                        return should_stop;
+                    }
+                    slot_since_last_update++;
+                    if (slot_since_last_update > 10)
+                    {
+                        lr *= 0.75;
+                        learner.ResetLearningRate(new TrainingParameterScheduleDouble(lr));
+                        Console.WriteLine($"Learning rate set to {lr}");
+                        slot_since_last_update = 0;
+                        should_stop = (lr < 1e-6);
+                    }
+                    return should_stop;
+                }
             }
             /// <summary>
             /// RestNet Model Helper Function

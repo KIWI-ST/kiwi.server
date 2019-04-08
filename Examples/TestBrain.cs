@@ -37,6 +37,10 @@ namespace Examples
         /// glove model 
         /// </summary>
         string gloveFullFilename = Directory.GetCurrentDirectory()+ @"\Datasets\glove.6B.100d.txt";
+        /// <summary>
+        /// 
+        /// </summary>
+        string imdbDir = Directory.GetCurrentDirectory() + @"\Datasets\aclImdb\";
 
         [TestMethod]
         public void ClassificationByDQN()
@@ -112,8 +116,9 @@ namespace Examples
         [TestMethod]
         public void EmbeddingNet()
         {
-            GloVeNet net = new GloVeNet(gloveFullFilename);
-            //net.UseGloVeWordEmebdding();
+            var deviceName = NP.CNTK.DeviceCollection[0];
+            GloVeNet net = new GloVeNet(gloveFullFilename, deviceName);
+            net.UseGloVeWordEmebdding(imdbDir);
 
             var beijing = net.Predict("beijing");
             var china = net.Predict("china");

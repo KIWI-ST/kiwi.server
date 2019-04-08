@@ -396,8 +396,17 @@ namespace Engine.Brain.Utils
             array[n] = array[k];
             array[k] = temp;
         }
-
-
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns></returns>
+        public static int[] ShuffledIndex(int n)
+        {
+            var array = new int[n];
+            for (int i = 0; i < n; i++) { array[i] = i; }
+            Shuffle(array);
+            return array;
+        }
     }
 }

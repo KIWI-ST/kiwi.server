@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using CNTK;
 using Engine.Brain.Utils;
 
 namespace Engine.Brain.Model.DL
@@ -38,29 +40,77 @@ namespace Engine.Brain.Model.DL
         /// 
         /// </summary>
         Dictionary<string, double[]> embeddingsIndex;
-
+        /// <summary>
+        /// 
+        /// </summary>
+        DeviceDescriptor device;
+        /// <summary>
+        /// learning rate scheduler
+        /// </summary>
+        NP.CNTK.ReduceLROnPlateau lrs;
+        Function model;
+        Variable x, y;
         public double[][] embedding_weights = null;
-
+        Trainer trainer;
         /// <summary>
         /// 
         /// </summary>
         readonly string _modelFilename;
 
-        public GloVeNet(string modelFilename)
+        public GloVeNet(string modelFilename, string deviceName)
         {
+            device = NP.CNTK.GetDeviceByName(deviceName);
             _modelFilename = modelFilename;
         }
 
-        private void CreateModel()
+        private void CreateModel(int inputDim)
         {
-
+            x = Variable.InputVariable(new int[] { inputDim }, DataType.Double);
+            y = Variable.InputVariable(new int[] { 1 }, DataType.Double);
+            //create model 
+            model = CNTKLib.OneHotOp(x, numClass: (uint)MaxWordsNum, outputSparse: true, axis: new Axis(0));
+            model = NP.CNTK.Embedding(model, 8, device);
+            model = NP.CNTK.Dense(model, 1, device);
+            model = CNTKLib.Sigmoid(model);
+            //
+            var loss_function = CNTKLib.BinaryCrossEntropy(model, y);
+            var accuracy_function = loss_function;
+            //create learner
+            var parameterVector = new ParameterVector((System.Collections.ICollection)model.Parameters());
+            var learner = CNTKLib.AdamLearner(
+                parameterVector,
+                new TrainingParameterScheduleDouble(0.001),
+                new TrainingParameterScheduleDouble(0.9),
+                unitGain: false);
+            trainer = CNTKLib.CreateTrainer(model, loss_function, accuracy_function, new CNTK.LearnerVector() { learner });
+            //lrs = new NP.CNTK.ReduceLROnPlateau(learner, 0.1);
         }
 
-
+        public double Train(double[][] inputs, double[] outputs)
+        {
+            var metric = 0.0;
+            for (int epoch = 0; epoch < 1000; epoch++)
+            {
+                var feed_dictionary = new Dictionary<Variable, Value>() {
+                    { x,  Value.CreateBatch(x.Shape, NP.ToUnidimensional(inputs),device)},
+                    { y,  Value.CreateBatch(y.Shape, outputs, device)},
+                };
+                trainer.TrainMinibatch(feed_dictionary, true, device);
+                metric += trainer.PreviousMinibatchLossAverage();
+            }
+            return metric;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="imdbDir"></param>
         public void UseGloVeWordEmebdding(string imdbDir)
         {
+            embeddingsIndex = PreprocessEmbeddings(_modelFilename);
             var (xTrain, yTrain, xValid, yValid, tokenizer, texts, labels) = PreprocessRawText(imdbDir);
             embedding_weights = ComputeEmbeddingMatrix(tokenizer);
+            CreateModel(xTrain[0].Length);
+            Train(xTrain, yTrain);
         }
         /// <summary>
         /// 计算W矩阵
@@ -70,13 +120,12 @@ namespace Engine.Brain.Model.DL
         private double[][] ComputeEmbeddingMatrix(NP.FromKeras.Tokenizer tokenizer)
         {
             var embedding_matrix = new double[MaxWordsNum][];
-            var embeddings_index = PreprocessEmbeddings(_modelFilename);
             foreach (var entry in tokenizer.word_index)
             {
                 var word = entry.Key;
                 var i = entry.Value;
                 if (i >= MaxWordsNum) { continue; }
-                embeddings_index.TryGetValue(word, out double[] embedding_vector);
+                embeddingsIndex.TryGetValue(word, out double[] embedding_vector);
                 if (embedding_vector == null)
                 {
                     // Words not found in embedding index will be all-zeros.
