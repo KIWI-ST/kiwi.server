@@ -17,6 +17,18 @@ namespace Engine.Brain.Model.DL
         /// <summary>
         /// 
         /// </summary>
+        public int TrainingSize { get; private set; } = 200;
+        /// <summary>
+        /// 
+        /// </summary>
+        public int ValidationSize { get; private set; } = 200;
+        /// <summary>
+        /// 
+        /// </summary>
+        public int MaxlenNum { get; private set; } = 100;
+        /// <summary>
+        /// 
+        /// </summary>
         public int MaxWordsNum { get; private set; } = 0;
         /// <summary>
         /// 
@@ -25,7 +37,7 @@ namespace Engine.Brain.Model.DL
         /// <summary>
         /// 
         /// </summary>
-        Dictionary<string, double[]>  embeddingsIndex;
+        Dictionary<string, double[]> embeddingsIndex;
 
         public double[][] embedding_weights = null;
 
@@ -39,9 +51,10 @@ namespace Engine.Brain.Model.DL
             _modelFilename = modelFilename;
         }
 
-        public void Initialization()
+        public void UseGloVeWordEmebdding(string imdbDir)
         {
-            //embeddingsIndex = PreprocessEmbeddings(_modelFilename);
+            var (xTrain, yTrain, xValid, yValid, tokenizer, texts, labels) = PreprocessRawText(imdbDir);
+
         }
         /// <summary>
         /// 计算W矩阵
@@ -57,8 +70,7 @@ namespace Engine.Brain.Model.DL
                 var word = entry.Key;
                 var i = entry.Value;
                 if (i >= MaxWordsNum) { continue; }
-                double[] embedding_vector;
-                embeddings_index.TryGetValue(word, out embedding_vector);
+                embeddings_index.TryGetValue(word, out double[] embedding_vector);
                 if (embedding_vector == null)
                 {
                     // Words not found in embedding index will be all-zeros.
@@ -77,7 +89,11 @@ namespace Engine.Brain.Model.DL
             }
             return embedding_matrix;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="modelFilename"></param>
+        /// <returns></returns>
         private Dictionary<string, double[]> PreprocessEmbeddings(string modelFilename)
         {
             var embeddings_index = new Dictionary<string, double[]>();
@@ -87,31 +103,73 @@ namespace Engine.Brain.Model.DL
                 var word = values[0];
                 var coefs = values.Skip(1).Select(v => double.Parse(v)).ToArray();
                 var d = NP.Len(coefs);
-                embeddings_index[word] = coefs.Select(v=>v/d).ToArray();
+                embeddings_index[word] = coefs.Select(v => v / d).ToArray();
             }
             MaxWordsNum = embeddings_index.Keys.Count;
             EmbeddingDimNum = embeddings_index.Values.First().Length;
             return embeddings_index;
         }
-
-        private void PreprocessRawText(string acimbFilename)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="acimbFilename"></param>
+        private (double[][] xTrain, double[] yTrain, double[][] xValid, double[] yValid, NP.FromKeras.Tokenizer tokenizer, List<string> texts, List<double> labels) PreprocessRawText(string imdbDir)
         {
-            List<string> texts;
-            List<float> labels;
-
+            var (tokenizer, texts, labels) = PreprocessImdb(imdbDir);
+            var sequences = tokenizer.texts_to_sequences(texts.ToArray());
+            var word_index = tokenizer.word_index;
+            //  Console.WriteLine($"Found {word_index.Keys.Count:n0} unique tokens.");
+            var data_array = NP.FromKeras.Preprocessing.pad_sequences(sequences, MaxlenNum);
+            var labels_array = labels.ToArray();
+            NP.Shuffle(data_array, labels_array);
+            //
+            double[][] xTrain = data_array.Take(TrainingSize).ToArray();
+            double[] yTrain = labels_array.Take(TrainingSize).ToArray();
+            double[][] xValid = data_array.Skip(TrainingSize).Take(ValidationSize).ToArray();
+            double[] yValid = labels_array.Skip(TrainingSize).Take(ValidationSize).ToArray();
+            //
+            return (xTrain, yTrain, xValid, yValid, tokenizer, texts, labels);
         }
-
-        private void PreprocessImdb()
+        /// <summary>
+        /// 
+        /// </summary>
+        private (NP.FromKeras.Tokenizer tokenizer, List<string> texts, List<double> labels) PreprocessImdb(string imdbDir)
         {
             //1. load  imdb text 
-
-
+            var textLabelFilename = Path.Combine(imdbDir, "train");
+            var (texts, labels) = ProcessTextLabels(textLabelFilename);
             //2. tokenizer 
-
+            var tokenizer = new NP.FromKeras.Tokenizer(MaxWordsNum);
+            tokenizer.fit_on_texts(texts.ToArray());
+            //3. return process results
+            return (tokenizer, texts, labels);
         }
-
-
-
+        /// <summary>
+        /// 
+        /// </summary>
+        private (List<string> texts, List<double> labels) ProcessTextLabels(string textLabelFilename)
+        {
+            List<string> texts = new List<string>();
+            List<double> lables = new List<double>();
+            var label_types = new string[] { "neg", "pos" };
+            foreach (var label_type in label_types)
+            {
+                var dir_name = Path.Combine(textLabelFilename, label_type);
+                foreach (var fname in Directory.GetFiles(dir_name))
+                {
+                    if (fname.EndsWith(".txt"))
+                    {
+                        texts.Add(File.ReadAllText(Path.Combine(dir_name, fname), Encoding.UTF8));
+                        lables.Add((label_type == "neg") ? 0 : 1);
+                    }
+                }
+            }
+            return (texts, lables);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sourceNet"></param>
         public void Accept(IDNet sourceNet)
         {
             throw new System.NotImplementedException();
@@ -130,7 +188,7 @@ namespace Engine.Brain.Model.DL
         public double[] Predict(params object[] inputs)
         {
             string input = inputs[0] as string;
-            return embeddingsIndex.Keys.Contains(input)?embeddingsIndex[input]:new double[EmbeddingDimNum];
+            return embeddingsIndex.Keys.Contains(input) ? embeddingsIndex[input] : new double[EmbeddingDimNum];
         }
 
         public double Train(double[][] inputs, double[][] outputs)

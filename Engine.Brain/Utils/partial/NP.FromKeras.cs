@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Engine.Brain.Utils
@@ -7,6 +8,39 @@ namespace Engine.Brain.Utils
     {
         public static class FromKeras
         {
+            /// <summary>
+            ///  https://github.com/keras-team/keras/blob/master/keras/preprocessing/sequence.py
+            /// </summary>
+            public class Preprocessing
+            {
+                /// <summary>
+                /// https://github.com/keras-team/keras/blob/master/keras/preprocessing/sequence.py
+                /// </summary>
+                /// <typeparam name="T"></typeparam>
+                /// <param name="sequences"></param>
+                /// <param name="maxlen"></param>
+                /// <returns></returns>
+                static public double[][] pad_sequences<T>(List<List<T>> sequences, int maxlen)
+                {
+                    var padded_sequences = new double[sequences.Count][];
+                    for (int i = 0; i < sequences.Count; i++)
+                    {
+                        padded_sequences[i] = new double[maxlen];
+                        var src = sequences[i];
+                        var dst = padded_sequences[i];
+                        var offset = src.Count - dst.Length;
+                        for (int dst_index = Math.Max(0, -offset); dst_index < dst.Length; dst_index++)
+                        {
+                            var src_index = dst_index + offset;
+                            dst[dst_index] = Convert.ToSingle(src[src_index]);
+                        }
+                    }
+                    return padded_sequences;
+                }
+            }
+            /// <summary>
+            /// https://github.com/python/cpython/blob/master/Lib/string.py
+            /// </summary>
             public class Tokenizer
             {
                 readonly int num_words;

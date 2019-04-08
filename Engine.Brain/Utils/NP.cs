@@ -45,12 +45,19 @@ namespace Engine.Brain.Utils
             int index = Random(seeds.Length);
             return seeds[index];
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="maxValue"></param>
+        /// <returns></returns>
         public static int Random(int maxValue)
         {
             return new Random(Guid.NewGuid().GetHashCode()).Next(0, maxValue);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public static double Random()
         {
             return new Random(Guid.NewGuid().GetHashCode()).NextDouble();
@@ -245,7 +252,12 @@ namespace Engine.Brain.Utils
             }
             return output;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="predict"></param>
+        /// <param name="label"></param>
+        /// <returns></returns>
         public static double CalcuteAccuracy(double[][] predict, double[][] label)
         {
             int predCount = predict.GetLength(0);
@@ -257,7 +269,12 @@ namespace Engine.Brain.Utils
                 right += Equal(predict[i], label[i]) ? 1 : 0;
             return right / predCount;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="predict"></param>
+        /// <param name="label"></param>
+        /// <returns></returns>
         public static double CalcuteAccuracy(float[] predict, float[] label)
         {
             int count = predict.Length;
@@ -266,7 +283,12 @@ namespace Engine.Brain.Utils
                 right += Math.Abs(predict[i] - label[i]) < 0.1f ? 1f : 0f;
             return right / count;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="predict"></param>
+        /// <param name="label"></param>
+        /// <returns></returns>
         public static float CalcuteAccuracy(float[,] predict, float[,] label)
         {
             int dim0 = predict.GetLength(0);
@@ -289,7 +311,12 @@ namespace Engine.Brain.Utils
             if (source.Length != target.Length) throw new Exception("Error: Distance, source and target length must be same");
             return 0.0;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
+        /// <returns></returns>
         public static double[] Plus(double[] source, double[] target)
         {
             if (source.Length != target.Length) throw new Exception("Error: Distance, source and target length must be same");
@@ -298,7 +325,12 @@ namespace Engine.Brain.Utils
                 r[i] = source[i] + target[i];
             return r;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
+        /// <returns></returns>
         public static double[] Sub(double[] source, double[] target)
         {
             if (source.Length != target.Length) throw new Exception("Error: Distance, source and target length must be same");
@@ -307,14 +339,65 @@ namespace Engine.Brain.Utils
                 r[i] = source[i] - target[i];
             return r;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
         public static double Len(double[] source)
         {
             double sum = 0;
             for (int i = 0; i < source.Length; i++)
-                sum += source[i]* source[i];
+                sum += source[i] * source[i];
             return Math.Sqrt(sum);
         }
+        /// <summary>
+        ///  https://stackoverflow.com/a/110570
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="array"></param>
+        public static void Shuffle<T>(T[] array)
+        {
+            var n = array.Length;
+            while (n > 1)
+            {
+                var k = NP.Random(n--);
+                Swap(array, n, k);
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <param name="array1"></param>
+        /// <param name="array2"></param>
+        public static void Shuffle<T1, T2>(T1[] array1, T2[] array2)
+        {
+            System.Diagnostics.Debug.Assert(array1.Length == array2.Length);
+            var n = array1.Length;
+            while (n > 1)
+            {
+                var k = NP.Random(n--);
+                Swap(array1, n, k);
+                Swap(array2, n, k);
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="array"></param>
+        /// <param name="n"></param>
+        /// <param name="k"></param>
+        public static void Swap<T>(T[] array, int n, int k)
+        {
+            var temp = array[n];
+            array[n] = array[k];
+            array[k] = temp;
+        }
+
+
 
     }
 }

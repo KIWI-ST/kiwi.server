@@ -113,7 +113,7 @@ namespace Examples
         public void EmbeddingNet()
         {
             GloVeNet net = new GloVeNet(gloveFullFilename);
-            net.Initialization();
+            //net.UseGloVeWordEmebdding();
 
             var beijing = net.Predict("beijing");
             var china = net.Predict("china");
