@@ -408,5 +408,24 @@ namespace Engine.Brain.Utils
             Shuffle(array);
             return array;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="inputs"></param>
+        /// <param name="outputs"></param>
+        /// <param name="batchSize"></param>
+        /// <returns></returns>
+        public static (double[][] inputs, double[] labels) ShuffleBatch(double[][] inputs, double[] outputs, int batchSize)
+        {
+            double[][] x = new double[batchSize][];
+            double[] y = new double[batchSize];
+            Shuffle(inputs, outputs);
+            for (int i = 0; i < batchSize; i++)
+            {
+                x[i] = inputs[i];
+                y[i] = outputs[i];
+            }
+            return (x, y);
+        }
     }
 }

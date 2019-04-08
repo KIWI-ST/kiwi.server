@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -69,7 +68,9 @@ namespace Engine.Brain.Model.DL
             y = Variable.InputVariable(new int[] { 1 }, DataType.Double);
             //create model 
             model = CNTKLib.OneHotOp(x, numClass: (uint)MaxWordsNum, outputSparse: true, axis: new Axis(0));
-            model = NP.CNTK.Embedding(model, 8, device);
+            model = NP.CNTK.Embedding(model, EmbeddingDimNum, device, embedding_weights, "Embedding_1");
+            model = NP.CNTK.Dense(model, 32, device);
+            model = CNTKLib.ReLU(model);
             model = NP.CNTK.Dense(model, 1, device);
             model = CNTKLib.Sigmoid(model);
             //
@@ -85,15 +86,21 @@ namespace Engine.Brain.Model.DL
             trainer = CNTKLib.CreateTrainer(model, loss_function, accuracy_function, new CNTK.LearnerVector() { learner });
             //lrs = new NP.CNTK.ReduceLROnPlateau(learner, 0.1);
         }
-
+        /// <summary>
+        /// train GloVeNet
+        /// </summary>
+        /// <param name="inputs"></param>
+        /// <param name="outputs"></param>
+        /// <returns></returns>
         public double Train(double[][] inputs, double[] outputs)
         {
             var metric = 0.0;
+            var( xBatch, yBatch) = NP.ShuffleBatch(inputs, outputs, 1);
             for (int epoch = 0; epoch < 1000; epoch++)
             {
                 var feed_dictionary = new Dictionary<Variable, Value>() {
-                    { x,  Value.CreateBatch(x.Shape, NP.ToUnidimensional(inputs),device)},
-                    { y,  Value.CreateBatch(y.Shape, outputs, device)},
+                    { x,  Value.CreateBatch(x.Shape, NP.ToUnidimensional(xBatch),device)},
+                    { y,  Value.CreateBatch(y.Shape, yBatch, device)},
                 };
                 trainer.TrainMinibatch(feed_dictionary, true, device);
                 metric += trainer.PreviousMinibatchLossAverage();
