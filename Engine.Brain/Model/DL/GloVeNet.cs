@@ -51,15 +51,10 @@ namespace Engine.Brain.Model.DL
         Variable x, y;
         public double[][] embedding_weights = null;
         Trainer trainer;
-        /// <summary>
-        /// 
-        /// </summary>
-        readonly string _modelFilename;
 
-        public GloVeNet(string modelFilename, string deviceName)
+        public GloVeNet(string deviceName)
         {
             device = NP.CNTK.GetDeviceByName(deviceName);
-            _modelFilename = modelFilename;
         }
 
         private void CreateModel(int inputDim)
@@ -111,9 +106,9 @@ namespace Engine.Brain.Model.DL
         /// 
         /// </summary>
         /// <param name="imdbDir"></param>
-        public void UseGloVeWordEmebdding(string imdbDir)
+        public void UseGloVeWordEmebdding(string imdbDir, string gloVeFilename)
         {
-            embeddingsIndex = PreprocessEmbeddings(_modelFilename);
+            embeddingsIndex = PreprocessEmbeddings(gloVeFilename);
             var (xTrain, yTrain, xValid, yValid, tokenizer, texts, labels) = PreprocessRawText(imdbDir);
             embedding_weights = ComputeEmbeddingMatrix(tokenizer);
             CreateModel(xTrain[0].Length);
@@ -133,16 +128,7 @@ namespace Engine.Brain.Model.DL
                 var i = entry.Value;
                 if (i >= MaxWordsNum) { continue; }
                 embeddingsIndex.TryGetValue(word, out double[] embedding_vector);
-                if (embedding_vector == null)
-                {
-                    // Words not found in embedding index will be all-zeros.
-                    embedding_vector = new double[EmbeddingDimNum];
-                }
-                else
-                {
-                    System.Diagnostics.Debug.Assert(embedding_vector.Length == EmbeddingDimNum);
-                }
-                embedding_matrix[i] = embedding_vector;
+                embedding_matrix[i] = embedding_vector != null && embedding_vector.Length == EmbeddingDimNum? embedding_vector: new double[EmbeddingDimNum];
             }
             for (int i = 0; i < embedding_matrix.Length; i++)
             {

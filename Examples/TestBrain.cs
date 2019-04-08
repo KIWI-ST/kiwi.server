@@ -118,18 +118,15 @@ namespace Examples
         public void EmbeddingNet()
         {
             var deviceName = NP.CNTK.DeviceCollection[0];
-            GloVeNet net = new GloVeNet(gloveFullFilename, deviceName);
-            net.UseGloVeWordEmebdding(imdbDir);
+            GloVeNet net = new GloVeNet(deviceName);
+            net.UseGloVeWordEmebdding(imdbDir, gloveFullFilename);
 
-            var beijing = net.Predict("beijing");
-            var china = net.Predict("china");
+            var banana = net.Predict("banana");
+            var orange = net.Predict("orange");
+            var exhaust = net.Predict("exhaust");
 
-            var havana = net.Predict("havana");
-            var cuba = net.Predict("cuba");
-
-            var pred = NP.Plus(NP.Sub(china, beijing), havana);
-
-            var s = "";
+            var s1 = NP.Cosine(banana, orange);
+            var s2 = NP.Cosine(exhaust, banana);
 
         }
 

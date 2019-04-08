@@ -306,10 +306,13 @@ namespace Engine.Brain.Utils
         /// <param name="source"></param>
         /// <param name="target"></param>
         /// <returns></returns>
-        public static double Cosine(double[] source, double[] target)
+        public static double Cosine(double[] a, double[] b)
         {
-            if (source.Length != target.Length) throw new Exception("Error: Distance, source and target length must be same");
-            return 0.0;
+            if (a.Length != b.Length) throw new Exception("Error: Distance, source and target length must be same");
+            double si = 0;
+            for (int i = 0; i < a.Length; i++)
+                si += a[i] * b[i];
+            return si / (Len(a) * Len(b));
         }
         /// <summary>
         /// 
