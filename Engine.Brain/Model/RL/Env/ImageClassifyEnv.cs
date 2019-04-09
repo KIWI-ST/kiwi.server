@@ -163,14 +163,14 @@ namespace Engine.Brain.Model.RL.Env
         /// </summary>
         /// <param name="batchSize"></param>
         /// <returns></returns>
-        public (List<double[]> states, double[][] labels) RandomEval(int pickWidth = 5, int pickHeight = 5, int batchSize = 64)
+        public (List<double[]> states, double[][] labels) RandomEval(int batchSize = 64)
         {
             List<double[]> states = new List<double[]>();
             double[][] labels = new double[batchSize][];
             for (int i = 0; i < batchSize; i++)
             {
                 var (x, y, classIndex) = RandomAccessMemory();
-                double[] normal = _pGRasterLayerCursorTool.PickRagneNormalValue(x, y, pickWidth, pickHeight);
+                double[] normal = _pGRasterLayerCursorTool.PickRagneNormalValue(x, y);
                 states.Add(normal);
                 labels[i] = classIndex;
             }

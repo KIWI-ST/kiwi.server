@@ -215,16 +215,6 @@ namespace Engine.Brain.Model.RL
             for (int i = 0; i < batchSize; i++)
             {
                 Memory memory = _memoryList.RandomTake();
-                //if(memory.RT == 1.0)
-                //{
-                //    string key = string.Join(",", memory.ST);
-                //    _usedSamples[key] = 1;
-                //}
-                //else
-                //{
-                //    string key = string.Join(",", memory.ST) + string.Join(",", memory.AT);
-                //    _usedInfos[key] = 1;
-                //}
                 list.Add(memory);
             }
             return list;

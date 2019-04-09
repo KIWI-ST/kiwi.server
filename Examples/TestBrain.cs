@@ -151,7 +151,7 @@ namespace Examples
             for (int i = 0; i < epochs; i++)
             {
                 int batchSize = 29;
-                var (states, labels) = env.RandomEval(11, 11, batchSize);
+                var (states, labels) = env.RandomEval(batchSize);
                 double[][] inputX = new double[batchSize][];
                 for (int j = 0; j < batchSize; j++)
                     inputX[j] = states[j];
@@ -163,14 +163,12 @@ namespace Examples
             IDConvNet cnn2 = NP.CNTK.LoadModel(modelFilename, devicesName);
             for (int i = 0; i < epochs; i++)
             {
-                var (states, labels) = env.RandomEval(11, 11);
+                var (states, labels) = env.RandomEval();
                 var pred = cnn2.Predict(states[0]);
-
                 var predText = NP.Argmax(pred);
                 var labeText = NP.Argmax(labels[0]);
 
             }
-
             //in general, loss is less than 5
             //Assert.IsTrue(_loss < 5.0);
             //apply cnn to classify featureLayer

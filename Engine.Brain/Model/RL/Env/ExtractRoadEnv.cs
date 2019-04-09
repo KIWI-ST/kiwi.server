@@ -202,7 +202,7 @@ namespace Engine.Brain.Model.RL.Env
         /// </summary>
         /// <param name="batchSize"></param>
         /// <returns></returns>
-        public (List<double[]> states, double[][] labels) RandomEval(int pickWidth=5, int pickHeight=5, int batchSize = 64)
+        public (List<double[]> states, double[][] labels) RandomEval(int batchSize = 64)
         {
             //store states and actions
             List<double[]> states = new List<double[]>();

@@ -505,18 +505,15 @@ namespace Host.UI
                     dqnForm.RasterDic = _rasterDic;
                     if (dqnForm.ShowDialog() == DialogResult.OK)
                     {
-                        //"Image Classification",
-                        if (dqnForm.TaskName == "Image Classification")
-                        {
-                            IJob dqnClassifyJob = new JobDQNClassify(_rasterDic[dqnForm.SelectedFeatureRasterLayer], _rasterDic[dqnForm.SelectedLabelRasterLayer], dqnForm.Epochs, dqnForm.SampeSizeLimit, dqnForm.LerpPick);
-                            RegisterJob(dqnClassifyJob);
-                            dqnClassifyJob.Start();
-                        }
-                        //"Road Extraction"
-                        else if (dqnForm.TaskName == "Road Extraction")
-                        {
-
-                        }
+                        IJob dqnClassifyJob = new JobDQNClassify(
+                            _rasterDic[dqnForm.SelectedFeatureRasterLayer],
+                            dqnForm.SampleFilename,
+                            dqnForm.Width,
+                            dqnForm.Height,
+                            dqnForm.Depth,
+                            dqnForm.Epochs);
+                        RegisterJob(dqnClassifyJob);
+                        dqnClassifyJob.Start();
                     }
                     break;
                 //cnn classification
