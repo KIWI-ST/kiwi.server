@@ -1,23 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Configuration;
+﻿using System.Configuration;
 
 namespace Engine.NLP
 {
     public class NLPConfiguration
     {
-        public static void SetGloVeFilename(string gloVeFilename)
+
+        private static readonly string configFilename = System.Windows.Forms.Application.ExecutablePath;
+
+        private static Configuration config = ConfigurationManager.OpenExeConfiguration(configFilename);
+
+        private static void UpdateConfigKeyValue(string key, string value)
         {
-            ConfigurationManager.RefreshSection("gloVeFilename");
-            ConfigurationManager.AppSettings["gloVeFilename"] = gloVeFilename;
+            var element = config.AppSettings.Settings[key];
+            if (element != null) config.AppSettings.Settings.Remove(key);
+            config.AppSettings.Settings.Add(key, value);
         }
-        public static void SetCorpusDir(string corpusDir)
-        {
-            ConfigurationManager.RefreshSection("corpusDir");
-            ConfigurationManager.AppSettings["corpusDir"] = corpusDir;
-        }
+
     }
 }
