@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Drawing;
 
-namespace Engine.Brain.AI.RL
+namespace Engine.Brain.Model.RL
 {
     /// <summary>
     /// 定义基本环境编写接口

@@ -2,8 +2,8 @@
 using System.Drawing;
 using System.IO;
 using System.Threading;
-using Engine.Brain.AI.RL;
-using Engine.Brain.AI.RL.Env;
+using Engine.Brain.Model.RL;
+using Engine.Brain.Model.RL.Env;
 using Engine.Brain.Utils;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Tools;

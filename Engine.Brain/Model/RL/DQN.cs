@@ -6,7 +6,7 @@ using Engine.Brain.Model;
 using Engine.Brain.Model.DL;
 using Engine.Brain.Utils;
 
-namespace Engine.Brain.AI.RL
+namespace Engine.Brain.Model.RL
 {
 
     /// <summary>
@@ -88,7 +88,7 @@ namespace Engine.Brain.AI.RL
         //一轮学习次数
         readonly int _forward = 256;
         //q值积累权重
-        readonly double _alpah = 0.6;
+        readonly double _alpha = 0.6;
         //q值印象权重
         double _gamma = 0.0;
         //输入feature长度
@@ -261,7 +261,7 @@ namespace Engine.Brain.AI.RL
                 //calcute q_next
                 q = _gamma != 0 ? ChooseAction(list[i].S_NEXT).q : q;
                 //input qvalue assign
-                input_qValue[i] = new double[1] { (1 - _alpah) * list[i].QT + _alpah * (list[i].RT + _gamma * q) };
+                input_qValue[i] = new double[1] { (1 - _alpha) * list[i].QT + _alpha * (list[i].RT + _gamma * q) };
             }
             return (input_features, input_qValue);
         }

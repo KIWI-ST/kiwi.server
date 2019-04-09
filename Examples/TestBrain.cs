@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Engine.Brain.AI.RL;
-using Engine.Brain.AI.RL.Env;
 using Engine.Brain.Model;
 using Engine.Brain.Model.DL;
 using Engine.Brain.Model.ML;
+using Engine.Brain.Model.RL;
 using Engine.Brain.Model.RL.Env;
 using Engine.Brain.Utils;
 using Engine.GIS.GLayer.GRasterLayer;
@@ -37,7 +36,7 @@ namespace Examples
         /// <summary>
         /// glove model 
         /// </summary>
-        string gloveFullFilename = Directory.GetCurrentDirectory()+ @"\Datasets\glove.6B.100d.txt";
+        string gloveFullFilename = Directory.GetCurrentDirectory()+ @"\Datasets\glove.840B.300d.txt";
         /// <summary>
         /// 
         /// </summary>
@@ -121,12 +120,15 @@ namespace Examples
             GloVeNet net = new GloVeNet(deviceName);
             net.UseGloVeWordEmebdding(imdbDir, gloveFullFilename);
 
-            var banana = net.Predict("banana");
-            var orange = net.Predict("orange");
-            var exhaust = net.Predict("exhaust");
+            var woman = net.Predict("boy");
+            var man = net.Predict("girl");
+            var madam = net.Predict("brother");
+            var sir = net.Predict("sister");
 
-            var s1 = NP.Cosine(banana, orange);
-            var s2 = NP.Cosine(exhaust, banana);
+            var s1 = NP.Sub(woman, man);
+            var s2 = NP.Sub(madam, sir);
+
+            var s3 = NP.Cosine(s1, s2);
 
         }
 

@@ -109,10 +109,10 @@ namespace Engine.Brain.Model.DL
         public void UseGloVeWordEmebdding(string imdbDir, string gloVeFilename)
         {
             embeddingsIndex = PreprocessEmbeddings(gloVeFilename);
-            var (xTrain, yTrain, xValid, yValid, tokenizer, texts, labels) = PreprocessRawText(imdbDir);
-            embedding_weights = ComputeEmbeddingMatrix(tokenizer);
-            CreateModel(xTrain[0].Length);
-            Train(xTrain, yTrain);
+            //var (xTrain, yTrain, xValid, yValid, tokenizer, texts, labels) = PreprocessRawText(imdbDir);
+            //embedding_weights = ComputeEmbeddingMatrix(tokenizer);
+            //CreateModel(xTrain[0].Length);
+            //Train(xTrain, yTrain);
         }
         /// <summary>
         /// 计算W矩阵
@@ -152,6 +152,7 @@ namespace Engine.Brain.Model.DL
                 var coefs = values.Skip(1).Select(v => double.Parse(v)).ToArray();
                 var d = NP.Len(coefs);
                 embeddings_index[word] = coefs.Select(v => v / d).ToArray();
+                //embeddings_index[word] = coefs;
             }
             MaxWordsNum = embeddings_index.Keys.Count;
             EmbeddingDimNum = embeddings_index.Values.First().Length;

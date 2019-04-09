@@ -34,6 +34,4 @@ namespace Engine.Brain.Model
         /// <param name="sourceNet"></param>
         void Accept(IDNet sourceNet);
     }
-
-
 }

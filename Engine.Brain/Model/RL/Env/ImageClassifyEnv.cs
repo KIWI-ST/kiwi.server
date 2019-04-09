@@ -9,7 +9,7 @@ using Engine.Brain.Utils;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Tools;
 
-namespace Engine.Brain.AI.RL.Env
+namespace Engine.Brain.Model.RL.Env
 {
     /// <summary>
     ///  the environment of image classification

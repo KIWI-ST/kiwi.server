@@ -32,7 +32,7 @@ namespace Engine.Brain.Utils
         {
             double[] action = new double[length];
             for (int i = 0; i < length; i++)
-                action[i] = NP.Random(2);
+                action[i] = Random(2);
             return action;
         }
         /// <summary>
@@ -157,7 +157,7 @@ namespace Engine.Brain.Utils
             //构建多样本的输出label
             for (int i = 0; i < batchSzie; i++)
             {
-                var label = NP.Random(10);
+                var label = Random(10);
                 inputs.Add(ToOneHot(label, oneHot));
             }
             var outputs = new List<double>();
