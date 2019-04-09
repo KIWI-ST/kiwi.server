@@ -75,13 +75,13 @@
             // 
             this.task_progress.Text = "任务进度";
             this.task_progress.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.task_progress.Width = 100;
+            this.task_progress.Width = 119;
             // 
             // task_summary
             // 
             this.task_summary.Text = "总结";
             this.task_summary.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.task_summary.Width = 298;
+            this.task_summary.Width = 300;
             // 
             // task_contextMenuStrip
             // 

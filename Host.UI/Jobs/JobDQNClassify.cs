@@ -151,7 +151,6 @@ namespace Host.UI.Jobs
             Process = progress;
             Summary = string.Format("accuracy: {0:P}, loss:{1:0.000}, reward:{2}", accuracy, loss, totalReward);
         }
-
         /// <summary>
         /// example samples
         /// </summary>
@@ -160,7 +159,6 @@ namespace Host.UI.Jobs
         {
             _env.Export(fullFilename);
         }
-
         /// <summary>
         /// 
         /// </summary>

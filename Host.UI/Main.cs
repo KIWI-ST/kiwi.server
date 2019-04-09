@@ -610,10 +610,21 @@ namespace Host.UI
             ToolStripItem item = sender as ToolStripItem;
             switch (item.Name)
             {
+                case "Scenario_toolStripButton":{
+
+                    }
+                    break;
+                case "RawText_toolStripButton":
+                    break;
+                case "Load_Words_Embedding_ToolStripMenuItem":
+                    break;
+                //setting configuration
+                case "Configuration_ToolStripMenuItem":
+                    break;
                 //start stanford nlp server
-                case "STAR_NLPSERVER_toolStripButton":
+                case "STAR_NLPSERVER_ToolStripMenuItem":
                     //change selected index
-                    STAR_NLPSERVER_toolStripButton.Enabled = false;
+                    STAR_NLPSERVER_ToolStripMenuItem.Enabled = false;
                     string msg = string.Format("time:{0}, {1}", Now, "NLP Server Starting.......");
                     Invoke(new UpdateListBoxHandler(UpdateMapListBox), msg);
                     Process process = new Process();
