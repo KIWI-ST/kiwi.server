@@ -15,7 +15,7 @@ namespace Engine.Brain.Model
         /// <returns>loss</returns>
         double Train(double[][] inputs, double[][] outputs);
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>

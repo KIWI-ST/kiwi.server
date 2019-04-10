@@ -66,6 +66,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
+    <Reference Include="ScottPlot">
+      <HintPath>..\Extra\ScottPlot\obj\Debug\ScottPlot.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -87,6 +90,12 @@
     </Compile>
     <Compile Include="Forms\NLPConfigForm.Designer.cs">
       <DependentUpon>NLPConfigForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ScottPlotForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ScottPlotForm.Designer.cs">
+      <DependentUpon>ScottPlotForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Jobs\IJob.cs" />
     <Compile Include="Jobs\IJobRPCRectify.cs" />
@@ -208,6 +217,9 @@
     </Compile>
     <EmbeddedResource Include="Forms\NLPConfigForm.resx">
       <DependentUpon>NLPConfigForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ScottPlotForm.resx">
+      <DependentUpon>ScottPlotForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>

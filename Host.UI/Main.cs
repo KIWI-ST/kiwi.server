@@ -5,9 +5,11 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Engine.Brain.Model;
 using Engine.Brain.Model.DL;
+using Engine.Brain.Utils;
 using Engine.GIS.Entity;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Arithmetic;
@@ -110,7 +112,7 @@ namespace Host.UI
         /// <summary>
         /// glovenet for nlp
         /// </summary>
-        IDNet _gloVeNet = null;
+        IDEmbeddingNet _gloVeNet = null;
 
         #endregion
 
@@ -398,7 +400,6 @@ namespace Host.UI
         #endregion
 
         #region jobs
-
         /// <summary>
         /// register job
         /// </summary>
@@ -463,7 +464,7 @@ namespace Host.UI
                     break;
                 //case load GloveNet
                 case "LoadGloVeNetTask":
-                    _gloVeNet = outputs[0] as IDNet;
+                    _gloVeNet = outputs[0] as IDEmbeddingNet;
                     break;
                 default:
                     break;
@@ -634,7 +635,21 @@ namespace Host.UI
                 //setting domain knowledge for custer algorihtm
                 case "Expertise_toolStripButton":
                     {
-
+                        //calcute axis 0 and asix 1 value
+                        int wordsCount = 500;
+                        double[][] rawWordsVector = _gloVeNet.W.Take(wordsCount).ToArray();
+                        double[][] t_sne2 = NP.TSNE2(rawWordsVector);
+                        double[] x = new double[wordsCount];
+                        double[] y = new double[wordsCount];
+                        for(int i=0;i<wordsCount;i++)
+                        {
+                            x[i] = t_sne2[i][0];
+                            y[i] = t_sne2[i][1];
+                        }
+                        //}{debug
+                        ScottPlotForm scottPoltForm = new ScottPlotForm();
+                        scottPoltForm.LoadData(y, x, wordsCount);
+                        scottPoltForm.ShowDialog();
                     }
                     break;
                 //setting configuration
@@ -760,7 +775,6 @@ namespace Host.UI
                 tree_contextMenuStrip.Show(map_treeView, new Point(e.X, e.Y));
             }
         }
-
         #endregion
 
     }

@@ -13,7 +13,7 @@ namespace Engine.Brain.Model.DL
     /// https://github.com/anastasios-stamoulis/deep-learning-with-csharp-and-cntk/tree/master/DeepLearning/Ch_06_Using_Word_Embeddings
     /// embedding net aims to use model instead of training it
     /// </summary>
-    public class GloVeNet : IDNet
+    public class GloVeNet : IDEmbeddingNet
     {
         /// <summary>
         /// 
@@ -35,6 +35,11 @@ namespace Engine.Brain.Model.DL
         /// 
         /// </summary>
         public int EmbeddingDimNum { get; private set; } = 0;
+        /// <summary>
+        /// 
+        /// </summary>
+        public double[][] W { get; private set; }
+
         /// <summary>
         /// 
         /// </summary>
@@ -60,6 +65,11 @@ namespace Engine.Brain.Model.DL
         {
             device = NP.CNTK.GetDeviceByName(deviceName);
             embeddingsIndex = PreprocessEmbeddings(gloVeFilename);
+            //initial w
+            int seed = 0;
+            W = new double[embeddingsIndex.Count][];
+            foreach (var element in embeddingsIndex)
+                W[seed++] = element.Value;
         }
 
         private void CreateModel(int inputDim)
@@ -95,7 +105,7 @@ namespace Engine.Brain.Model.DL
         public double Train(double[][] inputs, double[] outputs)
         {
             var metric = 0.0;
-            var( xBatch, yBatch) = NP.ShuffleBatch(inputs, outputs, 1);
+            var (xBatch, yBatch) = NP.ShuffleBatch(inputs, outputs, 1);
             for (int epoch = 0; epoch < 1000; epoch++)
             {
                 var feed_dictionary = new Dictionary<Variable, Value>() {
@@ -133,7 +143,7 @@ namespace Engine.Brain.Model.DL
                 var i = entry.Value;
                 if (i >= MaxWordsNum) { continue; }
                 embeddingsIndex.TryGetValue(word, out double[] embedding_vector);
-                embedding_matrix[i] = embedding_vector != null && embedding_vector.Length == EmbeddingDimNum? embedding_vector: new double[EmbeddingDimNum];
+                embedding_matrix[i] = embedding_vector != null && embedding_vector.Length == EmbeddingDimNum ? embedding_vector : new double[EmbeddingDimNum];
             }
             for (int i = 0; i < embedding_matrix.Length; i++)
             {

@@ -25,6 +25,22 @@ namespace Engine.Brain.Utils
             return y;
         }
         /// <summary>
+        /// http://accord-framework.net/docs/html/T_Accord_MachineLearning_Clustering_TSNE.htm
+        /// </summary>
+        /// <param name="observations"></param>
+        /// <returns></returns>
+        public static double[][] TSNE2(double[][] observations)
+        {
+            Accord.Math.Random.Generator.Seed = 0;
+            TSNE tSNE = new TSNE()
+            {
+                NumberOfOutputs = 2,
+                Perplexity = 1.5
+            };
+            double[][] output = tSNE.Transform(observations);
+            return output;
+        }
+        /// <summary>
         /// indicate prediction vector equals lable vector
         /// </summary>
         /// <param name="pred"></param>

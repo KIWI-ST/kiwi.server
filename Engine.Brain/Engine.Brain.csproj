@@ -71,6 +71,7 @@
     <Compile Include="Model\DL\FullyChannelNet9.cs" />
     <Compile Include="Model\DL\ResNet.cs" />
     <Compile Include="Model\IDConvNet.cs" />
+    <Compile Include="Model\IDEmbeddingNet.cs" />
     <Compile Include="Model\IDSupervised.cs" />
     <Compile Include="Model\ML\RF.cs" />
     <Compile Include="Model\ML\L2SVM.cs" />
