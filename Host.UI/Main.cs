@@ -631,7 +631,8 @@ namespace Host.UI
 
                     }
                     break;
-                case "RawText_toolStripButton":
+                //setting domain knowledge for custer algorihtm
+                case "Expertise_toolStripButton":
                     {
 
                     }

@@ -1,11 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Accord.MachineLearning.Clustering;
+using Accord.Math;
 
 namespace Engine.Brain.Utils
 {
     public partial class NP
     {
+        /// <summary>
+        /// http://accord-framework.net/docs/html/T_Accord_MachineLearning_Clustering_TSNE.htm
+        /// </summary>
+        /// <param name=""></param>
+        public static double[] TSNE1(double[][] observations)
+        {
+            Accord.Math.Random.Generator.Seed = 0;
+            TSNE tSNE = new TSNE()
+            {
+                NumberOfOutputs = 1,
+                Perplexity = 1.5
+            };
+            double[][] output = tSNE.Transform(observations);
+            double[] y = output.Reshape();
+            return y;
+        }
         /// <summary>
         /// indicate prediction vector equals lable vector
         /// </summary>

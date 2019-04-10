@@ -56,7 +56,7 @@
             this.STAR_NLPSERVER_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Load_Words_Embedding_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.RawText_toolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.Expertise_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.Scenario_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.Map_task_toolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -163,7 +163,7 @@
             this.toolStripSeparator2,
             this.NLP_Services_toolStripDropDownButton,
             this.toolStripSeparator4,
-            this.RawText_toolStripButton,
+            this.Expertise_toolStripButton,
             this.Scenario_toolStripButton,
             this.toolStripSeparator3,
             this.Map_task_toolStripButton});
@@ -340,15 +340,15 @@
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(6, 47);
             // 
-            // RawText_toolStripButton
+            // Expertise_toolStripButton
             // 
-            this.RawText_toolStripButton.Image = global::Host.UI.Properties.Resources.floder;
-            this.RawText_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.RawText_toolStripButton.Name = "RawText_toolStripButton";
-            this.RawText_toolStripButton.Size = new System.Drawing.Size(75, 44);
-            this.RawText_toolStripButton.Text = "RawText";
-            this.RawText_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.RawText_toolStripButton.Click += new System.EventHandler(this.NLP_funciton_Click);
+            this.Expertise_toolStripButton.Image = global::Host.UI.Properties.Resources.floder;
+            this.Expertise_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.Expertise_toolStripButton.Name = "Expertise_toolStripButton";
+            this.Expertise_toolStripButton.Size = new System.Drawing.Size(80, 44);
+            this.Expertise_toolStripButton.Text = "Expertise";
+            this.Expertise_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.Expertise_toolStripButton.Click += new System.EventHandler(this.NLP_funciton_Click);
             // 
             // Scenario_toolStripButton
             // 
@@ -678,7 +678,7 @@
         private System.Windows.Forms.ToolStripMenuItem STAR_NLPSERVER_ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem Load_Words_Embedding_ToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-        private System.Windows.Forms.ToolStripButton RawText_toolStripButton;
+        private System.Windows.Forms.ToolStripButton Expertise_toolStripButton;
         private System.Windows.Forms.ToolStripButton Scenario_toolStripButton;
     }
 }
