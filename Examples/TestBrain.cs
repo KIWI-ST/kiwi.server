@@ -117,8 +117,8 @@ namespace Examples
         public void EmbeddingNet()
         {
             var deviceName = NP.CNTK.DeviceCollection[0];
-            GloVeNet net = new GloVeNet(deviceName);
-            net.UseGloVeWordEmebdding(imdbDir, gloveFullFilename);
+            GloVeNet net = new GloVeNet(deviceName, gloveFullFilename);
+            //net.UseGloVeWordEmebdding(imdbDir, gloveFullFilename);
 
             var woman = net.Predict("boy");
             var man = net.Predict("girl");

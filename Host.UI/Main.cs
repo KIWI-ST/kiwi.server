@@ -6,9 +6,13 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using Engine.Brain.Model;
+using Engine.Brain.Model.DL;
 using Engine.GIS.Entity;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Arithmetic;
+using Engine.NLP;
+using Host.UI.Forms;
 using Host.UI.Jobs;
 using Host.UI.SettingForm;
 using OfficeOpenXml;
@@ -17,6 +21,7 @@ namespace Host.UI
 {
     public partial class Main : Form
     {
+
         #region 初始化
 
         public Main()
@@ -76,6 +81,7 @@ namespace Host.UI
         #endregion
 
         #region 缓存管理
+
         /// <summary>
         /// process cache
         /// </summary>
@@ -101,6 +107,10 @@ namespace Host.UI
         /// 当前选中的Bitmap2信息，包含图层，波段，索引等
         /// </summary>
         Bitmap2 _selectBmp2 = null;
+        /// <summary>
+        /// glovenet for nlp
+        /// </summary>
+        IDNet _gloVeNet = null;
 
         #endregion
 
@@ -451,6 +461,10 @@ namespace Host.UI
                 // rpc rester rectify
                 case "RPCRasterRectifyTask":
                     break;
+                //case load GloveNet
+                case "LoadGloVeNetTask":
+                    _gloVeNet = outputs[0] as IDNet;
+                    break;
                 default:
                     break;
             }
@@ -533,12 +547,13 @@ namespace Host.UI
                     rfForm.RasterDic = _rasterDic;
                     if (rfForm.ShowDialog() == DialogResult.OK)
                     {
-                        if(rfForm.Model == 1)
+                        if (rfForm.Model == 1)
                         {
                             IJob rfJob = new JobRFClassify(rfForm.TreeCount, rfForm.SampleFullFilename, _rasterDic[rfForm.FeatureKey]);
                             RegisterJob(rfJob);
                             rfJob.Start();
-                        }else if (rfForm.Model == 2)
+                        }
+                        else if (rfForm.Model == 2)
                         {
                             IJob rfJob2 = new JobRFCSV(rfForm.TreeCount, rfForm.SampleFullFilename, rfForm.WaitFullFilename, rfForm.SaveFullFilename);
                             RegisterJob(rfJob2);
@@ -558,12 +573,13 @@ namespace Host.UI
                     svm_Form.RasterDic = _rasterDic;
                     if (svm_Form.ShowDialog() == DialogResult.OK)
                     {
-                        if(svm_Form.Model == 1)
+                        if (svm_Form.Model == 1)
                         {
                             IJob svmJob = new JobSVMClassify(svm_Form.SampleFullFilename, _rasterDic[svm_Form.FeatureKey]);
                             RegisterJob(svmJob);
                             svmJob.Start();
-                        }else if (svm_Form.Model == 2)
+                        }
+                        else if (svm_Form.Model == 2)
                         {
                             IJob svmJob2 = new JobSVMCSV(svm_Form.SampleFullFilename, svm_Form.WaitFullFilename, svm_Form.SaveFullFilename);
                             RegisterJob(svmJob2);
@@ -593,7 +609,7 @@ namespace Host.UI
                     CNNDQNForm c_d_form = new CNNDQNForm();
                     if (c_d_form.ShowDialog() == DialogResult.OK)
                     {
-                        
+
                     }
                     break;
                 default:
@@ -610,41 +626,55 @@ namespace Host.UI
             ToolStripItem item = sender as ToolStripItem;
             switch (item.Name)
             {
-                case "Scenario_toolStripButton":{
+                case "Scenario_toolStripButton":
+                    {
 
                     }
                     break;
                 case "RawText_toolStripButton":
-                    break;
-                case "Load_Words_Embedding_ToolStripMenuItem":
+                    {
+
+                    }
                     break;
                 //setting configuration
                 case "Configuration_ToolStripMenuItem":
+                    {
+                        NLPConfigForm nlpConfigForm = new NLPConfigForm();
+                        nlpConfigForm.ShowDialog();
+                    }
+                    break;
+                case "Load_Words_Embedding_ToolStripMenuItem":
+                    {
+                        Load_Words_Embedding_ToolStripMenuItem.Enabled = false;
+                        IJob gloVeNetJob = new JobLoadGloVeNet(NLPConfiguration.GloVeEmbeddingString);
+                        RegisterJob(gloVeNetJob);
+                        gloVeNetJob.Start();
+                    }
                     break;
                 //start stanford nlp server
                 case "STAR_NLPSERVER_ToolStripMenuItem":
-                    //change selected index
-                    STAR_NLPSERVER_ToolStripMenuItem.Enabled = false;
-                    string msg = string.Format("time:{0}, {1}", Now, "NLP Server Starting.......");
-                    Invoke(new UpdateListBoxHandler(UpdateMapListBox), msg);
-                    Process process = new Process();
-                    process.StartInfo.WorkingDirectory = Directory.GetCurrentDirectory() + @"\stanford-corenlp-full\";
-                    //process.StartInfo.FileName = "powershell.exe"; //powershell
-                    process.StartInfo.FileName = "java";
-                    process.StartInfo.Arguments = "-mx4g -cp * edu.stanford.nlp.pipeline.StanfordCoreNLPServer -port 9000 -timeout 15000";
-                    process.StartInfo.UseShellExecute = false;
-                    process.StartInfo.RedirectStandardInput = true;
-                    process.StartInfo.RedirectStandardOutput = true;
-                    process.StartInfo.RedirectStandardError = true;
-                    process.StartInfo.CreateNoWindow = true;
-                    process.Start();
-                    process.BeginOutputReadLine();
-                    process.BeginErrorReadLine();
-                    //register information
-                    process.OutputDataReceived += UpdateProcessOutput;
-                    process.ErrorDataReceived += UpdateProcessOutput;
-                    //process cache
-                    _processCache.Add(process);
+                    {
+                        STAR_NLPSERVER_ToolStripMenuItem.Enabled = false;
+                        string msg = string.Format("time:{0}, {1}", Now, "NLP Server Starting.......");
+                        Invoke(new UpdateListBoxHandler(UpdateMapListBox), msg);
+                        Process process = new Process();
+                        process.StartInfo.WorkingDirectory = NLPConfiguration.CoreNLPDirString;
+                        process.StartInfo.FileName = "java";
+                        process.StartInfo.Arguments = NLPConfiguration.CoreNLPCommandString;
+                        process.StartInfo.UseShellExecute = false;
+                        process.StartInfo.RedirectStandardInput = true;
+                        process.StartInfo.RedirectStandardOutput = true;
+                        process.StartInfo.RedirectStandardError = true;
+                        process.StartInfo.CreateNoWindow = true;
+                        process.Start();
+                        process.BeginOutputReadLine();
+                        process.BeginErrorReadLine();
+                        //register information
+                        process.OutputDataReceived += UpdateProcessOutput;
+                        process.ErrorDataReceived += UpdateProcessOutput;
+                        //process cache
+                        _processCache.Add(process);
+                    }
                     break;
                 //scenario
                 case "SCENARIO_BUILD_toolStripButton":

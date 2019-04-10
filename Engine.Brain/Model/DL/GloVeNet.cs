@@ -51,10 +51,15 @@ namespace Engine.Brain.Model.DL
         Variable x, y;
         public double[][] embedding_weights = null;
         Trainer trainer;
-
-        public GloVeNet(string deviceName)
+        /// <summary>
+        /// create GloveNet instance and initialization weights by Glove pretrain file
+        /// </summary>
+        /// <param name="deviceName"></param>
+        /// <param name="gloVeFilename"></param>
+        public GloVeNet(string deviceName, string gloVeFilename)
         {
             device = NP.CNTK.GetDeviceByName(deviceName);
+            embeddingsIndex = PreprocessEmbeddings(gloVeFilename);
         }
 
         private void CreateModel(int inputDim)

@@ -82,6 +82,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\NLPConfigForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\NLPConfigForm.Designer.cs">
+      <DependentUpon>NLPConfigForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Jobs\IJob.cs" />
     <Compile Include="Jobs\IJobRPCRectify.cs" />
     <Compile Include="Jobs\JobCNNClassify.cs" />
@@ -89,6 +95,7 @@
     <Compile Include="Jobs\JobCNNSVMClassify.cs" />
     <Compile Include="Jobs\JobCOVRaster.cs" />
     <Compile Include="Jobs\JobDQNClassify.cs" />
+    <Compile Include="Jobs\JobLoadModel.cs" />
     <Compile Include="Jobs\JobParsingText.cs" />
     <Compile Include="Jobs\JobReadRaster.cs" />
     <Compile Include="Jobs\JobRFClassify.cs" />
@@ -199,6 +206,9 @@
     <Compile Include="Forms\TaskMonitor.Designer.cs">
       <DependentUpon>TaskMonitor.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Forms\NLPConfigForm.resx">
+      <DependentUpon>NLPConfigForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
@@ -274,6 +284,10 @@
     <ProjectReference Include="..\Engine.GIS\Engine.GIS.csproj">
       <Project>{82b3cfc7-e05c-46d3-9e91-2f5f4495238e}</Project>
       <Name>Engine.GIS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Engine.NLP\Engine.NLP.csproj">
+      <Project>{D8C1D1D1-E414-4C26-A666-7DBE72C8BA44}</Project>
+      <Name>Engine.NLP</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
