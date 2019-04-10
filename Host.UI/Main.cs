@@ -635,6 +635,11 @@ namespace Host.UI
                 //setting domain knowledge for custer algorihtm
                 case "Expertise_toolStripButton":
                     {
+                        if (_gloVeNet == null)
+                        {
+                            MessageBox.Show("可视化词向量前，请先启动嵌入模型载入","错误",MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
                         //calcute axis 0 and asix 1 value
                         int wordsCount = 500;
                         double[][] rawWordsVector = _gloVeNet.W.Take(wordsCount).ToArray();
