@@ -92,6 +92,7 @@
             this.Factor_listView.Size = new System.Drawing.Size(741, 253);
             this.Factor_listView.TabIndex = 1;
             this.Factor_listView.UseCompatibleStateImageBehavior = false;
+            this.Factor_listView.SelectedIndexChanged += new System.EventHandler(this.ListView_SelectedIndexChanged);
             // 
             // Anti_tabPage
             // 
@@ -112,6 +113,7 @@
             this.Anti_listView.Size = new System.Drawing.Size(741, 253);
             this.Anti_listView.TabIndex = 0;
             this.Anti_listView.UseCompatibleStateImageBehavior = false;
+            this.Anti_listView.SelectedIndexChanged += new System.EventHandler(this.ListView_SelectedIndexChanged);
             // 
             // Affect_tabPage
             // 
@@ -132,6 +134,7 @@
             this.Affect_listView.Size = new System.Drawing.Size(741, 253);
             this.Affect_listView.TabIndex = 0;
             this.Affect_listView.UseCompatibleStateImageBehavior = false;
+            this.Affect_listView.SelectedIndexChanged += new System.EventHandler(this.ListView_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -144,7 +147,7 @@
             // 
             // Word_textBox
             // 
-            this.Word_textBox.Location = new System.Drawing.Point(136, 343);
+            this.Word_textBox.Location = new System.Drawing.Point(136, 342);
             this.Word_textBox.Name = "Word_textBox";
             this.Word_textBox.Size = new System.Drawing.Size(140, 25);
             this.Word_textBox.TabIndex = 5;

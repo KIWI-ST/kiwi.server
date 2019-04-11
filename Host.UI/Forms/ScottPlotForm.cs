@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.Drawing;
+using System.Windows.Forms;
 
 namespace Host.UI.Forms
 {
@@ -9,15 +10,26 @@ namespace Host.UI.Forms
             InitializeComponent();
         }
 
-        public void LoadData(double[] x, double[] y, int length)
+        public void Clear()
         {
             Mainly_scottPlotUC.plt.data.Clear();
-            for(int i=0; i <length; i++)
-                Mainly_scottPlotUC.plt.data.AddPoint(x[i], y[i]);
-            Mainly_scottPlotUC.plt.settings.AxisFit();
-            //Mainly_scottPlotUC.plt.data.AddPoint
-            Mainly_scottPlotUC.plt.settings.title = "Words Embedding Visualization";
+        }
+
+        public void Title(string title)
+        {
+            Mainly_scottPlotUC.plt.settings.title = title;
+        }
+
+        public void Render()
+        {
             Mainly_scottPlotUC.Render();
+        }
+
+        public void AddData(double[][] xy, int length, Color color)
+        {
+            for(int i=0; i <length; i++)
+                Mainly_scottPlotUC.plt.data.AddPoint(xy[i][0], xy[i][1], 5, color);
+            Mainly_scottPlotUC.plt.settings.AxisFit();
         }
 
     }

@@ -35,7 +35,7 @@ namespace Engine.Brain.Utils
             TSNE tSNE = new TSNE()
             {
                 NumberOfOutputs = 2,
-                Perplexity = 1.5
+                Perplexity = 1
             };
             double[][] output = tSNE.Transform(observations);
             return output;
