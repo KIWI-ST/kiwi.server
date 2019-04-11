@@ -71,6 +71,46 @@ namespace Engine.NLP
                 UpdateConfigKeyValue("GloVeEmbeddingString", value);
             }
         }
-
+        /// <summary>
+        /// 情景致灾因子
+        /// </summary>
+        public static string FactorScenarioString
+        {
+            get
+            {
+                return GetConfigValueByKey("FactorScenarioString", "");
+            }
+            set
+            {
+                UpdateConfigKeyValue("FactorScenarioString", value);
+            }
+        }
+        /// <summary>
+        /// 情景抗灾体
+        /// </summary>
+        public static string AntiScenarioString
+        {
+            get
+            {
+                return GetConfigValueByKey("AntiScenarioString", "");
+            }
+            set
+            {
+                UpdateConfigKeyValue("AntiScenarioString", value);
+            }
+        }
+        /// <summary>
+        /// 情景承灾体
+        /// </summary>
+        public static string AffectScenarioString {
+            get
+            {
+                return GetConfigValueByKey("AffectScenarioString", "");
+            }
+            set
+            {
+                UpdateConfigKeyValue("AffectScenarioString", value);
+            }
+        }
     }
 }

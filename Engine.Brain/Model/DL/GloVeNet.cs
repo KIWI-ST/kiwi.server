@@ -52,9 +52,21 @@ namespace Engine.Brain.Model.DL
         /// learning rate scheduler
         /// </summary>
         NP.CNTK.ReduceLROnPlateau lrs;
+        /// <summary>
+        /// 
+        /// </summary>
         Function model;
+        /// <summary>
+        /// 
+        /// </summary>
         Variable x, y;
+        /// <summary>
+        /// 
+        /// </summary>
         public double[][] embedding_weights = null;
+        /// <summary>
+        /// 
+        /// </summary>
         Trainer trainer;
         /// <summary>
         /// create GloveNet instance and initialization weights by Glove pretrain file
@@ -71,7 +83,10 @@ namespace Engine.Brain.Model.DL
             foreach (var element in embeddingsIndex)
                 W[seed++] = element.Value;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="inputDim"></param>
         private void CreateModel(int inputDim)
         {
             x = Variable.InputVariable(new int[] { inputDim }, DataType.Double);
