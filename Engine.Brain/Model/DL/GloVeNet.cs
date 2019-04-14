@@ -124,7 +124,7 @@ namespace Engine.Brain.Model.DL
             for (int epoch = 0; epoch < 1000; epoch++)
             {
                 var feed_dictionary = new Dictionary<Variable, Value>() {
-                    { x,  Value.CreateBatch(x.Shape, NP.ToUnidimensional(xBatch),device)},
+                    { x,  Value.CreateBatch(x.Shape, NP.ToOneDimensional(xBatch),device)},
                     { y,  Value.CreateBatch(y.Shape, yBatch, device)},
                 };
                 trainer.TrainMinibatch(feed_dictionary, true, device);

@@ -90,8 +90,8 @@ namespace Engine.Brain.Model.DL
         public double Train(double[][] inputs, double[][] outputs)
         {
             //ensure that data is destroyed after use
-            using (Value inputsValue = Value.CreateBatch(inputVariable.Shape, NP.ToUnidimensional(inputs), device))
-            using (Value outputsValue = Value.CreateBatch(outputVariable.Shape, NP.ToUnidimensional(outputs), device))
+            using (Value inputsValue = Value.CreateBatch(inputVariable.Shape, NP.ToOneDimensional(inputs), device))
+            using (Value outputsValue = Value.CreateBatch(outputVariable.Shape, NP.ToOneDimensional(outputs), device))
             {
                 traindEpochs++;
                 var miniBatch = new Dictionary<Variable, Value>() { { inputVariable, inputsValue }, { outputVariable, outputsValue } };
@@ -137,7 +137,7 @@ namespace Engine.Brain.Model.DL
 
        public double[][] Predicts(double[][] inputs)
         {
-            using (Value inputsValue = Value.CreateBatch(inputVariable.Shape, NP.ToUnidimensional(inputs), device))
+            using (Value inputsValue = Value.CreateBatch(inputVariable.Shape, NP.ToOneDimensional(inputs), device))
             {
                 var inputDict = new Dictionary<Variable, Value>() { { inputVariable, inputsValue } };
                 var outputDict = new Dictionary<Variable, Value>() { { classifierOutput.Output, null } };

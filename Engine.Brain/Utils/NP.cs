@@ -140,7 +140,7 @@ namespace Engine.Brain.Utils
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static double[] ToUnidimensional(double[][] input)
+        public static double[] ToOneDimensional(double[][] input)
         {
             var list = input.ToList();
             int rows = list.Count;

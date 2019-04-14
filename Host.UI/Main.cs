@@ -5,11 +5,8 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 using Engine.Brain.Model;
-using Engine.Brain.Model.DL;
-using Engine.Brain.Utils;
 using Engine.GIS.Entity;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Arithmetic;
@@ -627,9 +624,11 @@ namespace Host.UI
             ToolStripItem item = sender as ToolStripItem;
             switch (item.Name)
             {
+                //create scenario
                 case "Scenario_toolStripButton":
                     {
-
+                        NLPScenarioForm nlp_scenario_form = new NLPScenarioForm();
+                        nlp_scenario_form.ShowDialog();
                     }
                     break;
                 //setting domain knowledge for custer algorihtm

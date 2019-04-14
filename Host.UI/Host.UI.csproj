@@ -97,6 +97,12 @@
     <Compile Include="Forms\NLPExpertiseForm.Designer.cs">
       <DependentUpon>NLPExpertiseForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\NLPScenarioForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\NLPScenarioForm.Designer.cs">
+      <DependentUpon>NLPScenarioForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ScottPlotForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -226,6 +232,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\NLPExpertiseForm.resx">
       <DependentUpon>NLPExpertiseForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\NLPScenarioForm.resx">
+      <DependentUpon>NLPScenarioForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ScottPlotForm.resx">
       <DependentUpon>ScottPlotForm.cs</DependentUpon>

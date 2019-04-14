@@ -132,6 +132,47 @@ namespace Examples
 
         }
 
+        [TestMethod]
+        public void TrainModedByDNN()
+        {
+            List<double[]> inputList = new List<double[]>();
+            List<double> labelList = new List<double>();
+            //
+            string featureFullFilename = Directory.GetCurrentDirectory() + @"\Datasets\dnnSamples.csv";
+            using(StreamReader sr = new StreamReader(featureFullFilename))
+            {
+                string text = sr.ReadLine();
+                while (text!=null)
+                {
+                    string[] texts = text.Split(',');
+                    double lable = Convert.ToDouble(texts.Last());
+                    double[] input = new double[texts.Length - 1];
+                    for (int i=0;i< texts.Length - 1; i++)
+                        input[i] = Convert.ToDouble(texts[i]);
+                    inputList.Add(input);
+                    labelList.Add(lable);
+                    //read new line
+                    text = sr.ReadLine();
+                }
+            }
+            int count = inputList.Count;
+            double[][] inputs = new double[count][];
+            double[][] labels = new double[count][];
+            for(int i = 0; i < count; i++)
+            {
+                inputs[i] = inputList[i];
+                labels[i] = new double[1] { labelList[i] };
+            }
+            IDNet net = new DNet(new int[] { 8, 1, 1 },8);
+            string loss = "";
+            for(int i = 0; i < 10000; i++)
+            {
+                NP.Shuffle(inputs, labels);
+                loss += net.Train(inputs.Take(31).ToArray(), labels.Take(31).ToArray());
+                loss += "\r\n";
+            }
+            string ssss = loss;
+        }
 
         [TestMethod]
         public void TrainFullyChannelNet()

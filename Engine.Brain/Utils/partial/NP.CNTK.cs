@@ -213,8 +213,8 @@ namespace Engine.Brain.Utils
             /// <returns></returns>
             public static Dictionary<Variable, Value> CreateMiniBatch(double[][] inputs, double[][] outputs, Variable inputVariable, Variable outputVariable, DeviceDescriptor device)
             {
-                Value inputsValue = Value.CreateBatch(inputVariable.Shape, NP.ToUnidimensional(inputs), device);
-                Value outputsValue = Value.CreateBatch(outputVariable.Shape, NP.ToUnidimensional(outputs), device);
+                Value inputsValue = Value.CreateBatch(inputVariable.Shape, NP.ToOneDimensional(inputs), device);
+                Value outputsValue = Value.CreateBatch(outputVariable.Shape, NP.ToOneDimensional(outputs), device);
                 var miniBatch = new Dictionary<Variable, Value>() { { inputVariable, inputsValue }, { outputVariable, outputsValue } };
                 return miniBatch;
             }
