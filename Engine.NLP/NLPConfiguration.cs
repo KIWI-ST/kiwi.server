@@ -1,5 +1,6 @@
 ﻿using System.Configuration;
 using System.IO;
+using System.Reflection;
 
 namespace Engine.NLP
 {
@@ -17,11 +18,19 @@ namespace Engine.NLP
         /// default golVe embedding string
         /// </summary>
         private static string gloVeEmbeddingString = Directory.GetCurrentDirectory() + @"\glove-embedding\glove.6B.100d.txt";
-
-        private static readonly string configFilename = System.Windows.Forms.Application.ExecutablePath;
-
+        /// <summary>
+        /// 
+        /// </summary>
+        private static readonly string configFilename = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\NLPConfiguration.config";
+        /// <summary>
+        /// 
+        /// </summary>
         private static Configuration config = ConfigurationManager.OpenExeConfiguration(configFilename);
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
         private static void UpdateConfigKeyValue(string key, string value)
         {
             var element = config.AppSettings.Settings[key];
@@ -29,13 +38,20 @@ namespace Engine.NLP
             config.AppSettings.Settings.Add(key, value);
             config.Save();
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="defaultString"></param>
+        /// <returns></returns>
         private static string GetConfigValueByKey(string key, string defaultString)
         {
             var element = config.AppSettings.Settings[key];
             return element == null ? defaultString : element.Value;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
         public static string CoreNLPCommandString
         {
             get
@@ -47,7 +63,9 @@ namespace Engine.NLP
                 UpdateConfigKeyValue("CoreNLPCommandString", value);
             }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
         public static string CoreNLPDirString
         {
             get
@@ -59,7 +77,9 @@ namespace Engine.NLP
                 UpdateConfigKeyValue("CoreNLPDirString", value);
             }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
         public static string GloVeEmbeddingString
         {
             get
