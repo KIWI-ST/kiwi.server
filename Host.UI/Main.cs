@@ -22,12 +22,12 @@ namespace Host.UI
     {
 
         #region 初始化
-
         public Main()
         {
             InitializeComponent();
+       
         }
-
+  
         bool _is_firstBallon = true;
 
         /// <summary>
@@ -49,7 +49,6 @@ namespace Host.UI
                 Hide();
             }
         }
-
         /// <summary>
         /// 
         /// </summary>
@@ -62,10 +61,9 @@ namespace Host.UI
             WindowState = FormWindowState.Normal;
             Focus();
         }
-
         #endregion
 
-        #region 资源释放
+        #region 资源清理
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
             //释放process缓存
@@ -628,7 +626,7 @@ namespace Host.UI
                 case "Scenario_toolStripButton":
                     {
                         NLPScenarioForm nlp_scenario_form = new NLPScenarioForm();
-                        nlp_scenario_form.ShowDialog();
+                        nlp_scenario_form.Show();
                     }
                     break;
                 //setting domain knowledge for custer algorihtm
@@ -678,9 +676,6 @@ namespace Host.UI
                         //process cache
                         _processCache.Add(process);
                     }
-                    break;
-                //scenario
-                case "SCENARIO_BUILD_toolStripButton":
                     break;
                 //lstm test 
                 case "LSTM_toolStripButton":

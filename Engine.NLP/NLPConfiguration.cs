@@ -13,12 +13,12 @@ namespace Engine.NLP
         /// <summary>
         /// default start command string
         /// </summary>
-        private static string setupString = "-mx4g -cp * edu.stanford.nlp.pipeline.StanfordCoreNLPServer -port 9000 -timeout 15000";
+        private static string setupString = "-mx4g -cp * edu.stanford.nlp.pipeline.StanfordCoreNLPServer -port 9000 -timeout 99999";
         /// <summary>
         /// default golVe embedding string
         /// </summary>
         private static string gloVeEmbeddingString = Directory.GetCurrentDirectory() + @"\glove-embedding\glove.6B.100d.txt";
-        /// <summary>
+        ///// <summary>
         /// 
         /// </summary>
         private static readonly string configFilename = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\NLPConfiguration.config";

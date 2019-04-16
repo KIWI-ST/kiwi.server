@@ -443,7 +443,7 @@
             this.tab_treeview.Controls.Add(this.map_treeView);
             this.tab_treeview.Location = new System.Drawing.Point(4, 22);
             this.tab_treeview.Name = "tab_treeview";
-            this.tab_treeview.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tab_treeview.Padding = new System.Windows.Forms.Padding(3);
             this.tab_treeview.Size = new System.Drawing.Size(199, 584);
             this.tab_treeview.TabIndex = 0;
             this.tab_treeview.Text = "TreeView";
@@ -473,7 +473,7 @@
             this.tab_mapview.Controls.Add(this.map_splitContainer);
             this.tab_mapview.Location = new System.Drawing.Point(4, 22);
             this.tab_mapview.Name = "tab_mapview";
-            this.tab_mapview.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tab_mapview.Padding = new System.Windows.Forms.Padding(3);
             this.tab_mapview.Size = new System.Drawing.Size(683, 584);
             this.tab_mapview.TabIndex = 1;
             this.tab_mapview.Text = "MapView";
@@ -484,7 +484,7 @@
             this.map_splitContainer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.map_splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.map_splitContainer.Location = new System.Drawing.Point(3, 3);
-            this.map_splitContainer.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.map_splitContainer.Margin = new System.Windows.Forms.Padding(2);
             this.map_splitContainer.Name = "map_splitContainer";
             this.map_splitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -505,7 +505,7 @@
             this.map_pictureBox.ContextMenuStrip = this.map_contextMenuStrip;
             this.map_pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.map_pictureBox.Location = new System.Drawing.Point(0, 0);
-            this.map_pictureBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.map_pictureBox.Margin = new System.Windows.Forms.Padding(2);
             this.map_pictureBox.Name = "map_pictureBox";
             this.map_pictureBox.Size = new System.Drawing.Size(673, 384);
             this.map_pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -534,7 +534,7 @@
             this.MAP_listBox.FormattingEnabled = true;
             this.MAP_listBox.ItemHeight = 12;
             this.MAP_listBox.Location = new System.Drawing.Point(0, 0);
-            this.MAP_listBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.MAP_listBox.Margin = new System.Windows.Forms.Padding(2);
             this.MAP_listBox.Name = "MAP_listBox";
             this.MAP_listBox.Size = new System.Drawing.Size(673, 183);
             this.MAP_listBox.TabIndex = 0;
