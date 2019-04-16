@@ -1,21 +1,14 @@
-﻿
-using edu.stanford.nlp.coref;
-using edu.stanford.nlp.ling;
-using edu.stanford.nlp.naturalli;
-using edu.stanford.nlp.parser.lexparser;
-using edu.stanford.nlp.pipeline;
-using edu.stanford.nlp.semgraph;
-using edu.stanford.nlp.simple;
-using edu.stanford.nlp.time;
-using edu.stanford.nlp.trees;
-using edu.stanford.nlp.util;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using edu.stanford.nlp.ling;
+using edu.stanford.nlp.pipeline;
+using edu.stanford.nlp.semgraph;
+using edu.stanford.nlp.time;
+using edu.stanford.nlp.trees;
+using edu.stanford.nlp.util;
 using static edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations;
 
 namespace Host.UI.Forms
@@ -99,19 +92,37 @@ namespace Host.UI.Forms
                     break;
             }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="useTime"></param>
         delegate void UpdateListBoxHandler(string item, bool useTime = false);
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="useTime"></param>
         private void UpdateListBox(string item, bool useTime=false)
         {
             string text =useTime? string.Format("Time:{0},{1}", DateTime.Now.ToLongTimeString(), item):item;
             Corpus_listBox.Items.Add(text);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sentence"></param>
+        /// <returns></returns>
         private Tree GetTreeStructInSentence(CacheMap sentence)
         {
             var tree = sentence.get(new TreeCoreAnnotations.TreeAnnotation().getClass()) as Tree;
             return tree;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sentence"></param>
+        /// <returns></returns>
         private java.util.Collection GetDependenciesInSentence(CoreMap sentence)
         {
             SemanticGraph deps = sentence.get(new BasicDependenciesAnnotation().getClass()) as SemanticGraph;
@@ -194,6 +205,5 @@ namespace Host.UI.Forms
                 //   TimeMLDict.Last().Value.Add(sentence);
             }
         }
-
     }
 }
