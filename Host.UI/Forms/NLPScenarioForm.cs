@@ -75,6 +75,7 @@ namespace Host.UI.Forms
                                 double[] vFactor = GloveNet.Predict(factor);
                                 double cosine = NP.Cosine(vWrod, vFactor);
                                 factorText += string.Format("{0}-{1},", factor, cosine);
+                                //factorText += string.Format("{0},", cosine);
                             }
                             string antiText = "";
                             foreach (var factor in antis)
@@ -82,6 +83,7 @@ namespace Host.UI.Forms
                                 double[] vFactor = GloveNet.Predict(factor);
                                 double cosine = NP.Cosine(vWrod, vFactor);
                                 antiText += string.Format("{0}-{1},", factor, cosine);
+                                //antiText += string.Format("{0},", cosine);
                             }
                             string affectText = "";
                             foreach (var factor in affects)
@@ -89,6 +91,7 @@ namespace Host.UI.Forms
                                 double[] vFactor = GloveNet.Predict(factor);
                                 double cosine = NP.Cosine(vWrod, vFactor);
                                 affectText += string.Format("{0}-{1},", factor, cosine);
+                                //affectText += string.Format("{0},",cosine);
                             }
                             string line = string.Format("单词:{0}, 致灾因子相似度:{1},抗灾体相似度:{2},承灾体相似度:{3}", word, factorText, antiText, affectText);
                             UpdateListBox(line, false);
