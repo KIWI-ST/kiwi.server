@@ -18,10 +18,15 @@ namespace Host.UI.Forms
         public void Title(string title)
         {
             Mainly_scottPlotUC.plt.settings.title = title;
+            Mainly_scottPlotUC.plt.settings.axisLabelX = title;
         }
 
         public void Render()
         {
+            Mainly_scottPlotUC.plt.settings.title = " ";
+            Mainly_scottPlotUC.plt.settings.axisLabelX = " ";
+            Mainly_scottPlotUC.plt.settings.axisLabelY = " ";
+            Mainly_scottPlotUC.plt.settings.AxisFit();
             Mainly_scottPlotUC.Render();
         }
 

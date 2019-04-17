@@ -63,9 +63,35 @@ namespace Host.UI.Forms
                         List<string> antis = NLPConfiguration.AntiScenarioString.Split(';').ToList();
                         List<string> affects = NLPConfiguration.AffectScenarioString.Split(';').ToList();
                         //
+                        Corpus_listBox.Items.Clear();
+                        //
                         foreach(var word in CorpusWordList)
                         {
+                            //string line = word;
                             double[] vWrod = GloveNet.Predict(word);
+                            string factorText = "";
+                            foreach (var factor in factors)
+                            {
+                                double[] vFactor = GloveNet.Predict(factor);
+                                double cosine = NP.Cosine(vWrod, vFactor);
+                                factorText += string.Format("{0}-{1},", factor, cosine);
+                            }
+                            string antiText = "";
+                            foreach (var factor in antis)
+                            {
+                                double[] vFactor = GloveNet.Predict(factor);
+                                double cosine = NP.Cosine(vWrod, vFactor);
+                                antiText += string.Format("{0}-{1},", factor, cosine);
+                            }
+                            string affectText = "";
+                            foreach (var factor in affects)
+                            {
+                                double[] vFactor = GloveNet.Predict(factor);
+                                double cosine = NP.Cosine(vWrod, vFactor);
+                                affectText += string.Format("{0}-{1},", factor, cosine);
+                            }
+                            string line = string.Format("单词:{0}, 致灾因子相似度:{1},抗灾体相似度:{2},承灾体相似度:{3}", word, factorText, antiText, affectText);
+                            UpdateListBox(line, false);
                         }
                     }
                     break;
@@ -182,7 +208,7 @@ namespace Host.UI.Forms
             scott_plot_form.AddData(a, a.Length, Color.Red);
             scott_plot_form.AddData(b, b.Length, Color.Blue);
             scott_plot_form.AddData(c, c.Length, Color.Green);
-            scott_plot_form.Title("Scenario Visualization");
+            scott_plot_form.Render();
             scott_plot_form.ShowDialog();
         }
         /// <summary>
@@ -350,7 +376,7 @@ namespace Host.UI.Forms
                             string text = "";
                             foreach( var line in Corpus_listBox.SelectedItems)
                                 text += line + "\r\n";
-                            using (StreamWriter sw = new StreamWriter(sfg.FileName))
+                            using (StreamWriter sw = new StreamWriter(sfg.FileName, true, Encoding.UTF8))
                                 sw.Write(text);
                             //show tip
                             MessageBox.Show("导出完成");

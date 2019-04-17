@@ -62,7 +62,8 @@ namespace Host.UI.Forms
                 scott_plot_form.AddData(a, a.Length, Color.Red);
                 scott_plot_form.AddData(b, b.Length, Color.Blue);
                 scott_plot_form.AddData(c, c.Length, Color.Green);
-                scott_plot_form.Title("Words Embedding Visualization");
+                scott_plot_form.Render();
+               // scott_plot_form.Title("Words Embedding Visualization");
                 scott_plot_form.ShowDialog();
             }
             else
