@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Analysis\DependencyAnalysis.cs" />
     <Compile Include="Extend\StringExtend.cs" />
     <Compile Include="Lexicon\HalfmanTree.cs" />
     <Compile Include="Lexicon\Lexicon.cs" />
