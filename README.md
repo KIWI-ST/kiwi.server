@@ -3,7 +3,7 @@ kiwi.server is a tool set that integrates gdal, accord.net, orleans... everyone 
 
 The commonly used operations are packaged, mainly the following modules
 ### Examples ###
->in general, code samples in [Test.Examples](https://github.com/axmand/kiwi.server/tree/master/Test.Examples) are updated as functionality increases
+>in general, code samples in [Examples and Tests](https://github.com/axmand/kiwi.server/tree/master/Examples) are updated as functionality increases
 
 ### Engine.GIS ####
 >a little sample style api library based on gdal. 
