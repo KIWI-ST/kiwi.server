@@ -3,7 +3,7 @@ kiwi.server is a tool set that integrates gdal, accord.net, orleans... everyone 
 
 The commonly used operations are packaged, mainly the following modules
 ### Examples ###
->in general, code samples in [Test.Examples](https://github.com/axmand/kiwi.server/tree/master/Test.Examples) are updated as functionality increases
+>in general, code samples in [Examples and Tests](https://github.com/axmand/kiwi.server/tree/master/Examples) are updated as functionality increases
 
 ### Engine.GIS ####
 >a little sample style api library based on gdal. 
@@ -65,10 +65,44 @@ a winform-based user interface application
 
 ### Engine.NLP ###
 there are servel steps before use it:
->install java8, seting 'user' evnironment varibale , example:
+>install java8, seting 'user' evnironment varibale, and download [stanford nlp] (https://stanfordnlp.github.io/CoreNLP/), decompression and move to Debug , rename flodar name to 'stanford-corenlp-full'
 ```
-JAVA_HOME: C:\Program Files\Java\jdk1.8.0_111
-CLASSPATH: .;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar;  
-Path: %JAVA_HOME%\bin;%JAVA_HOME%\jre\bin;
+            //   CC  并列连词           Coordinating conjunction
+            //   CD  基数               Cardinal number
+            //   DT  限定词             Determiner
+            //   EX  存在词             Existential there
+            //   FW  外来词             Foreign word
+            //   IN  介词               Preposition or subordinating conjunction
+            //   JJ  形容词             Adjective
+            //  JJR  形容词比较级        Adjective, comparative
+            //  JJS  形容词最高级        Adjective, superlative
+            //   LS  括号内的数量词       List item marker
+            //   MD  情态动词            Modal(can,may,could,might)
+            //   NN  名词               Noun, singular or mass
+            //  NNS  名词复数            Noun, plural
+            //  NNP  专有名词单数        Proper noun, singular
+            // NNPS  专有名词复数        Proper noun, plural
+            //   NP  专有名词               
+            //   NT  词               
+            //  PDT  前限定词            Predeterminer
+            //  POS  所有格结束词        Possessive ending
+            //  PRP  人称代词            Personal pronoun
+            // PRP$  物主代词            Possessive pronoun
+            //   RB  副词               Adverb
+            //  RBR  副词比较级          Adverb, comparative
+            //  RBS  副词最高级          Adverb, superlative
+            //   RP  助词               Particle
+            //  SYM  符号               Symbol
+            //   TO                     to
+            //   UH  感叹词              Interjection
+            //   VB  动词原形            Verb, base form
+            //  VBD  动词过去式           Verb, past tense
+            //  VBG  动词现在分词         Verb, gerund or present participle
+            //  VBN  动词过去分词         Verb, past participle
+            //  VBP  动词非第三人称       Verb, non­3rd person singular present
+            //  VBZ  动词第三人称单数     Verb, 3rd person singular present
+            //  WDT  Wh限定词            Wh­-determiner
+            //  WP   Wh代词              Wh­pronoun
+            //  WP$  Wh物主代词          Possessive wh-­pronoun
+            //  WRB  Wh副词              Wh -­adverb
 ```
->download [stanford nlp] (https://stanfordnlp.github.io/CoreNLP/), decompression and move to Debug , rename flodar name to 'stanford-corenlp-full'
