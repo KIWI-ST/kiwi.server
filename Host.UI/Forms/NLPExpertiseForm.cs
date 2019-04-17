@@ -38,7 +38,7 @@ namespace Host.UI.Forms
             InitialConfigValue();
         }
 
-       void InitialConfigValue()
+        void InitialConfigValue()
         {
             factors = NLPConfiguration.FactorScenarioString.Split(';').ToList();
             antis = NLPConfiguration.AntiScenarioString.Split(';').ToList();
@@ -79,10 +79,11 @@ namespace Host.UI.Forms
 
         ScenarioElementType scenarioType = ScenarioElementType.Factor;
 
-        private void UpdateScenarioListView(ListView listView,List<string> words)
+        private void UpdateScenarioListView(ListView listView, List<string> words)
         {
             listView.Items.Clear();
-            words.ForEach(word => {
+            words.ForEach(word =>
+            {
                 listView.Items.Add(word);
             });
         }
@@ -153,13 +154,14 @@ namespace Host.UI.Forms
 
         private void Visual_button_Click(object sender, EventArgs e)
         {
-            if(GloveNet == null)
+            if (GloveNet == null)
             {
                 MessageBox.Show("预览前请先载入GloVe模型", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             Visual_button.Enabled = false;
-            Thread t = new Thread(() => {
+            Thread t = new Thread(() =>
+            {
                 int totalNum = factors.Count + antis.Count + affects.Count;
                 //1. 构建词W集合
                 double[][] words = new double[totalNum][];
@@ -169,14 +171,14 @@ namespace Host.UI.Forms
                 for (int i = 0; i < antis.Count; i++)
                     words[factors.Count + i] = GloveNet.Predict(antis[i]);
                 for (int i = 0; i < affects.Count; i++)
-                    words[factors.Count+ antis.Count+i] = GloveNet.Predict(affects[i]);
+                    words[factors.Count + antis.Count + i] = GloveNet.Predict(affects[i]);
                 //3.t-SNE算法降维
                 var vWords = NP.TSNE2(words);
                 //4.可视化
-                Invoke(new UpdateProcessTipHandler(UpdateProcessTip), 1.0, 
-                    vWords.Take(factors.Count).ToArray(), 
+                Invoke(new UpdateProcessTipHandler(UpdateProcessTip), 1.0,
+                    vWords.Take(factors.Count).ToArray(),
                     vWords.Skip(factors.Count).Take(antis.Count).ToArray(),
-                    vWords.Skip(factors.Count+antis.Count).Take(affects.Count).ToArray());
+                    vWords.Skip(factors.Count + antis.Count).Take(affects.Count).ToArray());
             });
             t.IsBackground = true;
             t.Start();
@@ -185,7 +187,7 @@ namespace Host.UI.Forms
         private void ListView_SelectedIndexChanged(object sender, EventArgs e)
         {
             var selectItems = (sender as ListView).SelectedItems;
-            Word_textBox.Text = selectItems.Count>0? selectItems[0].Text:"";
+            Word_textBox.Text = selectItems.Count > 0 ? selectItems[0].Text : "";
         }
 
         private void Scenario_tabControl_SelectedIndexChanged(object sender, EventArgs e)

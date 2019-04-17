@@ -626,6 +626,7 @@ namespace Host.UI
                 case "Scenario_toolStripButton":
                     {
                         NLPScenarioForm nlp_scenario_form = new NLPScenarioForm();
+                        nlp_scenario_form.GloveNet = _gloVeNet;
                         nlp_scenario_form.Show();
                     }
                     break;
