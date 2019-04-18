@@ -1,10 +1,8 @@
 # kiwi.server
 kiwi.server is a tool set that integrates gdal, accord.net, cntk to solve some problems in the field of GIS by using machine learning algorihtms...There is complied executable program [released software](https://github.com/axmand/kiwi.server/releases) for testing.
-
-The commonly used operations are packaged, mainly the following modules
 ### Examples ###
 >in general, code samples in [Examples and Tests](https://github.com/axmand/kiwi.server/tree/master/Examples) are updated as functionality increases
-
+The commonly used operations are packaged, mainly the following modules
 ### Engine.GIS ####
 >a little sample style api library based on gdal. 
 ```c#
@@ -29,7 +27,6 @@ The commonly used operations are packaged, mainly the following modules
         foreach(var (classIndex,point) in pBandStasticTool.StaisticalRawGraph)
                 //do something as you need
 ```
-
 ### Engine.Brain ###
 >implemention of some machinelearning algorithm, such as Deep Q-Learning:
 ```c#
@@ -59,10 +56,6 @@ The commonly used operations are packaged, mainly the following modules
          //prediction
          long classified = model.Classify(input, shapeEuum);
 ```
-
-### Host.UI ###
-a winform-based user interface application 
-
 ### Engine.NLP ###
 there are servel steps before use it:
 >install java8, seting 'user' evnironment varibale, and download [stanford nlp] (https://stanfordnlp.github.io/CoreNLP/), decompression and move to Debug , rename flodar name to 'stanford-corenlp-full'
@@ -106,3 +99,5 @@ there are servel steps before use it:
             //  WP$  Wh物主代词          Possessive wh-­pronoun
             //  WRB  Wh副词              Wh -­adverb
 ```
+### Host.UI ###
+Based on winform user interface, providing related functions above.
