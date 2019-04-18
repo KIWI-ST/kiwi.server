@@ -3,7 +3,8 @@
     public static class ArrayExtend
     {
         /// <summary>
-        /// 
+        /// combine encode , example :
+        /// [0,1,1,0,0] + [0,0,0,1,1] = [0,1,1,1,1]
         /// </summary>
         /// <param name="array"></param>
         /// <param name="otherArray"></param>
@@ -26,6 +27,5 @@
                 product *= array[i];
             return product;
         }
-
     }
 }
