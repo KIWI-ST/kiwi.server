@@ -58,7 +58,7 @@
             // 
             this.button1.Location = new System.Drawing.Point(569, 140);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(86, 28);
+            this.button1.Size = new System.Drawing.Size(86, 25);
             this.button1.TabIndex = 2;
             this.button1.Text = "确定";
             this.button1.UseVisualStyleBackColor = true;
@@ -90,7 +90,7 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // BandExport
+            // BandExportForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -102,7 +102,7 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.bandRegion);
-            this.Name = "BandExport";
+            this.Name = "BandExportForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "BandExport";
             this.ResumeLayout(false);
