@@ -58,7 +58,9 @@ The commonly used operations are packaged, mainly the following modules
 ```
 ### Engine.NLP ###
 there are servel steps before use it:
->install java8, seting 'user' evnironment varibale, and download [stanford nlp] (https://stanfordnlp.github.io/CoreNLP/), decompression and move to Debug , rename flodar name to 'stanford-corenlp-full'
++ install java8, setting user environment variables
++ download [stanford nlp](https://stanfordnlp.github.io/CoreNLP/), decompression and move to Debug , rename flodar name to "stanford-corenlp-full"
++ download [glove](https://nlp.stanford.edu/projects/glove/) embedding lexicon, decompression and move to Debug, rename flodar name to "glove-embedding"
 ```
             //   CC  并列连词           Coordinating conjunction
             //   CD  基数               Cardinal number
