@@ -27,7 +27,7 @@ namespace Engine.Brain.Model.DL
         /// <summary>
         /// model 
         /// </summary>
-        readonly Function classifierOutput;
+        Function classifierOutput;
 
         /// <summary>
         /// 
@@ -60,8 +60,8 @@ namespace Engine.Brain.Model.DL
             inputVariable = Variable.InputVariable(NDShape.CreateNDShape(inputDim), DataType.Double, "inputVariable");
             outputVariable = Variable.InputVariable(NDShape.CreateNDShape(outputDim), DataType.Double, "labelVariable");
             classifierOutput = CreateFullyChannelNetwork(inputVariable, c, o);
-            var trainingLoss = CNTKLib.CrossEntropyWithSoftmax(classifierOutput, outputVariable);
-            var prediction = CNTKLib.ClassificationError(classifierOutput, outputVariable);
+            var trainingLoss = CNTKLib.SquaredError(classifierOutput, outputVariable);
+            var prediction = CNTKLib.SquaredError(classifierOutput, outputVariable);
             TrainingParameterScheduleDouble learningRatePerSample = new TrainingParameterScheduleDouble(0.00178125, 1); //0.00178125
             TrainingParameterScheduleDouble momentumTimeConstant = CNTKLib.MomentumAsTimeConstantSchedule(256);
             IList<Learner> parameterLearners = new List<Learner>() { Learner.MomentumSGDLearner(classifierOutput.Parameters(), learningRatePerSample, momentumTimeConstant, true) };
@@ -97,8 +97,7 @@ namespace Engine.Brain.Model.DL
             //read model and set parameters
             Function model = Function.Load(bytes, device);
             int count = model.Parameters().Count;
-            //copy
-            for(int i = 0; i < count; i++)
+            for (int i = 0; i < count; i++)
                 classifierOutput.Parameters()[i].SetValue(model.Parameters()[i].Value());
         }
         /// <summary>

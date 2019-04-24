@@ -184,7 +184,7 @@ namespace Examples
             IDNet actor = new DNet2(NP.CNTK.DeviceCollection[0], 9, 9, 18, keys.Count);
             IDNet critic = new DNet2(NP.CNTK.DeviceCollection[0], 9, 9, 18, keys.Count);
             //create dqn alogrithm
-            DQN dqn = new DQN(env, actor, critic, epochs: 1000);
+            DQN dqn = new DQN(env, actor, critic, epochs: 10000);
             //in order to test fast, we set training epochs equals 10.
             //please do not use so few training steps in actual use.
             //register event to get information while training
