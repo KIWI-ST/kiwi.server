@@ -70,14 +70,9 @@ namespace Engine.Brain.Model.DL
 
         public DNet(int[] featureNum, int actionNum, double learningRate = 0.002)
         {
-            //
-            int num = featureNum.Product() + actionNum;
-            //
+            int input = featureNum.Product();
             _learningRate = learningRate;
-            // _network = new ActivationNetwork(new SeluFunction(), num, num, actionNum, actionNum/2,1);
-            // _network = new ActivationNetwork(new SeluFunction(), num, num, featureNum.Product(), actionNum, actionNum, actionNum, 1);
-            _network = new ActivationNetwork(new SeluFunction(), num, num, actionNum, actionNum/2, 1);
-            //
+            _network = new ActivationNetwork(new SeluFunction(), input, input / 2, input / 4, actionNum, actionNum);
             new GaussianWeights(_network).Randomize();
             //https://github.com/accord-net/framework/blob/a5a2ea8b59173dd4e695da8017ba06bc45fc6b51/Samples/Neuro/Deep%20Learning/ViewModel/LearnViewModel.cs#L289
             _teacher = new BackPropagationLearning(_network)
@@ -96,7 +91,7 @@ namespace Engine.Brain.Model.DL
 
         public string PersistencNative(string modelFilename = null)
         {
-            string filePath = modelFilename ==null? Directory.GetCurrentDirectory() + @"\tmp\": modelFilename;
+            string filePath = modelFilename ?? Directory.GetCurrentDirectory() + @"\tmp\";
             string fileName = filePath + _dqnFilename;
             if (!Directory.Exists(filePath))
                 Directory.CreateDirectory(filePath);

@@ -41,6 +41,20 @@ namespace Engine.Brain.Utils
             return output;
         }
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public static double Dot(double[] x, double[] y)
+        {
+            if (x.Length != y.Length) throw new Exception("vector x and y length must be equal");
+            double dot = 0.0;
+            for (int i = 0; i < x.Length; i++)
+                dot += x[i] * y[i];
+            return dot;
+        }
+        /// <summary>
         /// indicate prediction vector equals lable vector
         /// </summary>
         /// <param name="pred"></param>
@@ -292,7 +306,7 @@ namespace Engine.Brain.Utils
         /// <param name="predict"></param>
         /// <param name="label"></param>
         /// <returns></returns>
-        public static double CalcuteAccuracy(double[][] predict, double[][] label)
+        public static double CalcuteAccuracy(double[] predict, double[] target)
         {
             int predCount = predict.GetLength(0);
             int labelCount = predict.GetLength(0);
@@ -300,38 +314,8 @@ namespace Engine.Brain.Utils
                 return 0.0;
             double right = 0.0;
             for (int i = 0; i < predCount; i++)
-                right += Equal(predict[i], label[i]) ? 1 : 0;
+                right += (predict[i] == target[i]) ? 1 : 0;
             return right / predCount;
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="predict"></param>
-        /// <param name="label"></param>
-        /// <returns></returns>
-        public static double CalcuteAccuracy(float[] predict, float[] label)
-        {
-            int count = predict.Length;
-            float right = 0f;
-            for (int i = 0; i < count; i++)
-                right += Math.Abs(predict[i] - label[i]) < 0.1f ? 1f : 0f;
-            return right / count;
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="predict"></param>
-        /// <param name="label"></param>
-        /// <returns></returns>
-        public static float CalcuteAccuracy(float[,] predict, float[,] label)
-        {
-            int dim0 = predict.GetLength(0);
-            int dim1 = predict.GetLength(1);
-            float right = 0f;
-            for (int i = 0; i < dim0; i++)
-                for (int j = 0; j < dim1; j++)
-                    right += Math.Abs(predict[i, j] - label[i, j]) < 0.1f ? 1f : 0f;
-            return right / (dim0 * dim1);
         }
         /// <summary>
         /// 余弦计算文本相似度

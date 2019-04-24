@@ -18,9 +18,13 @@ namespace Examples
     public class TestBrain
     {
         /// <summary>
+        /// 
+        /// </summary>
+        string envFilename2 = Directory.GetCurrentDirectory() + @"\Datasets\3x3x18x100.txt";
+        /// <summary>
         /// dqn environment full filename
         /// </summary>
-        string envFilename = Directory.GetCurrentDirectory() + @"\Datasets\9x9x18x100.txt";
+        string envFilename1 = Directory.GetCurrentDirectory() + @"\Datasets\9x9x18x100.txt";
         /// <summary>
         /// feature layer
         /// </summary>
@@ -79,14 +83,78 @@ namespace Examples
         }
 
         [TestMethod]
-        public void ClassificationByDQN2()
+        public void ClassificationByDQNWithDNet()
         {
             IEnv env;
             //read samples
             List<List<double>> inputList = new List<List<double>>();
             List<int> outputList = new List<int>();
             List<int> keys = new List<int>();
-            using (StreamReader sr = new StreamReader(envFilename))
+            using (StreamReader sr = new StreamReader(envFilename2))
+            {
+                string text = sr.ReadLine().Replace("\t", ",");
+                do
+                {
+                    string[] rawdatas = text.Split(',');
+                    int key = Convert.ToInt32(rawdatas.Last());
+                    outputList.Add(key);
+                    if (!keys.Contains(key))
+                        keys.Add(key);
+                    List<double> inputItem = new List<double>();
+                    for (int i = 0; i < rawdatas.Length - 1; i++)
+                        inputItem.Add(Convert.ToDouble(rawdatas[i]));
+                    inputList.Add(inputItem);
+                    text = sr.ReadLine();
+                } while (text != null);
+                //convert to double[][] and double[]
+                int count = inputList.Count;
+                double[][] x = new double[count][];
+                int[] y = outputList.ToArray();
+                for (int i = 0; i < count; i++)
+                    x[i] = inputList[i].ToArray();
+                //create environment for agent exploring
+                env = new SamplesEnv(x, y);
+            }
+            string msg = "";
+            //create cnn structure for dqn training
+            IDNet actor = new DNet(new int[] { 3, 3, 18 }, keys.Count);
+            IDNet critic = new DNet(new int[] { 3, 3, 18 }, keys.Count);
+            //create dqn alogrithm
+            DQN dqn = new DQN(env, actor, critic, epochs: 1000);
+            //in order to test fast, we set training epochs equals 10.
+            //please do not use so few training steps in actual use.
+            //register event to get information while training
+            dqn.OnLearningLossEventHandler += (double loss, double totalReward, double accuracy, double progress, string epochesTime) =>
+            {
+                msg += string.Format("loss: {0}, reward: {1}, accuracy: {2}. \r\n", loss, totalReward, accuracy);
+            };
+            //start dqn alogrithm learning
+            dqn.Learn();
+
+            string sss2 = "";
+            //in general, loss is less than 1
+            //Assert.IsTrue(_loss < 1.0);
+            //apply dqn to classify fetureLayer
+            //pick value
+            //IRasterLayerCursorTool pRasterLayerCursorTool = new GRasterLayerCursorTool();
+            //
+            //double[] state = pRasterLayerCursorTool.PickNormalValue(50, 50);
+            //double[] action = dqn.ChooseAction(state).action;
+            //int landCoverType = dqn.ActionToRawValue(NP.Argmax(action));
+            //do something as you need. i.e. draw landCoverType to bitmap at position ( i , j )
+            //the classification results are not stable because of the training epochs are too few.
+            //Assert.IsTrue(landCoverType >= 0);
+        }
+
+        [TestMethod]
+        public void ClassificationByDQNWithDNet2()
+        {
+            IEnv env;
+            //read samples
+            List<List<double>> inputList = new List<List<double>>();
+            List<int> outputList = new List<int>();
+            List<int> keys = new List<int>();
+            using (StreamReader sr = new StreamReader(envFilename1))
             {
                 string text = sr.ReadLine().Replace("\t", ",");
                 do
@@ -120,7 +188,8 @@ namespace Examples
             //in order to test fast, we set training epochs equals 10.
             //please do not use so few training steps in actual use.
             //register event to get information while training
-            dqn.OnLearningLossEventHandler += (double loss, double totalReward, double accuracy, double progress, string epochesTime) => {
+            dqn.OnLearningLossEventHandler += (double loss, double totalReward, double accuracy, double progress, string epochesTime) =>
+            {
                 msg += string.Format("loss: {0}, reward: {1}, accuracy: {2}. \r\n", loss, totalReward, accuracy);
             };
             //start dqn alogrithm learning

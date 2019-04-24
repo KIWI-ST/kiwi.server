@@ -7,7 +7,6 @@ using Engine.Brain.Utils;
 
 namespace Engine.Brain.Model.RL
 {
-
     /// <summary>
     /// 
     /// </summary>
@@ -49,34 +48,26 @@ namespace Engine.Brain.Model.RL
     public class DQN
     {
         /// <summary>
-        /// 
-        /// </summary>
-        //Dictionary<string, int> _usedSamples = new Dictionary<string, int>();
-        /// <summary>
-        /// 
-        /// </summary>
-        //Dictionary<string, int> _usedInfos = new Dictionary<string, int>();
-        /// <summary>
-        /// 回调区
+        /// reporter
         /// </summary>
         public event UpdateLearningLossHandler OnLearningLossEventHandler;
         /// <summary>
-        /// 记忆区
+        /// memory
         /// </summary>
-        private List<Memory> _memoryList = new List<Memory>();
+        private readonly List<Memory> _memoryList = new List<Memory>();
         /// <summary>
-        /// 决策网络
+        /// actor model
         /// </summary>
-        private IDNet _actorNet;
+        private readonly IDNet _actorNet;
         /// <summary>
-        /// 目标网络
+        /// critic model
         /// </summary>
-        private IDNet _criticNet;
-        /// <summary>
-        /// 观察环境
-        /// </summary>
-        private IEnv _env;
-        //
+        private readonly IDNet _criticNet;
+
+        #region Parameters
+        //environment
+        private readonly IEnv _env;
+        //memory limit
         readonly int _memoryCapacity = 512;
         //拷贝net参数
         readonly int _everycopy = 128;
@@ -89,38 +80,28 @@ namespace Engine.Brain.Model.RL
         //q值积累权重
         readonly double _alpha = 0.6;
         //q值印象权重
-        double _gamma = 0.0;
+        readonly double _gamma = 0.0;
         //输入feature长度
         readonly int _featuresNumber;
         //输入action长度
         readonly int _actionsNumber;
+        #endregion
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="env"></param>
         public DQN(IEnv env, IDNet actor=null, IDNet critic= null, int epochs = 3000, double gamma = 0.0)
         {
-            //
             _env = env;
-            //
-            _actionsNumber = _env.ActionNum;
-            //
-            _featuresNumber = _env.FeatureNum.Product();
-            //决策
-            _actorNet = new DNet(_env.FeatureNum, _actionsNumber);
-            //训练
-            _criticNet = new DNet(_env.FeatureNum, _actionsNumber);
-        }
-        /// <summary>
-        /// 设置运行参数
-        /// </summary>
-        /// <param name="epochs"></param>
-        public void SetParameters(int epochs = 3000, double gamma = 0.0)
-        {
-            //训练轮次
-            _epoches = epochs;
-            //设置gamma, 表示对连续状态的计算
             _gamma = gamma;
+            _epoches = epochs;
+            //input and output
+            _actionsNumber = _env.ActionNum;
+            _featuresNumber = _env.FeatureNum.Product();
+            //actor-critic
+            _actorNet = actor??new DNet(_env.FeatureNum, _actionsNumber);
+            _criticNet = critic??new DNet(_env.FeatureNum, _actionsNumber);
         }
         /// <summary>
         /// convert action to raw byte value
@@ -154,54 +135,8 @@ namespace Engine.Brain.Model.RL
         /// <returns></returns>
         public (double[] action, double q) ChooseAction(double[] state)
         {
-            double[] input = new double[_featuresNumber + _actionsNumber];
-            Dictionary<double[], double> predicts = new Dictionary<double[], double>();
-            //1.create dict to simulate action,based on singleAction == true
-            if (_env.SingleAction)
-                for (int i = 0; i < _actionsNumber; i++)
-                    predicts.Add(NP.ToOneHot(i, _actionsNumber), -1.0);
-            //2.env.singleAction == false
-            else
-                for (int i = 1; i < Math.Pow(2, _actionsNumber); i++)
-                {
-                    char[] strOnehot = Convert.ToString(i, 2).PadLeft(_actionsNumber, '0').ToCharArray();
-                    double[] doubleOnehot = new double[_actionsNumber];
-                    for (int index = 0; index < _actionsNumber; index++)
-                        doubleOnehot[_actionsNumber - index - 1] = Convert.ToDouble(strOnehot[index].ToString());
-                    predicts.Add(doubleOnehot, -1.0);
-                }
-            List<double[]> keyCollection = predicts.Keys.ToList();
-            //2.choose action
-            for (int i = 0; i < keyCollection.Count; i++)
-            {
-                double[] key = keyCollection[i];
-                int offset = 0;
-                Array.ConstrainedCopy(state, 0, input, offset, _featuresNumber);
-                offset += _featuresNumber;
-                Array.ConstrainedCopy(key, 0, input, offset, _actionsNumber);
-                offset += _actionsNumber;
-                double[] preditOutput = _actorNet.Predict(input);
-                predicts[key] = preditOutput[0];
-            }
-            //3.sort dictionary
-            var target = predicts.OrderByDescending(p => p.Value).ToDictionary(p => p.Key, o => o.Value).First();
-            //3. calcute action and qvalue
-            return (target.Key, target.Value);
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="state"></param>
-        /// <returns></returns>
-        private double[] MakeInput(double[] state)
-        {
-            double[] input = new double[_featuresNumber + _actionsNumber];
-            int offset = 0;
-            Array.ConstrainedCopy(state, 0, input, offset, _featuresNumber);
-            offset += _featuresNumber;
-            Array.ConstrainedCopy(NP.ToOneHot(0, _actionsNumber), 0, input, offset, _actionsNumber);
-            offset += _actionsNumber;
-            return input;
+            double[] pred = _actorNet.Predict(state);
+            return (pred, pred[NP.Argmax(pred)]);
         }
         /// <summary>
         /// 随机抽取样本
@@ -224,7 +159,7 @@ namespace Engine.Brain.Model.RL
         /// <param name="input_features_tensor"></param>
         /// <param name="input_qvalue_tensor"></param>
         /// <param name="batchSize"></param>
-        private (double[][] inputs, double[][] outputs) MakeDNNBatch(List<Memory> list)
+        private (double[][] inputs, double[][] outputs) MakeBatch(List<Memory> list)
         {
             //batchSize个样本
             int batchSize = list.Count;
@@ -232,25 +167,18 @@ namespace Engine.Brain.Model.RL
             double[][] input_features = new double[batchSize][];
             //qvalue input
             double[][] input_qValue = new double[batchSize][];
-            //let q value equals 0  
-            double q = 0f;
-            //
             for (int i = 0; i < batchSize; i++)
             {
+                //input_qValue[i] = new double[_actionsNumber];
                 //写入当前sample
-                double[] array = input_features[i] = new double[_featuresNumber + _actionsNumber];
-                //写入偏移位
-                int offset = 0;
+                double[] array = input_features[i] = new double[_featuresNumber];
                 //input features assign
-                Array.ConstrainedCopy(list[i].ST, 0, array, offset, _featuresNumber);
-                offset += _featuresNumber;
-                //input actions assign
-                Array.ConstrainedCopy(list[i].AT, 0, array, offset, _actionsNumber);
-                offset += _actionsNumber;
+                Array.ConstrainedCopy(list[i].ST, 0, array, 0, _featuresNumber);
                 //calcute q_next
-                q = _gamma != 0 ? ChooseAction(list[i].S_NEXT).q : q;
+                //double[] q = _gamma != 0 ? ChooseAction(list[i].S_NEXT).action : new double[_actionsNumber];
+                input_qValue[i] = ChooseAction(list[i].ST).action;
                 //input qvalue assign
-                input_qValue[i] = new double[1] { (1 - _alpha) * list[i].QT + _alpha * (list[i].RT + _gamma * q) };
+                input_qValue[i][NP.Argmax(list[i].AT)] = (1 - _alpha) * list[i].QT + _alpha * (list[i].RT + _gamma * input_qValue[i][NP.Argmax(list[i].AT)]);
             }
             return (input_features, input_qValue);
         }
@@ -294,7 +222,7 @@ namespace Engine.Brain.Model.RL
             DateTime now = DateTime.Now;
             //batch of memory
             List<Memory> rawBatchList = CreateRawDataBatch(_batchSize);
-            var (inputs, outputs) = MakeDNNBatch(rawBatchList);
+            var (inputs, outputs) = MakeBatch(rawBatchList);
             //loss计算
             double loss = _criticNet.Train(inputs, outputs);
             return (loss, DateTime.Now - now);
@@ -309,11 +237,15 @@ namespace Engine.Brain.Model.RL
             //eval data batchSize
             const int evalSize = 100;
             var (states, rawLabels) = _env.RandomEval(evalSize);
-            double[][] predicts = new double[evalSize][];
+            double[] predicts = new double[evalSize];
+            double[] targets = new double[evalSize];
             for (int i = 0; i < evalSize; i++)
-                predicts[i] = ChooseAction(states[i]).action;
+            {
+                predicts[i] = NP.Argmax(ChooseAction(states[i]).action);
+                targets[i] = NP.Argmax(rawLabels[i]);
+            }
             //calcute accuracy
-            var accuracy = NP.CalcuteAccuracy(predicts, rawLabels);
+            var accuracy = NP.CalcuteAccuracy(predicts, targets);
             return accuracy;
         }
         /// <summary>
@@ -357,7 +289,6 @@ namespace Engine.Brain.Model.RL
                     Remember(state, action, q, reward, nextState);
                     //train
                     (loss, span) = Replay();
-                    //
                     state = nextState;
                     totalRewards += reward;
                     //copy criticNet paramters to actorNet
