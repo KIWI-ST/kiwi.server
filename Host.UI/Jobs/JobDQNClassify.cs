@@ -100,8 +100,7 @@ namespace Host.UI.Jobs
                     x[i] = inputList[i].ToArray();
                 //构造DQN样本环境
                 _env = new SamplesEnv(x, y);
-                _dqn = new DQN(_env);
-                _dqn.SetParameters(epochs: epochs, gamma: _gamma);
+                _dqn = new DQN(_env, epochs: epochs, gamma: _gamma);
                 _dqn.OnLearningLossEventHandler += _dqn_OnLearningLossEventHandler;
                 //training
                 Summary = "模型训练中";

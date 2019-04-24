@@ -97,7 +97,6 @@ namespace Host.UI.Jobs
                 }
                 SamplesEnv _env = new SamplesEnv(svmInputs, svmOutputs);
                 DQN dqn = new DQN(_env);
-                dqn.SetParameters();
                 dqn.OnLearningLossEventHandler += Dqn_OnLearningLossEventHandler;
                 dqn.Learn();
                 //classify

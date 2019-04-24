@@ -98,7 +98,7 @@ namespace Engine.Brain.Model.RL
         /// 
         /// </summary>
         /// <param name="env"></param>
-        public DQN(IEnv env)
+        public DQN(IEnv env, IDNet actor=null, IDNet critic= null, int epochs = 3000, double gamma = 0.0)
         {
             //
             _env = env;
