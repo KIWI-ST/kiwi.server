@@ -18,32 +18,26 @@ namespace Engine.Brain.Model.DL
         /// log trained epochs
         /// </summary>
         private int traindEpochs = 0;
-
         /// <summary>
         /// trainer function
         /// </summary>
-        readonly Trainer trainer;
-
+        Trainer trainer;
         /// <summary>
         /// model 
         /// </summary>
-        readonly Function classifierOutput;
-
+        Function classifierOutput;
         /// <summary>
         /// 
         /// </summary>
-        private readonly Variable inputVariable;
-
+        private Variable inputVariable;
         /// <summary>
         /// 
         /// </summary>
-        private readonly Variable outputVariable;
-
+        private Variable outputVariable;
         /// <summary>
         /// device
         /// </summary>
         readonly DeviceDescriptor device;
-
         /// <summary>
         /// select device to run model
         /// </summary>
@@ -60,8 +54,8 @@ namespace Engine.Brain.Model.DL
             inputVariable = Variable.InputVariable(NDShape.CreateNDShape(inputDim), DataType.Double, "inputVariable");
             outputVariable = Variable.InputVariable(NDShape.CreateNDShape(outputDim), DataType.Double, "labelVariable");
             classifierOutput = CreateFullyChannelNetwork(inputVariable, c, o);
-            var trainingLoss = CNTKLib.CrossEntropyWithSoftmax(classifierOutput, outputVariable);
-            var prediction = CNTKLib.ClassificationError(classifierOutput, outputVariable);
+            var trainingLoss = CNTKLib.SquaredError(classifierOutput, outputVariable);
+            var prediction = CNTKLib.SquaredError(classifierOutput, outputVariable);
             TrainingParameterScheduleDouble learningRatePerSample = new TrainingParameterScheduleDouble(0.00178125, 1); //0.00178125
             TrainingParameterScheduleDouble momentumTimeConstant = CNTKLib.MomentumAsTimeConstantSchedule(256);
             IList<Learner> parameterLearners = new List<Learner>() { Learner.MomentumSGDLearner(classifierOutput.Parameters(), learningRatePerSample, momentumTimeConstant, true) };
@@ -95,11 +89,15 @@ namespace Engine.Brain.Model.DL
             modelStream.Read(bytes, 0, bytes.Length);
             modelStream.Seek(0, SeekOrigin.Begin);
             //read model and set parameters
-            Function model = Function.Load(bytes, device);
-            int count = model.Parameters().Count;
-            //copy
-            for(int i = 0; i < count; i++)
-                classifierOutput.Parameters()[i].SetValue(model.Parameters()[i].Value());
+            classifierOutput = Function.Load(bytes, device);
+            inputVariable = classifierOutput.Inputs.First(v => v.Name == "inputVariable");
+            outputVariable = Variable.InputVariable(classifierOutput.Output.Shape, DataType.Double, "labelVariable");
+            var trainingLoss = CNTKLib.SquaredError(classifierOutput, outputVariable);
+            var prediction = CNTKLib.SquaredError(classifierOutput, outputVariable);
+            TrainingParameterScheduleDouble learningRatePerSample = new TrainingParameterScheduleDouble(0.00178125, 1); //0.00178125
+            TrainingParameterScheduleDouble momentumTimeConstant = CNTKLib.MomentumAsTimeConstantSchedule(256);
+            IList<Learner> parameterLearners = new List<Learner>() { Learner.MomentumSGDLearner(classifierOutput.Parameters(), learningRatePerSample, momentumTimeConstant, true) };
+            trainer = Trainer.CreateTrainer(classifierOutput, trainingLoss, prediction, parameterLearners);
         }
         /// <summary>
         /// store in memeory
@@ -138,7 +136,7 @@ namespace Engine.Brain.Model.DL
             {
                 traindEpochs++;
                 var miniBatch = new Dictionary<Variable, Value>() { { inputVariable, inputsValue }, { outputVariable, outputsValue } };
-                trainer.TrainMinibatch(miniBatch, true, device);
+                trainer.TrainMinibatch(miniBatch, false, device);
                 return trainer.PreviousMinibatchEvaluationAverage();
             }
         }

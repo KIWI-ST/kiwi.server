@@ -123,7 +123,8 @@ namespace Engine.Brain.Utils
                     CNTKLib.GlorotUniformInitializer(convWScale, -1, 2),
                     device);
                 Function convFunction = CNTKLib.Convolution(convParameters, fetures, new int[] { 1, 1, inputChannel });
-                Function reluFunction = CNTKLib.ReLU(convFunction);
+                //use Selu
+                Function reluFunction = CNTKLib.SELU(convFunction);
                 Function poolling = CNTKLib.Pooling(
                     reluFunction, PoolingType.Max,
                     new int[] { poolingWindowWidth, poolingWindowHeight },
@@ -170,7 +171,7 @@ namespace Engine.Brain.Utils
                     input = CNTKLib.Reshape(input, new int[] { reshapeDim });
                 }
                 Function fc = FullyConnectedLinearLayer(input, outputDim, device, outputName);
-                return CNTKLib.ReLU(fc);
+                return CNTKLib.SELU(fc);
             }
             /// <summary>
             /// 

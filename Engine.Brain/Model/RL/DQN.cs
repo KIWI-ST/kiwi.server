@@ -223,7 +223,6 @@ namespace Engine.Brain.Model.RL
             //batch of memory
             List<Memory> rawBatchList = CreateRawDataBatch(_batchSize);
             var (inputs, outputs) = MakeBatch(rawBatchList);
-            //loss计算
             double loss = _criticNet.Train(inputs, outputs);
             return (loss, DateTime.Now - now);
         }
