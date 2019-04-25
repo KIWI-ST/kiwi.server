@@ -72,7 +72,7 @@ namespace Host.UI.SettingForm
         public void Initial(Dictionary<string, GRasterLayer> rasterDic)
         {
             //convNet types
-            List<string> convTypes = NP.Model.ConvNetCollection;
+            List<string> convTypes = NP.Model.ConvSupportCollection;
             if (convTypes != null&&convTypes.Count>0)
             {
                 ConvType_comboBox.Items.Clear();
@@ -99,9 +99,14 @@ namespace Host.UI.SettingForm
             }
             //source image select 
             RasterLayer_comboBox.Items.Clear();
-            rasterDic.Keys.ToList().ForEach(raster => {
-                RasterLayer_comboBox.Items.Add(raster);
-            });
+            if(rasterDic!=null && rasterDic.Keys.Count > 0)
+            {
+                rasterDic.Keys.ToList().ForEach(raster => {
+                    RasterLayer_comboBox.Items.Add(raster);
+                });
+                RasterLayer_comboBox.SelectedIndex = 0;
+                RasterLayerName = RasterLayer_comboBox.Items[0].ToString();
+            }
         }
 
         private void Device_comboBox_SelectedIndexChanged(object sender, EventArgs e)

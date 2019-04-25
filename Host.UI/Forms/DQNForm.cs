@@ -1,4 +1,5 @@
-﻿using Engine.GIS.GLayer.GRasterLayer;
+﻿using Engine.Brain.Utils;
+using Engine.GIS.GLayer.GRasterLayer;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,17 +18,21 @@ namespace Host.UI.SettingForm
 
         Dictionary<string, GRasterLayer> _rasterDic;
 
-        public string SelectedFeatureRasterLayer { get; private set; }
+        public string RasterLayerName { get; private set; }
 
         public int Epochs { get; private set; } = 3000;
 
         public string SampleFilename { get; private set; }
 
-        public int Width { get; private set; } = 0;
+        public string NetName{get; private set;}
 
-        public int Height { get; private set; } = 0;
+        public string DeviceName { get; private set; }
 
-        public int Depth { get; private set; } = 0;
+        public int ImageWidth { get; private set; } = 0;
+
+        public int ImageHeight { get; private set; } = 0;
+
+        public int ImageDepth { get; private set; } = 0;
 
         public Dictionary<string, GRasterLayer> RasterDic
         {
@@ -40,17 +45,43 @@ namespace Host.UI.SettingForm
 
         public void Initial(Dictionary<string, GRasterLayer> rasterDic)
         {
-            //add raster keys
-            state_comboBox.Items.Clear();
-            rasterDic.Keys.ToList().ForEach(p => {
-                state_comboBox.Items.Add(p);
-            });
-        }
-
-        private void State_comboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            string key = (sender as ComboBox).SelectedItem as string;
-            SelectedFeatureRasterLayer = key;
+            //soruce raster image keys
+            if (rasterDic != null && rasterDic.Keys.Count > 0)
+            {
+                state_comboBox.Items.Clear();
+                rasterDic.Keys.ToList().ForEach(raster => {
+                    state_comboBox.Items.Add(raster);
+                });
+                state_comboBox.SelectedIndex = 0;
+                RasterLayerName = state_comboBox.Items[0].ToString();
+            }
+            //add support net keys
+            SupportNet_comboBox.Items.Clear();
+            List<string> supportNetTypes = NP.Model.ReinforceSupportCollection;
+            if (supportNetTypes != null && supportNetTypes.Count > 0)
+            {
+                SupportNet_comboBox.Items.Clear();
+                supportNetTypes.ForEach(modelType => {
+                    SupportNet_comboBox.Items.Add(modelType);
+                });
+                //set 0 as default
+                SupportNet_comboBox.SelectedIndex = 0;
+                //net name
+                NetName = SupportNet_comboBox.Items[0].ToString();
+            }
+            //check devices name
+            List<string> devices = NP.CNTK.DeviceCollection;
+            Device_comboBox.Items.Clear();
+            if (devices != null && devices.Count > 0)
+            {
+                devices.ForEach(device => {
+                    Device_comboBox.Items.Add(device);
+                });
+                //select index 0 as default
+                Device_comboBox.SelectedIndex = 0;
+                //device name
+                DeviceName = Device_comboBox.Items[0].ToString();
+            }
         }
 
         private void Ok_button_Click(object sender, EventArgs e)
@@ -78,17 +109,35 @@ namespace Host.UI.SettingForm
                 try
                 {
                     //depth
-                    Depth = Convert.ToInt32(parameters[parameters.Length - 1]);
+                    ImageDepth = Convert.ToInt32(parameters[parameters.Length - 1]);
                     //width
-                    Width = Convert.ToInt32(parameters[parameters.Length - 2]);
+                    ImageWidth = Convert.ToInt32(parameters[parameters.Length - 2]);
                     //height
-                    Height = Convert.ToInt32(parameters[parameters.Length - 3]);
+                    ImageHeight = Convert.ToInt32(parameters[parameters.Length - 3]);
                 }
                 catch
                 {
                     MessageBox.Show("样本文件不符合规范，请使用MiniBatch制作样本", "样本命名错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        private void Device_comboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string key = (sender as ComboBox).SelectedItem as string;
+            DeviceName = key;
+        }
+
+        private void State_comboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string key = (sender as ComboBox).SelectedItem as string;
+            RasterLayerName = key;
+        }
+
+        private void SupportNet_comboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string key = (sender as ComboBox).SelectedItem as string;
+            NetName = key;
         }
     }
 }

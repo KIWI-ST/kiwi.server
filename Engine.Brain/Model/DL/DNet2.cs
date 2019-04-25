@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CNTK;
 using Engine.Brain.Utils;
 
@@ -12,7 +10,7 @@ namespace Engine.Brain.Model.DL
     /// <summary>
     /// use Fully Channel Convoluation Neural Network instead of Deep Neural Network
     /// </summary>
-    public class DNet2 : IDNet
+    public class DNet2 : IDSupportDQN
     {
         /// <summary>
         /// log trained epochs
