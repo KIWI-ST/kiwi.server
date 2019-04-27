@@ -16,6 +16,13 @@ namespace Engine.Brain.Utils
         public static class CNTK
         {
             /// <summary>
+            /// activate enum
+            /// </summary>
+            public enum ActivateEnum {
+                SELU=1,
+                RELU=2,
+            }
+            /// <summary>
             /// device get
             /// </summary>
             /// <param name="deviceName"></param>
@@ -90,7 +97,7 @@ namespace Engine.Brain.Utils
                 for (int row = 0; row < numRows; row++)
                 {
                     System.Diagnostics.Debug.Assert(src[row].Length == numColumns);
-                    System.Buffer.BlockCopy(src[row], 0, dst, dstOffset, numBytesInRow);
+                    Buffer.BlockCopy(src[row], 0, dst, dstOffset, numBytesInRow);
                     dstOffset += numBytesInRow;
                 }
                 return dst;
@@ -114,7 +121,8 @@ namespace Engine.Brain.Utils
                 int kernelWidth, int kernelHeight, int inputChannel, int outputChannel,
                 int hStride, int vStride,
                 int poolingWindowWidth, int poolingWindowHeight,
-                DeviceDescriptor device)
+                DeviceDescriptor device,
+                ActivateEnum activateName)
             {
                 double convWScale = 0.26;
                 var convParameters = new Parameter(
@@ -123,10 +131,9 @@ namespace Engine.Brain.Utils
                     CNTKLib.GlorotUniformInitializer(convWScale, -1, 2),
                     device);
                 Function convFunction = CNTKLib.Convolution(convParameters, fetures, new int[] { 1, 1, inputChannel });
-                //use Selu
-                Function reluFunction = CNTKLib.SELU(convFunction);
+                Function activationFunction = Activation(convFunction, activateName);
                 Function poolling = CNTKLib.Pooling(
-                    reluFunction, PoolingType.Max,
+                    activationFunction, PoolingType.Max,
                     new int[] { poolingWindowWidth, poolingWindowHeight },
                     new int[] { hStride, vStride },
                     new bool[] { true });
@@ -144,12 +151,10 @@ namespace Engine.Brain.Utils
             {
                 int inputDim = input.Shape[0];
                 int[] i = { outputDim, inputDim };
-                var timesParam = new Parameter(i, DataType.Double,
-                CNTKLib.GlorotUniformInitializer(
+                var timesParam = new Parameter(i, DataType.Double,CNTKLib.GlorotUniformInitializer(
                     CNTKLib.DefaultParamInitScale,
                     CNTKLib.SentinelValueForInferParamInitRank,
-                    CNTKLib.SentinelValueForInferParamInitRank, 1),
-                device, "timesParam");
+                    CNTKLib.SentinelValueForInferParamInitRank, 1), device, "timesParam");
                 var timesFunction = CNTKLib.Times(timesParam, input, "times");
                 int[] o = { outputDim };
                 var plusParam = new Parameter(o, 0.0, device, "plusParam");
@@ -163,7 +168,7 @@ namespace Engine.Brain.Utils
             /// <param name="device"></param>
             /// <param name="outputName"></param>
             /// <returns></returns>
-            public static Function Dense(Variable input, int outputDim, DeviceDescriptor device, string outputName = "")
+            public static Function Dense(Variable input, int outputDim, DeviceDescriptor device, ActivateEnum activateName,string outputName = "")
             {
                 if (input.Shape.Rank != 1)
                 {
@@ -171,7 +176,30 @@ namespace Engine.Brain.Utils
                     input = CNTKLib.Reshape(input, new int[] { reshapeDim });
                 }
                 Function fc = FullyConnectedLinearLayer(input, outputDim, device, outputName);
-                return CNTKLib.SELU(fc);
+                return Activation(fc, activateName);
+            }
+            /// <summary>
+            /// set activation function 
+            /// </summary>
+            /// <param name="input"></param>
+            /// <param name="activateName"></param>
+            /// <returns></returns>
+            private static Function Activation(Function input, ActivateEnum activateName)
+            {
+                Function activateFunction;
+                switch (activateName)
+                {
+                    case ActivateEnum.SELU:
+                        activateFunction =  CNTKLib.SELU(input);
+                        break;
+                    case ActivateEnum.RELU:
+                        activateFunction = CNTKLib.ReLU(input);
+                        break;
+                    default:
+                        activateFunction = CNTKLib.ReLU(input);
+                        break;
+                }
+                return activateFunction;
             }
             /// <summary>
             /// 

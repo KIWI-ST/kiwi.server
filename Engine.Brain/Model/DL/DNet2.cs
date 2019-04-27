@@ -69,11 +69,11 @@ namespace Engine.Brain.Model.DL
         private Function CreateFullyChannelNetwork(Variable input, int inputChannel, int outputClassNum)
         {
             int[] channels = new int[] { inputChannel, inputChannel, Math.Max(inputChannel / 2, 3), Math.Max(inputChannel / 3, 3), Math.Max(inputChannel / 3, 3) };
-            Function pooling1 = NP.CNTK.ConvolutionWithMaxPooling(input, 3, 3, channels[0], channels[1], 1, 1, 3, 3, device);
-            Function pooling2 = NP.CNTK.ConvolutionWithMaxPooling(pooling1, 3, 3, channels[1], channels[2], 1, 1, 3, 3, device);
-            Function pooling3 = NP.CNTK.ConvolutionWithMaxPooling(pooling2, 3, 3, channels[2], channels[3], 1, 1, 3, 3, device);
-            Function pooling4 = NP.CNTK.ConvolutionWithMaxPooling(pooling3, 3, 3, channels[3], channels[4], 1, 1, 3, 3, device);
-            return NP.CNTK.Dense(pooling4, outputClassNum, device, "ouput");
+            Function pooling1 = NP.CNTK.ConvolutionWithMaxPooling(input, 3, 3, channels[0], channels[1], 1, 1, 3, 3, device, NP.CNTK.ActivateEnum.SELU);
+            Function pooling2 = NP.CNTK.ConvolutionWithMaxPooling(pooling1, 3, 3, channels[1], channels[2], 1, 1, 3, 3, device, NP.CNTK.ActivateEnum.SELU);
+            Function pooling3 = NP.CNTK.ConvolutionWithMaxPooling(pooling2, 3, 3, channels[2], channels[3], 1, 1, 3, 3, device, NP.CNTK.ActivateEnum.SELU);
+            Function pooling4 = NP.CNTK.ConvolutionWithMaxPooling(pooling3, 3, 3, channels[3], channels[4], 1, 1, 3, 3, device, NP.CNTK.ActivateEnum.SELU);
+            return NP.CNTK.Dense(pooling4, outputClassNum, device, NP.CNTK.ActivateEnum.SELU ,"ouput");
         }
         /// <summary>
         /// async parameters
