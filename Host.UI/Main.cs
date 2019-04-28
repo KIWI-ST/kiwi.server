@@ -516,11 +516,13 @@ namespace Host.UI
                     if (dqnForm.ShowDialog() == DialogResult.OK)
                     {
                         IJob dqnClassifyJob = new JobDQNClassify(
-                            _rasterDic[dqnForm.SelectedFeatureRasterLayer],
+                            _rasterDic[dqnForm.RasterLayerName],
                             dqnForm.SampleFilename,
-                            dqnForm.Width,
-                            dqnForm.Height,
-                            dqnForm.Depth,
+                            dqnForm.NetName,
+                            dqnForm.DeviceName,
+                            dqnForm.ImageWidth,
+                            dqnForm.ImageHeight,
+                            dqnForm.ImageDepth,
                             dqnForm.Epochs);
                         RegisterJob(dqnClassifyJob);
                         dqnClassifyJob.Start();

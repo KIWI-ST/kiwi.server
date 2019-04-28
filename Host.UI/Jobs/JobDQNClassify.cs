@@ -4,6 +4,8 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using Engine.Brain.Model;
+using Engine.Brain.Model.DL;
 using Engine.Brain.Model.RL;
 using Engine.Brain.Model.RL.Env;
 using Engine.Brain.Utils;
@@ -67,7 +69,7 @@ namespace Host.UI.Jobs
         /// <param name="featureRasterLayer"></param>
         /// <param name="envSampleFilename"></param>
         /// <param name="epochs"></param>
-        public JobDQNClassify(GRasterLayer featureRasterLayer, string envSampleFilename, int width, int height, int depth, int epochs = 3000)
+        public JobDQNClassify(GRasterLayer featureRasterLayer, string envSampleFilename, string supportNetName,string deviceName, int width, int height, int depth, int epochs = 3000)
         {
             _t = new Thread(() =>
             {
@@ -90,20 +92,35 @@ namespace Host.UI.Jobs
                         inputList.Add(inputItem);
                         text = sr.ReadLine();
                     } while (text != null);
+                    //转换成指定类型
+                    int count = inputList.Count;
+                    double[][] x = new double[count][];
+                    int[] y = outputList.ToArray();
+                    for (int i = 0; i < count; i++)
+                        x[i] = inputList[i].ToArray();
+                    //构造DQN样本环境
+                    _env = new SamplesEnv(x, y);
                 }
                 Summary = "模型训练中";
-                //转换成指定类型
-                int count = inputList.Count;
-                double[][] x = new double[count][];
-                int[] y = outputList.ToArray();
-                for (int i = 0; i < count; i++)
-                    x[i] = inputList[i].ToArray();
-                //构造DQN样本环境
-                _env = new SamplesEnv(x, y);
-                _dqn = new DQN(_env, epochs: epochs, gamma: _gamma);
+                //create actor and critic
+                IDNet actor, critic;
+                if(supportNetName == typeof(DNet).Name)
+                {
+                    actor = new DNet(new int[] { width, height, depth }, _env.ActionNum);
+                    critic = new DNet(new int[] { width, height, depth }, _env.ActionNum);
+                }
+                else if(supportNetName == typeof(DNet2).Name)
+                {
+                    actor = new DNet2(deviceName, width, height, depth, _env.ActionNum);
+                    critic = new DNet2(deviceName, width, height, depth, _env.ActionNum);
+                }
+                else
+                {
+                    actor = new DNet(new int[] { width, height, depth }, _env.ActionNum);
+                    critic = new DNet(new int[] { width, height, depth }, _env.ActionNum);
+                }
+                _dqn = new DQN(_env, actor, critic ,epochs: epochs, gamma: _gamma);
                 _dqn.OnLearningLossEventHandler += _dqn_OnLearningLossEventHandler;
-                //training
-                Summary = "模型训练中";
                 _dqn.Learn();
                 //classification
                 Summary = "分类应用中";

@@ -58,7 +58,7 @@ namespace Engine.Brain.Model.DL
     /// <summary>
     /// DQN State Prediction NeuralNetwork 
     /// </summary>
-    public class DNet : IDNet
+    public class DNet : IDSupportDQN
     {
         ActivationNetwork _network;
 

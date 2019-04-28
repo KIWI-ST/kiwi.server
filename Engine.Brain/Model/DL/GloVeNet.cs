@@ -94,9 +94,9 @@ namespace Engine.Brain.Model.DL
             //create model 
             model = CNTKLib.OneHotOp(x, numClass: (uint)MaxWordsNum, outputSparse: true, axis: new Axis(0));
             model = NP.CNTK.Embedding(model, EmbeddingDimNum, device, embedding_weights, "Embedding_1");
-            model = NP.CNTK.Dense(model, 32, device);
+            model = NP.CNTK.Dense(model, 32, device, NP.CNTK.ActivateEnum.RELU);
             model = CNTKLib.ReLU(model);
-            model = NP.CNTK.Dense(model, 1, device);
+            model = NP.CNTK.Dense(model, 1, device, NP.CNTK.ActivateEnum.RELU);
             model = CNTKLib.Sigmoid(model);
             //
             var loss_function = CNTKLib.BinaryCrossEntropy(model, y);

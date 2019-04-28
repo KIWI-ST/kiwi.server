@@ -9,23 +9,25 @@ namespace Engine.Brain.Utils
     {
         public static class Model
         {
-            public static List<string> ConvNetCollection {
+            /// <summary>
+            /// get convnet support only
+            /// </summary>
+            public static List<string> ConvSupportCollection {
                 get {
                     IEnumerable<string> typeNames = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.GetInterfaces().Contains(typeof(IDConvNet))).Select(s => s.ToString().Split('.').Last());
                     return typeNames.ToList();
                 }
             }
             /// <summary>
-            /// all the ConvNet constructed with w,h,c and output classNum
+            /// get deep reinforcement neural net support , for DQN
             /// </summary>
-            /// <param name="name"></param>
-            /// <param name="width"></param>
-            /// <param name="height"></param>
-            /// <param name="channel"></param>
-            /// <param name="classNum"></param>
-            public static IDConvNet creator(string name, int width, int height, int channel, int classNum)
+            public static List<string> ReinforceSupportCollection
             {
-                return null;
+                get
+                {
+                    IEnumerable<string> typeNames = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.GetInterfaces().Contains(typeof(IDSupportDQN))).Select(s => s.ToString().Split('.').Last());
+                    return typeNames.ToList();
+                }
             }
         }
     }
