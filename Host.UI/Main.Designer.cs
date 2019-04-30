@@ -38,14 +38,6 @@
             this.map_toolStrip = new System.Windows.Forms.ToolStrip();
             this.CNN_SVM_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.CNN_DQN_toolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.SINGLE_toolStripDropDownButton = new System.Windows.Forms.ToolStripDropDownButton();
-            this.RF_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.SVM_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
-            this.ConvNet_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.DQN_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.BATCHS_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.Kappa_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -79,6 +71,12 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.bandExport_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.main_notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.RF_ToolStripMenuItem = new System.Windows.Forms.ToolStripButton();
+            this.DQN_ToolStripMenuItem = new System.Windows.Forms.ToolStripButton();
+            this.SVM_ToolStripMenuItem = new System.Windows.Forms.ToolStripButton();
+            this.ConvNet_ToolStripMenuItem = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.map_menuStrip.SuspendLayout();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
@@ -151,11 +149,14 @@
             this.map_toolStrip.BackColor = System.Drawing.Color.White;
             this.map_toolStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.map_toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.RF_ToolStripMenuItem,
+            this.SVM_ToolStripMenuItem,
+            this.DQN_ToolStripMenuItem,
+            this.ConvNet_ToolStripMenuItem,
+            this.toolStripSeparator5,
             this.CNN_SVM_toolStripButton,
             this.CNN_DQN_toolStripButton,
-            this.toolStripSeparator1,
-            this.SINGLE_toolStripDropDownButton,
-            this.toolStripSeparator5,
+            this.toolStripSeparator6,
             this.BATCHS_toolStripButton,
             this.Kappa_toolStripButton,
             this.toolStripSeparator2,
@@ -178,8 +179,8 @@
             this.CNN_SVM_toolStripButton.Image = global::Host.UI.Properties.Resources.mingpai;
             this.CNN_SVM_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.CNN_SVM_toolStripButton.Name = "CNN_SVM_toolStripButton";
-            this.CNN_SVM_toolStripButton.Size = new System.Drawing.Size(57, 44);
-            this.CNN_SVM_toolStripButton.Text = "CSVM";
+            this.CNN_SVM_toolStripButton.Size = new System.Drawing.Size(87, 44);
+            this.CNN_SVM_toolStripButton.Text = "CNN-SVM";
             this.CNN_SVM_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.CNN_SVM_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
             // 
@@ -188,72 +189,10 @@
             this.CNN_DQN_toolStripButton.Image = global::Host.UI.Properties.Resources.kafei;
             this.CNN_DQN_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.CNN_DQN_toolStripButton.Name = "CNN_DQN_toolStripButton";
-            this.CNN_DQN_toolStripButton.Size = new System.Drawing.Size(58, 44);
-            this.CNN_DQN_toolStripButton.Text = "CDQN";
+            this.CNN_DQN_toolStripButton.Size = new System.Drawing.Size(88, 44);
+            this.CNN_DQN_toolStripButton.Text = "CNN-DQN";
             this.CNN_DQN_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.CNN_DQN_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 47);
-            // 
-            // SINGLE_toolStripDropDownButton
-            // 
-            this.SINGLE_toolStripDropDownButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.RF_ToolStripMenuItem,
-            this.SVM_ToolStripMenuItem,
-            this.toolStripMenuItem4,
-            this.ConvNet_ToolStripMenuItem,
-            this.DQN_ToolStripMenuItem});
-            this.SINGLE_toolStripDropDownButton.Image = global::Host.UI.Properties.Resources.duorou;
-            this.SINGLE_toolStripDropDownButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.SINGLE_toolStripDropDownButton.Name = "SINGLE_toolStripDropDownButton";
-            this.SINGLE_toolStripDropDownButton.Size = new System.Drawing.Size(67, 44);
-            this.SINGLE_toolStripDropDownButton.Text = "Haplo";
-            this.SINGLE_toolStripDropDownButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            // 
-            // RF_ToolStripMenuItem
-            // 
-            this.RF_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icon_test;
-            this.RF_ToolStripMenuItem.Name = "RF_ToolStripMenuItem";
-            this.RF_ToolStripMenuItem.Size = new System.Drawing.Size(311, 26);
-            this.RF_ToolStripMenuItem.Text = "Random Forest";
-            this.RF_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
-            // 
-            // SVM_ToolStripMenuItem
-            // 
-            this.SVM_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.gongwenbao;
-            this.SVM_ToolStripMenuItem.Name = "SVM_ToolStripMenuItem";
-            this.SVM_ToolStripMenuItem.Size = new System.Drawing.Size(311, 26);
-            this.SVM_ToolStripMenuItem.Text = "Support Vector Machines";
-            this.SVM_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
-            // 
-            // toolStripMenuItem4
-            // 
-            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(308, 6);
-            // 
-            // ConvNet_ToolStripMenuItem
-            // 
-            this.ConvNet_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.jisuan_f;
-            this.ConvNet_ToolStripMenuItem.Name = "ConvNet_ToolStripMenuItem";
-            this.ConvNet_ToolStripMenuItem.Size = new System.Drawing.Size(311, 26);
-            this.ConvNet_ToolStripMenuItem.Text = "Convolutional Neural Networks";
-            this.ConvNet_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
-            // 
-            // DQN_ToolStripMenuItem
-            // 
-            this.DQN_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.erji;
-            this.DQN_ToolStripMenuItem.Name = "DQN_ToolStripMenuItem";
-            this.DQN_ToolStripMenuItem.Size = new System.Drawing.Size(311, 26);
-            this.DQN_ToolStripMenuItem.Text = "Deep Q Network";
-            this.DQN_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 47);
             // 
             // BATCHS_toolStripButton
             // 
@@ -405,7 +344,7 @@
             this.splitContainer_main.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.splitContainer_main.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer_main.Location = new System.Drawing.Point(0, 75);
-            this.splitContainer_main.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.splitContainer_main.Margin = new System.Windows.Forms.Padding(4);
             this.splitContainer_main.Name = "splitContainer_main";
             // 
             // splitContainer_main.Panel1
@@ -425,7 +364,7 @@
             this.map_tabControl.Controls.Add(this.tab_treeview);
             this.map_tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.map_tabControl.Location = new System.Drawing.Point(0, 0);
-            this.map_tabControl.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.map_tabControl.Margin = new System.Windows.Forms.Padding(4);
             this.map_tabControl.Name = "map_tabControl";
             this.map_tabControl.SelectedIndex = 0;
             this.map_tabControl.Size = new System.Drawing.Size(275, 777);
@@ -435,9 +374,9 @@
             // 
             this.tab_treeview.Controls.Add(this.map_treeView);
             this.tab_treeview.Location = new System.Drawing.Point(4, 25);
-            this.tab_treeview.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tab_treeview.Margin = new System.Windows.Forms.Padding(4);
             this.tab_treeview.Name = "tab_treeview";
-            this.tab_treeview.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tab_treeview.Padding = new System.Windows.Forms.Padding(4);
             this.tab_treeview.Size = new System.Drawing.Size(267, 748);
             this.tab_treeview.TabIndex = 0;
             this.tab_treeview.Text = "TreeView";
@@ -447,7 +386,7 @@
             // 
             this.map_treeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.map_treeView.Location = new System.Drawing.Point(4, 4);
-            this.map_treeView.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.map_treeView.Margin = new System.Windows.Forms.Padding(4);
             this.map_treeView.Name = "map_treeView";
             this.map_treeView.Size = new System.Drawing.Size(259, 740);
             this.map_treeView.TabIndex = 0;
@@ -458,7 +397,7 @@
             this.Main_tabControl.Controls.Add(this.tab_mapview);
             this.Main_tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Main_tabControl.Location = new System.Drawing.Point(0, 0);
-            this.Main_tabControl.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Main_tabControl.Margin = new System.Windows.Forms.Padding(4);
             this.Main_tabControl.Name = "Main_tabControl";
             this.Main_tabControl.SelectedIndex = 0;
             this.Main_tabControl.Size = new System.Drawing.Size(925, 777);
@@ -468,9 +407,9 @@
             // 
             this.tab_mapview.Controls.Add(this.map_splitContainer);
             this.tab_mapview.Location = new System.Drawing.Point(4, 25);
-            this.tab_mapview.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tab_mapview.Margin = new System.Windows.Forms.Padding(4);
             this.tab_mapview.Name = "tab_mapview";
-            this.tab_mapview.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tab_mapview.Padding = new System.Windows.Forms.Padding(4);
             this.tab_mapview.Size = new System.Drawing.Size(917, 748);
             this.tab_mapview.TabIndex = 1;
             this.tab_mapview.Text = "MapView";
@@ -574,6 +513,52 @@
             this.main_notifyIcon.Visible = true;
             this.main_notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.main_notifyIcon_MouseDoubleClick);
             // 
+            // RF_ToolStripMenuItem
+            // 
+            this.RF_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.clock;
+            this.RF_ToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.RF_ToolStripMenuItem.Name = "RF_ToolStripMenuItem";
+            this.RF_ToolStripMenuItem.Size = new System.Drawing.Size(140, 44);
+            this.RF_ToolStripMenuItem.Text = "RandomForest";
+            this.RF_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
+            // 
+            // DQN_ToolStripMenuItem
+            // 
+            this.DQN_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.dangandai;
+            this.DQN_ToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.DQN_ToolStripMenuItem.Name = "DQN_ToolStripMenuItem";
+            this.DQN_ToolStripMenuItem.Size = new System.Drawing.Size(111, 44);
+            this.DQN_ToolStripMenuItem.Text = "DeepQNet";
+            this.DQN_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
+            // 
+            // SVM_ToolStripMenuItem
+            // 
+            this.SVM_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.duorou;
+            this.SVM_ToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.SVM_ToolStripMenuItem.Name = "SVM_ToolStripMenuItem";
+            this.SVM_ToolStripMenuItem.Size = new System.Drawing.Size(90, 44);
+            this.SVM_ToolStripMenuItem.Text = "L2-SVM";
+            this.SVM_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
+            // 
+            // ConvNet_ToolStripMenuItem
+            // 
+            this.ConvNet_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.email;
+            this.ConvNet_ToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ConvNet_ToolStripMenuItem.Name = "ConvNet_ToolStripMenuItem";
+            this.ConvNet_ToolStripMenuItem.Size = new System.Drawing.Size(97, 44);
+            this.ConvNet_ToolStripMenuItem.Text = "ConvNet";
+            this.ConvNet_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 47);
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(6, 47);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -585,7 +570,7 @@
             this.Controls.Add(this.map_menuStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.map_menuStrip;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "AI-Based Toolkit";
@@ -644,7 +629,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem bandExport_ToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton Kappa_toolStripButton;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton Map_task_toolStripButton;
         private System.Windows.Forms.ToolStripMenuItem RPC_ToolStripMenuItem;
         private System.Windows.Forms.NotifyIcon main_notifyIcon;
@@ -652,14 +636,7 @@
         private System.Windows.Forms.ToolStripButton CNN_SVM_toolStripButton;
         private System.Windows.Forms.ToolStripButton CNN_DQN_toolStripButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripDropDownButton SINGLE_toolStripDropDownButton;
-        private System.Windows.Forms.ToolStripMenuItem RF_ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem SVM_ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
-        private System.Windows.Forms.ToolStripMenuItem ConvNet_ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem DQN_ToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripDropDownButton NLP_Services_toolStripDropDownButton;
         private System.Windows.Forms.ToolStripMenuItem Configuration_ToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
@@ -668,6 +645,12 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripButton Expertise_toolStripButton;
         private System.Windows.Forms.ToolStripButton Scenario_toolStripButton;
+        private System.Windows.Forms.ToolStripButton RF_ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton SVM_ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton ConvNet_ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton DQN_ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
     }
 }
 
