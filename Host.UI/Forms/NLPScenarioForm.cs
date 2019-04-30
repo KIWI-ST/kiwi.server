@@ -62,7 +62,7 @@ namespace Host.UI.Forms
                 case "Similarity_toolStripButton":
                     {
                         List<string> factors = NLPConfiguration.FactorScenarioString.Split(';').ToList();
-                        List<string> antis = NLPConfiguration.AntiScenarioString.Split(';').ToList();
+                        List<string> antis = NLPConfiguration.InduceScenarioString.Split(';').ToList();
                         List<string> affects = NLPConfiguration.AffectScenarioString.Split(';').ToList();
                         //
                         Corpus_listBox.Items.Clear();
@@ -104,7 +104,7 @@ namespace Host.UI.Forms
                 case "Preview_toolStripButton":
                     {
                         List<string> factors = NLPConfiguration.FactorScenarioString.Split(';').ToList();
-                        List<string> antis = NLPConfiguration.AntiScenarioString.Split(';').ToList();
+                        List<string> antis = NLPConfiguration.InduceScenarioString.Split(';').ToList();
                         List<string> affects = NLPConfiguration.AffectScenarioString.Split(';').ToList();
                         Thread t = new Thread(() => {
                             int totalNum = factors.Count + antis.Count + affects.Count+CorpusWordList.Count;

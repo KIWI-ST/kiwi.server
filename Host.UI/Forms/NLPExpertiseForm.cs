@@ -75,7 +75,7 @@ namespace Host.UI.Forms
         void InitialConfigValue()
         {
             factors = NLPConfiguration.FactorScenarioString.Split(';').ToList();
-            induces = NLPConfiguration.AntiScenarioString.Split(';').ToList();
+            induces = NLPConfiguration.InduceScenarioString.Split(';').ToList();
             affects = NLPConfiguration.AffectScenarioString.Split(';').ToList();
             UpdateScenarioListView(Induce_listView, induces);
             UpdateScenarioListView(Factor_listView, factors);
@@ -270,8 +270,9 @@ namespace Host.UI.Forms
         private void Save_button_Click(object sender, EventArgs e)
         {
             NLPConfiguration.AffectScenarioString = string.Join(";", affects.ToArray());
-            NLPConfiguration.AntiScenarioString = string.Join(";", induces.ToArray());
+            NLPConfiguration.InduceScenarioString = string.Join(";", induces.ToArray());
             NLPConfiguration.FactorScenarioString = string.Join(";", factors.ToArray());
+            NLPConfiguration.RescueScenarioString = string.Join(";", rescues.ToArray());
             MessageBox.Show("情景要素中心词已保存", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 

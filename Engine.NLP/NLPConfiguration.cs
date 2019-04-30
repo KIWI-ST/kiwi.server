@@ -108,15 +108,15 @@ namespace Engine.NLP
         /// <summary>
         /// 情景抗灾体
         /// </summary>
-        public static string AntiScenarioString
+        public static string InduceScenarioString
         {
             get
             {
-                return GetConfigValueByKey("AntiScenarioString", "");
+                return GetConfigValueByKey("InduceScenarioString", "");
             }
             set
             {
-                UpdateConfigKeyValue("AntiScenarioString", value);
+                UpdateConfigKeyValue("InduceScenarioString", value);
             }
         }
         /// <summary>
@@ -130,6 +130,20 @@ namespace Engine.NLP
             set
             {
                 UpdateConfigKeyValue("AffectScenarioString", value);
+            }
+        }
+        /// <summary>
+        /// 情景承灾体
+        /// </summary>
+        public static string RescueScenarioString
+        {
+            get
+            {
+                return GetConfigValueByKey("RescueScenarioString", "");
+            }
+            set
+            {
+                UpdateConfigKeyValue("RescueScenarioString", value);
             }
         }
     }
