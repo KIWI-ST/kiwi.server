@@ -149,13 +149,13 @@
             this.map_toolStrip.BackColor = System.Drawing.Color.White;
             this.map_toolStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.map_toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.CNN_DQN_toolStripButton,
+            this.CNN_SVM_toolStripButton,
+            this.toolStripSeparator5,
             this.RF_ToolStripMenuItem,
             this.SVM_ToolStripMenuItem,
             this.DQN_ToolStripMenuItem,
             this.ConvNet_ToolStripMenuItem,
-            this.toolStripSeparator5,
-            this.CNN_SVM_toolStripButton,
-            this.CNN_DQN_toolStripButton,
             this.toolStripSeparator6,
             this.BATCHS_toolStripButton,
             this.Kappa_toolStripButton,
@@ -179,9 +179,8 @@
             this.CNN_SVM_toolStripButton.Image = global::Host.UI.Properties.Resources.mingpai;
             this.CNN_SVM_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.CNN_SVM_toolStripButton.Name = "CNN_SVM_toolStripButton";
-            this.CNN_SVM_toolStripButton.Size = new System.Drawing.Size(87, 44);
+            this.CNN_SVM_toolStripButton.Size = new System.Drawing.Size(107, 44);
             this.CNN_SVM_toolStripButton.Text = "CNN-SVM";
-            this.CNN_SVM_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.CNN_SVM_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
             // 
             // CNN_DQN_toolStripButton
@@ -189,9 +188,8 @@
             this.CNN_DQN_toolStripButton.Image = global::Host.UI.Properties.Resources.kafei;
             this.CNN_DQN_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.CNN_DQN_toolStripButton.Name = "CNN_DQN_toolStripButton";
-            this.CNN_DQN_toolStripButton.Size = new System.Drawing.Size(88, 44);
+            this.CNN_DQN_toolStripButton.Size = new System.Drawing.Size(108, 44);
             this.CNN_DQN_toolStripButton.Text = "CNN-DQN";
-            this.CNN_DQN_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.CNN_DQN_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
             // 
             // BATCHS_toolStripButton
