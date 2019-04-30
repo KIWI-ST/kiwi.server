@@ -25,6 +25,7 @@ namespace Host.UI.Forms
         {
             InitializeComponent();
         }
+
         #region Properties Class Name
         readonly static java.lang.Class sentencesAnnotationClass = new CoreAnnotations.SentencesAnnotation().getClass();
         readonly static java.lang.Class tokensAnnotationClass = new CoreAnnotations.TokensAnnotation().getClass();
@@ -34,6 +35,7 @@ namespace Host.UI.Forms
         readonly static java.lang.Class normalizedNamedEntityTagAnnotationClass = new CoreAnnotations.NormalizedNamedEntityTagAnnotation().getClass();
         readonly static java.lang.Class timeExpressionClass = new TimeExpression.Annotation().getClass();
         #endregion
+        
         /// <summary>
         /// 
         /// </summary>

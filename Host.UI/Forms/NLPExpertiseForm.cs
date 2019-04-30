@@ -20,15 +20,21 @@ namespace Host.UI.Forms
         /// </summary>
         Factor = 1,
         /// <summary>
-        /// 抗灾体
+        /// 孕灾环境
         /// </summary>
-        Anti = 2,
+        Induce = 2,
         /// <summary>
         /// 承灾体
         /// </summary>
-        Affect = 3
+        Affect = 3,
+        /// <summary>
+        /// 救援力量
+        /// </summary>
+        Rescue = 4
     }
-
+    /// <summary>
+    /// 
+    /// </summary>
     public partial class NLPExpertiseForm : Form
     {
 
@@ -38,16 +44,51 @@ namespace Host.UI.Forms
             InitialConfigValue();
         }
 
+        #region Intilization
+        /// <summary>
+        ///灾害系统要素
+        /// </summary>
+        private ScenarioElementType scenarioType = ScenarioElementType.Factor;
+        /// <summary>
+        /// 词嵌入模型（GloVe）
+        /// </summary>
+        public IDEmbeddingNet GloveNet { get; set; }
+        /// <summary>
+        /// 孕灾环境
+        /// </summary>
+        List<string> induces = new List<string>();
+        /// <summary>
+        /// 致灾因子
+        /// </summary>
+        List<string> factors = new List<string>();
+        /// <summary>
+        /// 承灾体
+        /// </summary>
+        List<string> affects = new List<string>();
+        /// <summary>
+        /// 救援力量
+        /// </summary>
+        List<string> rescues = new List<string>();
+        /// <summary>
+        /// load config data
+        /// </summary>
         void InitialConfigValue()
         {
             factors = NLPConfiguration.FactorScenarioString.Split(';').ToList();
-            antis = NLPConfiguration.AntiScenarioString.Split(';').ToList();
+            induces = NLPConfiguration.AntiScenarioString.Split(';').ToList();
             affects = NLPConfiguration.AffectScenarioString.Split(';').ToList();
-            //
+            UpdateScenarioListView(Induce_listView, induces);
             UpdateScenarioListView(Factor_listView, factors);
-            UpdateScenarioListView(Anti_listView, antis);
             UpdateScenarioListView(Affect_listView, affects);
         }
+        /// <summary>
+        /// 更新进度委托
+        /// </summary>
+        /// <param name="process"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="c"></param>
+        private delegate void UpdateProcessTipHandler(double process, double[][] a = null, double[][] b = null, double[][] c = null);
         /// <summary>
         /// 
         /// </summary>
@@ -63,23 +104,16 @@ namespace Host.UI.Forms
                 scott_plot_form.AddData(b, b.Length, Color.Blue);
                 scott_plot_form.AddData(c, c.Length, Color.Green);
                 scott_plot_form.Render();
-               // scott_plot_form.Title("Words Embedding Visualization");
                 scott_plot_form.ShowDialog();
             }
-            else
-                Visual_button.Text = string.Format("{0:P}", process);
+            else//Visual_button.Text = string.Format("{0:P}", process);
+                Visual_button.Text = "正在处理";
         }
-
-        private delegate void UpdateProcessTipHandler(double process, double[][] a = null, double[][] b = null, double[][] c = null);
-
-        public IDEmbeddingNet GloveNet { get; set; }
-
-        List<string> factors = new List<string>();
-        List<string> antis = new List<string>();
-        List<string> affects = new List<string>();
-
-        ScenarioElementType scenarioType = ScenarioElementType.Factor;
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="listView"></param>
+        /// <param name="words"></param>
         private void UpdateScenarioListView(ListView listView, List<string> words)
         {
             listView.Items.Clear();
@@ -87,6 +121,32 @@ namespace Host.UI.Forms
             {
                 listView.Items.Add(word);
             });
+        }
+        #endregion
+
+        #region UI response
+
+        private void Scenario_tabControl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            TabControl tabControl = sender as TabControl;
+            switch (tabControl.SelectedIndex)
+            {
+                case 0:
+                    scenarioType = ScenarioElementType.Factor;
+                    break;
+                case 1:
+                    scenarioType = ScenarioElementType.Induce;
+                    break;
+                case 2:
+                    scenarioType = ScenarioElementType.Affect;
+                    break;
+                case 3:
+                    scenarioType = ScenarioElementType.Rescue;
+                    break;
+                default:
+                    scenarioType = ScenarioElementType.Factor;
+                    break;
+            }
         }
 
         private void Add_button_Click(object sender, EventArgs e)
@@ -102,11 +162,11 @@ namespace Host.UI.Forms
                         UpdateScenarioListView(Factor_listView, factors);
                     }
                     break;
-                case ScenarioElementType.Anti:
+                case ScenarioElementType.Induce:
                     {
-                        if (!antis.Contains(word))
-                            antis.Add(word);
-                        UpdateScenarioListView(Anti_listView, antis);
+                        if (!induces.Contains(word))
+                            induces.Add(word);
+                        UpdateScenarioListView(Induce_listView, induces);
                     }
                     break;
                 case ScenarioElementType.Affect:
@@ -114,6 +174,13 @@ namespace Host.UI.Forms
                         if (!affects.Contains(word))
                             affects.Add(word);
                         UpdateScenarioListView(Affect_listView, affects);
+                    }
+                    break;
+                case ScenarioElementType.Rescue:
+                    {
+                        if (!rescues.Contains(word))
+                            rescues.Add(word);
+                        UpdateScenarioListView(Rescue_listView, rescues);
                     }
                     break;
                 default:
@@ -134,11 +201,11 @@ namespace Host.UI.Forms
                         UpdateScenarioListView(Factor_listView, factors);
                     }
                     break;
-                case ScenarioElementType.Anti:
+                case ScenarioElementType.Induce:
                     {
-                        if (antis.Contains(word))
-                            antis.Remove(word);
-                        UpdateScenarioListView(Anti_listView, antis);
+                        if (induces.Contains(word))
+                            induces.Remove(word);
+                        UpdateScenarioListView(Induce_listView, induces);
                     }
                     break;
                 case ScenarioElementType.Affect:
@@ -146,6 +213,13 @@ namespace Host.UI.Forms
                         if (affects.Contains(word))
                             affects.Remove(word);
                         UpdateScenarioListView(Affect_listView, affects);
+                    }
+                    break;
+                case ScenarioElementType.Rescue:
+                    {
+                        if (rescues.Contains(word))
+                            rescues.Remove(word);
+                        UpdateScenarioListView(Rescue_listView, rescues);
                     }
                     break;
                 default:
@@ -163,23 +237,25 @@ namespace Host.UI.Forms
             Visual_button.Enabled = false;
             Thread t = new Thread(() =>
             {
-                int totalNum = factors.Count + antis.Count + affects.Count;
+                //0.通知预处理开始
+                Invoke(new UpdateProcessTipHandler(UpdateProcessTip), 0.0);
+                int totalNum = factors.Count + induces.Count + affects.Count;
                 //1. 构建词W集合
                 double[][] words = new double[totalNum][];
                 //2.定义词颜色
                 for (int i = 0; i < factors.Count; i++)
                     words[i] = GloveNet.Predict(factors[i]);
-                for (int i = 0; i < antis.Count; i++)
-                    words[factors.Count + i] = GloveNet.Predict(antis[i]);
+                for (int i = 0; i < induces.Count; i++)
+                    words[factors.Count + i] = GloveNet.Predict(induces[i]);
                 for (int i = 0; i < affects.Count; i++)
-                    words[factors.Count + antis.Count + i] = GloveNet.Predict(affects[i]);
+                    words[factors.Count + induces.Count + i] = GloveNet.Predict(affects[i]);
                 //3.t-SNE算法降维
                 var vWords = NP.TSNE2(words);
                 //4.可视化
                 Invoke(new UpdateProcessTipHandler(UpdateProcessTip), 1.0,
                     vWords.Take(factors.Count).ToArray(),
-                    vWords.Skip(factors.Count).Take(antis.Count).ToArray(),
-                    vWords.Skip(factors.Count + antis.Count).Take(affects.Count).ToArray());
+                    vWords.Skip(factors.Count).Take(induces.Count).ToArray(),
+                    vWords.Skip(factors.Count + induces.Count).Take(affects.Count).ToArray());
             });
             t.IsBackground = true;
             t.Start();
@@ -191,33 +267,14 @@ namespace Host.UI.Forms
             Word_textBox.Text = selectItems.Count > 0 ? selectItems[0].Text : "";
         }
 
-        private void Scenario_tabControl_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            TabControl tabControl = sender as TabControl;
-            switch (tabControl.SelectedIndex)
-            {
-                case 0:
-                    scenarioType = ScenarioElementType.Factor;
-                    break;
-                case 1:
-                    scenarioType = ScenarioElementType.Anti;
-                    break;
-                case 2:
-                    scenarioType = ScenarioElementType.Affect;
-                    break;
-                default:
-                    scenarioType = ScenarioElementType.Factor;
-                    break;
-            }
-        }
-
         private void Save_button_Click(object sender, EventArgs e)
         {
             NLPConfiguration.AffectScenarioString = string.Join(";", affects.ToArray());
-            NLPConfiguration.AntiScenarioString = string.Join(";", antis.ToArray());
+            NLPConfiguration.AntiScenarioString = string.Join(";", induces.ToArray());
             NLPConfiguration.FactorScenarioString = string.Join(";", factors.ToArray());
             MessageBox.Show("情景要素中心词已保存", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        #endregion
     }
 }

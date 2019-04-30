@@ -30,23 +30,26 @@
         {
             this.Scenario_groupBox = new System.Windows.Forms.GroupBox();
             this.Scenario_tabControl = new System.Windows.Forms.TabControl();
+            this.Anti_tabPage = new System.Windows.Forms.TabPage();
+            this.Induce_listView = new System.Windows.Forms.ListView();
             this.Factor_tabPage = new System.Windows.Forms.TabPage();
             this.Factor_listView = new System.Windows.Forms.ListView();
-            this.Anti_tabPage = new System.Windows.Forms.TabPage();
-            this.Anti_listView = new System.Windows.Forms.ListView();
             this.Affect_tabPage = new System.Windows.Forms.TabPage();
             this.Affect_listView = new System.Windows.Forms.ListView();
+            this.Rescue_tabPage = new System.Windows.Forms.TabPage();
             this.label1 = new System.Windows.Forms.Label();
             this.Word_textBox = new System.Windows.Forms.TextBox();
             this.Add_button = new System.Windows.Forms.Button();
             this.Remove_button = new System.Windows.Forms.Button();
             this.Save_button = new System.Windows.Forms.Button();
             this.Visual_button = new System.Windows.Forms.Button();
+            this.Rescue_listView = new System.Windows.Forms.ListView();
             this.Scenario_groupBox.SuspendLayout();
             this.Scenario_tabControl.SuspendLayout();
-            this.Factor_tabPage.SuspendLayout();
             this.Anti_tabPage.SuspendLayout();
+            this.Factor_tabPage.SuspendLayout();
             this.Affect_tabPage.SuspendLayout();
+            this.Rescue_tabPage.SuspendLayout();
             this.SuspendLayout();
             // 
             // Scenario_groupBox
@@ -64,9 +67,10 @@
             // 
             // Scenario_tabControl
             // 
-            this.Scenario_tabControl.Controls.Add(this.Factor_tabPage);
             this.Scenario_tabControl.Controls.Add(this.Anti_tabPage);
+            this.Scenario_tabControl.Controls.Add(this.Factor_tabPage);
             this.Scenario_tabControl.Controls.Add(this.Affect_tabPage);
+            this.Scenario_tabControl.Controls.Add(this.Rescue_tabPage);
             this.Scenario_tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Scenario_tabControl.Location = new System.Drawing.Point(3, 20);
             this.Scenario_tabControl.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -75,6 +79,30 @@
             this.Scenario_tabControl.Size = new System.Drawing.Size(755, 290);
             this.Scenario_tabControl.TabIndex = 0;
             this.Scenario_tabControl.SelectedIndexChanged += new System.EventHandler(this.Scenario_tabControl_SelectedIndexChanged);
+            // 
+            // Anti_tabPage
+            // 
+            this.Anti_tabPage.Controls.Add(this.Induce_listView);
+            this.Anti_tabPage.Location = new System.Drawing.Point(4, 25);
+            this.Anti_tabPage.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Anti_tabPage.Name = "Anti_tabPage";
+            this.Anti_tabPage.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Anti_tabPage.Size = new System.Drawing.Size(747, 261);
+            this.Anti_tabPage.TabIndex = 1;
+            this.Anti_tabPage.Text = "孕灾环境";
+            this.Anti_tabPage.UseVisualStyleBackColor = true;
+            // 
+            // Induce_listView
+            // 
+            this.Induce_listView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Induce_listView.Location = new System.Drawing.Point(3, 2);
+            this.Induce_listView.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Induce_listView.Name = "Induce_listView";
+            this.Induce_listView.Size = new System.Drawing.Size(741, 257);
+            this.Induce_listView.TabIndex = 0;
+            this.Induce_listView.UseCompatibleStateImageBehavior = false;
+            this.Induce_listView.View = System.Windows.Forms.View.List;
+            this.Induce_listView.SelectedIndexChanged += new System.EventHandler(this.ListView_SelectedIndexChanged);
             // 
             // Factor_tabPage
             // 
@@ -100,30 +128,6 @@
             this.Factor_listView.View = System.Windows.Forms.View.List;
             this.Factor_listView.SelectedIndexChanged += new System.EventHandler(this.ListView_SelectedIndexChanged);
             // 
-            // Anti_tabPage
-            // 
-            this.Anti_tabPage.Controls.Add(this.Anti_listView);
-            this.Anti_tabPage.Location = new System.Drawing.Point(4, 25);
-            this.Anti_tabPage.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.Anti_tabPage.Name = "Anti_tabPage";
-            this.Anti_tabPage.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.Anti_tabPage.Size = new System.Drawing.Size(747, 261);
-            this.Anti_tabPage.TabIndex = 1;
-            this.Anti_tabPage.Text = "抗灾体";
-            this.Anti_tabPage.UseVisualStyleBackColor = true;
-            // 
-            // Anti_listView
-            // 
-            this.Anti_listView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Anti_listView.Location = new System.Drawing.Point(3, 2);
-            this.Anti_listView.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.Anti_listView.Name = "Anti_listView";
-            this.Anti_listView.Size = new System.Drawing.Size(741, 257);
-            this.Anti_listView.TabIndex = 0;
-            this.Anti_listView.UseCompatibleStateImageBehavior = false;
-            this.Anti_listView.View = System.Windows.Forms.View.List;
-            this.Anti_listView.SelectedIndexChanged += new System.EventHandler(this.ListView_SelectedIndexChanged);
-            // 
             // Affect_tabPage
             // 
             this.Affect_tabPage.Controls.Add(this.Affect_listView);
@@ -147,6 +151,16 @@
             this.Affect_listView.UseCompatibleStateImageBehavior = false;
             this.Affect_listView.View = System.Windows.Forms.View.List;
             this.Affect_listView.SelectedIndexChanged += new System.EventHandler(this.ListView_SelectedIndexChanged);
+            // 
+            // Rescue_tabPage
+            // 
+            this.Rescue_tabPage.Controls.Add(this.Rescue_listView);
+            this.Rescue_tabPage.Location = new System.Drawing.Point(4, 25);
+            this.Rescue_tabPage.Name = "Rescue_tabPage";
+            this.Rescue_tabPage.Size = new System.Drawing.Size(747, 261);
+            this.Rescue_tabPage.TabIndex = 4;
+            this.Rescue_tabPage.Text = "救援力量[可选]";
+            this.Rescue_tabPage.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
@@ -209,6 +223,16 @@
             this.Visual_button.UseVisualStyleBackColor = true;
             this.Visual_button.Click += new System.EventHandler(this.Visual_button_Click);
             // 
+            // Rescue_listView
+            // 
+            this.Rescue_listView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Rescue_listView.Location = new System.Drawing.Point(0, 0);
+            this.Rescue_listView.Name = "Rescue_listView";
+            this.Rescue_listView.Size = new System.Drawing.Size(747, 261);
+            this.Rescue_listView.TabIndex = 0;
+            this.Rescue_listView.UseCompatibleStateImageBehavior = false;
+            this.Rescue_listView.View = System.Windows.Forms.View.List;
+            // 
             // NLPExpertiseForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -228,9 +252,10 @@
             this.Text = "NLPExpertiseForm";
             this.Scenario_groupBox.ResumeLayout(false);
             this.Scenario_tabControl.ResumeLayout(false);
-            this.Factor_tabPage.ResumeLayout(false);
             this.Anti_tabPage.ResumeLayout(false);
+            this.Factor_tabPage.ResumeLayout(false);
             this.Affect_tabPage.ResumeLayout(false);
+            this.Rescue_tabPage.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -248,9 +273,11 @@
         private System.Windows.Forms.Button Save_button;
         private System.Windows.Forms.TabPage Anti_tabPage;
         private System.Windows.Forms.ListView Factor_listView;
-        private System.Windows.Forms.ListView Anti_listView;
+        private System.Windows.Forms.ListView Induce_listView;
         private System.Windows.Forms.TabPage Affect_tabPage;
         private System.Windows.Forms.ListView Affect_listView;
         private System.Windows.Forms.Button Visual_button;
+        private System.Windows.Forms.TabPage Rescue_tabPage;
+        private System.Windows.Forms.ListView Rescue_listView;
     }
 }
