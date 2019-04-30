@@ -20,11 +20,11 @@ namespace Examples
         /// <summary>
         /// 
         /// </summary>
-        string envFilename2 = Directory.GetCurrentDirectory() + @"\Datasets\3x3x18x100.txt";
+        string envFilename3x3x18 = Directory.GetCurrentDirectory() + @"\Datasets\3x3x18x100.txt";
         /// <summary>
         /// dqn environment full filename
         /// </summary>
-        string envFilename1 = Directory.GetCurrentDirectory() + @"\Datasets\9x9x18x100.txt";
+        string envFilename9x9x18 = Directory.GetCurrentDirectory() + @"\Datasets\9x9x18x100.txt";
         /// <summary>
         /// feature layer
         /// </summary>
@@ -52,7 +52,7 @@ namespace Examples
 
 
         [TestMethod]
-        public void ClassificationByDQN()
+        public void ClassificationByDQNWithRasterEnv()
         {
             double _loss = 1.0;
             GRasterLayer featureLayer = new GRasterLayer(featureFilename);
@@ -83,14 +83,15 @@ namespace Examples
         }
 
         [TestMethod]
-        public void ClassificationByDQNWithDNet()
+        public void ClassificationByDQNWithSampleEnv()
         {
+            //read sample and create environment
             IEnv env;
             //read samples
             List<List<double>> inputList = new List<List<double>>();
             List<int> outputList = new List<int>();
             List<int> keys = new List<int>();
-            using (StreamReader sr = new StreamReader(envFilename2))
+            using (StreamReader sr = new StreamReader(envFilename3x3x18))
             {
                 string text = sr.ReadLine().Replace("\t", ",");
                 do
@@ -115,138 +116,90 @@ namespace Examples
                 //create environment for agent exploring
                 env = new SamplesEnv(x, y);
             }
-            string msg = "";
-            //create cnn structure for dqn training
+            double dNetLoss = 999;
+            //use DNet (DNN) for dqn training
             IDNet actor = new DNet(new int[] { 3, 3, 18 }, keys.Count);
             IDNet critic = new DNet(new int[] { 3, 3, 18 }, keys.Count);
             //create dqn alogrithm
-            DQN dqn = new DQN(env, actor, critic, epochs: 1000);
+            DQN dqn = new DQN(env, actor, critic, epochs: 10);
             //in order to test fast, we set training epochs equals 10.
             //please do not use so few training steps in actual use.
             //register event to get information while training
             dqn.OnLearningLossEventHandler += (double loss, double totalReward, double accuracy, double progress, string epochesTime) =>
             {
-                msg += string.Format("loss: {0}, reward: {1}, accuracy: {2}. \r\n", loss, totalReward, accuracy);
+                dNetLoss = loss;
             };
             //start dqn alogrithm learning
             dqn.Learn();
-
-            string sss2 = "";
             //in general, loss is less than 1
-            //Assert.IsTrue(_loss < 1.0);
-            //apply dqn to classify fetureLayer
-            //pick value
-            //IRasterLayerCursorTool pRasterLayerCursorTool = new GRasterLayerCursorTool();
-            //
-            //double[] state = pRasterLayerCursorTool.PickNormalValue(50, 50);
-            //double[] action = dqn.ChooseAction(state).action;
-            //int landCoverType = dqn.ActionToRawValue(NP.Argmax(action));
-            //do something as you need. i.e. draw landCoverType to bitmap at position ( i , j )
-            //the classification results are not stable because of the training epochs are too few.
-            //Assert.IsTrue(landCoverType >= 0);
-        }
-
-        [TestMethod]
-        public void ClassificationByDQNWithDNet2()
-        {
-            IEnv env;
-            //read samples
-            List<List<double>> inputList = new List<List<double>>();
-            List<int> outputList = new List<int>();
-            List<int> keys = new List<int>();
-            using (StreamReader sr = new StreamReader(envFilename1))
-            {
-                string text = sr.ReadLine().Replace("\t", ",");
-                do
-                {
-                    string[] rawdatas = text.Split(',');
-                    int key = Convert.ToInt32(rawdatas.Last());
-                    outputList.Add(key);
-                    if (!keys.Contains(key))
-                        keys.Add(key);
-                    List<double> inputItem = new List<double>();
-                    for (int i = 0; i < rawdatas.Length - 1; i++)
-                        inputItem.Add(Convert.ToDouble(rawdatas[i]));
-                    inputList.Add(inputItem);
-                    text = sr.ReadLine();
-                } while (text != null);
-                //convert to double[][] and double[]
-                int count = inputList.Count;
-                double[][] x = new double[count][];
-                int[] y = outputList.ToArray();
-                for (int i = 0; i < count; i++)
-                    x[i] = inputList[i].ToArray();
-                //create environment for agent exploring
-                env = new SamplesEnv(x, y);
-            }
-            string msg = "";
-            //create cnn structure for dqn training
-            IDNet actor = new DNet2(NP.CNTK.DeviceCollection[0], 9, 9, 18, keys.Count);
-            IDNet critic = new DNet2(NP.CNTK.DeviceCollection[0], 9, 9, 18, keys.Count);
+            Assert.IsTrue(dNetLoss < 1.0);
+            double dNet2Loss = 999;
+            //use DNet2(CNN) for dqn training
+            IDNet actor2 = new DNet2(NP.CNTK.DeviceCollection[0], 9, 9, 18, keys.Count);
+            IDNet critic2 = new DNet2(NP.CNTK.DeviceCollection[0], 9, 9, 18, keys.Count);
             //create dqn alogrithm
-            DQN dqn = new DQN(env, actor, critic, epochs: 10000);
+            DQN dqn2 = new DQN(env, actor2, critic2, epochs: 10);
             //in order to test fast, we set training epochs equals 10.
             //please do not use so few training steps in actual use.
             //register event to get information while training
             dqn.OnLearningLossEventHandler += (double loss, double totalReward, double accuracy, double progress, string epochesTime) =>
             {
-                msg += string.Format("loss: {0}, reward: {1}, accuracy: {2}. \r\n", loss, totalReward, accuracy);
+                dNet2Loss = loss;
             };
             //start dqn alogrithm learning
             dqn.Learn();
-
-            string sss2 = "";
-            //in general, loss is less than 1
-            //Assert.IsTrue(_loss < 1.0);
-            //apply dqn to classify fetureLayer
-            //pick value
-            //IRasterLayerCursorTool pRasterLayerCursorTool = new GRasterLayerCursorTool();
-            //
-            //double[] state = pRasterLayerCursorTool.PickNormalValue(50, 50);
-            //double[] action = dqn.ChooseAction(state).action;
-            //int landCoverType = dqn.ActionToRawValue(NP.Argmax(action));
-            //do something as you need. i.e. draw landCoverType to bitmap at position ( i , j )
-            //the classification results are not stable because of the training epochs are too few.
-            //Assert.IsTrue(landCoverType >= 0);
+            Assert.IsTrue(dNet2Loss < 1.0);
         }
 
         [TestMethod]
         public void ClassificationByCNN()
         {
-            //double _loss = 1.0;
-            ////training epochs
-            //int epochs = 1000;
-            //GRasterLayer featureLayer = new GRasterLayer(featureFullFilename);
-            //GRasterLayer labelLayer = new GRasterLayer(trainFullFilename);
-            ////create environment for agent exploring
-            //IEnv env = new ImageClassifyEnv(featureLayer, labelLayer);
-            ////assume 18dim equals 3x6 (image)
-            //IDConvNet cnn = new CNN(new int[] { 1, 3, 6 }, env.ActionNum);
-            ////training
-            //for (int i = 0; i < epochs; i++)
-            //{
-            //    int batchSize = 3;
-            //    var (states, labels) = env.RandomEval(1, 1, batchSize);
-            //    double[][] inputX = new double[batchSize][];
-            //    for (int j = 0; j < batchSize; j++)
-            //        inputX[j] = states[j];
-            //    _loss = cnn.Train(inputX, labels);
-            //}
-            ////in general, loss is less than 5
-            //Assert.IsTrue(_loss < 5.0);
-            ////apply cnn to classify featureLayer
-            //IRasterLayerCursorTool pRasterLayerCursorTool = new GRasterLayerCursorTool();
-            //pRasterLayerCursorTool.Visit(featureLayer);
-            ////get normalized input raw value
-            //double[] normal = pRasterLayerCursorTool.PickNormalValue(50, 50);
-            //double[] action = cnn.Predict(normal);
-            //int landCoverType = env.RandomSeedKeys[NP.Argmax(action)];
-            ////pred
-            //cnn.ConvertToExtractNetwork();
-            //double[] action2 = cnn.Predict(normal);
-            ////do something as you need. i.e. draw landCoverType to bitmap at position ( i , j )
-            ////the classification results are not stable because of the training epochs are too few.
-            //Assert.IsTrue(landCoverType >= 0);
+            //read samples
+            double[][] x;
+            double[][] y;
+            List<int> keys = new List<int>();
+            using (StreamReader sr = new StreamReader(envFilename3x3x18))
+            {
+                List<List<double>> inputList = new List<List<double>>();
+                List<int> outputList = new List<int>();
+                string text = sr.ReadLine().Replace("\t", ",");
+                do
+                {
+                    string[] rawdatas = text.Split(',');
+                    int key = Convert.ToInt32(rawdatas.Last());
+                    outputList.Add(key);
+                    if (!keys.Contains(key))
+                        keys.Add(key);
+                    List<double> inputItem = new List<double>();
+                    for (int i = 0; i < rawdatas.Length - 1; i++)
+                        inputItem.Add(Convert.ToDouble(rawdatas[i]));
+                    inputList.Add(inputItem);
+                    text = sr.ReadLine();
+                } while (text != null);
+                //convert to double[][] and double[]
+                int count = inputList.Count;
+                x = new double[count][];
+                y = new double[count][];
+                for (int i = 0; i < count; i++)
+                {
+                    x[i] = inputList[i].ToArray();
+                    y[i] = NP.ToOneHot(outputList[i], keys.Count);
+                }
+            }
+            double _loss = 1.0;
+            int epochs = 100, batchSize = 19;
+            //use fullychannelnet 
+            IDConvNet cnn = new FullyChannelNet9(3, 3, 18, keys.Count, NP.CNTK.DeviceCollection[0]);
+            //training epochs
+            for (int i = 0; i < epochs; i++)
+            {
+                NP.Shuffle(x, y);
+                double[][] inputs = x.Take(batchSize).ToArray();
+                double[][] labels = y.Take(batchSize).ToArray();
+                _loss = cnn.Train(inputs, labels);
+            }
+            //training result
+            Assert.IsTrue(_loss < 1.0);
         }
 
         [TestMethod]
@@ -269,7 +222,7 @@ namespace Examples
         }
 
         [TestMethod]
-        public void TrainModedByDNN()
+        public void ClassificationByDNN()
         {
             List<double[]> inputList = new List<double[]>();
             List<double> labelList = new List<double>();
@@ -311,59 +264,6 @@ namespace Examples
         }
 
         [TestMethod]
-        public void TrainFullyChannelNet()
-        {
-            //set device
-            var devicesName = NP.CNTK.DeviceCollection[0];
-            //training epochs
-            int epochs = 3000;
-            GRasterLayer featureLayer = new GRasterLayer(featureFilename);
-            GRasterLayer labelLayer = new GRasterLayer(trainFilename);
-            //create environment for agent exploring
-            IEnv env = new ImageClassifyEnv(featureLayer, labelLayer);
-            //assume 18dim equals 3x6 (image)
-            IDConvNet cnn = new FullyChannelNet9(11, 11, 18, env.ActionNum, devicesName);
-            string lossText = "";
-            //training
-            for (int i = 0; i < epochs; i++)
-            {
-                int batchSize = 29;
-                var (states, labels) = env.RandomEval(batchSize);
-                double[][] inputX = new double[batchSize][];
-                for (int j = 0; j < batchSize; j++)
-                    inputX[j] = states[j];
-                var loss = cnn.Train(inputX, labels);
-                lossText += loss + "\r\n";
-            }
-            string modelFilename = cnn.PersistencNative();
-            //training2
-            IDConvNet cnn2 = NP.CNTK.LoadModel(modelFilename, devicesName);
-            for (int i = 0; i < epochs; i++)
-            {
-                var (states, labels) = env.RandomEval();
-                var pred = cnn2.Predict(states[0]);
-                var predText = NP.Argmax(pred);
-                var labeText = NP.Argmax(labels[0]);
-
-            }
-            //in general, loss is less than 5
-            //Assert.IsTrue(_loss < 5.0);
-            //apply cnn to classify featureLayer
-            //IRasterLayerCursorTool pRasterLayerCursorTool = new GRasterLayerCursorTool();
-            //pRasterLayerCursorTool.Visit(featureLayer);
-            //get normalized input raw value
-            //double[] normal = pRasterLayerCursorTool.PickNormalValue(50, 50);
-            //double[] action = cnn.Predict(normal);
-            //int landCoverType = env.RandomSeedKeys[NP.Argmax(action)];
-            //pred
-            //cnn.ConvertToExtractNetwork();
-            //double[] action2 = cnn.Predict(normal);
-            //do something as you need. i.e. draw landCoverType to bitmap at position ( i , j )
-            //the classification results are not stable because of the training epochs are too few.
-            //Assert.IsTrue(landCoverType >= 0);
-        }
-
-        [TestMethod]
         public void SaveAndLoad()
         {
             var devicesName = NP.CNTK.DeviceCollection[0];
@@ -375,7 +275,7 @@ namespace Examples
         [TestMethod]
         public void ClassificationByRF()
         {
-            double _loss = 1.0;
+            double loss = 1.0;
             //Randforest Method
             RF rf = new RF(30);
             using (StreamReader sr = new StreamReader(samplesFilename))
@@ -397,9 +297,49 @@ namespace Examples
                 int[] outputs = outputList.ToArray();
                 for (int i = 0; i < inputList.Count; i++)
                     inputs[i] = inputList[i].ToArray();
-                _loss = rf.Train(inputs, outputs);
+                loss = rf.Train(inputs, outputs);
             }
-            Assert.IsTrue(_loss < 1.0);
+            Assert.IsTrue(loss < 1.0);
         }
+
+        [TestMethod]
+        public void ClassificationBySVM()
+        {
+            double loss = 1.0;
+            using (StreamReader sr = new StreamReader(samplesFilename))
+            {
+                List<List<double>> inputList = new List<List<double>>();
+                List<int> outputList = new List<int>();
+                List<int> keys = new List<int>();
+                string text = sr.ReadLine();
+                do
+                {
+                    string[] rawdatas = text.Split(',');
+                    int key = Convert.ToInt32(rawdatas.Last());
+                    if (!keys.Contains(key))
+                        keys.Add(key);
+                    outputList.Add(key);
+                    List<double> inputItem = new List<double>();
+                    for (int i = 0; i < rawdatas.Length - 1; i++)
+                        inputItem.Add(Convert.ToDouble(rawdatas[i]));
+                    inputList.Add(inputItem);
+                    text = sr.ReadLine();
+                } while (text != null);
+                double[][] inputs = new double[inputList.Count][];
+                int[] outputs = outputList.ToArray();
+                //convert to training samples
+                for (int i = 0; i < inputList.Count; i++)
+                {
+                    inputs[i] = inputList[i].ToArray();
+                    //make sure the type value range form 0 to +
+                    outputs[i] = keys.IndexOf(outputList[i]);
+                }
+                //svm
+                L2SVM l2svm = new L2SVM(inputs[0].Length, keys.Count);
+                loss = l2svm.Train(inputs, outputs);
+            }
+            Assert.IsTrue(loss < 1.0);
+        }
+
     }
 }
