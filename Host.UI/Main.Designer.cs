@@ -509,7 +509,7 @@
             this.main_notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("main_notifyIcon.Icon")));
             this.main_notifyIcon.Text = "please double click to restore the view";
             this.main_notifyIcon.Visible = true;
-            this.main_notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.main_notifyIcon_MouseDoubleClick);
+            this.main_notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.Main_notifyIcon_MouseDoubleClick);
             // 
             // RF_ToolStripMenuItem
             // 

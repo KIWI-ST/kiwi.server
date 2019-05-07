@@ -14,7 +14,6 @@ using Engine.NLP;
 using Host.UI.Forms;
 using Host.UI.Jobs;
 using Host.UI.SettingForm;
-using OfficeOpenXml;
 
 namespace Host.UI
 {
@@ -22,10 +21,10 @@ namespace Host.UI
     {
 
         #region 初始化
+
         public Main()
         {
             InitializeComponent();
-       
         }
   
         bool _is_firstBallon = true;
@@ -49,18 +48,20 @@ namespace Host.UI
                 Hide();
             }
         }
+        
         /// <summary>
         /// 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void main_notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void Main_notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             main_notifyIcon.Visible = false;
             Show();
             WindowState = FormWindowState.Normal;
             Focus();
         }
+        
         #endregion
 
         #region 资源清理
@@ -82,28 +83,34 @@ namespace Host.UI
         /// <summary>
         /// process cache
         /// </summary>
-        List<Process> _processCache = new List<Process>();
+        readonly List<Process> _processCache = new List<Process>();
+        
         /// <summary>
         /// get time string
         /// </summary>
         string Now => DateTime.Now.ToLongDateString() + DateTime.Now.ToLongTimeString();
+        
         /// <summary>
         /// raster layer
         /// </summary>
         Dictionary<string, GRasterLayer> _rasterDic = new Dictionary<string, GRasterLayer>();
+
         /// <summary>
         /// 管理全局的图像与树视图区域的缓存对应
         /// key是图片名称或图+波段名称，值为对应的bitmap
         /// </summary>
-        Dictionary<string, Bitmap2> _imageDic = new Dictionary<string, Bitmap2>();
+        readonly Dictionary<string, Bitmap2> _imageDic = new Dictionary<string, Bitmap2>();
+        
         /// <summary>
         /// store jobs
         /// </summary>
         List<IJob> _jobs = new List<IJob>();
+        
         /// <summary>
         /// 当前选中的Bitmap2信息，包含图层，波段，索引等
         /// </summary>
         Bitmap2 _selectBmp2 = null;
+        
         /// <summary>
         /// glovenet for nlp
         /// </summary>
@@ -111,108 +118,8 @@ namespace Host.UI
 
         #endregion
 
-        #region 算法执行
-
-        /// <summary>
-        /// }{小萌娃记得改哟
-        /// </summary>
-        /// <param name="fileNameCollection"></param>
-        /// <param name="centers"></param>loul
-        private void RunCenter(List<string> fileNameCollection, Center[] centers)
-        {
-            DataTable dt = new DataTable();
-            int count = fileNameCollection.Count;
-            for (int r = 0; r <= centers.Length; r++)
-                dt.Rows.Add(dt.NewRow());
-            for (int k = 0; k < count; k++)
-            {
-                Invoke(new UpdateStatusLabelHandler(UpdateStatusLabel), "应用超像素中心计算开始，进度 " + k + "/" + fileNameCollection.Count);
-                string fileName = fileNameCollection[k];
-                Bitmap bmp = new Bitmap(fileName);
-                //添加1列
-                DataColumn dc = dt.Columns.Add(Path.GetFileNameWithoutExtension(fileName));
-                dt.Rows[0][dc] = Path.GetFileNameWithoutExtension(fileName);
-                //1.提取x,y位置的像素值
-                for (int i = 0; i < centers.Length; i++)
-                    //}{小萌娃记得改哟  new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1 } 是 3x3 mask 都是1的算子，这里可以修改 自动识别的
-                    dt.Rows[i + 1][dc] = GConvolution.Run(bmp, (int)centers[i].X, (int)centers[i].Y, new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1 });
-            }
-            Invoke(new SaveExcelHandler(SaveExcel), dt);
-        }
-        /// <summary>
-        /// 超像素计算
-        /// </summary>
-        /// <param name="bmp"></param>
-        private void RunSLIC(Bitmap bmp)
-        {
-            Invoke(new UpdateStatusLabelHandler(UpdateStatusLabel), "超像素中心计算开始...");
-            SlicPackage pkg = SuperPixelSegment.Run(bmp, 10000, 3, Color.White);
-            Invoke(new SaveJsonHandler(SaveJson), pkg.CENTER);
-            Invoke(new SaveJsonHandler(SaveJson), pkg.Label);
-            Invoke(new SaveBitmapHandler(SaveBitmap), pkg.Edge);
-            Invoke(new SaveBitmapHandler(SaveBitmap), pkg.Average);
-        }
-
-        #endregion
-
         #region 界面更新
-        /// <summary>
-        /// 保存json结果
-        /// </summary>
-        /// <param name="jsonText"></param>
-        private void SaveJson(string jsonText)
-        {
-            UpdateStatusLabel("保存Json结果文件");
-            SaveFileDialog sfg = new SaveFileDialog
-            {
-                DefaultExt = ".json"
-            };
-            if (sfg.ShowDialog() == DialogResult.OK)
-            {
-                using (StreamWriter sw = new StreamWriter(sfg.FileName))
-                {
-                    sw.Write(jsonText);
-                }
-            }
-        }
-        /// <summary>
-        /// 保存bmp位图结果
-        /// </summary>
-        /// <param name="bmp"></param>
-        private void SaveBitmap(Bitmap bmp)
-        {
-            UpdateStatusLabel("保存.jpg结果文件");
-            SaveFileDialog sfg = new SaveFileDialog();
-            sfg.DefaultExt = ".jpg";
-            if (sfg.ShowDialog() == DialogResult.OK)
-                bmp.Save(sfg.FileName);
-        }
-        /// <summary>
-        /// 保存Excel结果
-        /// </summary>
-        /// <param name="dt"></param>
-        private void SaveExcel(DataTable dt)
-        {
-            SaveFileDialog sfg = new SaveFileDialog
-            {
-                DefaultExt = ".xls"
-            };
-            if (sfg.ShowDialog() == DialogResult.OK)
-            {
-                using (var excel = new ExcelPackage(new FileInfo(sfg.FileName)))
-                {
-                    var ws = excel.Workbook.Worksheets.Add("Sheet1");
-                    for (int r = 0; r < dt.Rows.Count; r++)
-                    {
-                        for (int c = 0; c < dt.Columns.Count; c++)
-                        {
-                            ws.Cells[r + 1, c + 1].Value = dt.Rows[r][c];
-                        }
-                    }
-                    excel.Save();
-                }
-            }
-        }
+        
         /// <summary>
         /// 更新底部栏提示
         /// </summary>
@@ -222,6 +129,7 @@ namespace Host.UI
         {
             map_statusLabel.Text = msg;
         }
+        
         /// <summary>
         /// 更新地图相关树视图节点内容
         /// </summary>
@@ -241,6 +149,7 @@ namespace Host.UI
             if (_imageDic.ContainsKey(childrenNode.Text))
                 map_pictureBox.Image = _imageDic[childrenNode.Text]?.BMP;
         }
+        
         /// <summary>
         /// 
         /// </summary>
@@ -251,16 +160,7 @@ namespace Host.UI
             MAP_listBox.Items.Add(msg);
             MAP_listBox.SelectedIndex = MAP_listBox.Items.Count - 1;
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="bmp"></param>
-        /// <param name="nodeName"></param>
-        private void PaintBitmap(Bitmap bmp, string nodeName)
-        {
-            _imageDic[nodeName].BMP = bmp;
-            map_pictureBox.Image = bmp;
-        }
+
         /// <summary>
         /// update process output
         /// </summary>
@@ -270,38 +170,45 @@ namespace Host.UI
         {
             Invoke(new UpdateListBoxHandler(UpdateMapListBox), e.Data);
         }
+        
         /// <summary>
         /// 更新listbox区域显示内容
         /// </summary>
         /// <param name="msg"></param>
         private delegate void UpdateListBoxHandler(string msg);
+        
         /// <summary>
         /// 更新树视图委托
         /// </summary>
         /// <param name="parentNode"></param>
         /// <param name="childrenNode"></param>
         private delegate void UpdateTreeNodeHandler(TreeNode parentNode, TreeNode childrenNode);
+        
         /// <summary>
         ///  保存Json委托
         /// </summary>
         /// <param name="jsonText"></param>
         private delegate void SaveJsonHandler(string jsonText);
+        
         /// <summary>
         ///  保存位图委托
         /// </summary>
         /// <param name="bmp"></param>
         private delegate void SaveBitmapHandler(Bitmap bmp);
+        
         /// <summary>
         ///  保存Excel委托
         /// </summary>
         /// <param name="dt"></param>
         private delegate void SaveExcelHandler(DataTable dt);
+        
         /// <summary>
         /// 更新底部信息栏提示内容委托
         /// </summary>
         /// <param name="msg"></param>
         /// <param name="statue"></param>
         private delegate void UpdateStatusLabelHandler(string msg);
+        
         /// <summary>
         /// 
         /// </summary>
@@ -310,16 +217,19 @@ namespace Host.UI
         /// <param name="y"></param>
         /// <param name="value"></param>
         private delegate void PaintPointHandler(Bitmap bmp, int x, int y, byte value);
+        
         /// <summary>
         /// 
         /// </summary>
         /// <param name="bmp"></param>
         /// <param name="nodeName"></param>
         private delegate void PaintBitmapHandler(Bitmap bmp, string nodeName);
+        
         /// <summary>
         /// 
         /// </summary>
         private delegate void RefreshPlotModelHandler();
+        
         /// <summary>
         /// 
         /// </summary>
@@ -358,6 +268,7 @@ namespace Host.UI
                 }
             }
         }
+        
         /// <summary>
         /// read raster data
         /// </summary>
@@ -376,6 +287,7 @@ namespace Host.UI
                 readRasterJob.Start();
             }
         }
+        
         /// <summary>
         /// Update Read Raster UI
         /// </summary>
@@ -395,6 +307,7 @@ namespace Host.UI
         #endregion
 
         #region jobs
+        
         /// <summary>
         /// register job
         /// </summary>
@@ -411,6 +324,7 @@ namespace Host.UI
             string msg = string.Format("time:{0},task:{1} registered", Now, job.Name);
             Invoke(new UpdateListBoxHandler(UpdateMapListBox), msg);
         }
+        
         /// <summary>
         /// 
         /// </summary>
@@ -428,6 +342,7 @@ namespace Host.UI
                     break;
             }
         }
+        
         /// <summary>
         /// job complete
         /// </summary>
@@ -472,6 +387,7 @@ namespace Host.UI
         #endregion
 
         #region UI事件相应方法
+        
         /// <summary>
         /// 底图区域功能按钮
         /// </summary>
@@ -614,6 +530,7 @@ namespace Host.UI
                     break;
             }
         }
+        
         /// <summary>
         /// NLP功能栏
         /// </summary>
@@ -690,6 +607,7 @@ namespace Host.UI
                     break;
             }
         }
+        
         /// <summary>
         ///  树视图点击捕捉，用于邮件弹出功能栏
         /// </summary>
@@ -740,6 +658,7 @@ namespace Host.UI
                     break;
             }
         }
+        
         /// <summary>
         /// 树视图结点操作
         /// </summary>
@@ -760,6 +679,7 @@ namespace Host.UI
                 tree_contextMenuStrip.Show(map_treeView, new Point(e.X, e.Y));
             }
         }
+
         #endregion
 
     }
