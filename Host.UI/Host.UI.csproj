@@ -59,114 +59,6 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ejml-0.23, Version=0.23.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Stanford.NLP.CoreNLP.3.9.2.0\lib\ejml-0.23.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.AWT.WinForms, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.AWT.WinForms.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Beans, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Beans.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Charsets, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Charsets.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Cldrdata, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Cldrdata.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Corba, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Corba.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Core, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Jdbc, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Jdbc.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Localedata, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Localedata.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Management, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Management.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Media, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Media.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Misc, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Misc.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Naming, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Naming.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Nashorn, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Nashorn.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Remoting, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Remoting.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Security, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Security.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.SwingAWT, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.SwingAWT.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Text, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Text.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Tools, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Tools.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.Util, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Util.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.XML.API, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.API.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.XML.Bind, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.Bind.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.XML.Crypto, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.Crypto.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.XML.Parse, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.Parse.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.XML.Transform, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.Transform.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.XML.WebServices, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.WebServices.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.OpenJDK.XML.XPath, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.XPath.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.Runtime, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="IKVM.Runtime.JNI, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
-      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.Runtime.JNI.dll</HintPath>
-    </Reference>
-    <Reference Include="javax.json, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Stanford.NLP.CoreNLP.3.9.2.0\lib\javax.json.dll</HintPath>
-    </Reference>
-    <Reference Include="joda-time, Version=2.9.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Stanford.NLP.CoreNLP.3.9.2.0\lib\joda-time.dll</HintPath>
-    </Reference>
-    <Reference Include="jollyday, Version=0.4.9.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Stanford.NLP.CoreNLP.3.9.2.0\lib\jollyday.dll</HintPath>
-    </Reference>
-    <Reference Include="protobuf, Version=2.6.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Stanford.NLP.CoreNLP.3.9.2.0\lib\protobuf.dll</HintPath>
-    </Reference>
-    <Reference Include="slf4j-api, Version=1.7.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Stanford.NLP.CoreNLP.3.9.2.0\lib\slf4j-api.dll</HintPath>
-    </Reference>
-    <Reference Include="slf4j-simple, Version=1.7.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Stanford.NLP.CoreNLP.3.9.2.0\lib\slf4j-simple.dll</HintPath>
-    </Reference>
-    <Reference Include="stanford-corenlp-3.9.2, Version=3.9.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Stanford.NLP.CoreNLP.3.9.2.0\lib\stanford-corenlp-3.9.2.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -181,9 +73,6 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="xom, Version=1.2.10.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Stanford.NLP.CoreNLP.3.9.2.0\lib\xom.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Forms\BandExportForm.cs">
@@ -222,12 +111,6 @@
     <Compile Include="Forms\ConvForm.Designer.cs">
       <DependentUpon>ConvForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\DLClassifyForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\DLClassifyForm.Designer.cs">
-      <DependentUpon>DLClassifyForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\DQNForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -239,24 +122,6 @@
     </Compile>
     <Compile Include="Forms\KappaForm.Designer.cs">
       <DependentUpon>KappaForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\NLPConfigForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\NLPConfigForm.Designer.cs">
-      <DependentUpon>NLPConfigForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\NLPExpertiseForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\NLPExpertiseForm.Designer.cs">
-      <DependentUpon>NLPExpertiseForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\NLPScenarioForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\NLPScenarioForm.Designer.cs">
-      <DependentUpon>NLPScenarioForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ParsingForm.cs">
       <SubType>Form</SubType>
@@ -275,18 +140,6 @@
     </Compile>
     <Compile Include="Forms\RPCForm.Designer.cs">
       <DependentUpon>RPCForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\ScottPlotForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ScottPlotForm.Designer.cs">
-      <DependentUpon>ScottPlotForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\SLICForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\SLICForm.Designer.cs">
-      <DependentUpon>SLICForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\SVMForm.cs">
       <SubType>Form</SubType>
@@ -341,23 +194,11 @@
     <EmbeddedResource Include="Forms\ConvForm.resx">
       <DependentUpon>ConvForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\DLClassifyForm.resx">
-      <DependentUpon>DLClassifyForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\DQNForm.resx">
       <DependentUpon>DQNForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\KappaForm.resx">
       <DependentUpon>KappaForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\NLPConfigForm.resx">
-      <DependentUpon>NLPConfigForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\NLPExpertiseForm.resx">
-      <DependentUpon>NLPExpertiseForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\NLPScenarioForm.resx">
-      <DependentUpon>NLPScenarioForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ParsingForm.resx">
       <DependentUpon>ParsingForm.cs</DependentUpon>
@@ -367,12 +208,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\RPCForm.resx">
       <DependentUpon>RPCForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ScottPlotForm.resx">
-      <DependentUpon>ScottPlotForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SLICForm.resx">
-      <DependentUpon>SLICForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SVMForm.resx">
       <DependentUpon>SVMForm.cs</DependentUpon>
@@ -420,10 +255,6 @@
     <ProjectReference Include="..\Engine.NLP\Engine.NLP.csproj">
       <Project>{d8c1d1d1-e414-4c26-a666-7dbe72c8ba44}</Project>
       <Name>Engine.NLP</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Extra\ScottPlot\ScottPlot.csproj">
-      <Project>{2eb18f34-a0c1-4a51-9286-c42da53668cb}</Project>
-      <Name>ScottPlot</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

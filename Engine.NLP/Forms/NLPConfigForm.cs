@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
-using Engine.NLP;
 
-namespace Host.UI.Forms
+namespace Engine.NLP.Forms
 {
     public partial class NLPConfigForm : Form
     {

@@ -6,9 +6,8 @@ using System.Threading;
 using System.Windows.Forms;
 using Engine.Brain.Model;
 using Engine.Brain.Utils;
-using Engine.NLP;
 
-namespace Host.UI.Forms
+namespace Engine.NLP.Forms
 {
     /// <summary>
     /// 情景要素分类

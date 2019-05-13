@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
-using edu.stanford.nlp.ling;
-using edu.stanford.nlp.pipeline;
-using java.util;
 
 namespace Host.UI.Jobs
 {
@@ -50,20 +47,20 @@ namespace Host.UI.Jobs
             //lstm
             _t = new Thread(() => {
                 OnStateChanged?.Invoke(Name, string.Format("{0} - {1}", DateTime.Now.ToLongDateString() + DateTime.Now.ToLongTimeString(), "句法分析任务开始"));
-                string text = "";
-                using (StreamReader sr = new StreamReader(textFullFilename)) text = sr.ReadToEnd();
-                OnStateChanged?.Invoke(Name, string.Format("{0} - {1}", DateTime.Now.ToLongDateString() + DateTime.Now.ToLongTimeString(), text));
-                var props = new java.util.Properties();
-                props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, coref, sentiment, relation");
-                props.setProperty("ner.useSUTime", "false");
-                //props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref");
-                //props.setProperty("sutime.binders", "tokenize, ssplit, pos, lemma, ner, parse, coref");
-                var document = new Annotation(text);
-                OnStateChanged?.Invoke(Name, string.Format("{0} - {1}", DateTime.Now.ToLongDateString() + DateTime.Now.ToLongTimeString(), "初始化NLP环境完成"));
-                var pipeline = new StanfordCoreNLP(props);
-                pipeline.annotate(document);
-                var sentences = document.get(new CoreAnnotations.SentencesAnnotation().getClass()) as ArrayList;
-                List<string> ners = new List<string>();
+                //string text = "";
+                //using (StreamReader sr = new StreamReader(textFullFilename)) text = sr.ReadToEnd();
+                //OnStateChanged?.Invoke(Name, string.Format("{0} - {1}", DateTime.Now.ToLongDateString() + DateTime.Now.ToLongTimeString(), text));
+                //var props = new java.util.Properties();
+                //props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, coref, sentiment, relation");
+                //props.setProperty("ner.useSUTime", "false");
+                ////props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref");
+                ////props.setProperty("sutime.binders", "tokenize, ssplit, pos, lemma, ner, parse, coref");
+                //var document = new Annotation(text);
+                //OnStateChanged?.Invoke(Name, string.Format("{0} - {1}", DateTime.Now.ToLongDateString() + DateTime.Now.ToLongTimeString(), "初始化NLP环境完成"));
+                //var pipeline = new StanfordCoreNLP(props);
+                //pipeline.annotate(document);
+                //var sentences = document.get(new CoreAnnotations.SentencesAnnotation().getClass()) as ArrayList;
+                //List<string> ners = new List<string>();
                 //lstm
                 //var lstmNetwork = LSTMNetwork.Load(modelFullFilename);
                 //var lexicon = Engine.Lexicon.Entity.Lexicon.FromExistLexiconFile(lexiconFullFilename, Engine.Lexicon.Entity.EncodeScheme.Onehot);

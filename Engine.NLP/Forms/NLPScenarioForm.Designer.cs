@@ -1,4 +1,4 @@
-﻿namespace Host.UI.Forms
+﻿namespace Engine.NLP.Forms
 {
     partial class NLPScenarioForm
     {
@@ -95,7 +95,7 @@
             // 
             // Similarity_toolStripButton
             // 
-            this.Similarity_toolStripButton.Image = global::Host.UI.Properties.Resources.dangan;
+            this.Similarity_toolStripButton.Image = global::Engine.NLP.Properties.Resources.dangan;
             this.Similarity_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.Similarity_toolStripButton.Name = "Similarity_toolStripButton";
             this.Similarity_toolStripButton.Size = new System.Drawing.Size(108, 24);
@@ -104,7 +104,7 @@
             // 
             // Preview_toolStripButton
             // 
-            this.Preview_toolStripButton.Image = global::Host.UI.Properties.Resources.bofang1;
+            this.Preview_toolStripButton.Image = global::Engine.NLP.Properties.Resources.bofang1;
             this.Preview_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.Preview_toolStripButton.Name = "Preview_toolStripButton";
             this.Preview_toolStripButton.Size = new System.Drawing.Size(63, 24);

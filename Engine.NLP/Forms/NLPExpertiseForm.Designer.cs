@@ -1,4 +1,4 @@
-﻿namespace Host.UI.Forms
+﻿namespace Engine.NLP.Forms
 {
     partial class NLPExpertiseForm
     {

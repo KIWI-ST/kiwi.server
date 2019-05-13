@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 
-namespace Host.UI.Forms
+namespace Engine.NLP.Forms
 {
     public partial class ScottPlotForm : Form
     {

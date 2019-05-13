@@ -14,10 +14,9 @@ using edu.stanford.nlp.trees;
 using edu.stanford.nlp.util;
 using Engine.Brain.Model;
 using Engine.Brain.Utils;
-using Engine.NLP;
 using static edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations;
 
-namespace Host.UI.Forms
+namespace Engine.NLP.Forms
 {
     public partial class NLPScenarioForm : Form
     {
