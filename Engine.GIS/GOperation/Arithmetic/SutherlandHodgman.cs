@@ -109,7 +109,7 @@ namespace Engine.GIS.GOperation.Arithmetic
         private static Coordinate GetIntersect(Coordinate line1From, Coordinate line1To, Coordinate line2From, Coordinate line2To)
         {
            
-            Point pLine1To = new Point(line1To.X, line1To.Y),
+           Point pLine1To = new Point(line1To.X, line1To.Y),
                 pLine1From = new Point(line1From.X, line1From.Y),
                 pLine2To = new Point(line2To.X, line2To.Y),
                 pLine2From = new Point(line2From.X, line2From.Y);

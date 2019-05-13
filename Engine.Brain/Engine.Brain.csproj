@@ -4,16 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F1D8819A-EB82-46F4-950D-E8732586AF8E}</ProjectGuid>
+    <ProjectGuid>{E57416B0-BFEE-4420-8C3A-1F96732C9375}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Engine.Brain</RootNamespace>
     <AssemblyName>Engine.Brain</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -24,7 +24,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x64</PlatformTarget>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,7 +32,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -47,7 +45,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -55,10 +52,40 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Accord, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.3.8.0\lib\net46\Accord.dll</HintPath>
+    </Reference>
+    <Reference Include="Accord.Genetic, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.Genetic.3.8.0\lib\net46\Accord.Genetic.dll</HintPath>
+    </Reference>
+    <Reference Include="Accord.MachineLearning, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.MachineLearning.3.8.0\lib\net46\Accord.MachineLearning.dll</HintPath>
+    </Reference>
+    <Reference Include="Accord.Math, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.Math.3.8.0\lib\net46\Accord.Math.dll</HintPath>
+    </Reference>
+    <Reference Include="Accord.Math.Core, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.Math.3.8.0\lib\net46\Accord.Math.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Accord.Neuro, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.Neuro.3.8.0\lib\net46\Accord.Neuro.dll</HintPath>
+    </Reference>
+    <Reference Include="Accord.Statistics, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Accord.Statistics.3.8.0\lib\net46\Accord.Statistics.dll</HintPath>
+    </Reference>
+    <Reference Include="Cntk.Core.Managed-2.7, Version=2.7.0.0, Culture=neutral, PublicKeyToken=a82c1f3f67b62253, processorArchitecture=AMD64">
+      <HintPath>..\packages\CNTK.GPU.2.7.0\lib\netstandard2.0\Cntk.Core.Managed-2.7.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -67,76 +94,58 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\DL\DNet2.cs" />
-    <Compile Include="Model\DL\GloVeNet.cs" />
-    <Compile Include="Model\DL\FullyChannelNet9.cs" />
-    <Compile Include="Model\DL\ResNet.cs" />
-    <Compile Include="Model\IDConvNet.cs" />
-    <Compile Include="Model\IDEmbeddingNet.cs" />
-    <Compile Include="Model\IDSupervised.cs" />
-    <Compile Include="Model\IDSupportDQN.cs" />
-    <Compile Include="Model\ML\RF.cs" />
-    <Compile Include="Model\ML\L2SVM.cs" />
-    <Compile Include="Model\RL\Env\ExtractRoadEnv.cs" />
-    <Compile Include="Model\RL\Env\SamplesEnv.cs" />
-    <Compile Include="Model\IDNet.cs" />
-    <Compile Include="Model\RL\IEnv.cs" />
-    <Compile Include="Model\RL\Env\ImageClassifyEnv.cs" />
-    <Compile Include="Model\DL\DNet.cs" />
-    <Compile Include="Model\RL\DQN.cs" />
-    <Compile Include="Utils\partial\NP.Model.cs" />
-    <Compile Include="Utils\NP.cs" />
     <Compile Include="Extend\ArrayExtend.cs" />
     <Compile Include="Extend\DictionaryExtend.cs" />
     <Compile Include="Extend\ListExtend.cs" />
+    <Compile Include="Model\DL\DNet.cs" />
+    <Compile Include="Model\DL\DNet2.cs" />
+    <Compile Include="Model\DL\FullyChannelNet9.cs" />
+    <Compile Include="Model\DL\GloVeNet.cs" />
+    <Compile Include="Model\DL\ResNet.cs" />
+    <Compile Include="Model\DL\RNN.cs" />
+    <Compile Include="Model\IDConvNet.cs" />
+    <Compile Include="Model\IDEmbeddingNet.cs" />
+    <Compile Include="Model\IDNet.cs" />
+    <Compile Include="Model\IDSupervised.cs" />
+    <Compile Include="Model\IDSupportDQN.cs" />
+    <Compile Include="Model\ML\L2SVM.cs" />
+    <Compile Include="Model\ML\RF.cs" />
+    <Compile Include="Model\RL\DQN.cs" />
+    <Compile Include="Model\RL\Env\ExtractRoadEnv.cs" />
+    <Compile Include="Model\RL\Env\ImageClassifyEnv.cs" />
+    <Compile Include="Model\RL\Env\SamplesEnv.cs" />
+    <Compile Include="Model\RL\IEnv.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
+    <Compile Include="Utils\NP.cs" />
     <Compile Include="Utils\partial\NP.CNTK.cs" />
     <Compile Include="Utils\partial\NP.FromKeras.cs" />
+    <Compile Include="Utils\partial\NP.Model.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine.GIS\Engine.GIS.csproj">
-      <Project>{82b3cfc7-e05c-46d3-9e91-2f5f4495238e}</Project>
+      <Project>{b3845380-5ca5-4ed0-b6ad-ee9043e9fbfb}</Project>
       <Name>Engine.GIS</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Accord">
-      <Version>3.8.0</Version>
-    </PackageReference>
-    <PackageReference Include="Accord.MachineLearning">
-      <Version>3.8.0</Version>
-    </PackageReference>
-    <PackageReference Include="Accord.Neuro">
-      <Version>3.8.0</Version>
-    </PackageReference>
-    <PackageReference Include="Accord.Statistics">
-      <Version>3.8.0</Version>
-    </PackageReference>
-    <PackageReference Include="CNTK.Deps.Cuda">
-      <Version>2.6.0</Version>
-    </PackageReference>
-    <PackageReference Include="CNTK.Deps.cuDNN">
-      <Version>2.6.0</Version>
-    </PackageReference>
-    <PackageReference Include="CNTK.Deps.MKL">
-      <Version>2.6.0</Version>
-    </PackageReference>
-    <PackageReference Include="CNTK.Deps.OpenCV.Zip">
-      <Version>2.6.0</Version>
-    </PackageReference>
-    <PackageReference Include="CNTK.GPU">
-      <Version>2.6.0</Version>
-    </PackageReference>
-    <PackageReference Include="Newtonsoft.Json">
-      <Version>12.0.1</Version>
-    </PackageReference>
-    <PackageReference Include="System.ValueTuple">
-      <Version>4.5.0</Version>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\Accord.3.8.0\build\Accord.targets" Condition="Exists('..\packages\Accord.3.8.0\build\Accord.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Accord.3.8.0\build\Accord.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Accord.3.8.0\build\Accord.targets'))" />
+    <Error Condition="!Exists('..\packages\CNTK.Deps.Cuda.2.7.0\build\netstandard2.0\CNTK.Deps.Cuda.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CNTK.Deps.Cuda.2.7.0\build\netstandard2.0\CNTK.Deps.Cuda.targets'))" />
+    <Error Condition="!Exists('..\packages\CNTK.Deps.cuDNN.2.7.0\build\netstandard2.0\CNTK.Deps.cuDNN.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CNTK.Deps.cuDNN.2.7.0\build\netstandard2.0\CNTK.Deps.cuDNN.targets'))" />
+    <Error Condition="!Exists('..\packages\CNTK.Deps.MKL.2.7.0\build\netstandard2.0\CNTK.Deps.MKL.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CNTK.Deps.MKL.2.7.0\build\netstandard2.0\CNTK.Deps.MKL.targets'))" />
+    <Error Condition="!Exists('..\packages\CNTK.Deps.OpenCV.Zip.2.7.0\build\netstandard2.0\CNTK.Deps.OpenCV.Zip.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CNTK.Deps.OpenCV.Zip.2.7.0\build\netstandard2.0\CNTK.Deps.OpenCV.Zip.targets'))" />
+    <Error Condition="!Exists('..\packages\CNTK.GPU.2.7.0\build\netstandard2.0\CNTK.GPU.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CNTK.GPU.2.7.0\build\netstandard2.0\CNTK.GPU.targets'))" />
+  </Target>
+  <Import Project="..\packages\CNTK.Deps.Cuda.2.7.0\build\netstandard2.0\CNTK.Deps.Cuda.targets" Condition="Exists('..\packages\CNTK.Deps.Cuda.2.7.0\build\netstandard2.0\CNTK.Deps.Cuda.targets')" />
+  <Import Project="..\packages\CNTK.Deps.cuDNN.2.7.0\build\netstandard2.0\CNTK.Deps.cuDNN.targets" Condition="Exists('..\packages\CNTK.Deps.cuDNN.2.7.0\build\netstandard2.0\CNTK.Deps.cuDNN.targets')" />
+  <Import Project="..\packages\CNTK.Deps.MKL.2.7.0\build\netstandard2.0\CNTK.Deps.MKL.targets" Condition="Exists('..\packages\CNTK.Deps.MKL.2.7.0\build\netstandard2.0\CNTK.Deps.MKL.targets')" />
+  <Import Project="..\packages\CNTK.Deps.OpenCV.Zip.2.7.0\build\netstandard2.0\CNTK.Deps.OpenCV.Zip.targets" Condition="Exists('..\packages\CNTK.Deps.OpenCV.Zip.2.7.0\build\netstandard2.0\CNTK.Deps.OpenCV.Zip.targets')" />
+  <Import Project="..\packages\CNTK.GPU.2.7.0\build\netstandard2.0\CNTK.GPU.targets" Condition="Exists('..\packages\CNTK.GPU.2.7.0\build\netstandard2.0\CNTK.GPU.targets')" />
 </Project>

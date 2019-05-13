@@ -1,9 +1,9 @@
-﻿using Engine.GIS.GOperation.Arithmetic;
-using OSGeo.GDAL;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using Engine.GIS.GOperation.Arithmetic;
+using OSGeo.GDAL;
 
 namespace Engine.GIS.GLayer.GRasterLayer
 {

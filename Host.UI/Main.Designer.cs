@@ -36,8 +36,14 @@
             this.工具TToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.RPC_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.map_toolStrip = new System.Windows.Forms.ToolStrip();
-            this.CNN_SVM_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.CNN_DQN_toolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.CNN_SVM_toolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.RF_ToolStripMenuItem = new System.Windows.Forms.ToolStripButton();
+            this.SVM_ToolStripMenuItem = new System.Windows.Forms.ToolStripButton();
+            this.DQN_ToolStripMenuItem = new System.Windows.Forms.ToolStripButton();
+            this.ConvNet_ToolStripMenuItem = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.BATCHS_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.Kappa_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -71,12 +77,6 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.bandExport_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.main_notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.RF_ToolStripMenuItem = new System.Windows.Forms.ToolStripButton();
-            this.DQN_ToolStripMenuItem = new System.Windows.Forms.ToolStripButton();
-            this.SVM_ToolStripMenuItem = new System.Windows.Forms.ToolStripButton();
-            this.ConvNet_ToolStripMenuItem = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.map_menuStrip.SuspendLayout();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
@@ -174,6 +174,15 @@
             this.map_toolStrip.TabIndex = 1;
             this.map_toolStrip.Text = "classification tools";
             // 
+            // CNN_DQN_toolStripButton
+            // 
+            this.CNN_DQN_toolStripButton.Image = global::Host.UI.Properties.Resources.kafei;
+            this.CNN_DQN_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.CNN_DQN_toolStripButton.Name = "CNN_DQN_toolStripButton";
+            this.CNN_DQN_toolStripButton.Size = new System.Drawing.Size(108, 44);
+            this.CNN_DQN_toolStripButton.Text = "CNN-DQN";
+            this.CNN_DQN_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
+            // 
             // CNN_SVM_toolStripButton
             // 
             this.CNN_SVM_toolStripButton.Image = global::Host.UI.Properties.Resources.mingpai;
@@ -183,14 +192,51 @@
             this.CNN_SVM_toolStripButton.Text = "CNN-SVM";
             this.CNN_SVM_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
             // 
-            // CNN_DQN_toolStripButton
+            // toolStripSeparator5
             // 
-            this.CNN_DQN_toolStripButton.Image = global::Host.UI.Properties.Resources.kafei;
-            this.CNN_DQN_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.CNN_DQN_toolStripButton.Name = "CNN_DQN_toolStripButton";
-            this.CNN_DQN_toolStripButton.Size = new System.Drawing.Size(108, 44);
-            this.CNN_DQN_toolStripButton.Text = "CNN-DQN";
-            this.CNN_DQN_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 47);
+            // 
+            // RF_ToolStripMenuItem
+            // 
+            this.RF_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.clock;
+            this.RF_ToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.RF_ToolStripMenuItem.Name = "RF_ToolStripMenuItem";
+            this.RF_ToolStripMenuItem.Size = new System.Drawing.Size(140, 44);
+            this.RF_ToolStripMenuItem.Text = "RandomForest";
+            this.RF_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
+            // 
+            // SVM_ToolStripMenuItem
+            // 
+            this.SVM_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.duorou;
+            this.SVM_ToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.SVM_ToolStripMenuItem.Name = "SVM_ToolStripMenuItem";
+            this.SVM_ToolStripMenuItem.Size = new System.Drawing.Size(90, 44);
+            this.SVM_ToolStripMenuItem.Text = "L2-SVM";
+            this.SVM_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
+            // 
+            // DQN_ToolStripMenuItem
+            // 
+            this.DQN_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.dangandai;
+            this.DQN_ToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.DQN_ToolStripMenuItem.Name = "DQN_ToolStripMenuItem";
+            this.DQN_ToolStripMenuItem.Size = new System.Drawing.Size(111, 44);
+            this.DQN_ToolStripMenuItem.Text = "DeepQNet";
+            this.DQN_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
+            // 
+            // ConvNet_ToolStripMenuItem
+            // 
+            this.ConvNet_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.email;
+            this.ConvNet_ToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ConvNet_ToolStripMenuItem.Name = "ConvNet_ToolStripMenuItem";
+            this.ConvNet_ToolStripMenuItem.Size = new System.Drawing.Size(97, 44);
+            this.ConvNet_ToolStripMenuItem.Text = "ConvNet";
+            this.ConvNet_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(6, 47);
             // 
             // BATCHS_toolStripButton
             // 
@@ -510,52 +556,6 @@
             this.main_notifyIcon.Text = "please double click to restore the view";
             this.main_notifyIcon.Visible = true;
             this.main_notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.Main_notifyIcon_MouseDoubleClick);
-            // 
-            // RF_ToolStripMenuItem
-            // 
-            this.RF_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.clock;
-            this.RF_ToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.RF_ToolStripMenuItem.Name = "RF_ToolStripMenuItem";
-            this.RF_ToolStripMenuItem.Size = new System.Drawing.Size(140, 44);
-            this.RF_ToolStripMenuItem.Text = "RandomForest";
-            this.RF_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
-            // 
-            // DQN_ToolStripMenuItem
-            // 
-            this.DQN_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.dangandai;
-            this.DQN_ToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.DQN_ToolStripMenuItem.Name = "DQN_ToolStripMenuItem";
-            this.DQN_ToolStripMenuItem.Size = new System.Drawing.Size(111, 44);
-            this.DQN_ToolStripMenuItem.Text = "DeepQNet";
-            this.DQN_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
-            // 
-            // SVM_ToolStripMenuItem
-            // 
-            this.SVM_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.duorou;
-            this.SVM_ToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.SVM_ToolStripMenuItem.Name = "SVM_ToolStripMenuItem";
-            this.SVM_ToolStripMenuItem.Size = new System.Drawing.Size(90, 44);
-            this.SVM_ToolStripMenuItem.Text = "L2-SVM";
-            this.SVM_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
-            // 
-            // ConvNet_ToolStripMenuItem
-            // 
-            this.ConvNet_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.email;
-            this.ConvNet_ToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.ConvNet_ToolStripMenuItem.Name = "ConvNet_ToolStripMenuItem";
-            this.ConvNet_ToolStripMenuItem.Size = new System.Drawing.Size(97, 44);
-            this.ConvNet_ToolStripMenuItem.Text = "ConvNet";
-            this.ConvNet_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 47);
-            // 
-            // toolStripSeparator6
-            // 
-            this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(6, 47);
             // 
             // Main
             // 

@@ -4,16 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1646B48F-6A20-41D0-B9BE-CA8002CB50EA}</ProjectGuid>
+    <ProjectGuid>{1E236454-481B-4646-BEF5-57A5FCE9766B}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>Host.UI</RootNamespace>
     <AssemblyName>Host.UI</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>x64</PlatformTarget>
@@ -24,8 +22,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -35,8 +31,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>globe.ico</ApplicationIcon>
@@ -45,35 +42,136 @@
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x64\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PresentationCore" />
-    <Reference Include="ScottPlot">
-      <HintPath>..\Extra\ScottPlot\obj\Debug\ScottPlot.dll</HintPath>
+    <Reference Include="ejml-0.23, Version=0.23.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stanford.NLP.CoreNLP.3.9.2.0\lib\ejml-0.23.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.AWT.WinForms, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.AWT.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Beans, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Beans.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Charsets, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Charsets.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Cldrdata, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Cldrdata.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Corba, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Corba.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Core, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Jdbc, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Jdbc.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Localedata, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Localedata.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Management, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Management.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Media, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Media.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Misc, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Misc.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Naming, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Naming.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Nashorn, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Nashorn.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Remoting, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Remoting.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Security, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.SwingAWT, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.SwingAWT.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Text, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Text.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Tools, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Tools.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Util, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.Util.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.XML.API, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.API.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.XML.Bind, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.Bind.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.XML.Crypto, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.XML.Parse, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.Parse.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.XML.Transform, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.Transform.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.XML.WebServices, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.WebServices.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.XML.XPath, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.OpenJDK.XML.XPath.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.Runtime, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.Runtime.JNI, Version=8.1.5717.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <HintPath>..\packages\IKVM.8.1.5717.0\lib\IKVM.Runtime.JNI.dll</HintPath>
+    </Reference>
+    <Reference Include="javax.json, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stanford.NLP.CoreNLP.3.9.2.0\lib\javax.json.dll</HintPath>
+    </Reference>
+    <Reference Include="joda-time, Version=2.9.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stanford.NLP.CoreNLP.3.9.2.0\lib\joda-time.dll</HintPath>
+    </Reference>
+    <Reference Include="jollyday, Version=0.4.9.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stanford.NLP.CoreNLP.3.9.2.0\lib\jollyday.dll</HintPath>
+    </Reference>
+    <Reference Include="protobuf, Version=2.6.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stanford.NLP.CoreNLP.3.9.2.0\lib\protobuf.dll</HintPath>
+    </Reference>
+    <Reference Include="slf4j-api, Version=1.7.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stanford.NLP.CoreNLP.3.9.2.0\lib\slf4j-api.dll</HintPath>
+    </Reference>
+    <Reference Include="slf4j-simple, Version=1.7.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stanford.NLP.CoreNLP.3.9.2.0\lib\slf4j-simple.dll</HintPath>
+    </Reference>
+    <Reference Include="stanford-corenlp-3.9.2, Version=3.9.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stanford.NLP.CoreNLP.3.9.2.0\lib\stanford-corenlp-3.9.2.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Security" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -83,8 +181,65 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="xom, Version=1.2.10.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stanford.NLP.CoreNLP.3.9.2.0\lib\xom.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\BandExportForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\BandExportForm.Designer.cs">
+      <DependentUpon>BandExportForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\BandForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\BandForm.Designer.cs">
+      <DependentUpon>BandForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\BatchExportForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\BatchExportForm.Designer.cs">
+      <DependentUpon>BatchExportForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\CNN-DQNForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CNN-DQNForm.Designer.cs">
+      <DependentUpon>CNN-DQNForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\CNN-SVMForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CNN-SVMForm.Designer.cs">
+      <DependentUpon>CNN-SVMForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ConvForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ConvForm.Designer.cs">
+      <DependentUpon>ConvForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\DLClassifyForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DLClassifyForm.Designer.cs">
+      <DependentUpon>DLClassifyForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\DQNForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DQNForm.Designer.cs">
+      <DependentUpon>DQNForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\KappaForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\KappaForm.Designer.cs">
+      <DependentUpon>KappaForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\NLPConfigForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -103,11 +258,47 @@
     <Compile Include="Forms\NLPScenarioForm.Designer.cs">
       <DependentUpon>NLPScenarioForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ParsingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ParsingForm.Designer.cs">
+      <DependentUpon>ParsingForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\RFForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RFForm.Designer.cs">
+      <DependentUpon>RFForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\RPCForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RPCForm.Designer.cs">
+      <DependentUpon>RPCForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ScottPlotForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ScottPlotForm.Designer.cs">
       <DependentUpon>ScottPlotForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SLICForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SLICForm.Designer.cs">
+      <DependentUpon>SLICForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SVMForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SVMForm.Designer.cs">
+      <DependentUpon>SVMForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\TaskMonitor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TaskMonitor.Designer.cs">
+      <DependentUpon>TaskMonitor.cs</DependentUpon>
     </Compile>
     <Compile Include="Jobs\IJob.cs" />
     <Compile Include="Jobs\IJobRPCRectify.cs" />
@@ -132,121 +323,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\BandExportForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\BandExportForm.Designer.cs">
-      <DependentUpon>BandExportForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\BandForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\BandForm.Designer.cs">
-      <DependentUpon>BandForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\BatchExportForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\BatchExportForm.Designer.cs">
-      <DependentUpon>BatchExportForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\CNN-SVMForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\CNN-SVMForm.Designer.cs">
-      <DependentUpon>CNN-SVMForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\ConvForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ConvForm.Designer.cs">
-      <DependentUpon>ConvForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\CNN-DQNForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\CNN-DQNForm.Designer.cs">
-      <DependentUpon>CNN-DQNForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\DLClassifyForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\DLClassifyForm.Designer.cs">
-      <DependentUpon>DLClassifyForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\DQNForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\DQNForm.Designer.cs">
-      <DependentUpon>DQNForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\KappaForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\KappaForm.Designer.cs">
-      <DependentUpon>KappaForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\ParsingForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ParsingForm.Designer.cs">
-      <DependentUpon>ParsingForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\RFForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\RFForm.Designer.cs">
-      <DependentUpon>RFForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\RPCForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\RPCForm.Designer.cs">
-      <DependentUpon>RPCForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\SLICForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\SLICForm.Designer.cs">
-      <DependentUpon>SLICForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\SVMForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\SVMForm.Designer.cs">
-      <DependentUpon>SVMForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\TaskMonitor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\TaskMonitor.Designer.cs">
-      <DependentUpon>TaskMonitor.cs</DependentUpon>
-    </Compile>
-    <EmbeddedResource Include="Forms\NLPConfigForm.resx">
-      <DependentUpon>NLPConfigForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\NLPExpertiseForm.resx">
-      <DependentUpon>NLPExpertiseForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\NLPScenarioForm.resx">
-      <DependentUpon>NLPScenarioForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ScottPlotForm.resx">
-      <DependentUpon>ScottPlotForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Main.resx">
-      <DependentUpon>Main.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <SubType>Designer</SubType>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\BandExportForm.resx">
       <DependentUpon>BandExportForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -256,14 +332,14 @@
     <EmbeddedResource Include="Forms\BatchExportForm.resx">
       <DependentUpon>BatchExportForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CNN-DQNForm.resx">
+      <DependentUpon>CNN-DQNForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\CNN-SVMForm.resx">
       <DependentUpon>CNN-SVMForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ConvForm.resx">
       <DependentUpon>ConvForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\CNN-DQNForm.resx">
-      <DependentUpon>CNN-DQNForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\DLClassifyForm.resx">
       <DependentUpon>DLClassifyForm.cs</DependentUpon>
@@ -274,6 +350,15 @@
     <EmbeddedResource Include="Forms\KappaForm.resx">
       <DependentUpon>KappaForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\NLPConfigForm.resx">
+      <DependentUpon>NLPConfigForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\NLPExpertiseForm.resx">
+      <DependentUpon>NLPExpertiseForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\NLPScenarioForm.resx">
+      <DependentUpon>NLPScenarioForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ParsingForm.resx">
       <DependentUpon>ParsingForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -282,6 +367,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\RPCForm.resx">
       <DependentUpon>RPCForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ScottPlotForm.resx">
+      <DependentUpon>ScottPlotForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SLICForm.resx">
       <DependentUpon>SLICForm.cs</DependentUpon>
@@ -292,7 +380,21 @@
     <EmbeddedResource Include="Forms\TaskMonitor.resx">
       <DependentUpon>TaskMonitor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Main.resx">
+      <DependentUpon>Main.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <None Include="app.manifest" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -308,43 +410,24 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine.Brain\Engine.Brain.csproj">
-      <Project>{f1d8819a-eb82-46f4-950d-e8732586af8e}</Project>
+      <Project>{e57416b0-bfee-4420-8c3a-1f96732c9375}</Project>
       <Name>Engine.Brain</Name>
     </ProjectReference>
     <ProjectReference Include="..\Engine.GIS\Engine.GIS.csproj">
-      <Project>{82b3cfc7-e05c-46d3-9e91-2f5f4495238e}</Project>
+      <Project>{b3845380-5ca5-4ed0-b6ad-ee9043e9fbfb}</Project>
       <Name>Engine.GIS</Name>
     </ProjectReference>
     <ProjectReference Include="..\Engine.NLP\Engine.NLP.csproj">
-      <Project>{D8C1D1D1-E414-4C26-A666-7DBE72C8BA44}</Project>
+      <Project>{d8c1d1d1-e414-4c26-a666-7dbe72c8ba44}</Project>
       <Name>Engine.NLP</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Extra\ScottPlot\ScottPlot.csproj">
+      <Project>{2eb18f34-a0c1-4a51-9286-c42da53668cb}</Project>
+      <Name>ScottPlot</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="globe.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="EPPlus">
-      <Version>4.5.3.1</Version>
-    </PackageReference>
-    <PackageReference Include="IKVM">
-      <Version>8.1.5717</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Office.Interop.Excel">
-      <Version>15.0.4795.1000</Version>
-    </PackageReference>
-    <PackageReference Include="Newtonsoft.Json">
-      <Version>12.0.1</Version>
-    </PackageReference>
-    <PackageReference Include="Stanford.NLP.CoreNLP">
-      <Version>3.9.1</Version>
-    </PackageReference>
-    <PackageReference Include="System.Collections">
-      <Version>4.3.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.ValueTuple">
-      <Version>4.5.0</Version>
-    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
