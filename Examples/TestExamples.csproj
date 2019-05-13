@@ -172,10 +172,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TestBrain.cs" />
-    <Compile Include="TestCNTK.cs" />
-    <Compile Include="TestGIS.cs" />
-    <Compile Include="TestLexicon.cs" />
+    <Compile Include="UnitTestBrain.cs" />
+    <Compile Include="UnitTestCNTK.cs" />
+    <Compile Include="UnitTestGIS.cs" />
+    <Compile Include="UnitTestLexicon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
