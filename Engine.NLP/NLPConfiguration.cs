@@ -1,23 +1,40 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Diagnostics;
 using System.IO;
+using System.Net;
+using System.Net.NetworkInformation;
 using System.Reflection;
+using Engine.NLP.Forms;
 
 namespace Engine.NLP
 {
+    /// <summary>
+    /// 1. set nlp configuration
+    /// 2. start nlp server
+    /// </summary>
     public class NLPConfiguration
     {
+
+        #region Properties
+
+        /// <summary>
+        /// port number
+        /// </summary>
+        public static int PORT = 9000;
         /// <summary>
         /// default CoreNLP dir
         /// </summary>
-        private static string corenlpDir = Directory.GetCurrentDirectory() + @"\stanford-corenlp-full\";
+        private static readonly string corenlpDir = Directory.GetCurrentDirectory() + @"\stanford-corenlp-full\";
         /// <summary>
         /// default start command string
         /// </summary>
-        private static string setupString = "-mx4g -cp * edu.stanford.nlp.pipeline.StanfordCoreNLPServer -port 9000 -timeout 99999";
+        private static readonly string setupString = "-mx4g -cp * edu.stanford.nlp.pipeline.StanfordCoreNLPServer -port 9000 -timeout 15000";
         /// <summary>
         /// default golVe embedding string
         /// </summary>
-        private static string gloVeEmbeddingString = Directory.GetCurrentDirectory() + @"\glove-embedding\glove.6B.100d.txt";
+        private static readonly string gloVeEmbeddingString = Directory.GetCurrentDirectory() + @"\glove-embedding\glove.6B.100d.txt";
         ///// <summary>
         /// 
         /// </summary>
@@ -25,7 +42,7 @@ namespace Engine.NLP
         /// <summary>
         /// 
         /// </summary>
-        private static Configuration config = ConfigurationManager.OpenExeConfiguration(configFilename);
+        private static readonly Configuration config = ConfigurationManager.OpenExeConfiguration(configFilename);
         /// <summary>
         /// 
         /// </summary>
@@ -146,5 +163,48 @@ namespace Engine.NLP
                 UpdateConfigKeyValue("RescueScenarioString", value);
             }
         }
+
+        #endregion
+        /// <summary>
+        /// 启动 CoreNLP server
+        /// </summary>
+        /// <returns></returns>
+        public static bool StartCoreServer()
+        {
+            if (PortInUse(PORT))
+                return false;
+            else
+            {
+                Process process = new Process();
+                process.StartInfo.WorkingDirectory = CoreNLPDirString;
+                process.StartInfo.FileName = "java";
+                process.StartInfo.Arguments = CoreNLPCommandString;
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.RedirectStandardInput = true;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.RedirectStandardError = true;
+                process.StartInfo.CreateNoWindow = true;
+                NLPProcessForm processForm = new NLPProcessForm();
+                processForm.SetProcess(process);
+                processForm.Show();
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// check wether the port is in use
+        /// </summary>
+        /// <param name="port"></param>
+        /// <returns></returns>
+        private static bool PortInUse(int port)
+        {
+            IPGlobalProperties properties = IPGlobalProperties.GetIPGlobalProperties();
+            List<IPEndPoint> endpoints = new List<IPEndPoint>();
+            endpoints.AddRange(properties.GetActiveTcpListeners());
+            endpoints.AddRange(properties.GetActiveUdpListeners());
+            IPEndPoint p = endpoints.Find(pt => pt.Port == port);
+            return p != null;
+        }
+
     }
 }

@@ -64,26 +64,7 @@ namespace Host.UI
         
         #endregion
 
-        #region 资源清理
-        private void Main_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            //释放process缓存
-            _processCache.ForEach(process =>
-            {
-                process.OutputDataReceived -= UpdateProcessOutput;
-                process.ErrorDataReceived -= UpdateProcessOutput;
-                //process.OutputDataReceived
-                process.Kill();
-            });
-        }
-        #endregion
-
         #region 缓存管理
-
-        /// <summary>
-        /// process cache
-        /// </summary>
-        readonly List<Process> _processCache = new List<Process>();
         
         /// <summary>
         /// get time string
@@ -159,16 +140,6 @@ namespace Host.UI
             if (msg == null) return;
             MAP_listBox.Items.Add(msg);
             MAP_listBox.SelectedIndex = MAP_listBox.Items.Count - 1;
-        }
-
-        /// <summary>
-        /// update process output
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void UpdateProcessOutput(object sender, DataReceivedEventArgs e)
-        {
-            Invoke(new UpdateListBoxHandler(UpdateMapListBox), e.Data);
         }
         
         /// <summary>
@@ -575,26 +546,14 @@ namespace Host.UI
                 //start stanford nlp server
                 case "STAR_NLPSERVER_ToolStripMenuItem":
                     {
-                        STAR_NLPSERVER_ToolStripMenuItem.Enabled = false;
+                        //STAR_NLPSERVER_ToolStripMenuItem.Enabled = false;
                         string msg = string.Format("time:{0}, {1}", Now, "NLP Server Starting.......");
                         Invoke(new UpdateListBoxHandler(UpdateMapListBox), msg);
-                        Process process = new Process();
-                        process.StartInfo.WorkingDirectory = NLPConfiguration.CoreNLPDirString;
-                        process.StartInfo.FileName = "java";
-                        process.StartInfo.Arguments = NLPConfiguration.CoreNLPCommandString;
-                        process.StartInfo.UseShellExecute = false;
-                        process.StartInfo.RedirectStandardInput = true;
-                        process.StartInfo.RedirectStandardOutput = true;
-                        process.StartInfo.RedirectStandardError = true;
-                        process.StartInfo.CreateNoWindow = true;
-                        process.Start();
-                        process.BeginOutputReadLine();
-                        process.BeginErrorReadLine();
-                        //register information
-                        process.OutputDataReceived += UpdateProcessOutput;
-                        process.ErrorDataReceived += UpdateProcessOutput;
-                        //process cache
-                        _processCache.Add(process);
+                        //process start
+                        if(NLPConfiguration.StartCoreServer())
+                            Invoke(new UpdateListBoxHandler(UpdateMapListBox), string.Format("time:{0}, {1}", Now, "Success: NLP Server Started"));
+                        else
+                            Invoke(new UpdateListBoxHandler(UpdateMapListBox), string.Format("time:{0}, {1}, port {2} is in use.", Now, "Error: NLP Server Start Fail", NLPConfiguration.PORT));
                     }
                     break;
                 //lstm test 

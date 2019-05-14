@@ -6,14 +6,18 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using edu.stanford.nlp.ie.crf;
 using edu.stanford.nlp.ling;
 using edu.stanford.nlp.pipeline;
 using edu.stanford.nlp.semgraph;
+using edu.stanford.nlp.tagger.maxent;
 using edu.stanford.nlp.time;
 using edu.stanford.nlp.trees;
 using edu.stanford.nlp.util;
 using Engine.Brain.Model;
 using Engine.Brain.Utils;
+using java.io;
+using java.util;
 using static edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations;
 
 namespace Engine.NLP.Forms
@@ -34,7 +38,7 @@ namespace Engine.NLP.Forms
         readonly static java.lang.Class normalizedNamedEntityTagAnnotationClass = new CoreAnnotations.NormalizedNamedEntityTagAnnotation().getClass();
         readonly static java.lang.Class timeExpressionClass = new TimeExpression.Annotation().getClass();
         #endregion
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -66,7 +70,7 @@ namespace Engine.NLP.Forms
                         //
                         Corpus_listBox.Items.Clear();
                         //
-                        foreach(var word in CorpusWordList)
+                        foreach (var word in CorpusWordList)
                         {
                             //string line = word;
                             double[] vWrod = GloveNet.Predict(word);
@@ -105,8 +109,9 @@ namespace Engine.NLP.Forms
                         List<string> factors = NLPConfiguration.FactorScenarioString.Split(';').ToList();
                         List<string> antis = NLPConfiguration.InduceScenarioString.Split(';').ToList();
                         List<string> affects = NLPConfiguration.AffectScenarioString.Split(';').ToList();
-                        Thread t = new Thread(() => {
-                            int totalNum = factors.Count + antis.Count + affects.Count+CorpusWordList.Count;
+                        Thread t = new Thread(() =>
+                        {
+                            int totalNum = factors.Count + antis.Count + affects.Count + CorpusWordList.Count;
                             //1. 构建词W集合
                             double[][] words = new double[totalNum][];
                             //2.定义词颜色
@@ -116,7 +121,7 @@ namespace Engine.NLP.Forms
                                 words[factors.Count + i] = GloveNet.Predict(antis[i]);
                             for (int i = 0; i < affects.Count; i++)
                                 words[factors.Count + antis.Count + i] = GloveNet.Predict(affects[i]);
-                            for(int i=0;i< CorpusWordList.Count;i++)
+                            for (int i = 0; i < CorpusWordList.Count; i++)
                                 words[factors.Count + antis.Count + affects.Count + i] = GloveNet.Predict(CorpusWordList[i]);
                             //3.t-SNE算法降维
                             var vWords = NP.TSNE2(words);
@@ -294,16 +299,21 @@ namespace Engine.NLP.Forms
         /// <param name="rawText"></param>
         private Dictionary<string, List<CoreMap>> SplitByTimeMarkupLanguage(string rawText)
         {
+            SUTime(rawText);
+            NER(rawText);
+            POSTagger(rawText);
+
             //create props
             var props = new java.util.Properties();
             //tokenize, ssplit, pos, lemma, ner, parse, coref, depparse, natlog, openie
             //tokenize, ssplit, pos, lemma, ner, parse, dcoref 
             props.setProperty("annotators", "tokenize, ssplit, pos, ner, parse");
             props.setProperty("ner.useSUTime", "true");
-            StanfordCoreNLPClient pipeline = new StanfordCoreNLPClient(props, "http://localhost", 9000);
+            StanfordCoreNLPClient pipeline = new StanfordCoreNLPClient(props, "http://localhost", 9000, 2);
             //pipeline.addAnnotator(new edu.stanford.nlp.parser.lexparser.LexicalizedParser().get);
             Annotation document = new Annotation(rawText);
             pipeline.annotate(document);
+            var sss = pipeline.process(rawText);
             //get sentance
             var sentences = document.get(sentencesAnnotationClass) as java.util.AbstractList;
             //time-sentences
@@ -362,6 +372,74 @@ namespace Engine.NLP.Forms
             //return dict
             return dict;
         }
+
+        private void POSTagger(string rawText)
+        {
+            //基于stanford corenlp full 下的 stanford-corenlp-3.9.1 解压
+            var jarRoot = @"D:\stanfordnlp\stanford-postagger-full";
+            var modelsDirectory = jarRoot + @"\models";
+            //load pos tagger
+            var tagger = new MaxentTagger(modelsDirectory + @"\wsj-0-18-bidirectional-nodistsim.tagger");
+            var sentences = MaxentTagger.tokenizeText(new java.io.StringReader(rawText)).toArray();
+            foreach (ArrayList sentence in sentences)
+            {
+                var taggedSentence = tagger.tagSentence(sentence);
+                //Console.WriteLine(SentenceUtils.listToString(taggedSentence, false));
+            }
+        }
+
+        private void NER(string rawText)
+        {
+            //基于stanford corenlp full 下的 stanford-corenlp-3.9.1 解压
+            var jarRoot = @"D:\stanfordnlp\stanford-ner";
+            var classifiersDirecrory = jarRoot + @"\classifiers";
+            //load pos tagger
+            var classifier = CRFClassifier.getClassifierNoExceptions(
+                  classifiersDirecrory + @"\english.all.3class.distsim.crf.ser.gz");
+
+            var str = classifier.classifyToString(rawText);
+
+        }
+
+        private void SUTime(string rawText)
+        {
+            var props = new java.util.Properties();
+            props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref");
+            StanfordCoreNLPClient pipeline = new StanfordCoreNLPClient(props, "http://localhost", 9000, 2);
+            // read some text in the text variable
+            String text = "adsfasdgasdgasdgadsgasdgfew3"; // Add your text here!
+            // create an empty Annotation just with the given text
+            Annotation document = new Annotation(text);
+            // run all Annotators on this text
+            pipeline.annotate(document);
+        }
+
+        private void SUTime2(string rawText)
+        {
+            var jarRoot = @"D:\stanfordnlp\stanford-corenlp-full\models";
+            var props = new java.util.Properties();
+            props.setProperty("annotators", "tokenize, ssplit, pos, lemma, parse, ner,dcoref");
+            props.setProperty("ner.useSUTime", "0");
+            var curDir = Environment.CurrentDirectory;
+            Directory.SetCurrentDirectory(jarRoot);
+            var pipeline = new StanfordCoreNLP(props);
+            Directory.SetCurrentDirectory(curDir);
+            // Annotation
+            var annotation = new Annotation(rawText);
+            pipeline.annotate(annotation);
+            // Result - Pretty Print
+            string text = "";
+            using (var stream = new ByteArrayOutputStream())
+            {
+                pipeline.prettyPrint(annotation, new PrintWriter(stream));
+                text += stream.toString();
+                stream.close();
+            }
+        }
+
+
+        #region  UI事件
+
         /// <summary>
         /// 
         /// </summary>
@@ -374,11 +452,11 @@ namespace Engine.NLP.Forms
             {
                 case "Exprot_ToolStripMenuItem":
                     {
-                        SaveFileDialog sfg = new SaveFileDialog(); 
-                        if(sfg.ShowDialog() == DialogResult.OK)
+                        SaveFileDialog sfg = new SaveFileDialog();
+                        if (sfg.ShowDialog() == DialogResult.OK)
                         {
                             string text = "";
-                            foreach( var line in Corpus_listBox.SelectedItems)
+                            foreach (var line in Corpus_listBox.SelectedItems)
                                 text += line + "\r\n";
                             using (StreamWriter sw = new StreamWriter(sfg.FileName, true, Encoding.UTF8))
                                 sw.Write(text);
@@ -389,5 +467,8 @@ namespace Engine.NLP.Forms
                     break;
             }
         }
+
+        #endregion
+
     }
 }

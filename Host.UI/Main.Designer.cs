@@ -267,10 +267,10 @@
             // NLP_Services_toolStripDropDownButton
             // 
             this.NLP_Services_toolStripDropDownButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.Configuration_ToolStripMenuItem,
-            this.toolStripMenuItem3,
             this.STAR_NLPSERVER_ToolStripMenuItem,
-            this.Load_Words_Embedding_ToolStripMenuItem});
+            this.Load_Words_Embedding_ToolStripMenuItem,
+            this.toolStripMenuItem3,
+            this.Configuration_ToolStripMenuItem});
             this.NLP_Services_toolStripDropDownButton.Image = global::Host.UI.Properties.Resources.Start_24px_1192352_easyicon_net;
             this.NLP_Services_toolStripDropDownButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.NLP_Services_toolStripDropDownButton.Name = "NLP_Services_toolStripDropDownButton";
@@ -282,8 +282,8 @@
             // 
             this.Configuration_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.hongben;
             this.Configuration_ToolStripMenuItem.Name = "Configuration_ToolStripMenuItem";
-            this.Configuration_ToolStripMenuItem.Size = new System.Drawing.Size(334, 26);
-            this.Configuration_ToolStripMenuItem.Text = "Configuration_ToolStripMenuItem";
+            this.Configuration_ToolStripMenuItem.Size = new System.Drawing.Size(268, 26);
+            this.Configuration_ToolStripMenuItem.Text = "NLP Server Configuration";
             this.Configuration_ToolStripMenuItem.Click += new System.EventHandler(this.NLP_funciton_Click);
             // 
             // toolStripMenuItem3
@@ -572,7 +572,6 @@
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "AI-Based Toolkit";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.Resize += new System.EventHandler(this.Main_Resize);
             this.map_menuStrip.ResumeLayout(false);
             this.map_menuStrip.PerformLayout();

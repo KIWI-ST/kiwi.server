@@ -193,6 +193,12 @@
     <Compile Include="Forms\NLPExpertiseForm.Designer.cs">
       <DependentUpon>NLPExpertiseForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\NLPProcessForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\NLPProcessForm.Designer.cs">
+      <DependentUpon>NLPProcessForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\NLPScenarioForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -218,6 +224,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="NLPConfiguration.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -229,6 +236,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\NLPExpertiseForm.resx">
       <DependentUpon>NLPExpertiseForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\NLPProcessForm.resx">
+      <DependentUpon>NLPProcessForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\NLPScenarioForm.resx">
       <DependentUpon>NLPScenarioForm.cs</DependentUpon>
@@ -251,12 +261,7 @@
       <Name>ScottPlot</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\dangan.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\bofang1.png" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Accord.3.8.0\build\Accord.targets" Condition="Exists('..\packages\Accord.3.8.0\build\Accord.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
