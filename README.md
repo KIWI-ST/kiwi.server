@@ -61,6 +61,7 @@ there are servel steps before use it:
 + install java8, setting user environment variables
 + download [stanford nlp](https://stanfordnlp.github.io/CoreNLP/), decompression and move to Debug , rename flodar name to "stanford-corenlp-full"
 + download [glove](https://nlp.stanford.edu/projects/glove/) embedding lexicon, decompression and move to Debug, rename flodar name to "glove-embedding"
++ error: [IKVM BUG 292](https://sourceforge.net/p/ikvm/bugs/292/), copy IKVM lib dlls with name contains "OpenJDK" to Debug. [IKVM ISSUE 296](https://sourceforge.net/p/ikvm/bugs/296/)
 ```
             //   CC  并列连词           Coordinating conjunction
             //   CD  基数               Cardinal number
