@@ -30,6 +30,7 @@ namespace Engine.NLP.Forms
         }
 
         #region Properties Class Name
+
         readonly static java.lang.Class sentencesAnnotationClass = new CoreAnnotations.SentencesAnnotation().getClass();
         readonly static java.lang.Class tokensAnnotationClass = new CoreAnnotations.TokensAnnotation().getClass();
         readonly static java.lang.Class textAnnotationClass = new CoreAnnotations.TextAnnotation().getClass();
@@ -37,6 +38,7 @@ namespace Engine.NLP.Forms
         readonly static java.lang.Class namedEntityTagAnnotationClass = new CoreAnnotations.NamedEntityTagAnnotation().getClass();
         readonly static java.lang.Class normalizedNamedEntityTagAnnotationClass = new CoreAnnotations.NormalizedNamedEntityTagAnnotation().getClass();
         readonly static java.lang.Class timeExpressionClass = new TimeExpression.Annotation().getClass();
+        
         #endregion
 
         /// <summary>
@@ -300,77 +302,78 @@ namespace Engine.NLP.Forms
         private Dictionary<string, List<CoreMap>> SplitByTimeMarkupLanguage(string rawText)
         {
             SUTime(rawText);
-            NER(rawText);
-            POSTagger(rawText);
+            //NER(rawText);
+            //POSTagger(rawText);
 
             //create props
-            var props = new java.util.Properties();
-            //tokenize, ssplit, pos, lemma, ner, parse, coref, depparse, natlog, openie
-            //tokenize, ssplit, pos, lemma, ner, parse, dcoref 
-            props.setProperty("annotators", "tokenize, ssplit, pos, ner, parse");
-            props.setProperty("ner.useSUTime", "true");
-            StanfordCoreNLPClient pipeline = new StanfordCoreNLPClient(props, "http://localhost", 9000, 2);
-            //pipeline.addAnnotator(new edu.stanford.nlp.parser.lexparser.LexicalizedParser().get);
-            Annotation document = new Annotation(rawText);
-            pipeline.annotate(document);
-            var sss = pipeline.process(rawText);
-            //get sentance
-            var sentences = document.get(sentencesAnnotationClass) as java.util.AbstractList;
-            //time-sentences
-            Dictionary<string, List<CoreMap>> dict = new Dictionary<string, List<CoreMap>>();
-            //analysis by time(date)
-            foreach (CoreMap sentence in sentences)
-            {
-                var tokens = sentence.get(tokensAnnotationClass) as java.util.AbstractList;
-                if (InvokeRequired)
-                    Invoke(new UpdateListBoxHandler(UpdateListBox), ("------------------------------------------------------------------------------------------"), true);
-                //Tree tree = sentence.get(new TreeCoreAnnotations.TreeAnnotation().getClass()) as Tree;
-                //SemanticGraph deps = sentence.get(new BasicDependenciesAnnotation().getClass()) as SemanticGraph;
-                //标记此句子是否有时间标注
-                bool sig = false;
-                foreach (CoreLabel token in tokens)
-                {
-                    string word = (string)token.get(textAnnotationClass);
-                    //string pos = (string)token.get(partOfSpeechAnnotationClass);
-                    string ner = (string)token.get(namedEntityTagAnnotationClass);
-                    string value = (string)token.get(normalizedNamedEntityTagAnnotationClass);
-                    //re constructed
-                    if (ner == "DATE" && value.Length > 0)
-                    {
-                        if (!dict.ContainsKey(value))
-                            dict.Add(value, new List<CoreMap>());
-                        if (!dict[value].Contains(sentence))
-                            dict[value].Add(sentence);
-                        sig = true;
-                    }
-                    //1.基于NLP服务端预处理timeML标注语料(split)
-                    //2.基于NLP服务端拆分词(pos, nn, ner)
-                    //3.组织sentences
-                    //4.基于 words embedding ，对情景三要素聚类（t-SNE降维可视化并聚类）
-                    //    //词
-                    //    
-                    //    //词性
-                    //    
-                    //    //名词词性
-                    //    
-                    //    //属性值
-                    //    
-                    //    //CoreAnnotations
-                    //    string mention = (string)token.get(new EnglishGrammaticalStructure().typedDependencies()) +"-";
-                    //    //recollection sentance
-                    //    string outputText = string.Format("{0}\t[pos={1};\tner={2};\tvalue={3};\tmention={4}]", word, pos, ner, value, mention);
-                    //    if (InvokeRequired) Invoke(new UpdateListBoxHandler(UpdateListBox), outputText, false);
-                    //    //recollect sentance
-                    //    //if((string)number.len)
-                    //    //if (ner == "DATE" && value.Length > 0)
-                    //add to wardlist
-                    CorpusWordList.Add(word);
-                }
-                if (!sig && dict.Values.Last() != null)
-                    dict.Values.Last().Add(sentence);
-            }
+            //var props = new java.util.Properties();
+            ////tokenize, ssplit, pos, lemma, ner, parse, coref, depparse, natlog, openie
+            ////tokenize, ssplit, pos, lemma, ner, parse, dcoref 
+            //props.setProperty("annotators", "tokenize, ssplit, pos, ner, parse");
+            //props.setProperty("ner.useSUTime", "true");
+            //StanfordCoreNLPClient pipeline = new StanfordCoreNLPClient(props, "http://localhost", 9000, 2);
+            ////pipeline.addAnnotator(new edu.stanford.nlp.parser.lexparser.LexicalizedParser().get);
+            //Annotation document = new Annotation(rawText);
+            //pipeline.annotate(document);
+            //var sss = pipeline.process(rawText);
+            ////get sentance
+            //var sentences = document.get(sentencesAnnotationClass) as java.util.AbstractList;
+            ////time-sentences
+            //Dictionary<string, List<CoreMap>> dict = new Dictionary<string, List<CoreMap>>();
+            ////analysis by time(date)
+            //foreach (CoreMap sentence in sentences)
+            //{
+            //    var tokens = sentence.get(tokensAnnotationClass) as java.util.AbstractList;
+            //    if (InvokeRequired)
+            //        Invoke(new UpdateListBoxHandler(UpdateListBox), ("------------------------------------------------------------------------------------------"), true);
+            //    //Tree tree = sentence.get(new TreeCoreAnnotations.TreeAnnotation().getClass()) as Tree;
+            //    //SemanticGraph deps = sentence.get(new BasicDependenciesAnnotation().getClass()) as SemanticGraph;
+            //    //标记此句子是否有时间标注
+            //    bool sig = false;
+            //    foreach (CoreLabel token in tokens)
+            //    {
+            //        string word = (string)token.get(textAnnotationClass);
+            //        //string pos = (string)token.get(partOfSpeechAnnotationClass);
+            //        string ner = (string)token.get(namedEntityTagAnnotationClass);
+            //        string value = (string)token.get(normalizedNamedEntityTagAnnotationClass);
+            //        //re constructed
+            //        if (ner == "DATE" && value.Length > 0)
+            //        {
+            //            if (!dict.ContainsKey(value))
+            //                dict.Add(value, new List<CoreMap>());
+            //            if (!dict[value].Contains(sentence))
+            //                dict[value].Add(sentence);
+            //            sig = true;
+            //        }
+            //        //1.基于NLP服务端预处理timeML标注语料(split)
+            //        //2.基于NLP服务端拆分词(pos, nn, ner)
+            //        //3.组织sentences
+            //        //4.基于 words embedding ，对情景三要素聚类（t-SNE降维可视化并聚类）
+            //        //    //词
+            //        //    
+            //        //    //词性
+            //        //    
+            //        //    //名词词性
+            //        //    
+            //        //    //属性值
+            //        //    
+            //        //    //CoreAnnotations
+            //        //    string mention = (string)token.get(new EnglishGrammaticalStructure().typedDependencies()) +"-";
+            //        //    //recollection sentance
+            //        //    string outputText = string.Format("{0}\t[pos={1};\tner={2};\tvalue={3};\tmention={4}]", word, pos, ner, value, mention);
+            //        //    if (InvokeRequired) Invoke(new UpdateListBoxHandler(UpdateListBox), outputText, false);
+            //        //    //recollect sentance
+            //        //    //if((string)number.len)
+            //        //    //if (ner == "DATE" && value.Length > 0)
+            //        //add to wardlist
+            //        CorpusWordList.Add(word);
+            //    }
+            //    if (!sig && dict.Values.Last() != null)
+            //        dict.Values.Last().Add(sentence);
+            //}
             //return dict
-            return dict;
+            //return dict;
+            return null;
         }
 
         private void POSTagger(string rawText)
@@ -403,15 +406,28 @@ namespace Engine.NLP.Forms
 
         private void SUTime(string rawText)
         {
-            var props = new java.util.Properties();
-            props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref");
-            StanfordCoreNLPClient pipeline = new StanfordCoreNLPClient(props, "http://localhost", 9000, 2);
-            // read some text in the text variable
-            String text = "adsfasdgasdgasdgadsgasdgfew3"; // Add your text here!
-            // create an empty Annotation just with the given text
-            Annotation document = new Annotation(text);
-            // run all Annotators on this text
-            pipeline.annotate(document);
+            try
+            {
+                var props = new java.util.Properties();
+                props.setProperty("annotators", "tokenize, ssplit, pos, ner, parse");
+                StanfordCoreNLPClient pipeline = new StanfordCoreNLPClient(props, "http://localhost", 9000);
+                // create an empty Annotation just with the given text
+                Annotation document = new Annotation(rawText);
+                // run all Annotators on this text
+                pipeline.annotate(document);
+                var sentences = document.get(sentencesAnnotationClass) as java.util.AbstractList;
+                //time-sentences
+                Dictionary<string, List<CoreMap>> dict = new Dictionary<string, List<CoreMap>>();
+                //analysis by time(date)
+                foreach (CoreMap sentence in sentences)
+                {
+
+                }
+            }
+            catch
+            {
+
+            }
         }
 
         private void SUTime2(string rawText)

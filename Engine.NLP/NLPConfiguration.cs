@@ -30,7 +30,7 @@ namespace Engine.NLP
         /// <summary>
         /// default start command string
         /// </summary>
-        private static readonly string setupString = "-mx4g -cp * edu.stanford.nlp.pipeline.StanfordCoreNLPServer -port 9000 -timeout 15000";
+        private static readonly string setupString = "-mx4g -cp * edu.stanford.nlp.pipeline.StanfordCoreNLPServer -port 9000 -timeout 999999";
         /// <summary>
         /// default golVe embedding string
         /// </summary>
