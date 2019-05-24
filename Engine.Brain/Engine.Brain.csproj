@@ -100,9 +100,9 @@
     <Compile Include="Model\DL\DNet.cs" />
     <Compile Include="Model\DL\DNet2.cs" />
     <Compile Include="Model\DL\FullyChannelNet9.cs" />
+    <Compile Include="Model\DL\GANet.cs" />
     <Compile Include="Model\DL\GloVeNet.cs" />
     <Compile Include="Model\DL\ResNet.cs" />
-    <Compile Include="Model\DL\RNN.cs" />
     <Compile Include="Model\IDConvNet.cs" />
     <Compile Include="Model\IDEmbeddingNet.cs" />
     <Compile Include="Model\IDNet.cs" />

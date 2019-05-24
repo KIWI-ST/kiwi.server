@@ -58,11 +58,11 @@ namespace Engine.Brain.Model.RL
         /// <summary>
         /// actor model
         /// </summary>
-        private readonly IDNet _actorNet;
+        private readonly IDSupportDQN _actorNet;
         /// <summary>
         /// critic model
         /// </summary>
-        private readonly IDNet _criticNet;
+        private readonly IDSupportDQN _criticNet;
 
         #region Parameters
         //environment
@@ -91,7 +91,7 @@ namespace Engine.Brain.Model.RL
         /// 
         /// </summary>
         /// <param name="env"></param>
-        public DQN(IEnv env, IDNet actor=null, IDNet critic= null, int epochs = 3000, double gamma = 0.0)
+        public DQN(IEnv env, IDSupportDQN actor =null, IDSupportDQN critic = null, int epochs = 3000, double gamma = 0.0)
         {
             _env = env;
             _gamma = gamma;

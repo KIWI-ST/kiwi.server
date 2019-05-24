@@ -118,8 +118,8 @@ namespace Examples
             }
             double dNetLoss = 999;
             //use DNet (DNN) for dqn training
-            IDNet actor = new DNet(new int[] { 3, 3, 18 }, keys.Count);
-            IDNet critic = new DNet(new int[] { 3, 3, 18 }, keys.Count);
+            IDSupportDQN actor = new DNet(new int[] { 3, 3, 18 }, keys.Count);
+            IDSupportDQN critic = new DNet(new int[] { 3, 3, 18 }, keys.Count);
             //create dqn alogrithm
             DQN dqn = new DQN(env, actor, critic, epochs: 10);
             //in order to test fast, we set training epochs equals 10.
@@ -135,8 +135,8 @@ namespace Examples
             Assert.IsTrue(dNetLoss < 1.0);
             double dNet2Loss = 999;
             //use DNet2(CNN) for dqn training
-            IDNet actor2 = new DNet2(NP.CNTK.DeviceCollection[0], 9, 9, 18, keys.Count);
-            IDNet critic2 = new DNet2(NP.CNTK.DeviceCollection[0], 9, 9, 18, keys.Count);
+            IDSupportDQN actor2 = new DNet2(NP.CNTK.DeviceCollection[0], 9, 9, 18, keys.Count);
+            IDSupportDQN critic2 = new DNet2(NP.CNTK.DeviceCollection[0], 9, 9, 18, keys.Count);
             //create dqn alogrithm
             DQN dqn2 = new DQN(env, actor2, critic2, epochs: 10);
             //in order to test fast, we set training epochs equals 10.

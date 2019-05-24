@@ -165,6 +165,7 @@ namespace Engine.NLP
         }
 
         #endregion
+
         /// <summary>
         /// 启动 CoreNLP server
         /// </summary>

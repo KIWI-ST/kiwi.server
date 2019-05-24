@@ -301,7 +301,7 @@ namespace Engine.NLP.Forms
         /// <param name="rawText"></param>
         private Dictionary<string, List<CoreMap>> SplitByTimeMarkupLanguage(string rawText)
         {
-            SUTime(rawText);
+            Analysis(rawText);
             //NER(rawText);
             //POSTagger(rawText);
 
@@ -404,7 +404,11 @@ namespace Engine.NLP.Forms
 
         }
 
-        private void SUTime(string rawText)
+        /// <summary>
+        /// 分析统一入口
+        /// </summary>
+        /// <param name="rawText"></param>
+        private void Analysis(string rawText)
         {
             try
             {
@@ -421,6 +425,7 @@ namespace Engine.NLP.Forms
                 //analysis by time(date)
                 foreach (CoreMap sentence in sentences)
                 {
+
 
                 }
             }

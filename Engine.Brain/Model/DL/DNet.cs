@@ -109,7 +109,7 @@ namespace Engine.Brain.Model.DL
             return memory;
         }
 
-        public void Accept(IDNet sourceNet)
+        public void Accept(IDSupportDQN sourceNet)
         {
             _network = Network.Load(sourceNet.PersistenceMemory()) as ActivationNetwork;
             _teacher = new BackPropagationLearning(_network)

@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace Engine.Brain.Model
+﻿namespace Engine.Brain.Model
 {
     /// <summary>
     /// DNN结构网络
@@ -14,24 +12,17 @@ namespace Engine.Brain.Model
         /// <param name="outputs"></param>
         /// <returns>loss</returns>
         double Train(double[][] inputs, double[][] outputs);
+
         /// <summary>
         ///
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
         double[] Predict(params object[] inputs);
+
         /// <summary>
         /// persistence in local dir
         /// </summary>
         string PersistencNative(string modelFilename = null);
-        /// <summary>
-        /// persistence in memory
-        /// </summary>
-        Stream PersistenceMemory();
-        /// <summary>
-        /// copy sourceNet parameters to this Net
-        /// </summary>
-        /// <param name="sourceNet"></param>
-        void Accept(IDNet sourceNet);
     }
 }

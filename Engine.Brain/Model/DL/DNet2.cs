@@ -79,7 +79,7 @@ namespace Engine.Brain.Model.DL
         /// async parameters
         /// </summary>
         /// <param name="sourceNet"></param>
-        public void Accept(IDNet sourceNet)
+        public void Accept(IDSupportDQN sourceNet)
         {
             //convert to bytes 
             Stream modelStream = sourceNet.PersistenceMemory();
