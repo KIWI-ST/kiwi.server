@@ -99,7 +99,7 @@ namespace Engine.Brain.Utils
                 int num_output_channels,
                 int[] filter_shape,
                 DeviceDescriptor device,
-                Func<Variable, string, Function> activation,
+                Func<Variable, string, Function> activation = null,
                 bool use_padding = false,
                 bool use_bias = true,
                 int[] strides = null,
@@ -130,8 +130,7 @@ namespace Engine.Brain.Utils
                 bool use_padding,
                 bool use_bias,
                 int[] strides,
-                
-                Func<Variable, string, Function> activation,
+                Func<Variable, string, Function> activation = null,
                 string outputName = "")
             {
                 var W = new Parameter(
@@ -156,6 +155,71 @@ namespace Engine.Brain.Utils
                     y = activation(y, outputName);
                 }
                 return y;
+            }
+
+            /// <summary>
+            /// https://microsoft.github.io/CNTK-R/reference/ConvolutionTranspose.html
+            /// </summary>
+            /// <param name="input"></param>
+            /// <param name="filter_shape"></param>
+            /// <param name="num_filters"></param>
+            /// <param name="activation"></param>
+            /// <param name="device"></param>
+            /// <param name="use_padding"></param>
+            /// <param name="strides"></param>
+            /// <param name="use_bias"></param>
+            /// <param name="output_shape"></param>
+            /// <param name="dilation"></param>
+            /// <param name="max_temp_mem_size_in_samples"></param>
+            /// <param name="name"></param>
+            /// <returns></returns>
+            public static Function ConvolutionTranspose(
+                Variable input,
+                int[] filter_shape,
+                int num_filters,
+                DeviceDescriptor device,
+                Func<Variable, Function> activation = null,
+                bool use_padding =true,
+                int[] strides =null,
+                bool use_bias = true,
+                int[] output_shape=null,
+                int[] dilation = null,
+                uint max_temp_mem_size_in_samples = 0,
+                string name = "")
+            {
+                strides = strides?? new int[] { 1 };
+                var sharing = PadToShape(filter_shape, true);
+                var padding = PadToShape(filter_shape, use_padding);
+                padding = Concat(padding, new bool[] { false });
+                if (dilation == null)
+                    dilation = PadToShape(filter_shape, 1);
+                var output_channels_shape = new int[] { num_filters };
+                var kernel_shape = Concat(filter_shape, output_channels_shape, new int[] { NDShape.InferredDimension });
+                var output_full_shape = output_shape;
+                if (output_full_shape != null)
+                    output_full_shape = Concat(output_shape, output_channels_shape);
+                var filter_rank = filter_shape.Length;
+                var init = CNTKLib.GlorotUniformInitializer(CNTKLib.DefaultParamInitScale, CNTKLib.SentinelValueForInferParamInitRank, CNTKLib.SentinelValueForInferParamInitRank, 1);
+                var W = new Parameter(kernel_shape, DataType.Float, init, device, name = "W");
+                var r = CNTKLib.ConvolutionTranspose(
+                  convolutionMap: W,
+                  operand: input,
+                  strides: strides,
+                  sharing: new BoolVector(sharing),
+                  autoPadding: new BoolVector(padding),
+                  outputShape: output_full_shape,
+                  dilation: dilation,
+                  reductionRank: 1, // in this case, the reductionRank must be equals 1
+                  maxTempMemSizeInSamples: max_temp_mem_size_in_samples);
+                if (use_bias)
+                {
+                    var b_shape = Concat(Enumerable.Repeat(1, filter_shape.Length).ToArray(), output_channels_shape);
+                    var b = new Parameter(b_shape, 0.0, device, "B");
+                    r = CNTKLib.Plus(r, b);
+                }
+                if (activation != null)
+                    r = activation(r);
+                return r;
             }
 
             /// <summary>
@@ -204,7 +268,7 @@ namespace Engine.Brain.Utils
                 int poolingWindowWidth,
                 int poolingWindowHeight,
                 DeviceDescriptor device,
-                Func<Variable, Function> activation,
+                Func<Variable, Function> activation = null,
                 string outputName = "")
             {
                 double convWScale = 0.26;
@@ -254,7 +318,7 @@ namespace Engine.Brain.Utils
             /// <param name="device"></param>
             /// <param name="outputName"></param>
             /// <returns></returns>
-            public static Function Dense(Variable input, int outputDim, DeviceDescriptor device, Func<Variable, Function> activation, string outputName = "")
+            public static Function Dense(Variable input, int outputDim, DeviceDescriptor device, Func<Variable, Function> activation = null, string outputName = "")
             {
                 if (input.Shape.Rank != 1)
                 {

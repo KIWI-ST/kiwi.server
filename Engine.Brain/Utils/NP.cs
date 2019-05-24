@@ -492,5 +492,20 @@ namespace Engine.Brain.Utils
                 list.AddRange(argumetns[i]);
             return list.ToArray();
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="filter_shape"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static T[] PadToShape<T>(int[] filter_shape, T value) where T : struct
+        {
+            var result = new T[filter_shape.Length];
+            for (int i = 0; i < result.Length; i++) { result[i] = value; }
+            return result;
+        }
+  
     }
 }
