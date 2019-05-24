@@ -33,7 +33,6 @@ namespace Engine.Brain.Model.DL
         /// <param name="discriminatorNet"></param>
         public DCGANet(string deviceName, int w = 32, int h = 32, int c = 3, int latent_dim =32)
         {
-            //
             _device = NP.CNTK.GetDeviceByName(deviceName);
             var label_var = CNTK.Variable.InputVariable(shape: new CNTK.NDShape(0), dataType: CNTK.DataType.Float, name: "label_var");
             var generator = CreateGenerator(latent_dim, c);
