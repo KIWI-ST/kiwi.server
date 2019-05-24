@@ -14,44 +14,42 @@ namespace Engine.Brain.Utils
     public partial class NP
     {
         public static class CNTK
+
         {
-            /// <summary>
-            /// activate enum
-            /// </summary>
-            public enum ActivateEnum {
-                SELU=1,
-                RELU=2,
-            }
             /// <summary>
             /// device get
             /// </summary>
             /// <param name="deviceName"></param>
             /// <returns></returns>
             public static DeviceDescriptor GetDeviceByName(string deviceName) { return devices[deviceName]; }
+            
             /// <summary>
             /// deivces collection
             /// </summary>
-            static Dictionary<string, DeviceDescriptor> devices = DeviceDescriptor.AllDevices().ToDictionary(device => string.Format("{0}-{1}", device.Id, device.Type), device => device);
+            static readonly Dictionary<string, DeviceDescriptor> devices = DeviceDescriptor.AllDevices().ToDictionary(device => string.Format("{0}-{1}", device.Id, device.Type), device => device);
+            
             /// <summary>
             /// get device map collection
             /// </summary>
             public static List<string> DeviceCollection { get { return devices.Keys.ToList(); } }
-           /// <summary>
-           /// load IConvNet type model
-           /// </summary>
-           /// <param name="modelFilename"></param>
-           /// <param name="deviceName"></param>
-           /// <returns></returns>
+            
+            /// <summary>
+            /// load IConvNet type model
+            /// </summary>
+            /// <param name="modelFilename"></param>
+            /// <param name="deviceName"></param>
+            /// <returns></returns>
             public static IDConvNet LoadModel(string modelFilename, string deviceName)
             {
                 string modelType = System.IO.Path.GetFileNameWithoutExtension(modelFilename).Split('_').Last();
                 var device = devices[deviceName];
                 var outputClassifier = Function.Load(modelFilename, device);
-                if(modelType== typeof(FullyChannelNet9).Name)
+                if (modelType == typeof(FullyChannelNet9).Name)
                     return new FullyChannelNet9(outputClassifier, deviceName);
                 else
                     return null;
             }
+            
             /// <summary>
             /// load data from binary file
             /// </summary>
@@ -72,6 +70,7 @@ namespace Engine.Brain.Utils
                 }
                 return dst;
             }
+            
             /// <summary>
             /// 
             /// </summary>
@@ -81,13 +80,91 @@ namespace Engine.Brain.Utils
             {
                 return Marshal.SizeOf(default(T));
             }
+
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="input"></param>
+            /// <param name="num_output_channels"></param>
+            /// <param name="filter_shape"></param>
+            /// <param name="device"></param>
+            /// <param name="activation"></param>
+            /// <param name="use_padding"></param>
+            /// <param name="use_bias"></param>
+            /// <param name="strides"></param>
+            /// <param name="outputName"></param>
+            /// <returns></returns>
+            public static Function Convolution2D(
+                Variable input,
+                int num_output_channels,
+                int[] filter_shape,
+                DeviceDescriptor device,
+                Func<Variable, string, Function> activation,
+                bool use_padding = false,
+                bool use_bias = true,
+                int[] strides = null,
+                string outputName = "")
+            {
+                var convolution_map_size = new int[] { filter_shape[0], filter_shape[1], NDShape.InferredDimension, num_output_channels };
+                strides = strides ?? (new int[] { 1 });
+                var rtrn = Convolution(input, convolution_map_size, device, use_padding, use_bias, strides, activation, outputName);
+                return rtrn;
+            }
+
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="input"></param>
+            /// <param name="convolution_map_size"></param>
+            /// <param name="device"></param>
+            /// <param name="use_padding"></param>
+            /// <param name="use_bias"></param>
+            /// <param name="strides"></param>
+            /// <param name="activation"></param>
+            /// <param name="outputName"></param>
+            /// <returns></returns>
+            public static Function Convolution(
+                Variable input,
+                int[] convolution_map_size,
+                DeviceDescriptor device,
+                bool use_padding,
+                bool use_bias,
+                int[] strides,
+                
+                Func<Variable, string, Function> activation,
+                string outputName = "")
+            {
+                var W = new Parameter(
+                    NDShape.CreateNDShape(convolution_map_size),
+                    DataType.Double,
+                    CNTKLib.GlorotUniformInitializer(CNTKLib.DefaultParamInitScale, CNTKLib.SentinelValueForInferParamInitRank, CNTKLib.SentinelValueForInferParamInitRank, 1),
+                    device,
+                    outputName + "_W");
+                //y = Wx+b
+                Variable y = CNTKLib.Convolution(W, input, strides, new BoolVector(new bool[] { true }) /* sharing */, new BoolVector(new bool[] { use_padding }));
+                //apply bias
+                if (use_bias)
+                {
+                    var num_output_channels = convolution_map_size[convolution_map_size.Length - 1];
+                    var b_shape = Concat(Enumerable.Repeat(1, convolution_map_size.Length - 2).ToArray(), new int[] { num_output_channels });
+                    var b = new Parameter(b_shape, 0.0f, device, outputName + "_b");
+                    y = CNTKLib.Plus(y, b);
+                }
+                //apply activation
+                if (activation != null)
+                {
+                    y = activation(y, outputName);
+                }
+                return y;
+            }
+
             /// <summary>
             /// 
             /// </summary>
             /// <typeparam name="T"></typeparam>
             /// <param name="src"></param>
             /// <returns></returns>
-            public static T[] ConvertJaggedArrayToSingleDimensionalArray<T>(T[][] src) where T:struct
+            public static T[] ConvertJaggedArrayToSingleDimensionalArray<T>(T[][] src) where T : struct
             {
                 var numRows = src.Length;
                 var numColumns = src[0].Length;
@@ -102,10 +179,11 @@ namespace Engine.Brain.Utils
                 }
                 return dst;
             }
+
             /// <summary>
             /// 
             /// </summary>
-            /// <param name="fetures"></param>
+            /// <param name="input"></param>
             /// <param name="kernelWidth"></param>
             /// <param name="kernelHeight"></param>
             /// <param name="inputChannel"></param>
@@ -117,28 +195,35 @@ namespace Engine.Brain.Utils
             /// <param name="device"></param>
             /// <returns></returns>
             public static Function ConvolutionWithMaxPooling(
-                Variable fetures,
-                int kernelWidth, int kernelHeight, int inputChannel, int outputChannel,
+                Variable input,
+                int kernelWidth,
+                int kernelHeight,
+                int inputChannel,
+                int outputChannel,
                 int hStride, int vStride,
-                int poolingWindowWidth, int poolingWindowHeight,
+                int poolingWindowWidth,
+                int poolingWindowHeight,
                 DeviceDescriptor device,
-                ActivateEnum activateName)
+                Func<Variable, Function> activation,
+                string outputName = "")
             {
                 double convWScale = 0.26;
-                var convParameters = new Parameter(
+                var W = new Parameter(
                     new int[] { kernelWidth, kernelHeight, inputChannel, outputChannel },
                     DataType.Double,
                     CNTKLib.GlorotUniformInitializer(convWScale, -1, 2),
                     device);
-                Function convFunction = CNTKLib.Convolution(convParameters, fetures, new int[] { 1, 1, inputChannel });
-                Function activationFunction = Activation(convFunction, activateName);
-                Function poolling = CNTKLib.Pooling(
-                    activationFunction, PoolingType.Max,
+                Function y = CNTKLib.Convolution(W, input, new int[] { 1, 1, inputChannel });
+                y = activation != null ? activation(y) : y;
+                //pooling 
+                y = CNTKLib.Pooling(y,
+                    PoolingType.Max,
                     new int[] { poolingWindowWidth, poolingWindowHeight },
                     new int[] { hStride, vStride },
                     new bool[] { true });
-                return poolling;
+                return y;
             }
+
             /// <summary>
             /// 
             /// </summary>
@@ -151,7 +236,7 @@ namespace Engine.Brain.Utils
             {
                 int inputDim = input.Shape[0];
                 int[] i = { outputDim, inputDim };
-                var timesParam = new Parameter(i, DataType.Double,CNTKLib.GlorotUniformInitializer(
+                var timesParam = new Parameter(i, DataType.Double, CNTKLib.GlorotUniformInitializer(
                     CNTKLib.DefaultParamInitScale,
                     CNTKLib.SentinelValueForInferParamInitRank,
                     CNTKLib.SentinelValueForInferParamInitRank, 1), device, "timesParam");
@@ -160,15 +245,16 @@ namespace Engine.Brain.Utils
                 var plusParam = new Parameter(o, 0.0, device, "plusParam");
                 return CNTKLib.Plus(plusParam, timesFunction, outputName);
             }
+
             /// <summary>
-            /// 
+            /// y = ax +b , y1 = activate(y) 
             /// </summary>
             /// <param name="input"></param>
             /// <param name="outputDim"></param>
             /// <param name="device"></param>
             /// <param name="outputName"></param>
             /// <returns></returns>
-            public static Function Dense(Variable input, int outputDim, DeviceDescriptor device, ActivateEnum activateName,string outputName = "")
+            public static Function Dense(Variable input, int outputDim, DeviceDescriptor device, Func<Variable, Function> activation, string outputName = "")
             {
                 if (input.Shape.Rank != 1)
                 {
@@ -176,31 +262,10 @@ namespace Engine.Brain.Utils
                     input = CNTKLib.Reshape(input, new int[] { reshapeDim });
                 }
                 Function fc = FullyConnectedLinearLayer(input, outputDim, device, outputName);
-                return Activation(fc, activateName);
+                fc = activation != null ? activation(fc) : fc;
+                return fc;
             }
-            /// <summary>
-            /// set activation function 
-            /// </summary>
-            /// <param name="input"></param>
-            /// <param name="activateName"></param>
-            /// <returns></returns>
-            private static Function Activation(Function input, ActivateEnum activateName)
-            {
-                Function activateFunction;
-                switch (activateName)
-                {
-                    case ActivateEnum.SELU:
-                        activateFunction =  CNTKLib.SELU(input);
-                        break;
-                    case ActivateEnum.RELU:
-                        activateFunction = CNTKLib.ReLU(input);
-                        break;
-                    default:
-                        activateFunction = CNTKLib.ReLU(input);
-                        break;
-                }
-                return activateFunction;
-            }
+
             /// <summary>
             /// 
             /// </summary>
@@ -212,7 +277,7 @@ namespace Engine.Brain.Utils
             /// <returns></returns>
             public static Function Embedding(Variable x, int shape, DeviceDescriptor device, double[][] weights = null, string name = "")
             {
-                if(weights==null)
+                if (weights == null)
                 {
                     var weightShape = new int[] { shape, NDShape.InferredDimension };
                     var E = new Parameter(
@@ -234,6 +299,7 @@ namespace Engine.Brain.Utils
                     return CNTKLib.Times(E, x);
                 }
             }
+
             /// <summary>
             /// 
             /// </summary>
@@ -247,6 +313,7 @@ namespace Engine.Brain.Utils
                 var miniBatch = new Dictionary<Variable, Value>() { { inputVariable, inputsValue }, { outputVariable, outputsValue } };
                 return miniBatch;
             }
+
             /// <summary>
             /// learning rate reduce
             /// </summary>
@@ -283,6 +350,7 @@ namespace Engine.Brain.Utils
                     return should_stop;
                 }
             }
+
             /// <summary>
             /// RestNet Model Helper Function
             /// </summary>

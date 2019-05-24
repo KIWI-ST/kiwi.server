@@ -8,6 +8,7 @@ namespace Engine.Brain.Utils
 {
     public partial class NP
     {
+
         /// <summary>
         /// http://accord-framework.net/docs/html/T_Accord_MachineLearning_Clustering_TSNE.htm
         /// </summary>
@@ -24,6 +25,7 @@ namespace Engine.Brain.Utils
             double[] y = output.Reshape();
             return y;
         }
+
         /// <summary>
         /// http://accord-framework.net/docs/html/T_Accord_MachineLearning_Clustering_TSNE.htm
         /// </summary>
@@ -40,6 +42,7 @@ namespace Engine.Brain.Utils
             double[][] output = tSNE.Transform(observations);
             return output;
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -54,6 +57,7 @@ namespace Engine.Brain.Utils
                 dot += x[i] * y[i];
             return dot;
         }
+
         /// <summary>
         /// indicate prediction vector equals lable vector
         /// </summary>
@@ -71,6 +75,7 @@ namespace Engine.Brain.Utils
                 result &= pred[i] == label[i];
             return result;
         }
+
         /// <summary>
         /// create ont hot array stochastic
         /// </summary>
@@ -83,6 +88,7 @@ namespace Engine.Brain.Utils
                 action[i] = Random(2);
             return action;
         }
+
         /// <summary>
         /// random with seed
         /// </summary>
@@ -93,6 +99,7 @@ namespace Engine.Brain.Utils
             int index = Random(seeds.Length);
             return seeds[index];
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -102,6 +109,7 @@ namespace Engine.Brain.Utils
         {
             return new Random(Guid.NewGuid().GetHashCode()).Next(0, maxValue);
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -110,6 +118,7 @@ namespace Engine.Brain.Utils
         {
             return new Random(Guid.NewGuid().GetHashCode()).NextDouble();
         }
+
         /// <summary>
         /// 归一化
         /// </summary>
@@ -123,6 +132,7 @@ namespace Engine.Brain.Utils
                 normal[i] = inputs[i] / 255f;
             return normal;
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -136,6 +146,7 @@ namespace Engine.Brain.Utils
                 normal[i] = inputs[i] / max;
             return normal;
         }
+
         /// <summary>
         /// onehot编码
         /// </summary>
@@ -149,6 +160,7 @@ namespace Engine.Brain.Utils
                 oneHot[i] = i == hotIndex ? 1 : 0;
             return oneHot;
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -165,6 +177,7 @@ namespace Engine.Brain.Utils
                 output[i] = input[i / cols][i % cols];
             return output;
         }
+
         /// <summary>
         /// 随机构建训练样本
         /// </summary>
@@ -194,6 +207,7 @@ namespace Engine.Brain.Utils
             //返回一维数组，备用
             return outputs;
         }
+
         /// <summary>
         /// 构建10个长度的oneHot编码结果样本集
         /// </summary>
@@ -216,6 +230,7 @@ namespace Engine.Brain.Utils
             //返回一维数组，备用
             return outputs;
         }
+
         /// <summary>
         /// 生成符合正态分部的随机数组
         /// </summary>
@@ -228,6 +243,7 @@ namespace Engine.Brain.Utils
                 arry[i] = Normal(Random(), Random());
             return arry;
         }
+
         /// <summary>
         /// 标准正态分部期望0，方差1
         /// </summary>
@@ -241,6 +257,7 @@ namespace Engine.Brain.Utils
             double result = e + Math.Sqrt(d) * Math.Sqrt((-2) * (Math.Log(u1) / Math.Log(Math.E))) * Math.Cos(2 * Math.PI * u2);
             return (float)result;
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -251,6 +268,7 @@ namespace Engine.Brain.Utils
             double max = inputs.Max();
             return Array.IndexOf(inputs, max);
         }
+
         /// <summary>
         /// 非一维数组无法引用Array.Copy
         /// 可考虑转为one dim 
@@ -271,6 +289,7 @@ namespace Engine.Brain.Utils
             }
             return output;
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -281,6 +300,7 @@ namespace Engine.Brain.Utils
             double max = inputs.Max();
             return max;
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -300,6 +320,7 @@ namespace Engine.Brain.Utils
             }
             return output;
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -317,6 +338,7 @@ namespace Engine.Brain.Utils
                 right += (predict[i] == target[i]) ? 1 : 0;
             return right / predCount;
         }
+
         /// <summary>
         /// 余弦计算文本相似度
         /// https://www.cnblogs.com/airnew/p/9563703.html
@@ -332,6 +354,7 @@ namespace Engine.Brain.Utils
                 si += a[i] * b[i];
             return si / (Len(a) * Len(b));
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -346,6 +369,7 @@ namespace Engine.Brain.Utils
                 r[i] = source[i] + target[i];
             return r;
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -360,6 +384,7 @@ namespace Engine.Brain.Utils
                 r[i] = source[i] - target[i];
             return r;
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -372,6 +397,7 @@ namespace Engine.Brain.Utils
                 sum += source[i] * source[i];
             return Math.Sqrt(sum);
         }
+
         /// <summary>
         ///  https://stackoverflow.com/a/110570
         /// </summary>
@@ -386,6 +412,7 @@ namespace Engine.Brain.Utils
                 Swap(array, n, k);
             }
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -404,6 +431,7 @@ namespace Engine.Brain.Utils
                 Swap(array2, n, k);
             }
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -417,6 +445,7 @@ namespace Engine.Brain.Utils
             array[n] = array[k];
             array[k] = temp;
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -429,6 +458,7 @@ namespace Engine.Brain.Utils
             Shuffle(array);
             return array;
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -447,6 +477,20 @@ namespace Engine.Brain.Utils
                 y[i] = outputs[i];
             }
             return (x, y);
+        }
+
+        /// <summary>
+        /// concat arrrays to one array
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="argumetns"></param>
+        /// <returns></returns>
+        public static T[] Concat<T>(params T[][] argumetns) where T : struct
+        {
+            var list = new List<T>();
+            for (int i = 0; i < argumetns.Length; i++)
+                list.AddRange(argumetns[i]);
+            return list.ToArray();
         }
     }
 }

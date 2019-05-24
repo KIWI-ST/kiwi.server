@@ -19,22 +19,26 @@ namespace Engine.Brain.Model.DL
         /// store traind epochs
         /// </summary>
         int traindEpochs = 0;
+
         /// <summary>
         /// trainer function
         /// </summary>
-        Trainer trainer;
+        readonly Trainer trainer;
+
         /// <summary>
         /// model
         /// </summary>
-        Function classifierOutput;
-        /// <summary>
-        /// input and output
-        /// </summary>
-        Variable inputVariable, outputVariable;
+        readonly Function classifierOutput;
+
+        private readonly Variable inputVariable;
+
+        private readonly Variable outputVariable;
+
         /// <summary>
         /// 
         /// </summary>
         readonly DeviceDescriptor device;
+
         /// <summary>
         /// create model by w,h,c,outputClassNum
         /// </summary>
@@ -58,6 +62,7 @@ namespace Engine.Brain.Model.DL
             IList<Learner> parameterLearners = new List<Learner>() { Learner.MomentumSGDLearner(classifierOutput.Parameters(), learningRatePerSample, momentumTimeConstant, true) };
             trainer = Trainer.CreateTrainer(classifierOutput, trainingLoss, prediction, parameterLearners);
         }
+
         /// <summary>
         /// create from saved model
         /// </summary>
@@ -80,11 +85,11 @@ namespace Engine.Brain.Model.DL
         private Function CreateFullyChannelNetwork(Variable input, int inputChannel, int outputClassNum)
         {
             int[] channels = new int[] { inputChannel, inputChannel, Math.Max(inputChannel / 2, 3), Math.Max(inputChannel / 3, 3), Math.Max(inputChannel / 3, 3) };
-            Function pooling1 = NP.CNTK.ConvolutionWithMaxPooling(input, 3, 3, channels[0], channels[1], 1, 1, 3, 3, device, NP.CNTK.ActivateEnum.RELU);
-            Function pooling2 = NP.CNTK.ConvolutionWithMaxPooling(pooling1, 3, 3, channels[1], channels[2], 1, 1, 3, 3, device, NP.CNTK.ActivateEnum.RELU);
-            Function pooling3 = NP.CNTK.ConvolutionWithMaxPooling(pooling2, 3, 3, channels[2], channels[3], 1, 1, 3, 3, device, NP.CNTK.ActivateEnum.RELU);
-            Function pooling4 = NP.CNTK.ConvolutionWithMaxPooling(pooling3, 3, 3, channels[3], channels[4], 1, 1, 3, 3, device, NP.CNTK.ActivateEnum.RELU);
-            return NP.CNTK.Dense(pooling4, outputClassNum, device, NP.CNTK.ActivateEnum.RELU, "ouput");
+            Function pooling1 = NP.CNTK.ConvolutionWithMaxPooling(input, 3, 3, channels[0], channels[1], 1, 1, 3, 3, device, CNTKLib.ReLU);
+            Function pooling2 = NP.CNTK.ConvolutionWithMaxPooling(pooling1, 3, 3, channels[1], channels[2], 1, 1, 3, 3, device, CNTKLib.ReLU);
+            Function pooling3 = NP.CNTK.ConvolutionWithMaxPooling(pooling2, 3, 3, channels[2], channels[3], 1, 1, 3, 3, device, CNTKLib.ReLU);
+            Function pooling4 = NP.CNTK.ConvolutionWithMaxPooling(pooling3, 3, 3, channels[3], channels[4], 1, 1, 3, 3, device, CNTKLib.ReLU);
+            return NP.CNTK.Dense(pooling4, outputClassNum, device, CNTKLib.ReLU, "ouput");
         }
 
         public double Train(double[][] inputs, double[][] outputs)
