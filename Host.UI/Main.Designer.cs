@@ -59,8 +59,13 @@
             this.bandExport_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.main_notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.nlp_toolStrip = new System.Windows.Forms.ToolStrip();
+            this.STAR_NLPSERVER_ToolStripMenuItem = new System.Windows.Forms.ToolStripButton();
+            this.Load_Words_Embedding_ToolStripMenuItem = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.Expertise_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.Scenario_toolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.Configuration_ToolStripMenuItem = new System.Windows.Forms.ToolStripButton();
             this.文件FToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Open_toolstripmenuitem = new System.Windows.Forms.ToolStripMenuItem();
             this.工具TToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -69,13 +74,8 @@
             this.generic_toolStrip = new System.Windows.Forms.ToolStrip();
             this.BATCHS_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.Kappa_toolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.Map_task_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.STAR_NLPSERVER_ToolStripMenuItem = new System.Windows.Forms.ToolStripButton();
-            this.Load_Words_Embedding_ToolStripMenuItem = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.Configuration_ToolStripMenuItem = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.Map_task_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_main)).BeginInit();
@@ -414,6 +414,31 @@
             this.nlp_toolStrip.TabIndex = 4;
             this.nlp_toolStrip.Text = "classification tools";
             // 
+            // STAR_NLPSERVER_ToolStripMenuItem
+            // 
+            this.STAR_NLPSERVER_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.Start_24px_1192352_easyicon_net;
+            this.STAR_NLPSERVER_ToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.STAR_NLPSERVER_ToolStripMenuItem.Name = "STAR_NLPSERVER_ToolStripMenuItem";
+            this.STAR_NLPSERVER_ToolStripMenuItem.Size = new System.Drawing.Size(90, 48);
+            this.STAR_NLPSERVER_ToolStripMenuItem.Text = "StartNLP";
+            this.STAR_NLPSERVER_ToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.STAR_NLPSERVER_ToolStripMenuItem.Click += new System.EventHandler(this.NLP_funciton_Click);
+            // 
+            // Load_Words_Embedding_ToolStripMenuItem
+            // 
+            this.Load_Words_Embedding_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.Start_24px_1192352_easyicon_net;
+            this.Load_Words_Embedding_ToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.Load_Words_Embedding_ToolStripMenuItem.Name = "Load_Words_Embedding_ToolStripMenuItem";
+            this.Load_Words_Embedding_ToolStripMenuItem.Size = new System.Drawing.Size(94, 48);
+            this.Load_Words_Embedding_ToolStripMenuItem.Text = "GloveNet";
+            this.Load_Words_Embedding_ToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.Load_Words_Embedding_ToolStripMenuItem.Click += new System.EventHandler(this.NLP_funciton_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 53);
+            // 
             // Expertise_toolStripButton
             // 
             this.Expertise_toolStripButton.Image = global::Host.UI.Properties.Resources.floder;
@@ -433,6 +458,20 @@
             this.Scenario_toolStripButton.Text = "Scenario";
             this.Scenario_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.Scenario_toolStripButton.Click += new System.EventHandler(this.NLP_funciton_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 53);
+            // 
+            // Configuration_ToolStripMenuItem
+            // 
+            this.Configuration_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.usercard;
+            this.Configuration_ToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.Configuration_ToolStripMenuItem.Name = "Configuration_ToolStripMenuItem";
+            this.Configuration_ToolStripMenuItem.Size = new System.Drawing.Size(188, 48);
+            this.Configuration_ToolStripMenuItem.Text = "NLPConfiguration";
+            this.Configuration_ToolStripMenuItem.Click += new System.EventHandler(this.NLP_funciton_Click);
             // 
             // 文件FToolStripMenuItem
             // 
@@ -463,7 +502,7 @@
             // RPC_ToolStripMenuItem
             // 
             this.RPC_ToolStripMenuItem.Name = "RPC_ToolStripMenuItem";
-            this.RPC_ToolStripMenuItem.Size = new System.Drawing.Size(209, 34);
+            this.RPC_ToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.RPC_ToolStripMenuItem.Text = "RPC Rectify";
             this.RPC_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
@@ -518,6 +557,11 @@
             this.Kappa_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.Kappa_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 53);
+            // 
             // Map_task_toolStripButton
             // 
             this.Map_task_toolStripButton.Image = global::Host.UI.Properties.Resources.设置2;
@@ -527,50 +571,6 @@
             this.Map_task_toolStripButton.Text = "Monitor";
             this.Map_task_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.Map_task_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 53);
-            // 
-            // STAR_NLPSERVER_ToolStripMenuItem
-            // 
-            this.STAR_NLPSERVER_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.Start_24px_1192352_easyicon_net;
-            this.STAR_NLPSERVER_ToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.STAR_NLPSERVER_ToolStripMenuItem.Name = "STAR_NLPSERVER_ToolStripMenuItem";
-            this.STAR_NLPSERVER_ToolStripMenuItem.Size = new System.Drawing.Size(143, 48);
-            this.STAR_NLPSERVER_ToolStripMenuItem.Text = "StartNLPServer";
-            this.STAR_NLPSERVER_ToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.STAR_NLPSERVER_ToolStripMenuItem.Click += new System.EventHandler(this.NLP_funciton_Click);
-            // 
-            // Load_Words_Embedding_ToolStripMenuItem
-            // 
-            this.Load_Words_Embedding_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.Start_24px_1192352_easyicon_net;
-            this.Load_Words_Embedding_ToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.Load_Words_Embedding_ToolStripMenuItem.Name = "Load_Words_Embedding_ToolStripMenuItem";
-            this.Load_Words_Embedding_ToolStripMenuItem.Size = new System.Drawing.Size(160, 48);
-            this.Load_Words_Embedding_ToolStripMenuItem.Text = "LoadGloveModel";
-            this.Load_Words_Embedding_ToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.Load_Words_Embedding_ToolStripMenuItem.Click += new System.EventHandler(this.NLP_funciton_Click);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 53);
-            // 
-            // Configuration_ToolStripMenuItem
-            // 
-            this.Configuration_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.usercard;
-            this.Configuration_ToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.Configuration_ToolStripMenuItem.Name = "Configuration_ToolStripMenuItem";
-            this.Configuration_ToolStripMenuItem.Size = new System.Drawing.Size(188, 48);
-            this.Configuration_ToolStripMenuItem.Text = "NLPConfiguration";
-            this.Configuration_ToolStripMenuItem.Click += new System.EventHandler(this.NLP_funciton_Click);
-            // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 53);
             // 
             // Main
             // 
