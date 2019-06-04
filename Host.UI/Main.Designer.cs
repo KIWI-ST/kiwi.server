@@ -75,7 +75,7 @@
             this.Load_Words_Embedding_ToolStripMenuItem = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.Configuration_ToolStripMenuItem = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_main)).BeginInit();
@@ -401,11 +401,11 @@
             this.nlp_toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.STAR_NLPSERVER_ToolStripMenuItem,
             this.Load_Words_Embedding_ToolStripMenuItem,
-            this.toolStripSeparator3,
-            this.Configuration_ToolStripMenuItem,
             this.toolStripSeparator2,
             this.Expertise_toolStripButton,
-            this.Scenario_toolStripButton});
+            this.Scenario_toolStripButton,
+            this.toolStripSeparator4,
+            this.Configuration_ToolStripMenuItem});
             this.nlp_toolStrip.Location = new System.Drawing.Point(0, 85);
             this.nlp_toolStrip.Name = "nlp_toolStrip";
             this.nlp_toolStrip.Padding = new System.Windows.Forms.Padding(0);
@@ -538,8 +538,9 @@
             this.STAR_NLPSERVER_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.Start_24px_1192352_easyicon_net;
             this.STAR_NLPSERVER_ToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.STAR_NLPSERVER_ToolStripMenuItem.Name = "STAR_NLPSERVER_ToolStripMenuItem";
-            this.STAR_NLPSERVER_ToolStripMenuItem.Size = new System.Drawing.Size(163, 48);
+            this.STAR_NLPSERVER_ToolStripMenuItem.Size = new System.Drawing.Size(143, 48);
             this.STAR_NLPSERVER_ToolStripMenuItem.Text = "StartNLPServer";
+            this.STAR_NLPSERVER_ToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.STAR_NLPSERVER_ToolStripMenuItem.Click += new System.EventHandler(this.NLP_funciton_Click);
             // 
             // Load_Words_Embedding_ToolStripMenuItem
@@ -547,8 +548,9 @@
             this.Load_Words_Embedding_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.Start_24px_1192352_easyicon_net;
             this.Load_Words_Embedding_ToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.Load_Words_Embedding_ToolStripMenuItem.Name = "Load_Words_Embedding_ToolStripMenuItem";
-            this.Load_Words_Embedding_ToolStripMenuItem.Size = new System.Drawing.Size(180, 48);
+            this.Load_Words_Embedding_ToolStripMenuItem.Size = new System.Drawing.Size(160, 48);
             this.Load_Words_Embedding_ToolStripMenuItem.Text = "LoadGloveModel";
+            this.Load_Words_Embedding_ToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.Load_Words_Embedding_ToolStripMenuItem.Click += new System.EventHandler(this.NLP_funciton_Click);
             // 
             // toolStripSeparator2
@@ -565,10 +567,10 @@
             this.Configuration_ToolStripMenuItem.Text = "NLPConfiguration";
             this.Configuration_ToolStripMenuItem.Click += new System.EventHandler(this.NLP_funciton_Click);
             // 
-            // toolStripSeparator3
+            // toolStripSeparator4
             // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 53);
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 53);
             // 
             // Main
             // 
@@ -664,7 +666,7 @@
         private System.Windows.Forms.ToolStripButton Load_Words_Embedding_ToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton Configuration_ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
     }
 }
 
