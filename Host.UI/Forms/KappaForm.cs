@@ -8,9 +8,9 @@ using System.Windows.Forms;
 
 namespace Host.UI.SettingForm
 {
-    public partial class KappaForm : Form
+    public partial class KappaOaForm : Form
     {
-        public KappaForm()
+        public KappaOaForm()
         {
             InitializeComponent();
         }

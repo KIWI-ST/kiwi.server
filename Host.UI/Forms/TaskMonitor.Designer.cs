@@ -56,10 +56,11 @@
             this.Task_listView.GridLines = true;
             this.Task_listView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.Task_listView.Location = new System.Drawing.Point(0, 0);
+            this.Task_listView.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Task_listView.MultiSelect = false;
             this.Task_listView.Name = "Task_listView";
             this.Task_listView.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.Task_listView.Size = new System.Drawing.Size(531, 386);
+            this.Task_listView.Size = new System.Drawing.Size(796, 579);
             this.Task_listView.TabIndex = 1;
             this.Task_listView.TileSize = new System.Drawing.Size(128, 38);
             this.Task_listView.UseCompatibleStateImageBehavior = false;
@@ -69,13 +70,13 @@
             // task_name
             // 
             this.task_name.Text = "      任务名";
-            this.task_name.Width = 107;
+            this.task_name.Width = 201;
             // 
             // task_progress
             // 
             this.task_progress.Text = "任务进度";
             this.task_progress.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.task_progress.Width = 119;
+            this.task_progress.Width = 179;
             // 
             // task_summary
             // 
@@ -95,52 +96,53 @@
             this.Sample_Export_ToolStripMenuItem});
             this.task_contextMenuStrip.Name = "task_contextMenuStrip";
             this.task_contextMenuStrip.ShowImageMargin = false;
-            this.task_contextMenuStrip.Size = new System.Drawing.Size(100, 104);
+            this.task_contextMenuStrip.Size = new System.Drawing.Size(128, 136);
             // 
             // result_ToolStripMenuItem
             // 
             this.result_ToolStripMenuItem.Name = "result_ToolStripMenuItem";
-            this.result_ToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
+            this.result_ToolStripMenuItem.Size = new System.Drawing.Size(127, 30);
             this.result_ToolStripMenuItem.Text = "处理结果";
             this.result_ToolStripMenuItem.Click += new System.EventHandler(this.ToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(96, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(124, 6);
             // 
             // accuracy_ToolStripMenuItem
             // 
             this.accuracy_ToolStripMenuItem.Name = "accuracy_ToolStripMenuItem";
-            this.accuracy_ToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
+            this.accuracy_ToolStripMenuItem.Size = new System.Drawing.Size(127, 30);
             this.accuracy_ToolStripMenuItem.Text = "精度曲线";
             this.accuracy_ToolStripMenuItem.Click += new System.EventHandler(this.ToolStripMenuItem_Click);
             // 
             // 统计曲线ToolStripMenuItem
             // 
             this.统计曲线ToolStripMenuItem.Name = "统计曲线ToolStripMenuItem";
-            this.统计曲线ToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
+            this.统计曲线ToolStripMenuItem.Size = new System.Drawing.Size(127, 30);
             this.统计曲线ToolStripMenuItem.Text = "统计曲线";
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(96, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(124, 6);
             // 
             // Sample_Export_ToolStripMenuItem
             // 
             this.Sample_Export_ToolStripMenuItem.Name = "Sample_Export_ToolStripMenuItem";
-            this.Sample_Export_ToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
+            this.Sample_Export_ToolStripMenuItem.Size = new System.Drawing.Size(127, 30);
             this.Sample_Export_ToolStripMenuItem.Text = "样本导出";
             this.Sample_Export_ToolStripMenuItem.Click += new System.EventHandler(this.ToolStripMenuItem_Click);
             // 
             // TaskMonitor
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(531, 386);
+            this.ClientSize = new System.Drawing.Size(796, 579);
             this.Controls.Add(this.Task_listView);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "TaskMonitor";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "TaskMonitor";

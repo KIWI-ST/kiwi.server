@@ -385,11 +385,11 @@ namespace Host.UI
                     mapTaskForm.Jobs = _jobs;
                     mapTaskForm.ShowDialog();
                     break;
-                //calucte kappa
-                case "Kappa_toolStripButton":
-                    KappaForm kappaForm = new KappaForm();
-                    kappaForm.RasterDic = _rasterDic;
-                    kappaForm.ShowDialog();
+                //calucte kappa and oa
+                case "KappaOA_toolStripButton":
+                    KappaOaForm koaForm = new KappaOaForm();
+                    koaForm.RasterDic = _rasterDic;
+                    koaForm.ShowDialog();
                     break;
                 //添加图像
                 case "Open_toolstripmenuitem":
@@ -447,7 +447,7 @@ namespace Host.UI
                     }
                     break;
                 //make samples in minibatch
-                case "BATCHS_toolStripButton":
+                case "CreateSamples_toolStripButton":
                     BatchExportForm be_form = new BatchExportForm();
                     be_form.RasterDic = _rasterDic;
                     be_form.ShowDialog();
@@ -521,7 +521,7 @@ namespace Host.UI
                     }
                     break;
                 //setting domain knowledge for custer algorihtm
-                case "Expertise_toolStripButton":
+                case "Expertise_Knowledge_toolStripButton":
                     {
                         NLPExpertiseForm nlp_expertise_form = new NLPExpertiseForm();
                         nlp_expertise_form.GloveNet = _gloVeNet;
@@ -529,7 +529,7 @@ namespace Host.UI
                     }
                     break;
                 //setting configuration
-                case "Configuration_ToolStripMenuItem":
+                case "NLP_Configuration_toolStripButton":
                     {
                         NLPConfigForm nlpConfigForm = new NLPConfigForm();
                         nlpConfigForm.ShowDialog();
@@ -537,7 +537,7 @@ namespace Host.UI
                     break;
                 case "Load_Words_Embedding_ToolStripMenuItem":
                     {
-                        Load_Words_Embedding_ToolStripMenuItem.Enabled = false;
+                        Clear_NLPText_ToolStripMenuItem.Enabled = false;
                         IJob gloVeNetJob = new JobLoadGloVeNet(NLPConfiguration.GloVeEmbeddingString);
                         RegisterJob(gloVeNetJob);
                         gloVeNetJob.Start();

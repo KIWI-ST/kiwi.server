@@ -1,6 +1,6 @@
 ﻿namespace Host.UI.SettingForm
 {
-    partial class KappaForm
+    partial class KappaOaForm
     {
         /// <summary>
         /// Required designer variable.
