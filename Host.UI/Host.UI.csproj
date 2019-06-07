@@ -259,7 +259,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="globe.ico" />
-    <None Include="Resources\md-add.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

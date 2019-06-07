@@ -537,7 +537,7 @@ namespace Host.UI
                     break;
                 case "Load_Words_Embedding_ToolStripMenuItem":
                     {
-                        Clear_NLPText_ToolStripMenuItem.Enabled = false;
+                        //Clear_NLPText_ToolStripMenuItem.Enabled = false;
                         IJob gloVeNetJob = new JobLoadGloVeNet(NLPConfiguration.GloVeEmbeddingString);
                         RegisterJob(gloVeNetJob);
                         gloVeNetJob.Start();
