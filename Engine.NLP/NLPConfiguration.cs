@@ -166,11 +166,31 @@ namespace Engine.NLP
 
         #endregion
 
+
+        public static Process CreateCoreServerProcess()
+        {
+            if (PortInUse(PORT))
+                return null;
+            else
+            {
+                Process process = new Process();
+                process.StartInfo.WorkingDirectory = CoreNLPDirString;
+                process.StartInfo.FileName = "java";
+                process.StartInfo.Arguments = CoreNLPCommandString;
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.RedirectStandardInput = true;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.RedirectStandardError = true;
+                process.StartInfo.CreateNoWindow = true;
+                return process;
+            }
+        }
+
         /// <summary>
         /// 启动 CoreNLP server
         /// </summary>
         /// <returns></returns>
-        public static bool StartCoreServer()
+        private static bool StartCoreServer()
         {
             if (PortInUse(PORT))
                 return false;

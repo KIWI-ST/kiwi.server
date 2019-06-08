@@ -154,6 +154,9 @@
     <Reference Include="protobuf, Version=2.6.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Stanford.NLP.CoreNLP.3.9.2.0\lib\protobuf.dll</HintPath>
     </Reference>
+    <Reference Include="ScottPlot, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ScottPlot.3.0.3\lib\net45\ScottPlot.dll</HintPath>
+    </Reference>
     <Reference Include="slf4j-api, Version=1.7.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Stanford.NLP.CoreNLP.3.9.2.0\lib\slf4j-api.dll</HintPath>
     </Reference>
@@ -255,10 +258,6 @@
     <ProjectReference Include="..\Engine.Brain\Engine.Brain.csproj">
       <Project>{e57416b0-bfee-4420-8c3a-1f96732c9375}</Project>
       <Name>Engine.Brain</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Extra\ScottPlot\ScottPlot.csproj">
-      <Project>{2eb18f34-a0c1-4a51-9286-c42da53668cb}</Project>
-      <Name>ScottPlot</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

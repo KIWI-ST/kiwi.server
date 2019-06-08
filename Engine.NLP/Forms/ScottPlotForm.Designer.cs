@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.Mainly_scottPlotUC = new ScottPlotDev2.ScottPlotUC();
+            this.Mainly_scottPlotUC = new ScottPlot.ScottPlotUC();
             this.SuspendLayout();
             // 
             // Mainly_scottPlotUC
@@ -56,6 +56,6 @@
 
         #endregion
 
-        private ScottPlotDev2.ScottPlotUC Mainly_scottPlotUC;
+        private  ScottPlot.ScottPlotUC Mainly_scottPlotUC;
     }
 }

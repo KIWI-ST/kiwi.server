@@ -61,11 +61,11 @@ namespace Host.UI
             WindowState = FormWindowState.Normal;
             Focus();
         }
-        
+
         #endregion
 
         #region 缓存管理
-        
+
         /// <summary>
         /// get time string
         /// </summary>
@@ -97,10 +97,29 @@ namespace Host.UI
         /// </summary>
         IDEmbeddingNet _gloVeNet = null;
 
+        /// <summary>
+        /// nlp server process
+        /// </summary>
+        Process _process;
+
         #endregion
 
         #region 界面更新
-        
+
+        /// <summary>
+        /// 接受process ouput
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Process_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            Invoke(new UpdateListBoxHandler((msg)=> {
+                if (msg == null) return;
+                NLP_Server_listBox.Items.Add(msg);
+                NLP_Server_listBox.SelectedIndex = NLP_Server_listBox.Items.Count - 1;
+            }), e.Data);
+        }
+
         /// <summary>
         /// 更新底部栏提示
         /// </summary>
@@ -512,6 +531,34 @@ namespace Host.UI
             ToolStripItem item = sender as ToolStripItem;
             switch (item.Name)
             {
+                //start stanford nlp server
+                case "STAR_NLPSERVER_ToolStripMenuItem":
+                    {
+                        STAR_NLPSERVER_ToolStripMenuItem.Enabled = false;
+                        string msg = string.Format("time:{0}, {1}", Now, "NLP Server Starting.......");
+                        Invoke(new UpdateListBoxHandler(UpdateMapListBox), msg);
+                        //process start
+                        _process = NLPConfiguration.CreateCoreServerProcess();
+                        if (_process!=null)
+                        {
+                            //1. register event
+                            _process.OutputDataReceived += Process_OutputDataReceived;
+                            _process.ErrorDataReceived += Process_OutputDataReceived;
+                            //2. start process
+                            _process.Start();
+                            _process.BeginOutputReadLine();
+                            _process.BeginErrorReadLine();
+                            //3. output
+                            Invoke(new UpdateListBoxHandler(UpdateMapListBox), string.Format("time:{0}, {1}", Now, "Success: NLP Server Started"));
+                            //4. change to nlp view
+                            Main_tabControl.SelectedIndex = 1;
+                            //5. enable buttons
+                            Open_RawFile_toolStripButton.Enabled = true;
+                        }
+                        else
+                            Invoke(new UpdateListBoxHandler(UpdateMapListBox), string.Format("time:{0}, {1}, port {2} is in use.", Now, "Error: NLP Server Start Fail", NLPConfiguration.PORT));
+                    }
+                    break;
                 //create scenario
                 case "Scenario_toolStripButton":
                     {
@@ -543,19 +590,7 @@ namespace Host.UI
                         gloVeNetJob.Start();
                     }
                     break;
-                //start stanford nlp server
-                case "STAR_NLPSERVER_ToolStripMenuItem":
-                    {
-                        //STAR_NLPSERVER_ToolStripMenuItem.Enabled = false;
-                        string msg = string.Format("time:{0}, {1}", Now, "NLP Server Starting.......");
-                        Invoke(new UpdateListBoxHandler(UpdateMapListBox), msg);
-                        //process start
-                        if(NLPConfiguration.StartCoreServer())
-                            Invoke(new UpdateListBoxHandler(UpdateMapListBox), string.Format("time:{0}, {1}", Now, "Success: NLP Server Started"));
-                        else
-                            Invoke(new UpdateListBoxHandler(UpdateMapListBox), string.Format("time:{0}, {1}, port {2} is in use.", Now, "Error: NLP Server Start Fail", NLPConfiguration.PORT));
-                    }
-                    break;
+
                 //lstm test 
                 case "LSTM_toolStripButton":
                     string rawTextFullFilename = Directory.GetCurrentDirectory() + @"\tmp\RawText.txt";
@@ -566,7 +601,7 @@ namespace Host.UI
                     break;
             }
         }
-        
+
         /// <summary>
         ///  树视图点击捕捉，用于邮件弹出功能栏
         /// </summary>
