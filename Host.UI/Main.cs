@@ -5,6 +5,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 using Engine.Brain.Model;
 using Engine.GIS.Entity;
@@ -166,7 +167,13 @@ namespace Host.UI
         /// </summary>
         /// <param name="msg"></param>
         private delegate void UpdateListBoxHandler(string msg);
-        
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="msg"></param>
+        private delegate void UpdateGenericHandler(double msg);
+
         /// <summary>
         /// 更新树视图委托
         /// </summary>
@@ -327,6 +334,13 @@ namespace Host.UI
                 case "ParsingTextTask":
                     Invoke(new UpdateListBoxHandler(UpdateMapListBox), outputs[0] as string);
                     break;
+                case "LoadGloVeNetTask":
+                    Invoke(new UpdateGenericHandler((msg) => {
+                        Main_processBar.Visible = true;
+                        Main_processBar.Value = (int)(msg*100);
+                        //StatusBar.Text = string.Format("{0:P}", msg);
+                    }), Convert.ToDouble(outputs[0]));
+                    break;
                 default:
                     Invoke(new UpdateListBoxHandler(UpdateMapListBox), outputs[0] as string);
                     break;
@@ -348,23 +362,33 @@ namespace Host.UI
                 case "RFClassificationTask":
                 case "CnnClassificationTask":
                 case "SVMClassificationTask":
-                case "DqnClassificationTask":
-                    string fullFilename = outputs[0] as string;
-                    ReadRaster(fullFilename);
+                case "DqnClassificationTask":{
+                        string fullFilename = outputs[0] as string;
+                        ReadRaster(fullFilename);
+                    }
                     break;
                 //load image
-                case "ReadRasterTask":
-                    string nodeName = outputs[0] as string;
-                    Dictionary<string, Bitmap2> dict = outputs[1] as Dictionary<string, Bitmap2>;
-                    GRasterLayer rasterLayer = outputs[2] as GRasterLayer;
-                    UpdateReadRasterUI(nodeName, dict, rasterLayer);
+                case "ReadRasterTask":{
+                        string nodeName = outputs[0] as string;
+                        Dictionary<string, Bitmap2> dict = outputs[1] as Dictionary<string, Bitmap2>;
+                        GRasterLayer rasterLayer = outputs[2] as GRasterLayer;
+                        UpdateReadRasterUI(nodeName, dict, rasterLayer);
+                    }
                     break;
                 // rpc rester rectify
                 case "RPCRasterRectifyTask":
                     break;
                 //case load GloveNet
                 case "LoadGloVeNetTask":
-                    _gloVeNet = outputs[0] as IDEmbeddingNet;
+                    {
+                        Invoke(new UpdateGenericHandler((text) => {
+                            Main_processBar.Visible = false;
+                            Expertise_Knowledge_toolStripButton.Enabled = true;
+                        }), 0);
+                        //model
+                        _gloVeNet = outputs[0] as IDEmbeddingNet;
+                    }
+                    
                     break;
                 default:
                     break;
@@ -554,9 +578,41 @@ namespace Host.UI
                             Main_tabControl.SelectedIndex = 1;
                             //5. enable buttons
                             Open_RawFile_toolStripButton.Enabled = true;
+                            Clear_NLPRawTextView_toolStripButton.Enabled = true;
                         }
                         else
                             Invoke(new UpdateListBoxHandler(UpdateMapListBox), string.Format("time:{0}, {1}, port {2} is in use.", Now, "Error: NLP Server Start Fail", NLPConfiguration.PORT));
+                    }
+                    break;
+                //open raw text file
+                case "Open_RawFile_toolStripButton":
+                    OpenFileDialog opg = new OpenFileDialog();
+                    opg.Filter = "语料文本|*.txt";
+                    if (opg.ShowDialog() == DialogResult.OK)
+                    {
+                        using (StreamReader sr = new StreamReader(opg.FileName, Encoding.UTF8))
+                        {
+                            string text = sr.ReadLine();
+                            while (text != null)
+                            {
+                                NLP_RawText_listBox.Items.Add(text);
+                                text = sr.ReadLine();
+                            }
+                        }
+                    }
+                    break;
+                //clear nlp raw text view items
+                case "Clear_NLPRawTextView_toolStripButton":
+                    if (MessageBox.Show("是否清除原始文本数据？", "清除文本数据警告", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+                        NLP_RawText_listBox.Items.Clear();
+                    break;
+                //load gloVe model
+                case "Load_Words_Embedding_ToolStripMenuItem":
+                    {
+                        Load_Words_Embedding_ToolStripMenuItem.Enabled = false;
+                        IJob gloVeNetJob = new JobLoadGloVeNet(NLPConfiguration.GloVeEmbeddingString);
+                        RegisterJob(gloVeNetJob);
+                        gloVeNetJob.Start();
                     }
                     break;
                 //create scenario
@@ -582,15 +638,6 @@ namespace Host.UI
                         nlpConfigForm.ShowDialog();
                     }
                     break;
-                case "Load_Words_Embedding_ToolStripMenuItem":
-                    {
-                        //Clear_NLPText_ToolStripMenuItem.Enabled = false;
-                        IJob gloVeNetJob = new JobLoadGloVeNet(NLPConfiguration.GloVeEmbeddingString);
-                        RegisterJob(gloVeNetJob);
-                        gloVeNetJob.Start();
-                    }
-                    break;
-
                 //lstm test 
                 case "LSTM_toolStripButton":
                     string rawTextFullFilename = Directory.GetCurrentDirectory() + @"\tmp\RawText.txt";

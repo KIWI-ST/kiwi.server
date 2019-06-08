@@ -160,7 +160,7 @@
     <Compile Include="Jobs\JobCNNSVMClassify.cs" />
     <Compile Include="Jobs\JobCOVRaster.cs" />
     <Compile Include="Jobs\JobDQNClassify.cs" />
-    <Compile Include="Jobs\JobLoadModel.cs" />
+    <Compile Include="Jobs\JobLoadGloVeModel.cs" />
     <Compile Include="Jobs\JobParsingText.cs" />
     <Compile Include="Jobs\JobReadRaster.cs" />
     <Compile Include="Jobs\JobRFClassify.cs" />

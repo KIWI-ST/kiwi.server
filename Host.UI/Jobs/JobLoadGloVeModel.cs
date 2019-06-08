@@ -34,14 +34,18 @@ namespace Host.UI.Jobs
             {
                 string deviceName = NP.CNTK.DeviceCollection[0];
                 Summary = "构建GloveNet开始";
-                IDNet gloVeNet = new GloVeNet(deviceName, gloVeFilename);
-                //complete
-                Process = 1;
+                IDEmbeddingNet gloVeNet = new GloVeNet(deviceName, gloVeFilename);
+                gloVeNet.OnLoading += (double percentage) => {
+                    Process = percentage;
+                    OnStateChanged?.Invoke(Name, percentage);
+                };
+                gloVeNet.Load();
                 Summary = "加载GloveNet完成";
                 Complete = true;
                 OnTaskComplete?.Invoke(Name, gloVeNet);
             });
         }
+
         /// <summary>
         /// 
         /// </summary>

@@ -15,6 +15,7 @@ namespace Engine.Brain.Model.DL
     /// </summary>
     public class GloVeNet : IDEmbeddingNet
     {
+      
         /// <summary>
         /// 
         /// </summary>
@@ -44,30 +45,44 @@ namespace Engine.Brain.Model.DL
         /// 
         /// </summary>
         Dictionary<string, double[]> embeddingsIndex;
+
         /// <summary>
         /// 
         /// </summary>
         DeviceDescriptor device;
+
+        /// <summary>
+        /// glove filename
+        /// </summary>
+        string _gloVeFilename;
+
         /// <summary>
         /// learning rate scheduler
         /// </summary>
         NP.CNTK.ReduceLROnPlateau lrs;
+
         /// <summary>
         /// 
         /// </summary>
         Function model;
+
         /// <summary>
         /// 
         /// </summary>
         Variable x, y;
+
         /// <summary>
         /// 
         /// </summary>
         public double[][] embedding_weights = null;
+
         /// <summary>
         /// 
         /// </summary>
         Trainer trainer;
+
+        public event LoadingEventHandler OnLoading;
+
         /// <summary>
         /// create GloveNet instance and initialization weights by Glove pretrain file
         /// </summary>
@@ -76,13 +91,19 @@ namespace Engine.Brain.Model.DL
         public GloVeNet(string deviceName, string gloVeFilename)
         {
             device = NP.CNTK.GetDeviceByName(deviceName);
-            embeddingsIndex = PreprocessEmbeddings(gloVeFilename);
+            _gloVeFilename = gloVeFilename;
+        }
+
+        public void Load()
+        {
+            embeddingsIndex = PreprocessEmbeddings(_gloVeFilename);
             //initial w
             int seed = 0;
             W = new double[embeddingsIndex.Count][];
             foreach (var element in embeddingsIndex)
                 W[seed++] = element.Value;
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -175,7 +196,9 @@ namespace Engine.Brain.Model.DL
         private Dictionary<string, double[]> PreprocessEmbeddings(string modelFilename)
         {
             var embeddings_index = new Dictionary<string, double[]>();
-            foreach (var line in File.ReadLines(modelFilename, Encoding.UTF8))
+            IEnumerable<string> lines = File.ReadLines(modelFilename, Encoding.UTF8);
+            int seed = 0, totalNum = lines.Count();
+            foreach (var line in lines)
             {
                 var values = line.Split(' ');
                 var word = values[0];
@@ -183,6 +206,7 @@ namespace Engine.Brain.Model.DL
                 var d = NP.Len(coefs);
                 embeddings_index[word] = coefs.Select(v => v / d).ToArray();
                 //embeddings_index[word] = coefs;
+                OnLoading?.Invoke((double)seed++ / totalNum);
             }
             MaxWordsNum = embeddings_index.Keys.Count;
             EmbeddingDimNum = embeddings_index.Values.First().Length;
