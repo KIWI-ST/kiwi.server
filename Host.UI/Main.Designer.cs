@@ -60,11 +60,10 @@
             this.Expertise_Knowledge_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
             this.Map_task_toolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.map_statusStrip = new System.Windows.Forms.StatusStrip();
             this.empty_statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.Main_processBar = new System.Windows.Forms.ToolStripProgressBar();
-            this.map_statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.Main_statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.splitContainer_main = new System.Windows.Forms.SplitContainer();
             this.map_tabControl = new System.Windows.Forms.TabControl();
             this.tab_treeview = new System.Windows.Forms.TabPage();
@@ -146,8 +145,7 @@
             this.Load_Words_Embedding_ToolStripMenuItem,
             this.Expertise_Knowledge_toolStripButton,
             this.toolStripSeparator10,
-            this.Map_task_toolStripButton,
-            this.toolStripSeparator7});
+            this.Map_task_toolStripButton});
             this.map_toolStrip.Location = new System.Drawing.Point(0, 32);
             this.map_toolStrip.Name = "map_toolStrip";
             this.map_toolStrip.Padding = new System.Windows.Forms.Padding(0);
@@ -276,7 +274,7 @@
             // STAR_NLPSERVER_ToolStripMenuItem
             // 
             this.STAR_NLPSERVER_ToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.STAR_NLPSERVER_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.md_play;
+            this.STAR_NLPSERVER_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.md_arrow_dropright;
             this.STAR_NLPSERVER_ToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.STAR_NLPSERVER_ToolStripMenuItem.Name = "STAR_NLPSERVER_ToolStripMenuItem";
             this.STAR_NLPSERVER_ToolStripMenuItem.Size = new System.Drawing.Size(36, 36);
@@ -331,11 +329,12 @@
             // 
             this.Expertise_Knowledge_toolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.Expertise_Knowledge_toolStripButton.Enabled = false;
-            this.Expertise_Knowledge_toolStripButton.Image = global::Host.UI.Properties.Resources.md_cog;
+            this.Expertise_Knowledge_toolStripButton.Image = global::Host.UI.Properties.Resources.md_clipboard;
             this.Expertise_Knowledge_toolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.Expertise_Knowledge_toolStripButton.Name = "Expertise_Knowledge_toolStripButton";
             this.Expertise_Knowledge_toolStripButton.Size = new System.Drawing.Size(36, 36);
-            this.Expertise_Knowledge_toolStripButton.Text = "toolStripButton8";
+            this.Expertise_Knowledge_toolStripButton.Text = "Set Expertise Knowledge";
+            this.Expertise_Knowledge_toolStripButton.Click += new System.EventHandler(this.NLP_funciton_Click);
             // 
             // toolStripSeparator10
             // 
@@ -352,18 +351,13 @@
             this.Map_task_toolStripButton.Text = "Map task monitor";
             this.Map_task_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
             // 
-            // toolStripSeparator7
-            // 
-            this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(6, 41);
-            // 
             // map_statusStrip
             // 
             this.map_statusStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.map_statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.empty_statusLabel,
             this.Main_processBar,
-            this.map_statusLabel});
+            this.Main_statusLabel});
             this.map_statusStrip.Location = new System.Drawing.Point(0, 940);
             this.map_statusStrip.Name = "map_statusStrip";
             this.map_statusStrip.Padding = new System.Windows.Forms.Padding(1, 0, 21, 0);
@@ -375,7 +369,7 @@
             // empty_statusLabel
             // 
             this.empty_statusLabel.Name = "empty_statusLabel";
-            this.empty_statusLabel.Size = new System.Drawing.Size(1179, 24);
+            this.empty_statusLabel.Size = new System.Drawing.Size(1379, 24);
             this.empty_statusLabel.Spring = true;
             // 
             // Main_processBar
@@ -384,14 +378,14 @@
             this.Main_processBar.Size = new System.Drawing.Size(150, 23);
             this.Main_processBar.Visible = false;
             // 
-            // map_statusLabel
+            // Main_statusLabel
             // 
-            this.map_statusLabel.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.map_statusLabel.Name = "map_statusLabel";
-            this.map_statusLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.map_statusLabel.Size = new System.Drawing.Size(59, 24);
-            this.map_statusLabel.Text = "ready";
-            this.map_statusLabel.ToolTipText = "指示当前工具运行状态";
+            this.Main_statusLabel.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Main_statusLabel.Name = "Main_statusLabel";
+            this.Main_statusLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.Main_statusLabel.Size = new System.Drawing.Size(59, 24);
+            this.Main_statusLabel.Text = "ready";
+            this.Main_statusLabel.ToolTipText = "指示当前工具运行状态";
             // 
             // splitContainer_main
             // 
@@ -754,7 +748,7 @@
         private System.Windows.Forms.TabPage tab_mapview;
         private System.Windows.Forms.TreeView map_treeView;
         private System.Windows.Forms.ToolStripProgressBar Main_processBar;
-        private System.Windows.Forms.ToolStripStatusLabel map_statusLabel;
+        private System.Windows.Forms.ToolStripStatusLabel Main_statusLabel;
         private System.Windows.Forms.ToolStripStatusLabel empty_statusLabel;
         private System.Windows.Forms.ContextMenuStrip map_contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem Open_contextMenuStrip;
@@ -795,7 +789,6 @@
         private System.Windows.Forms.ToolStripButton Load_Words_Embedding_ToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton Expertise_Knowledge_toolStripButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
         private System.Windows.Forms.ToolStripMenuItem mapToolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ListBox NLP_Server_listBox;

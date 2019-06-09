@@ -17,20 +17,19 @@ namespace Engine.NLP.Forms
         /// <summary>
         /// 致灾因子
         /// </summary>
-        Factor = 1,
-        /// <summary>
-        /// 孕灾环境
-        /// </summary>
-        Induce = 2,
+        Hazard = 1,
+
         /// <summary>
         /// 承灾体
         /// </summary>
-        Affect = 3,
+        Exposure = 2,
+
         /// <summary>
-        /// 救援力量
+        /// 承灾体
         /// </summary>
-        Rescue = 4
+        HumanBehavior = 3,
     }
+
     /// <summary>
     /// 
     /// </summary>
@@ -44,42 +43,51 @@ namespace Engine.NLP.Forms
         }
 
         #region Intilization
+
         /// <summary>
         ///灾害系统要素
         /// </summary>
-        private ScenarioElementType scenarioType = ScenarioElementType.Factor;
+        private ScenarioElementType scenarioType = ScenarioElementType.Hazard;
+
         /// <summary>
         /// 词嵌入模型（GloVe）
         /// </summary>
         public IDEmbeddingNet GloveNet { get; set; }
+
         /// <summary>
         /// 孕灾环境
         /// </summary>
-        List<string> induces = new List<string>();
+        List<string> exposure = new List<string>();
+
         /// <summary>
         /// 致灾因子
         /// </summary>
-        List<string> factors = new List<string>();
+        List<string> hazard = new List<string>();
         /// <summary>
         /// 承灾体
         /// </summary>
-        List<string> affects = new List<string>();
+        List<string> humanBehavior = new List<string>();
+
         /// <summary>
         /// 救援力量
         /// </summary>
         List<string> rescues = new List<string>();
+
         /// <summary>
         /// load config data
         /// </summary>
         void InitialConfigValue()
         {
-            factors = NLPConfiguration.FactorScenarioString.Split(';').ToList();
-            induces = NLPConfiguration.InduceScenarioString.Split(';').ToList();
-            affects = NLPConfiguration.AffectScenarioString.Split(';').ToList();
-            UpdateScenarioListView(Induce_listView, induces);
-            UpdateScenarioListView(Factor_listView, factors);
-            UpdateScenarioListView(Affect_listView, affects);
+            //cascading effect analysis
+            hazard = NLPConfiguration.FactorScenarioString.Split(';').ToList();
+            exposure = NLPConfiguration.InduceScenarioString.Split(';').ToList();
+            humanBehavior = NLPConfiguration.AffectScenarioString.Split(';').ToList();
+            //ui
+            UpdateScenarioListView(Hazard_listView, exposure);
+            UpdateScenarioListView(Exposure_listView, hazard);
+            UpdateScenarioListView(Affect_listView, humanBehavior);
         }
+
         /// <summary>
         /// 更新进度委托
         /// </summary>
@@ -88,6 +96,7 @@ namespace Engine.NLP.Forms
         /// <param name="b"></param>
         /// <param name="c"></param>
         private delegate void UpdateProcessTipHandler(double process, double[][] a = null, double[][] b = null, double[][] c = null);
+        
         /// <summary>
         /// 
         /// </summary>
@@ -108,6 +117,7 @@ namespace Engine.NLP.Forms
             else//Visual_button.Text = string.Format("{0:P}", process);
                 Visual_button.Text = "正在处理";
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -121,6 +131,7 @@ namespace Engine.NLP.Forms
                 listView.Items.Add(word);
             });
         }
+
         #endregion
 
         #region UI response
@@ -131,19 +142,16 @@ namespace Engine.NLP.Forms
             switch (tabControl.SelectedIndex)
             {
                 case 0:
-                    scenarioType = ScenarioElementType.Factor;
+                    scenarioType = ScenarioElementType.Hazard;
                     break;
                 case 1:
-                    scenarioType = ScenarioElementType.Induce;
+                    scenarioType = ScenarioElementType.Exposure;
                     break;
                 case 2:
-                    scenarioType = ScenarioElementType.Affect;
-                    break;
-                case 3:
-                    scenarioType = ScenarioElementType.Rescue;
+                    scenarioType = ScenarioElementType.HumanBehavior;
                     break;
                 default:
-                    scenarioType = ScenarioElementType.Factor;
+                    scenarioType = ScenarioElementType.Hazard;
                     break;
             }
         }
@@ -154,32 +162,25 @@ namespace Engine.NLP.Forms
             if (word == null || word.Length == 0) return;
             switch (scenarioType)
             {
-                case ScenarioElementType.Factor:
+                case ScenarioElementType.Hazard:
                     {
-                        if (!factors.Contains(word))
-                            factors.Add(word);
-                        UpdateScenarioListView(Factor_listView, factors);
+                        if (!hazard.Contains(word))
+                            hazard.Add(word);
+                        UpdateScenarioListView(Exposure_listView, hazard);
                     }
                     break;
-                case ScenarioElementType.Induce:
+                case ScenarioElementType.Exposure:
                     {
-                        if (!induces.Contains(word))
-                            induces.Add(word);
-                        UpdateScenarioListView(Induce_listView, induces);
+                        if (!exposure.Contains(word))
+                            exposure.Add(word);
+                        UpdateScenarioListView(Hazard_listView, exposure);
                     }
                     break;
-                case ScenarioElementType.Affect:
+                case ScenarioElementType.HumanBehavior:
                     {
-                        if (!affects.Contains(word))
-                            affects.Add(word);
-                        UpdateScenarioListView(Affect_listView, affects);
-                    }
-                    break;
-                case ScenarioElementType.Rescue:
-                    {
-                        if (!rescues.Contains(word))
-                            rescues.Add(word);
-                        UpdateScenarioListView(Rescue_listView, rescues);
+                        if (!humanBehavior.Contains(word))
+                            humanBehavior.Add(word);
+                        UpdateScenarioListView(Affect_listView, humanBehavior);
                     }
                     break;
                 default:
@@ -193,32 +194,25 @@ namespace Engine.NLP.Forms
             if (word == null || word.Length == 0) return;
             switch (scenarioType)
             {
-                case ScenarioElementType.Factor:
+                case ScenarioElementType.Hazard:
                     {
-                        if (factors.Contains(word))
-                            factors.Remove(word);
-                        UpdateScenarioListView(Factor_listView, factors);
+                        if (hazard.Contains(word))
+                            hazard.Remove(word);
+                        UpdateScenarioListView(Exposure_listView, hazard);
                     }
                     break;
-                case ScenarioElementType.Induce:
+                case ScenarioElementType.Exposure:
                     {
-                        if (induces.Contains(word))
-                            induces.Remove(word);
-                        UpdateScenarioListView(Induce_listView, induces);
+                        if (exposure.Contains(word))
+                            exposure.Remove(word);
+                        UpdateScenarioListView(Hazard_listView, exposure);
                     }
                     break;
-                case ScenarioElementType.Affect:
+                case ScenarioElementType.HumanBehavior:
                     {
-                        if (affects.Contains(word))
-                            affects.Remove(word);
-                        UpdateScenarioListView(Affect_listView, affects);
-                    }
-                    break;
-                case ScenarioElementType.Rescue:
-                    {
-                        if (rescues.Contains(word))
-                            rescues.Remove(word);
-                        UpdateScenarioListView(Rescue_listView, rescues);
+                        if (humanBehavior.Contains(word))
+                            humanBehavior.Remove(word);
+                        UpdateScenarioListView(Affect_listView, humanBehavior);
                     }
                     break;
                 default:
@@ -238,23 +232,23 @@ namespace Engine.NLP.Forms
             {
                 //0.通知预处理开始
                 Invoke(new UpdateProcessTipHandler(UpdateProcessTip), 0.0);
-                int totalNum = factors.Count + induces.Count + affects.Count;
+                int totalNum = hazard.Count + exposure.Count + humanBehavior.Count;
                 //1. 构建词W集合
                 double[][] words = new double[totalNum][];
                 //2.定义词颜色
-                for (int i = 0; i < factors.Count; i++)
-                    words[i] = GloveNet.Predict(factors[i]);
-                for (int i = 0; i < induces.Count; i++)
-                    words[factors.Count + i] = GloveNet.Predict(induces[i]);
-                for (int i = 0; i < affects.Count; i++)
-                    words[factors.Count + induces.Count + i] = GloveNet.Predict(affects[i]);
+                for (int i = 0; i < hazard.Count; i++)
+                    words[i] = GloveNet.Predict(hazard[i]);
+                for (int i = 0; i < exposure.Count; i++)
+                    words[hazard.Count + i] = GloveNet.Predict(exposure[i]);
+                for (int i = 0; i < humanBehavior.Count; i++)
+                    words[hazard.Count + exposure.Count + i] = GloveNet.Predict(humanBehavior[i]);
                 //3.t-SNE算法降维
                 var vWords = NP.TSNE2(words);
                 //4.可视化
                 Invoke(new UpdateProcessTipHandler(UpdateProcessTip), 1.0,
-                    vWords.Take(factors.Count).ToArray(),
-                    vWords.Skip(factors.Count).Take(induces.Count).ToArray(),
-                    vWords.Skip(factors.Count + induces.Count).Take(affects.Count).ToArray());
+                    vWords.Take(hazard.Count).ToArray(),
+                    vWords.Skip(hazard.Count).Take(exposure.Count).ToArray(),
+                    vWords.Skip(hazard.Count + exposure.Count).Take(humanBehavior.Count).ToArray());
             });
             t.IsBackground = true;
             t.Start();
@@ -268,11 +262,11 @@ namespace Engine.NLP.Forms
 
         private void Save_button_Click(object sender, EventArgs e)
         {
-            NLPConfiguration.AffectScenarioString = string.Join(";", affects.ToArray());
-            NLPConfiguration.InduceScenarioString = string.Join(";", induces.ToArray());
-            NLPConfiguration.FactorScenarioString = string.Join(";", factors.ToArray());
+            NLPConfiguration.AffectScenarioString = string.Join(";", humanBehavior.ToArray());
+            NLPConfiguration.InduceScenarioString = string.Join(";", exposure.ToArray());
+            NLPConfiguration.FactorScenarioString = string.Join(";", hazard.ToArray());
             NLPConfiguration.RescueScenarioString = string.Join(";", rescues.ToArray());
-            MessageBox.Show("情景要素中心词已保存", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("专家知识保存成功", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         #endregion

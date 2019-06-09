@@ -128,7 +128,7 @@ namespace Host.UI
         /// <param name="statue"></param>
         private void UpdateStatusLabel(string msg)
         {
-            map_statusLabel.Text = msg;
+            Main_statusLabel.Text = msg;
         }
         
         /// <summary>
@@ -338,6 +338,7 @@ namespace Host.UI
                     Invoke(new UpdateGenericHandler((msg) => {
                         Main_processBar.Visible = true;
                         Main_processBar.Value = (int)(msg*100);
+                        Main_statusLabel.Text = string.Format("Loading: {0:p}", msg);
                         //StatusBar.Text = string.Format("{0:P}", msg);
                     }), Convert.ToDouble(outputs[0]));
                     break;
@@ -381,8 +382,10 @@ namespace Host.UI
                 //case load GloveNet
                 case "LoadGloVeNetTask":
                     {
+                        //report loading progress
                         Invoke(new UpdateGenericHandler((text) => {
                             Main_processBar.Visible = false;
+                            Main_statusLabel.Text = "ready";
                             Expertise_Knowledge_toolStripButton.Enabled = true;
                         }), 0);
                         //model
@@ -615,14 +618,6 @@ namespace Host.UI
                         gloVeNetJob.Start();
                     }
                     break;
-                //create scenario
-                case "Scenario_toolStripButton":
-                    {
-                        NLPScenarioForm nlp_scenario_form = new NLPScenarioForm();
-                        nlp_scenario_form.GloveNet = _gloVeNet;
-                        nlp_scenario_form.Show();
-                    }
-                    break;
                 //setting domain knowledge for custer algorihtm
                 case "Expertise_Knowledge_toolStripButton":
                     {
@@ -631,6 +626,15 @@ namespace Host.UI
                         nlp_expertise_form.ShowDialog();
                     }
                     break;
+                //create scenario
+                case "Scenario_toolStripButton":
+                    {
+                        NLPScenarioForm nlp_scenario_form = new NLPScenarioForm();
+                        nlp_scenario_form.GloveNet = _gloVeNet;
+                        nlp_scenario_form.Show();
+                    }
+                    break;
+
                 //setting configuration
                 case "NLP_Configuration_toolStripButton":
                     {
