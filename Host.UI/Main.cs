@@ -339,7 +339,6 @@ namespace Host.UI
                         Main_processBar.Visible = true;
                         Main_processBar.Value = (int)(msg*100);
                         Main_statusLabel.Text = string.Format("Loading: {0:p}", msg);
-                        //StatusBar.Text = string.Format("{0:P}", msg);
                     }), Convert.ToDouble(outputs[0]));
                     break;
                 default:
