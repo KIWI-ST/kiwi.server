@@ -172,7 +172,7 @@
             // 
             this.RandomForest_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_query_inner_join_50;
             this.RandomForest_ToolStripMenuItem.Name = "RandomForest_ToolStripMenuItem";
-            this.RandomForest_ToolStripMenuItem.Size = new System.Drawing.Size(278, 42);
+            this.RandomForest_ToolStripMenuItem.Size = new System.Drawing.Size(236, 34);
             this.RandomForest_ToolStripMenuItem.Text = "RandomForest";
             this.RandomForest_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
@@ -180,7 +180,7 @@
             // 
             this.L2SVM_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_query_inner_join_left_50;
             this.L2SVM_ToolStripMenuItem.Name = "L2SVM_ToolStripMenuItem";
-            this.L2SVM_ToolStripMenuItem.Size = new System.Drawing.Size(278, 42);
+            this.L2SVM_ToolStripMenuItem.Size = new System.Drawing.Size(236, 34);
             this.L2SVM_ToolStripMenuItem.Text = "L2-SVM";
             this.L2SVM_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
@@ -199,7 +199,7 @@
             // 
             this.CNN_SVM_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_flow_chart_50;
             this.CNN_SVM_ToolStripMenuItem.Name = "CNN_SVM_ToolStripMenuItem";
-            this.CNN_SVM_ToolStripMenuItem.Size = new System.Drawing.Size(278, 42);
+            this.CNN_SVM_ToolStripMenuItem.Size = new System.Drawing.Size(200, 34);
             this.CNN_SVM_ToolStripMenuItem.Text = "CNN-SVM";
             this.CNN_SVM_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
