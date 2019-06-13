@@ -120,6 +120,17 @@
   <metadata name="map_toolStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>1037, 17</value>
   </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="Open_RawFile_toolStripButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAD7SURBVGhD7Zc7DgFRGIVngx6J6C3ABjwKOokNWIJGNR69
+        ht4K7EAhUSjwJTcxuAqM5GTmfMlp7v/LvV8xkpOYMlDpzluVzmIQzW0W1vSp9dNNc5ieG6P1KRvOmIU1
+        ferd5bY92V3Gq8NDOGMW1vSxiBoWUcMialhEDYuoYRE1LKKGRfKACkp746JfU+3Nju9EmMV+82l4a7Q2
+        06epolyWR/rT/YsIZ7Hdb8JbeXN4/h0O6dXPl6uGt1pEKeUQKcbHXpS/3zzhoncizMKaPhZRwyJqWEQN
+        i6hhETUsooZF1LCIGrQ3qii9OhvOmIU1faig9Olo/l1PjQRJcgUnSG/q9SN5GgAAAABJRU5ErkJggg==
+</value>
+  </data>
   <metadata name="map_statusStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>367, 17</value>
   </metadata>
@@ -132,7 +143,6 @@
   <metadata name="main_notifyIcon.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>834, 17</value>
   </metadata>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="main_notifyIcon.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAEAgIAAAAEAIAAoCAEAFgAAACgAAACAAAAAAAEAAAEAIAAAAAAAAAABABMLAAATCwAAAAAAAAAA

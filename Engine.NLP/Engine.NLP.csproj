@@ -183,6 +183,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analysis\DependencyAnalysis.cs" />
+    <Compile Include="Analysis\TimeMarkupAnnotation.cs" />
     <Compile Include="Extend\StringExtend.cs" />
     <Compile Include="Forms\NLPConfigForm.cs">
       <SubType>Form</SubType>
@@ -214,6 +215,7 @@
     <Compile Include="Forms\ScottPlotForm.Designer.cs">
       <DependentUpon>ScottPlotForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="IAnnotation.cs" />
     <Compile Include="Lexicon\HalfmanTree.cs" />
     <Compile Include="Lexicon\Lexicon.cs" />
     <Compile Include="Lexicon\OnehotEncode.cs" />
@@ -260,9 +262,7 @@
       <Name>Engine.Brain</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Tools\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Accord.3.8.0\build\Accord.targets" Condition="Exists('..\packages\Accord.3.8.0\build\Accord.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -12,6 +12,7 @@ using Engine.GIS.Entity;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Arithmetic;
 using Engine.NLP;
+using Engine.NLP.Analysis;
 using Engine.NLP.Forms;
 using Host.UI.Jobs;
 using Host.UI.SettingForm;
@@ -425,7 +426,7 @@ namespace Host.UI
                     }
                     break;
                 //task
-                case "Map_task_toolStripButton":
+                case "Tasks_Monitor_toolStripButton":
                     TaskMonitor mapTaskForm = new TaskMonitor();
                     mapTaskForm.Jobs = _jobs;
                     mapTaskForm.ShowDialog();
@@ -576,37 +577,53 @@ namespace Host.UI
                             _process.BeginErrorReadLine();
                             //3. output
                             Invoke(new UpdateListBoxHandler(UpdateMapListBox), string.Format("time:{0}, {1}", Now, "Success: NLP Server Started"));
-                            //4. change to nlp view
-                            Main_tabControl.SelectedIndex = 1;
-                            //5. enable buttons
-                            Open_RawFile_toolStripButton.Enabled = true;
-                            Clear_NLPRawTextView_toolStripButton.Enabled = true;
                         }
                         else
                             Invoke(new UpdateListBoxHandler(UpdateMapListBox), string.Format("time:{0}, {1}, port {2} is in use.", Now, "Error: NLP Server Start Fail", NLPConfiguration.PORT));
+                        //4. change to nlp view
+                        Main_tabControl.SelectedIndex = 1;
+                        //5. enable buttons
+                        Open_RawFile_toolStripButton.Enabled = true;
+                        Clear_NLPRawTextView_toolStripButton.Enabled = true;
+                        Annotation_toolStripButton.Enabled = true;
                     }
                     break;
                 //open raw text file
                 case "Open_RawFile_toolStripButton":
-                    OpenFileDialog opg = new OpenFileDialog();
-                    opg.Filter = "语料文本|*.txt";
-                    if (opg.ShowDialog() == DialogResult.OK)
                     {
-                        using (StreamReader sr = new StreamReader(opg.FileName, Encoding.UTF8))
+                        OpenFileDialog opg = new OpenFileDialog();
+                        opg.Filter = "语料文本|*.txt";
+                        if (opg.ShowDialog() == DialogResult.OK)
                         {
-                            string text = sr.ReadLine();
-                            while (text != null)
+                            using (StreamReader sr = new StreamReader(opg.FileName, Encoding.UTF8))
                             {
-                                NLP_RawText_listBox.Items.Add(text);
-                                text = sr.ReadLine();
+                                string text = sr.ReadLine();
+                                while (text != null)
+                                {
+                                    NLP_RawText_listBox.Items.Add(text);
+                                    text = sr.ReadLine();
+                                }
                             }
                         }
                     }
                     break;
                 //clear nlp raw text view items
                 case "Clear_NLPRawTextView_toolStripButton":
-                    if (MessageBox.Show("是否清除原始文本数据？", "清除文本数据警告", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
-                        NLP_RawText_listBox.Items.Clear();
+                    {
+                        if (MessageBox.Show("是否清除原始文本数据？", "清除文本数据警告", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+                            NLP_RawText_listBox.Items.Clear();
+                    }
+                    break;
+                case "Annotation_toolStripButton":
+                    {
+                        TimeMarkupAnnotation annotation = new TimeMarkupAnnotation();
+                        string rawText = "";
+                        foreach (var element in NLP_RawText_listBox.Items)
+                            rawText += element;
+                        IJob annotatorJob = new JobAnnotationText(rawText);
+                        RegisterJob(annotatorJob);
+                        annotatorJob.Start();
+                    }
                     break;
                 //load gloVe model
                 case "Load_Words_Embedding_ToolStripMenuItem":
@@ -633,9 +650,8 @@ namespace Host.UI
                         nlp_scenario_form.Show();
                     }
                     break;
-
                 //setting configuration
-                case "NLP_Configuration_toolStripButton":
+                case "Tools_Configuration_ToolStripMenuItem":
                     {
                         NLPConfigForm nlpConfigForm = new NLPConfigForm();
                         nlpConfigForm.ShowDialog();
@@ -643,11 +659,13 @@ namespace Host.UI
                     break;
                 //lstm test 
                 case "LSTM_toolStripButton":
-                    string rawTextFullFilename = Directory.GetCurrentDirectory() + @"\tmp\RawText.txt";
-                    string autosave = Directory.GetCurrentDirectory() + @"\tmp\autolstm.bin";
-                    //IJob rnnTrainJob = new JobRNNTrain(rawTextFullFilename, autosave);
-                    //RegisterJob(rnnTrainJob);
-                    //rnnTrainJob.Start();
+                    {
+                        string rawTextFullFilename = Directory.GetCurrentDirectory() + @"\tmp\RawText.txt";
+                        string autosave = Directory.GetCurrentDirectory() + @"\tmp\autolstm.bin";
+                        //IJob rnnTrainJob = new JobRNNTrain(rawTextFullFilename, autosave);
+                        //RegisterJob(rnnTrainJob);
+                        //rnnTrainJob.Start();
+                    }
                     break;
             }
         }
