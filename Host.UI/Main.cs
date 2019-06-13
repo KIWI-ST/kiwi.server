@@ -432,7 +432,7 @@ namespace Host.UI
                     mapTaskForm.ShowDialog();
                     break;
                 //calucte kappa and oa
-                case "KappaOA_toolStripButton":
+                case "Accuracy_toolStripButton":
                     KappaOaForm koaForm = new KappaOaForm();
                     koaForm.RasterDic = _rasterDic;
                     koaForm.ShowDialog();
@@ -462,7 +462,7 @@ namespace Host.UI
                     }
                     break;
                 //cnn classification
-                case "ConvNet_ToolStripMenuItem":
+                case "CNN_toolStripButton":
                     ConvForm convForm = new ConvForm();
                     convForm.RasterDic = _rasterDic;
                     if (convForm.ShowDialog() == DialogResult.OK)
@@ -493,7 +493,7 @@ namespace Host.UI
                     }
                     break;
                 //make samples in minibatch
-                case "CreateSamples_toolStripButton":
+                case "Batches_toolStripButton":
                     BatchExportForm be_form = new BatchExportForm();
                     be_form.RasterDic = _rasterDic;
                     be_form.ShowDialog();
