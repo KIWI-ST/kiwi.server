@@ -182,8 +182,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Analysis\DependencyAnalysis.cs" />
-    <Compile Include="Analysis\TimeMarkupAnnotation.cs" />
+    <Compile Include="Annotation\TimeMarkupAnnotation.cs" />
     <Compile Include="Extend\StringExtend.cs" />
     <Compile Include="Forms\NLPConfigForm.cs">
       <SubType>Form</SubType>

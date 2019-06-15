@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -72,22 +73,27 @@ namespace Engine.NLP.Analysis
         java.util.AbstractList sentences;
 
         /// <summary>
-        /// 
+        /// TimeML Annotation
         /// </summary>
         public TimeMarkupAnnotation()
         {
             props = new java.util.Properties();
             //refrenece : https://stanfordnlp.github.io/CoreNLP/annotators.html
-            //tokenize : https://stanfordnlp.github.io/CoreNLP/tokenize.html
-            props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse");
-            //props.setProperty("ner.useSUTime", "true");
-            //props.setProperty("sutime.markTimeRanges", "1");
-            //props.setProperty("sutime.includeRange", "1");
+            props.setProperty("annotators",
+                //tokenize : https://stanfordnlp.github.io/CoreNLP/tokenize.html
+                "tokenize, " +
+                "ssplit, " +
+                "pos, " +
+                "lemma, " +
+                "ner, " +
+                "parse");
         }
 
         /// <summary>
         /// reference:
         /// https://stanfordnlp.github.io/CoreNLP/api.html
+        /// 
+        /// 
         /// </summary>
         /// <param name="rawText"></param>
         public void Process(string rawText)
