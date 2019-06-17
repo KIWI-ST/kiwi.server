@@ -21,6 +21,11 @@ namespace Engine.NLP.Analysis
         /// <summary>
         /// 
         /// </summary>
+        readonly static java.lang.Class entityTypeAnnotationClass = new edu.stanford.nlp.ling.CoreAnnotations.EntityTypeAnnotation().getClass();
+
+        /// <summary>
+        /// 
+        /// </summary>
         readonly static java.lang.Class sentencesAnnotationClass = new edu.stanford.nlp.ling.CoreAnnotations.SentencesAnnotation().getClass();
 
         /// <summary>
@@ -44,7 +49,7 @@ namespace Engine.NLP.Analysis
         readonly static java.lang.Class namedEntityTagAnnotationClass = new edu.stanford.nlp.ling.CoreAnnotations.NamedEntityTagAnnotation().getClass();
 
         /// <summary>
-        /// 
+        /// 识别一些数字型的实体，例如日期，货币等
         /// </summary>
         readonly static java.lang.Class normalizedNamedEntityTagAnnotationClass = new edu.stanford.nlp.ling.CoreAnnotations.NormalizedNamedEntityTagAnnotation().getClass();
 
@@ -53,63 +58,93 @@ namespace Engine.NLP.Analysis
         /// </summary>
         readonly static java.lang.Class timexAnnotationClass = new edu.stanford.nlp.time.TimeAnnotations.TimexAnnotations().getClass();
 
+        /// <summary>
+        /// 
+        /// </summary>
         readonly static java.lang.Class timeExpressionAnnotationClass = new edu.stanford.nlp.time.TimeExpression.Annotation().getClass();
-
-        readonly static java.lang.Class docDateAnnotationClass = new edu.stanford.nlp.ling.CoreAnnotations.DocDateAnnotation().getClass();
-
 
         /// <summary>
         /// 
         /// </summary>
-        readonly static java.lang.Class treeCoreAnnotationClass = new edu.stanford.nlp.trees.TreeCoreAnnotations.TreeAnnotation().getClass();
+        readonly static java.lang.Class docDateAnnotationClass = new edu.stanford.nlp.ling.CoreAnnotations.DocDateAnnotation().getClass();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        readonly static java.lang.Class treeAnnotationClass = new edu.stanford.nlp.trees.TreeCoreAnnotations.TreeAnnotation().getClass();
+
+        /// <summary>
+        /// dependency
+        /// </summary>
+        readonly static java.lang.Class basicDependenciesAnnotationClass = new edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations.BasicDependenciesAnnotation().getClass();
+
+        /// <summary>
+        /// 句子annotator 入口
+        /// </summary>
+        readonly static java.lang.Class mentionsAnnotationClass = new edu.stanford.nlp.ling.CoreAnnotations.MentionsAnnotation().getClass();
 
         #endregion
 
         /// <summary>
-        /// 
+        /// indicate the ability of annotator
         /// </summary>
-        java.util.Properties props;
-
-        java.util.AbstractList sentences;
+        java.util.Properties _props;
 
         /// <summary>
-        /// TimeML Annotation
+        /// cache sentences
+        /// </summary>
+        java.util.AbstractList _sentences;
+
+        /// <summary>
+        /// 记录时间-情景句子集
+        /// </summary>
+        Dictionary<string, edu.stanford.nlp.util.CoreMap> timeStampSentences = new Dictionary<string, edu.stanford.nlp.util.CoreMap>();
+
+        /// <summary>
+        ///  Annotation with SUTime
         /// </summary>
         public TimeMarkupAnnotation()
         {
-            props = new java.util.Properties();
-            //refrenece : https://stanfordnlp.github.io/CoreNLP/annotators.html
-            props.setProperty("annotators",
-                //tokenize : https://stanfordnlp.github.io/CoreNLP/tokenize.html
+            _props = new java.util.Properties();
+            //refrenece https://stanfordnlp.github.io/CoreNLP/annotators.html
+            _props.setProperty("annotators",
+                //tokenize https://stanfordnlp.github.io/CoreNLP/tokenize.html
                 "tokenize, " +
+                //ssplit https://stanfordnlp.github.io/CoreNLP/ssplit.html
                 "ssplit, " +
+                //part of speech https://stanfordnlp.github.io/CoreNLP/pos.html
                 "pos, " +
+                //lemma https://stanfordnlp.github.io/CoreNLP/lemma.html
                 "lemma, " +
+                //named entity recongnition https://stanfordnlp.github.io/CoreNLP/ner.html
                 "ner, " +
+                //parse https://stanfordnlp.github.io/CoreNLP/parse.html
                 "parse");
         }
 
         /// <summary>
         /// reference:
         /// https://stanfordnlp.github.io/CoreNLP/api.html
-        /// 
-        /// 
         /// </summary>
         /// <param name="rawText"></param>
         public void Process(string rawText)
         {
-            edu.stanford.nlp.pipeline.StanfordCoreNLPClient pipeline = new edu.stanford.nlp.pipeline.StanfordCoreNLPClient(props, "http://localhost", 9000);
+            edu.stanford.nlp.pipeline.StanfordCoreNLPClient pipeline = new edu.stanford.nlp.pipeline.StanfordCoreNLPClient(_props, "http://localhost", 9000);
             edu.stanford.nlp.pipeline.Annotation document = new edu.stanford.nlp.pipeline.Annotation(rawText);
             //run all Annotators on this text
             pipeline.annotate(document);
-            sentences = document.get(sentencesAnnotationClass) as java.util.AbstractList;
+            //cache sentences
+            _sentences = document.get(sentencesAnnotationClass) as java.util.AbstractList;
             //var timeAll = document.get(timexAnnotationClass);
-            if (sentences == null) return;
-            //
-            foreach (edu.stanford.nlp.util.CoreMap sentence in sentences)
+            if (_sentences == null) return;
+            //分析时间顺序，得到 时间-情景句子集
+            foreach (edu.stanford.nlp.util.CoreMap sentence in _sentences)
             {
-
-                var tree = sentence.get(treeCoreAnnotationClass);
+                //句子内容
+                string text = (string)sentence.get(textAnnotationClass);
+                //
+                //edu.stanford.nlp.util
+                //var mentions = sentence.get(mentionsAnnotationClass);
 
                 java.util.AbstractList tokens = sentence.get(tokensAnnotationClass) as java.util.AbstractList;
                 foreach (edu.stanford.nlp.ling.CoreLabel token in tokens)
@@ -117,8 +152,13 @@ namespace Engine.NLP.Analysis
                     string word = (string)token.get(textAnnotationClass);
                     string pos = (string)token.get(partOfSpeechAnnotationClass);
                     string ner = (string)token.get(namedEntityTagAnnotationClass);
+                    string type = (string)token.get(entityTypeAnnotationClass);
                     string value = (string)token.get(normalizedNamedEntityTagAnnotationClass);
                 }
+                //1.get tree sturcture
+                edu.stanford.nlp.trees.Tree tree = sentence.get(treeAnnotationClass) as edu.stanford.nlp.trees.Tree;
+                //2.build semantic graph
+                edu.stanford.nlp.semgraph.SemanticGraph dependencies = sentence.get(basicDependenciesAnnotationClass) as edu.stanford.nlp.semgraph.SemanticGraph;
             }
             //
         }
