@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using edu.stanford.nlp.coref.data;
 
 namespace Engine.NLP.Analysis
 {
@@ -56,7 +57,7 @@ namespace Engine.NLP.Analysis
         /// <summary>
         /// https://nlp.stanford.edu/software/sutime.shtml
         /// </summary>
-        readonly static java.lang.Class timexAnnotationClass = new edu.stanford.nlp.time.TimeAnnotations.TimexAnnotations().getClass();
+        readonly static java.lang.Class timexAnnotationClass = new edu.stanford.nlp.time.TimeAnnotations.TimexAnnotation().getClass();
 
         /// <summary>
         /// 
@@ -142,10 +143,14 @@ namespace Engine.NLP.Analysis
             {
                 //句子内容
                 string text = (string)sentence.get(textAnnotationClass);
-                //
-                //edu.stanford.nlp.util
-                //var mentions = sentence.get(mentionsAnnotationClass);
-
+                //https://github.com/stanfordnlp/CoreNLP/blob/c709c037aebb3ea3eb1e1591849e5a963b1d938f/src/edu/stanford/nlp/pipeline/GenderAnnotator.java#L42
+                //edu.stanford.nlp.util, edu.stanford.nlp.coref.data.Mention
+                var mentions = sentence.get(mentionsAnnotationClass) as java.util.AbstractList;
+                foreach(edu.stanford.nlp.util.CoreMap entity in mentions)
+                {
+                    var time = entity.get(timexAnnotationClass) as edu.stanford.nlp.time.Timex;
+                }
+                //var mention = sentence.get(mentionsAnnotationClass); 
                 java.util.AbstractList tokens = sentence.get(tokensAnnotationClass) as java.util.AbstractList;
                 foreach (edu.stanford.nlp.ling.CoreLabel token in tokens)
                 {
