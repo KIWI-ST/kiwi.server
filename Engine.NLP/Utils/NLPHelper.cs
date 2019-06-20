@@ -57,8 +57,12 @@ namespace Engine.NLP.Utils
                 edu.stanford.nlp.time.Timex timex = entity.get(timexAnnotationClass) as edu.stanford.nlp.time.Timex;
                 if (timex != null)
                 {
-                    DateTime time = ParseToDate(timex.altVal());
-                    if (!times.Contains(time)&&time!=DateTime.MinValue) times.Add(time);
+                    string altVal = timex.altVal();
+                    if (altVal != null)
+                    {
+                        DateTime time = ParseToDate(altVal);
+                        if (!times.Contains(time) && time != DateTime.MinValue) times.Add(time);
+                    }
                 }
             }
             return times;

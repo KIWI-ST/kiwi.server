@@ -145,8 +145,6 @@ namespace Engine.NLP.Analysis
             _sentences = document.get(sentencesAnnotationClass) as java.util.AbstractList;
             //var timeAll = document.get(timexAnnotationClass);
             if (_sentences == null) return;
-            //store the latest time segment
-            DateTime lastTimeStamp = DateTime.MinValue;
             //分析时间顺序，得到 时间-情景句子集
             foreach (edu.stanford.nlp.util.CoreMap sentence in _sentences)
             {
@@ -154,14 +152,13 @@ namespace Engine.NLP.Analysis
                 string text = (string)sentence.get(textAnnotationClass);
                 //https://github.com/stanfordnlp/CoreNLP/blob/c709c037aebb3ea3eb1e1591849e5a963b1d938f/src/edu/stanford/nlp/pipeline/GenderAnnotator.java#L42
                 //edu.stanford.nlp.util, edu.stanford.nlp.coref.data.Mention
-                var mentions = sentence.get(mentionsAnnotationClass) as java.util.AbstractList;
+                //var mentions = sentence.get(mentionsAnnotationClass) as java.util.AbstractList;
                 //comcat times to timeline
-                _timeLine.Concat(NLPHelper.ProcessTimex(sentence));
-                var times = NLPHelper.ProcessTimex(sentence);
-                //Convert to Date?
-
-
+                List<DateTime> time = NLPHelper.ProcessTimex(sentence);
+                _timeLine.AddRange(time);
                 //re-organize sentences according timeline
+
+
 
                 //var mention = sentence.get(mentionsAnnotationClass); 
                 java.util.AbstractList tokens = sentence.get(tokensAnnotationClass) as java.util.AbstractList;
@@ -178,6 +175,8 @@ namespace Engine.NLP.Analysis
                 //2.build semantic graph
                 edu.stanford.nlp.semgraph.SemanticGraph dependencies = sentence.get(basicDependenciesAnnotationClass) as edu.stanford.nlp.semgraph.SemanticGraph;
             }
+            //
+            var sss = "";
             //
         }
 
