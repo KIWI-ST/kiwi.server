@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using edu.stanford.nlp.coref.data;
+using Engine.NLP.Utils;
 
 namespace Engine.NLP.Analysis
 {
@@ -96,10 +97,16 @@ namespace Engine.NLP.Analysis
         /// </summary>
         java.util.AbstractList _sentences;
 
+
+        /// <summary>
+        /// 情景的时间线
+        /// </summary>
+        List<DateTime> _timeLine = new List<DateTime>();
+
         /// <summary>
         /// 记录时间-情景句子集
         /// </summary>
-        Dictionary<string, edu.stanford.nlp.util.CoreMap> timeStampSentences = new Dictionary<string, edu.stanford.nlp.util.CoreMap>();
+        Dictionary<DateTime, edu.stanford.nlp.util.CoreMap> timeStampSentences = new Dictionary<DateTime, edu.stanford.nlp.util.CoreMap>();
 
         /// <summary>
         ///  Annotation with SUTime
@@ -138,6 +145,8 @@ namespace Engine.NLP.Analysis
             _sentences = document.get(sentencesAnnotationClass) as java.util.AbstractList;
             //var timeAll = document.get(timexAnnotationClass);
             if (_sentences == null) return;
+            //store the latest time segment
+            DateTime lastTimeStamp = DateTime.MinValue;
             //分析时间顺序，得到 时间-情景句子集
             foreach (edu.stanford.nlp.util.CoreMap sentence in _sentences)
             {
@@ -146,10 +155,14 @@ namespace Engine.NLP.Analysis
                 //https://github.com/stanfordnlp/CoreNLP/blob/c709c037aebb3ea3eb1e1591849e5a963b1d938f/src/edu/stanford/nlp/pipeline/GenderAnnotator.java#L42
                 //edu.stanford.nlp.util, edu.stanford.nlp.coref.data.Mention
                 var mentions = sentence.get(mentionsAnnotationClass) as java.util.AbstractList;
-                foreach(edu.stanford.nlp.util.CoreMap entity in mentions)
-                {
-                    var time = entity.get(timexAnnotationClass) as edu.stanford.nlp.time.Timex;
-                }
+                //comcat times to timeline
+                _timeLine.Concat(NLPHelper.ProcessTimex(sentence));
+                var times = NLPHelper.ProcessTimex(sentence);
+                //Convert to Date?
+
+
+                //re-organize sentences according timeline
+
                 //var mention = sentence.get(mentionsAnnotationClass); 
                 java.util.AbstractList tokens = sentence.get(tokensAnnotationClass) as java.util.AbstractList;
                 foreach (edu.stanford.nlp.ling.CoreLabel token in tokens)

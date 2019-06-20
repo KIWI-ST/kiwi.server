@@ -138,5 +138,6 @@ namespace Engine.Brain.Model.DL
                 return trainer.PreviousMinibatchEvaluationAverage();
             }
         }
+
     }
 }

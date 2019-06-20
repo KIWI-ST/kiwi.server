@@ -55,6 +55,7 @@ namespace Engine.Brain.Model.DL
                 return scale * alpha * (Math.Exp(x) - 1);
         }
     }
+
     /// <summary>
     /// DQN State Prediction NeuralNetwork 
     /// </summary>

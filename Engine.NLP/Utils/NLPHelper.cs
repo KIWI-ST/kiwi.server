@@ -32,7 +32,7 @@ namespace Engine.NLP.Utils
         /// <summary>
         /// only prcess sentence to return text
         /// </summary>
-        private static string ProcessSentenceText(edu.stanford.nlp.util.CoreMap sentence)
+        public static string ProcessSentenceText(edu.stanford.nlp.util.CoreMap sentence)
         {
             return sentence.get(textAnnotationClass) as string;
         }
@@ -48,16 +48,38 @@ namespace Engine.NLP.Utils
         /// <summary>
         /// process timex
         /// </summary>
-        public static List<edu.stanford.nlp.time.Timex> ProcessTimex(edu.stanford.nlp.util.CoreMap sentence)
+        public static List<DateTime> ProcessTimex(edu.stanford.nlp.util.CoreMap sentence)
         {
-            List<edu.stanford.nlp.time.Timex> times = new List<edu.stanford.nlp.time.Timex>();
+            List<DateTime> times = new List<DateTime>();
             java.util.AbstractList mentions = ProcessSentenceMention(sentence);
             foreach (edu.stanford.nlp.util.CoreMap entity in mentions)
             {
-                edu.stanford.nlp.time.Timex time = entity.get(timexAnnotationClass) as edu.stanford.nlp.time.Timex;
-                if (time != null) times.Add(time);
+                edu.stanford.nlp.time.Timex timex = entity.get(timexAnnotationClass) as edu.stanford.nlp.time.Timex;
+                if (timex != null)
+                {
+                    DateTime time = ParseToDate(timex.altVal());
+                    if (!times.Contains(time)&&time!=DateTime.MinValue) times.Add(time);
+                }
             }
-            return times == null ? times : null;
+            return times;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns>if error, return minVlaue of DateTime</returns>
+        public static DateTime ParseToDate(string value)
+        {
+            string[] segments = value.Split(' ');
+            for(int i = 0; i < segments.Length; i++)
+            {
+                string segment = segments[i];
+                DateTime outTime;
+                if (DateTime.TryParse(segment, out outTime))
+                    return outTime;
+            }
+            return DateTime.MinValue;
         }
 
     }

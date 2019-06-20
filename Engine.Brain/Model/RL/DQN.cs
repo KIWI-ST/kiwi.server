@@ -15,6 +15,7 @@ namespace Engine.Brain.Model.RL
     /// <param name="accuracy">train accuracy</param>
     /// <param name="epochesTime"></param>
     public delegate void UpdateLearningLossHandler(double loss, double totalReward, double accuracy, double progress, string epochesTime);
+
     /// <summary>
     /// memory
     /// </summary>
@@ -41,6 +42,7 @@ namespace Engine.Brain.Model.RL
         /// </summary>
         public double RT { get; set; }
     }
+
     /// <summary>
     /// 用于影像分类的dqn学习机
     /// action固定为label图层的类别数
@@ -51,14 +53,17 @@ namespace Engine.Brain.Model.RL
         /// reporter
         /// </summary>
         public event UpdateLearningLossHandler OnLearningLossEventHandler;
+
         /// <summary>
         /// memory
         /// </summary>
         private readonly List<Memory> _memoryList = new List<Memory>();
+
         /// <summary>
         /// actor model
         /// </summary>
         private readonly IDSupportDQN _actorNet;
+
         /// <summary>
         /// critic model
         /// </summary>
@@ -103,6 +108,7 @@ namespace Engine.Brain.Model.RL
             _actorNet = actor??new DNet(_env.FeatureNum, _actionsNumber);
             _criticNet = critic??new DNet(_env.FeatureNum, _actionsNumber);
         }
+
         /// <summary>
         /// convert action to raw byte value
         /// </summary>
@@ -112,6 +118,7 @@ namespace Engine.Brain.Model.RL
         {
             return _env.RandomSeedKeys[action];
         }
+
         /// <summary>
         /// 控制记忆容量
         /// </summary>
@@ -129,6 +136,7 @@ namespace Engine.Brain.Model.RL
                 RT = reward
             });
         }
+
         /// <summary>
         /// 输出每一个 state 对应的 action 值
         /// </summary>
@@ -138,6 +146,7 @@ namespace Engine.Brain.Model.RL
             double[] pred = _actorNet.Predict(state);
             return (pred, pred[NP.Argmax(pred)]);
         }
+
         /// <summary>
         /// 随机抽取样本
         /// </summary>
@@ -153,6 +162,7 @@ namespace Engine.Brain.Model.RL
             }
             return list;
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -182,6 +192,7 @@ namespace Engine.Brain.Model.RL
             }
             return (input_features, input_qValue);
         }
+
         /// <summary>
         /// 探索算法
         /// </summary>
@@ -195,6 +206,7 @@ namespace Engine.Brain.Model.RL
         {
             return Math.Max(ep_min, ep_max - (ep_max - ep_min) * step / eps_total);
         }
+
         /// <summary>
         /// 获取当前actor下的action和reward
         /// </summary>
@@ -213,6 +225,7 @@ namespace Engine.Brain.Model.RL
                 return (action, q);
             }
         }
+
         /// <summary>
         /// 经验回放
         /// </summary>
@@ -226,6 +239,7 @@ namespace Engine.Brain.Model.RL
             double loss = _criticNet.Train(inputs, outputs);
             return (loss, DateTime.Now - now);
         }
+
         /// <summary>
         /// 计算分类精度
         /// </summary>
@@ -247,6 +261,7 @@ namespace Engine.Brain.Model.RL
             var accuracy = NP.CalcuteAccuracy(predicts, targets);
             return accuracy;
         }
+
         /// <summary>
         /// }{debug 
         /// 初始化记忆库时，需要给一定的优质记忆，否则记忆库里全是错误记忆，当action可选范围很大时，无法拟合
@@ -264,6 +279,7 @@ namespace Engine.Brain.Model.RL
                 state = nextState;
             }
         }
+
         /// <summary>
         /// 批次训练
         /// </summary>
