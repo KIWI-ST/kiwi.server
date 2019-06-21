@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Engine.NLP;
-using Engine.NLP.Analysis;
 
 namespace Host.UI.Jobs
 {
@@ -32,11 +31,11 @@ namespace Host.UI.Jobs
             _t = new Thread(() =>
             {
                 //1. select annotator type and process text
-                IAnnotation annotator = new TimeMarkupAnnotation();
-                annotator.Process(rawText);
+                //IAnnotation annotator = new TimeMarkupAnnotation();
+                //annotator.Process(rawText);
                 //
-                Complete = true;
-                OnTaskComplete?.Invoke(Name);
+                //Complete = true;
+                //OnTaskComplete?.Invoke(Name);
             });
         }
 
