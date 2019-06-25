@@ -116,8 +116,8 @@ namespace Host.UI
         {
             Invoke(new UpdateListBoxHandler((msg)=> {
                 if (msg == null) return;
-                NLP_Server_listBox.Items.Add(msg);
-                NLP_Server_listBox.SelectedIndex = NLP_Server_listBox.Items.Count - 1;
+                NLP_Timeline_listBox.Items.Add(msg);
+                NLP_Timeline_listBox.SelectedIndex = NLP_Timeline_listBox.Items.Count - 1;
             }), e.Data);
         }
 
@@ -554,6 +554,9 @@ namespace Host.UI
         /// <param name="e"></param>
         private void NLP_funciton_Click(Object sender, EventArgs e)
         {
+            //change view
+            Main_tabControl.SelectedIndex = 1;
+            //switch tool
             ToolStripItem item = sender as ToolStripItem;
             switch (item.Name)
             {

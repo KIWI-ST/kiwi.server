@@ -8,6 +8,10 @@ namespace Engine.NLP.Utils
 {
     /// <summary>
     /// Allows authentication to the API by using a basic apiKey mechanism
+    /// @example
+    ///  ApiKeyServiceClientCredentials credentials = new ApiKeyServiceClientCredentials(NLPConfiguration.SubscriptionKey);
+    ///  TextAnalyticsClient client = new TextAnalyticsClient(credentials) { Endpoint = NLPConfiguration.Endpoint };
+    ///  client.xxx
     /// </summary>
     public class ApiKeyServiceClientCredentials : ServiceClientCredentials
     {
@@ -39,5 +43,6 @@ namespace Engine.NLP.Utils
             request.Headers.Add("Ocp-Apim-Subscription-Key", this.subscriptionKey);
             return base.ProcessHttpRequestAsync(request, cancellationToken);
         }
+
     }
 }
