@@ -77,8 +77,9 @@
             this.tab_nlpview = new System.Windows.Forms.TabPage();
             this.Nlp_splitContainer = new System.Windows.Forms.SplitContainer();
             this.NLP_splitContainer_top = new System.Windows.Forms.SplitContainer();
-            this.NLP_Timeline_listBox = new System.Windows.Forms.ListBox();
             this.NLP_RawText_listBox = new System.Windows.Forms.ListBox();
+            this.NLP_Timeline_listBox = new System.Windows.Forms.ListBox();
+            this.NLP_pictureBox = new System.Windows.Forms.PictureBox();
             this.tree_contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.bandCombine_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
@@ -92,7 +93,6 @@
             this.mapToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Tools_Configuration_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.NLP_pictureBox = new System.Windows.Forms.PictureBox();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_main)).BeginInit();
@@ -118,9 +118,9 @@
             this.NLP_splitContainer_top.Panel1.SuspendLayout();
             this.NLP_splitContainer_top.Panel2.SuspendLayout();
             this.NLP_splitContainer_top.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NLP_pictureBox)).BeginInit();
             this.tree_contextMenuStrip.SuspendLayout();
             this.map_menuStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NLP_pictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // map_toolStrip
@@ -548,6 +548,16 @@
             this.NLP_splitContainer_top.SplitterDistance = 548;
             this.NLP_splitContainer_top.TabIndex = 0;
             // 
+            // NLP_RawText_listBox
+            // 
+            this.NLP_RawText_listBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.NLP_RawText_listBox.FormattingEnabled = true;
+            this.NLP_RawText_listBox.ItemHeight = 18;
+            this.NLP_RawText_listBox.Location = new System.Drawing.Point(0, 0);
+            this.NLP_RawText_listBox.Name = "NLP_RawText_listBox";
+            this.NLP_RawText_listBox.Size = new System.Drawing.Size(544, 306);
+            this.NLP_RawText_listBox.TabIndex = 0;
+            // 
             // NLP_Timeline_listBox
             // 
             this.NLP_Timeline_listBox.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -558,15 +568,14 @@
             this.NLP_Timeline_listBox.Size = new System.Drawing.Size(552, 306);
             this.NLP_Timeline_listBox.TabIndex = 0;
             // 
-            // NLP_RawText_listBox
+            // NLP_pictureBox
             // 
-            this.NLP_RawText_listBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.NLP_RawText_listBox.FormattingEnabled = true;
-            this.NLP_RawText_listBox.ItemHeight = 18;
-            this.NLP_RawText_listBox.Location = new System.Drawing.Point(0, 0);
-            this.NLP_RawText_listBox.Name = "NLP_RawText_listBox";
-            this.NLP_RawText_listBox.Size = new System.Drawing.Size(544, 306);
-            this.NLP_RawText_listBox.TabIndex = 0;
+            this.NLP_pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.NLP_pictureBox.Location = new System.Drawing.Point(0, 0);
+            this.NLP_pictureBox.Name = "NLP_pictureBox";
+            this.NLP_pictureBox.Size = new System.Drawing.Size(1104, 489);
+            this.NLP_pictureBox.TabIndex = 0;
+            this.NLP_pictureBox.TabStop = false;
             // 
             // tree_contextMenuStrip
             // 
@@ -678,15 +687,6 @@
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(93, 28);
             this.helpToolStripMenuItem.Text = "Help(&H)";
             // 
-            // NLP_pictureBox
-            // 
-            this.NLP_pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.NLP_pictureBox.Location = new System.Drawing.Point(0, 0);
-            this.NLP_pictureBox.Name = "NLP_pictureBox";
-            this.NLP_pictureBox.Size = new System.Drawing.Size(1104, 489);
-            this.NLP_pictureBox.TabIndex = 0;
-            this.NLP_pictureBox.TabStop = false;
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
@@ -731,10 +731,10 @@
             this.NLP_splitContainer_top.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.NLP_splitContainer_top)).EndInit();
             this.NLP_splitContainer_top.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.NLP_pictureBox)).EndInit();
             this.tree_contextMenuStrip.ResumeLayout(false);
             this.map_menuStrip.ResumeLayout(false);
             this.map_menuStrip.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NLP_pictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

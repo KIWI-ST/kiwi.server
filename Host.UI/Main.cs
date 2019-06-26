@@ -8,10 +8,12 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using Engine.Brain.Model;
+using Engine.Crawler.Crawlers;
 using Engine.GIS.Entity;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Arithmetic;
 using Engine.NLP;
+using Engine.NLP.Forms;
 using Engine.NLP.Utils;
 using Host.UI.Jobs;
 using Host.UI.SettingForm;
@@ -26,6 +28,8 @@ namespace Host.UI
         public Main()
         {
             InitializeComponent();
+
+            var s = new NsoasCrawler();
         }
   
         bool _is_firstBallon = true;
@@ -560,36 +564,6 @@ namespace Host.UI
             ToolStripItem item = sender as ToolStripItem;
             switch (item.Name)
             {
-                //start stanford nlp server
-                case "STAR_NLPSERVER_ToolStripMenuItem":
-                    {
-                        //STAR_NLPSERVER_ToolStripMenuItem.Enabled = false;
-                        //string msg = string.Format("time:{0}, {1}", Now, "NLP Server Starting.......");
-                        //Invoke(new UpdateListBoxHandler(UpdateMapListBox), msg);
-                        ////process start
-                        //_process = NLPConfiguration.CreateCoreServerProcess();
-                        //if (_process!=null)
-                        //{
-                        //    //1. register event
-                        //    _process.OutputDataReceived += Process_OutputDataReceived;
-                        //    _process.ErrorDataReceived += Process_OutputDataReceived;
-                        //    //2. start process
-                        //    _process.Start();
-                        //    _process.BeginOutputReadLine();
-                        //    _process.BeginErrorReadLine();
-                        //    //3. output
-                        //    Invoke(new UpdateListBoxHandler(UpdateMapListBox), string.Format("time:{0}, {1}", Now, "Success: NLP Server Started"));
-                        //}
-                        //else
-                        //    Invoke(new UpdateListBoxHandler(UpdateMapListBox), string.Format("time:{0}, {1}, port {2} is in use.", Now, "Error: NLP Server Start Fail", NLPConfiguration.PORT));
-                        ////4. change to nlp view
-                        //Main_tabControl.SelectedIndex = 1;
-                        ////5. enable buttons
-                        //Open_RawFile_toolStripButton.Enabled = true;
-                        //Clear_NLPRawTextView_toolStripButton.Enabled = true;
-                        //Annotation_toolStripButton.Enabled = true;
-                    }
-                    break;
                 //open raw text file
                 case "Open_RawFile_toolStripButton":
                     {
@@ -655,8 +629,8 @@ namespace Host.UI
                 //setting configuration
                 case "Tools_Configuration_ToolStripMenuItem":
                     {
-                        //NLPConfigForm nlpConfigForm = new NLPConfigForm();
-                        //nlpConfigForm.ShowDialog();
+                        NLPConfigForm nlpConfigForm = new NLPConfigForm();
+                        nlpConfigForm.ShowDialog();
                     }
                     break;
                 //lstm test 
