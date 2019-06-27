@@ -27,7 +27,7 @@ namespace Host.UI
         {
             InitializeComponent();
         }
-  
+
         bool _is_firstBallon = true;
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace Host.UI
                 Hide();
             }
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -71,7 +71,7 @@ namespace Host.UI
         /// get time string
         /// </summary>
         string Now => DateTime.Now.ToLongDateString() + DateTime.Now.ToLongTimeString();
-        
+
         /// <summary>
         /// raster layer
         /// </summary>
@@ -82,17 +82,17 @@ namespace Host.UI
         /// key是图片名称或图+波段名称，值为对应的bitmap
         /// </summary>
         readonly Dictionary<string, Bitmap2> _imageDic = new Dictionary<string, Bitmap2>();
-        
+
         /// <summary>
         /// store jobs
         /// </summary>
         List<IJob> _jobs = new List<IJob>();
-        
+
         /// <summary>
         /// 当前选中的Bitmap2信息，包含图层，波段，索引等
         /// </summary>
         Bitmap2 _selectBmp2 = null;
-        
+
         /// <summary>
         /// glovenet for nlp
         /// </summary>
@@ -114,7 +114,8 @@ namespace Host.UI
         /// <param name="e"></param>
         private void Process_OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
-            Invoke(new UpdateListBoxHandler((msg)=> {
+            Invoke(new UpdateListBoxHandler((msg) =>
+            {
                 if (msg == null) return;
                 NLP_Timeline_listBox.Items.Add(msg);
                 NLP_Timeline_listBox.SelectedIndex = NLP_Timeline_listBox.Items.Count - 1;
@@ -130,7 +131,7 @@ namespace Host.UI
         {
             Main_statusLabel.Text = msg;
         }
-        
+
         /// <summary>
         /// 更新地图相关树视图节点内容
         /// </summary>
@@ -150,7 +151,7 @@ namespace Host.UI
             if (_imageDic.ContainsKey(childrenNode.Text))
                 map_pictureBox.Image = _imageDic[childrenNode.Text]?.BMP;
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -161,7 +162,7 @@ namespace Host.UI
             MAP_listBox.Items.Add(msg);
             MAP_listBox.SelectedIndex = MAP_listBox.Items.Count - 1;
         }
-        
+
         /// <summary>
         /// 更新listbox区域显示内容
         /// </summary>
@@ -180,32 +181,32 @@ namespace Host.UI
         /// <param name="parentNode"></param>
         /// <param name="childrenNode"></param>
         private delegate void UpdateTreeNodeHandler(TreeNode parentNode, TreeNode childrenNode);
-        
+
         /// <summary>
         ///  保存Json委托
         /// </summary>
         /// <param name="jsonText"></param>
         private delegate void SaveJsonHandler(string jsonText);
-        
+
         /// <summary>
         ///  保存位图委托
         /// </summary>
         /// <param name="bmp"></param>
         private delegate void SaveBitmapHandler(Bitmap bmp);
-        
+
         /// <summary>
         ///  保存Excel委托
         /// </summary>
         /// <param name="dt"></param>
         private delegate void SaveExcelHandler(DataTable dt);
-        
+
         /// <summary>
         /// 更新底部信息栏提示内容委托
         /// </summary>
         /// <param name="msg"></param>
         /// <param name="statue"></param>
         private delegate void UpdateStatusLabelHandler(string msg);
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -214,19 +215,19 @@ namespace Host.UI
         /// <param name="y"></param>
         /// <param name="value"></param>
         private delegate void PaintPointHandler(Bitmap bmp, int x, int y, byte value);
-        
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="bmp"></param>
         /// <param name="nodeName"></param>
         private delegate void PaintBitmapHandler(Bitmap bmp, string nodeName);
-        
+
         /// <summary>
         /// 
         /// </summary>
         private delegate void RefreshPlotModelHandler();
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -265,7 +266,7 @@ namespace Host.UI
                 }
             }
         }
-        
+
         /// <summary>
         /// read raster data
         /// </summary>
@@ -284,7 +285,7 @@ namespace Host.UI
                 readRasterJob.Start();
             }
         }
-        
+
         /// <summary>
         /// Update Read Raster UI
         /// </summary>
@@ -304,7 +305,7 @@ namespace Host.UI
         #endregion
 
         #region jobs
-        
+
         /// <summary>
         /// register job
         /// </summary>
@@ -321,7 +322,7 @@ namespace Host.UI
             string msg = string.Format("time:{0},task:{1} registered", Now, job.Name);
             Invoke(new UpdateListBoxHandler(UpdateMapListBox), msg);
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -335,9 +336,10 @@ namespace Host.UI
                     Invoke(new UpdateListBoxHandler(UpdateMapListBox), outputs[0] as string);
                     break;
                 case "LoadGloVeNetTask":
-                    Invoke(new UpdateGenericHandler((msg) => {
+                    Invoke(new UpdateGenericHandler((msg) =>
+                    {
                         Main_processBar.Visible = true;
-                        Main_processBar.Value = (int)(msg*100);
+                        Main_processBar.Value = (int)(msg * 100);
                         Main_statusLabel.Text = string.Format("Loading: {0:p}", msg);
                     }), Convert.ToDouble(outputs[0]));
                     break;
@@ -346,7 +348,7 @@ namespace Host.UI
                     break;
             }
         }
-        
+
         /// <summary>
         /// job complete
         /// </summary>
@@ -362,13 +364,15 @@ namespace Host.UI
                 case "RFClassificationTask":
                 case "CnnClassificationTask":
                 case "SVMClassificationTask":
-                case "DqnClassificationTask":{
+                case "DqnClassificationTask":
+                    {
                         string fullFilename = outputs[0] as string;
                         ReadRaster(fullFilename);
                     }
                     break;
                 //load image
-                case "ReadRasterTask":{
+                case "ReadRasterTask":
+                    {
                         string nodeName = outputs[0] as string;
                         Dictionary<string, Bitmap2> dict = outputs[1] as Dictionary<string, Bitmap2>;
                         GRasterLayer rasterLayer = outputs[2] as GRasterLayer;
@@ -382,7 +386,8 @@ namespace Host.UI
                 case "LoadGloVeNetTask":
                     {
                         //report loading progress
-                        Invoke(new UpdateGenericHandler((text) => {
+                        Invoke(new UpdateGenericHandler((text) =>
+                        {
                             Main_processBar.Visible = false;
                             Main_statusLabel.Text = "ready";
                             Expertise_Knowledge_toolStripButton.Enabled = true;
@@ -390,7 +395,7 @@ namespace Host.UI
                         //model
                         _gloVeNet = outputs[0] as IDEmbeddingNet;
                     }
-                    
+
                     break;
                 default:
                     break;
@@ -403,7 +408,7 @@ namespace Host.UI
         #endregion
 
         #region UI事件相应方法
-        
+
         /// <summary>
         /// 底图区域功能按钮
         /// </summary>
@@ -546,7 +551,7 @@ namespace Host.UI
                     break;
             }
         }
-        
+
         /// <summary>
         /// NLP功能栏
         /// </summary>
@@ -588,10 +593,12 @@ namespace Host.UI
                     break;
                 case "Annotation_toolStripButton":
                     {
+                        string rawText = "";
+                        foreach (var element in NLP_RawText_listBox.Items)
+                            rawText += element;
+
+
                         //TimeMarkupAnnotation annotation = new TimeMarkupAnnotation();
-                        //string rawText = "";
-                        //foreach (var element in NLP_RawText_listBox.Items)
-                        //    rawText += element;
                         //IJob annotatorJob = new JobAnnotationText(rawText);
                         //RegisterJob(annotatorJob);
                         //annotatorJob.Start();
@@ -692,7 +699,7 @@ namespace Host.UI
                     break;
             }
         }
-        
+
         /// <summary>
         /// 树视图结点操作
         /// </summary>
