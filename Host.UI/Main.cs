@@ -8,11 +8,9 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using Engine.Brain.Model;
-using Engine.Crawler.Crawlers;
 using Engine.GIS.Entity;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Arithmetic;
-using Engine.NLP;
 using Engine.NLP.Forms;
 using Engine.NLP.Utils;
 using Host.UI.Jobs;
@@ -28,8 +26,6 @@ namespace Host.UI
         public Main()
         {
             InitializeComponent();
-
-            var s = new NsoasCrawler();
         }
   
         bool _is_firstBallon = true;

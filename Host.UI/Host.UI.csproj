@@ -249,10 +249,6 @@
       <Project>{e57416b0-bfee-4420-8c3a-1f96732c9375}</Project>
       <Name>Engine.Brain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Engine.Crawler\Engine.Crawler.csproj">
-      <Project>{333BD5DD-88F7-43D8-98F0-5DD91B99DB31}</Project>
-      <Name>Engine.Crawler</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Engine.GIS\Engine.GIS.csproj">
       <Project>{b3845380-5ca5-4ed0-b6ad-ee9043e9fbfb}</Project>
       <Name>Engine.GIS</Name>

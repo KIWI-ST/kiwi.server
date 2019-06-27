@@ -83,7 +83,7 @@
       <HintPath>..\packages\NetTopologySuite.CoordinateSystems.1.15.2\lib\net45\NetTopologySuite.CoordinateSystems.dll</HintPath>
     </Reference>
     <Reference Include="NetTopologySuite.Features, Version=1.15.0.0, Culture=neutral, PublicKeyToken=f580a05016ebada1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NetTopologySuite.Features.1.15.0\lib\net45\NetTopologySuite.Features.dll</HintPath>
+      <HintPath>..\packages\NetTopologySuite.Features.1.15.1\lib\net45\NetTopologySuite.Features.dll</HintPath>
     </Reference>
     <Reference Include="NetTopologySuite.IO, Version=1.14.0.0, Culture=neutral, PublicKeyToken=f580a05016ebada1, processorArchitecture=MSIL">
       <HintPath>..\packages\NetTopologySuite.IO.1.14.0.1\lib\net45\NetTopologySuite.IO.dll</HintPath>
