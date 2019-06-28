@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Engine.NLP.Utils;
 using Microsoft.Azure.CognitiveServices.Language.TextAnalytics;
@@ -58,18 +56,20 @@ namespace Examples
         }
 
         [TestMethod]
-        public void RecognizeTextTokenizer()
+        public void RecognizeTextSplitSentences()
         {
-            //https://stanfordnlp.github.io/CoreNLP/ssplit.html
-            string boundaryTokenRegex = "[.。]|[!?！？]+";
-
-           var sss = Regex.Split(rawText, boundaryTokenRegex);
+            string[] sentences = SentenceRecognizer.Split(rawText);
 
 
-            var result = new SimpleTokenizer().Tokenize(rawText);
+            //var result = new SimpleTokenizer().Tokenize(rawText);
 
         }
 
+        [TestMethod]
+        public void RecognizeTextTokenize()
+        {
+            var result = new SimpleTokenizer().Tokenize(rawText);
+        }
 
         [TestMethod]
         public void AnalysisTextEntity()
