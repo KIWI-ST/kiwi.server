@@ -72,6 +72,12 @@ namespace Examples
         }
 
         [TestMethod]
+        public void RegroupTextByTimeline()
+        {
+            TimeSeriesRecognizer.RegroupSentenceByTimeline(rawText);
+        }
+
+        [TestMethod]
         public void AnalysisTextEntity()
         {
             EntitiesBatchResult entitiesResult = RecognizeNamedEntity(_client, rawText).Result;
