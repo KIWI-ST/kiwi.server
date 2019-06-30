@@ -12,6 +12,7 @@ namespace Engine.NLP.Utils
     {
         /// <summary>
         /// 基于识别的时间实体重组句子集合
+        /// https://docs.microsoft.com/en-us/dotnet/api/microsoft.bot.builder.ai.luis.datetimespec?view=botbuilder-dotnet-stable
         /// </summary>
         public static void RegroupSentenceByTimeline(string rawText)
         {
@@ -19,11 +20,14 @@ namespace Engine.NLP.Utils
             List<ModelResult> timeline = DateTimeRecognizer.RecognizeDateTime(rawText, Culture.English);
             //2. split into sentences
             string[] sentences = SentenceRecognizer.Split(rawText);
-            //3. regroup by time expression
-            Array.ForEach(sentences, (sentence) => {
-                DateTimeRecognizer.RecognizeDateTime(sentence, Culture.English);
+            //3. analysis sentences point
+            foreach(ModelResult time in timeline)
+            {
+                var res = time.Resolution;
+            }
+            //4.
 
-            });
+
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Engine.NLP.Utils;
 using Microsoft.Azure.CognitiveServices.Language.TextAnalytics;
 using Microsoft.Azure.CognitiveServices.Language.TextAnalytics.Models;
+using Microsoft.Bot.Builder.AI.Luis;
 using Microsoft.Recognizers.Text;
 using Microsoft.Recognizers.Text.DateTime;
 using Microsoft.Recognizers.Text.Matcher;
@@ -59,16 +60,19 @@ namespace Examples
         public void RecognizeTextSplitSentences()
         {
             string[] sentences = SentenceRecognizer.Split(rawText);
-
-
-            //var result = new SimpleTokenizer().Tokenize(rawText);
-
         }
 
         [TestMethod]
         public void RecognizeTextTokenize()
         {
             var result = new SimpleTokenizer().Tokenize(rawText);
+        }
+
+        [TestMethod]
+        public void RecognizeTextDateTimeSpec()
+        {
+            //DateTimeSpec timeML = new DateTimeSpec()
+            //Microsoft.Bot.Builder.AI.Luis.
         }
 
         [TestMethod]
