@@ -49,6 +49,12 @@ namespace Engine.NLP.Utils
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <returns></returns>
         private List<string> GetStentencesByPositionRange(int start, int end)
         {
             int idx = 0;

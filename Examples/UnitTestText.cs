@@ -77,6 +77,18 @@ namespace Examples
         }
 
         [TestMethod]
+        public void RecognizeScenario()
+        {
+            //1. timeline group
+            SentenceGroup group = new SentenceGroup(rawText);
+            group.RegroupByTimeline();
+            //2. key parse 
+            //3. number with unit parse
+            //4. GolVe embedding
+            //5. property
+        }
+
+        [TestMethod]
         public void RegroupTextByTimeline()
         {
             // split into sentences
