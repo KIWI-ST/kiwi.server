@@ -42,6 +42,13 @@ namespace Examples
             return entitiesResult;
         }
 
+        private static async Task<KeyPhraseBatchResult> RecognizeKeyPhrase(TextAnalyticsClient client, string rawText)
+        {
+            var inputDocuments = new MultiLanguageBatchInput(new List<MultiLanguageInput> { new MultiLanguageInput("en", "1", rawText) });
+            KeyPhraseBatchResult keyPhraseResult = await client.KeyPhrasesAsync(multiLanguageBatchInput: inputDocuments);
+            return keyPhraseResult;
+        }
+
         [TestMethod]
         public void RecognizeTextNumber()
         {
@@ -54,12 +61,6 @@ namespace Examples
             DateTimeRecognizer recognizer = new DateTimeRecognizer(Culture.English);
             DateTimeModel model = recognizer.GetDateTimeModel();
             List<ModelResult> result = model.Parse(rawText);
-        }
-
-        [TestMethod]
-        public void RecognizeTextSplitSentences()
-        {
-            string[] sentences = SentenceRecognizer.Split(rawText);
         }
 
         [TestMethod]
@@ -78,13 +79,16 @@ namespace Examples
         [TestMethod]
         public void RegroupTextByTimeline()
         {
-            TimeSeriesRecognizer.RegroupSentenceByTimeline(rawText);
+            // split into sentences
+            SentenceGroup group = new SentenceGroup(rawText);
+            group.RegroupByTimeline();
         }
 
         [TestMethod]
         public void AnalysisTextEntity()
         {
             EntitiesBatchResult entitiesResult = RecognizeNamedEntity(_client, rawText).Result;
+            KeyPhraseBatchResult keyPhraseResult = RecognizeKeyPhrase(_client, rawText).Result;
         }
 
 

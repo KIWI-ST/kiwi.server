@@ -16,17 +16,6 @@ namespace Engine.NLP.Utils
         /// </summary>
         public static void RegroupSentenceByTimeline(string rawText)
         {
-            //1. recognize overall time
-            List<ModelResult> timeline = DateTimeRecognizer.RecognizeDateTime(rawText, Culture.English);
-            //2. split into sentences
-            string[] sentences = SentenceRecognizer.Split(rawText);
-            //3. analysis sentences point
-            foreach(ModelResult time in timeline)
-            {
-                var res = time.Resolution;
-            }
-            //4.
-
 
         }
     }
