@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.IO;
 using System.Reflection;
 
@@ -18,6 +19,16 @@ namespace Engine.NLP.Utils
         /// congnitive server endpoint
         /// </summary>
         private static readonly string endpoint = "https://chinanorth.api.cognitive.azure.cn";
+
+        /// <summary>
+        /// corenlp server address
+        /// </summary>
+        private static readonly string corenlpaddress = @"http://192.168.253.3";
+
+        /// <summary>
+        /// port of core nlp server
+        /// </summary>
+        private static readonly string corenlpport = "9000";
 
         /// <summary>
         ///  store configuration file
@@ -101,6 +112,33 @@ namespace Engine.NLP.Utils
             set
             {
                 UpdateConfigKeyValue("Endpoint", value);
+            }
+        }
+
+        /// <summary>
+        /// corenlp server address
+        /// </summary>
+        public static string CoreNLPAddress
+        {
+            get
+            {
+                return GetConfigValueByKey("CoreNLPAddress", corenlpaddress);
+            }
+            set
+            {
+                UpdateConfigKeyValue("CoreNLPAddress", value);
+            }
+        }
+
+        public static string CoreNLPPort
+        {
+            get
+            {
+                return GetConfigValueByKey("CoreNLPPort", corenlpport);
+            }
+            set
+            {
+                UpdateConfigKeyValue("CoreNLPPort", value);
             }
         }
 

@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using Microsoft.Recognizers.Text;
 using Microsoft.Recognizers.Text.DateTime;
 
-namespace Engine.NLP.Utils
+namespace Engine.NLP.Entity
 {
     public class SentenceGroup
     {
@@ -19,7 +19,10 @@ namespace Engine.NLP.Utils
 
         string[] _sentences;
 
-        Dictionary<string, List<string>> _dict = new Dictionary<string, List<string>>();
+        /// <summary>
+        /// groups
+        /// </summary>
+        public Dictionary<string, List<string>> Groups { get; set; } = new Dictionary<string, List<string>>();
 
         public SentenceGroup(string rawText)
         {
@@ -30,7 +33,8 @@ namespace Engine.NLP.Utils
         public void RegroupByTimeline()
         {
             //清理dict信息
-            _dict.Clear();
+            Groups.Clear();
+            //get timeline from rawtext
             List<ModelResult> timeline = DateTimeRecognizer.RecognizeDateTime(_rawText, Culture.English);
             // analysis sentences point, get start point and end point 
             ModelResult time = timeline.First();
@@ -42,7 +46,7 @@ namespace Engine.NLP.Utils
                 var (start, end) = FixPosition(time.Start);
                 //idx - start 区间是记录上一次timex的句子集
                 List<string> sentences = GetStentencesByPositionRange(idx, start);
-                _dict.Add(timex, sentences);
+                Groups.Add(timex, sentences);
                 //更新timex index的信息
                 timex = GetTimexString(time);
                 idx = end;

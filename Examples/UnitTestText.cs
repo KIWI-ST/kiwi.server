@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Engine.NLP;
+using Engine.NLP.Annotation;
+using Engine.NLP.Entity;
 using Engine.NLP.Utils;
 using Microsoft.Azure.CognitiveServices.Language.TextAnalytics;
 using Microsoft.Azure.CognitiveServices.Language.TextAnalytics.Models;
-using Microsoft.Bot.Builder.AI.Luis;
 using Microsoft.Recognizers.Text;
 using Microsoft.Recognizers.Text.DateTime;
 using Microsoft.Recognizers.Text.Matcher;
@@ -35,16 +38,32 @@ namespace Examples
         /// <param name="client"></param>
         /// <param name="rawText"></param>
         /// <returns></returns>
-        private static async Task<EntitiesBatchResult> RecognizeNamedEntity(TextAnalyticsClient client, string rawText)
+        private static async Task<EntitiesBatchResult> RecognizeNamedEntity(TextAnalyticsClient client, List<string> sentences)
         {
-            var inputDocuments = new MultiLanguageBatchInput(new List<MultiLanguageInput>{ new MultiLanguageInput("en", "1",  rawText) });
+            List<MultiLanguageInput> list = new List<MultiLanguageInput>() {
+                new MultiLanguageInput(language:"en",id: "0",text: string.Join(" ", sentences.ToArray()))
+            };
+            MultiLanguageBatchInput inputDocuments = new MultiLanguageBatchInput(list);
             EntitiesBatchResult entitiesResult = await client.EntitiesAsync(false, inputDocuments);
             return entitiesResult;
         }
 
-        private static async Task<KeyPhraseBatchResult> RecognizeKeyPhrase(TextAnalyticsClient client, string rawText)
+        private static async Task<KeyPhraseBatchResult> RecognizeKeyPhrase(TextAnalyticsClient client, List<string> sentences)
         {
-            var inputDocuments = new MultiLanguageBatchInput(new List<MultiLanguageInput> { new MultiLanguageInput("en", "1", rawText) });
+            List<MultiLanguageInput> list = new List<MultiLanguageInput>() {
+                new MultiLanguageInput(language:"en",id: "0",text: string.Join(" ", sentences.ToArray()))
+            };
+            MultiLanguageBatchInput inputDocuments = new MultiLanguageBatchInput(list);
+            KeyPhraseBatchResult keyPhraseResult = await client.KeyPhrasesAsync(multiLanguageBatchInput: inputDocuments);
+            return keyPhraseResult;
+        }
+
+        private static async Task<KeyPhraseBatchResult> RecognizeEntityMention(TextAnalyticsClient client, List<string> sentences)
+        {
+            List<MultiLanguageInput> list = new List<MultiLanguageInput>() {
+                new MultiLanguageInput(language:"en",id: "0",text: string.Join(" ", sentences.ToArray()))
+            };
+            MultiLanguageBatchInput inputDocuments = new MultiLanguageBatchInput(list);
             KeyPhraseBatchResult keyPhraseResult = await client.KeyPhrasesAsync(multiLanguageBatchInput: inputDocuments);
             return keyPhraseResult;
         }
@@ -80,12 +99,37 @@ namespace Examples
         public void RecognizeScenario()
         {
             //1. timeline group
-            SentenceGroup group = new SentenceGroup(rawText);
-            group.RegroupByTimeline();
-            //2. key parse 
-            //3. number with unit parse
-            //4. GolVe embedding
-            //5. property
+            SentenceGroup sGroup = new SentenceGroup(rawText);
+            sGroup.RegroupByTimeline();
+            //2. annotation
+            IAnnotation annotation = new DepenencyParseAnnotation();
+            foreach (var group in sGroup.Groups)
+            {
+                string rawText = string.Join(".", group.Value.ToArray());
+                annotation.Process(rawText);
+            }
+
+            //2. key parse for each group
+            //foreach (var group in sGroup.Groups)
+            //{
+            //    //1. entity
+            //    EntitiesBatchResult entityResult = RecognizeNamedEntity(_client, group.Value).Result;
+            //    KeyPhraseBatchResult keyPhraseResult = RecognizeKeyPhrase(_client, group.Value).Result;
+            //    //2. get location and time as scenario 
+            //    for(int i=0;i<sGroup.Groups.Count;i++)
+            //    {
+            //        EntitiesBatchResultItem entityDoc = entityResult.Documents.FirstOrDefault();
+            //        KeyPhraseBatchResultItem keyPhraseDoc = keyPhraseResult.Documents.FirstOrDefault();
+            //        //3. 根据keyphrase提取的关键词，处理entity
+
+                //    }
+                //}
+
+                //3. number with unit parse
+
+                //4. GolVe embedding
+
+                //5. property
         }
 
         [TestMethod]
@@ -99,8 +143,8 @@ namespace Examples
         [TestMethod]
         public void AnalysisTextEntity()
         {
-            EntitiesBatchResult entitiesResult = RecognizeNamedEntity(_client, rawText).Result;
-            KeyPhraseBatchResult keyPhraseResult = RecognizeKeyPhrase(_client, rawText).Result;
+            //EntitiesBatchResult entitiesResult = RecognizeNamedEntity(_client, rawText).Result;
+            //KeyPhraseBatchResult keyPhraseResult = RecognizeKeyPhrase(_client, rawText).Result;
         }
 
 
