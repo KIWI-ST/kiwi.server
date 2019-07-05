@@ -111,11 +111,17 @@
     <Compile Include="Forms\ConvForm.Designer.cs">
       <DependentUpon>ConvForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\DQNForm.cs">
+    <Compile Include="Forms\DQNPolSARForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\DQNForm.Designer.cs">
-      <DependentUpon>DQNForm.cs</DependentUpon>
+    <Compile Include="Forms\DQNPolSARForm.Designer.cs">
+      <DependentUpon>DQNPolSARForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\DQNSceneForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DQNSceneForm.Designer.cs">
+      <DependentUpon>DQNSceneForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\KappaForm.cs">
       <SubType>Form</SubType>
@@ -195,8 +201,8 @@
     <EmbeddedResource Include="Forms\ConvForm.resx">
       <DependentUpon>ConvForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\DQNForm.resx">
-      <DependentUpon>DQNForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\DQNPolSARForm.resx">
+      <DependentUpon>DQNPolSARForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\KappaForm.resx">
       <DependentUpon>KappaForm.cs</DependentUpon>

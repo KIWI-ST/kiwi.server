@@ -245,6 +245,7 @@ namespace Host.UI.SettingForm
 
     class RowCol
     {
+
         public int Row { get; set; }
         public int Col { get; set; }
 
@@ -254,4 +255,5 @@ namespace Host.UI.SettingForm
             Col = col;
         }
     }
+
 }

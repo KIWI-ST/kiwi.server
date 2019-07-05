@@ -46,7 +46,6 @@
             this.CNN_SVM_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.CNN_toolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.DQN_ToolStripMenuItem = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.Batches_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.Accuracy_toolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -93,6 +92,9 @@
             this.mapToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Tools_Configuration_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DQN_Classification_toolStripSplitButton = new System.Windows.Forms.ToolStripSplitButton();
+            this.DQN_PolSAR_Classification_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Scene_Classification_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_main)).BeginInit();
@@ -132,7 +134,7 @@
             this.Hybrid_toolStripSplitButton,
             this.toolStripSeparator5,
             this.CNN_toolStripButton,
-            this.DQN_ToolStripMenuItem,
+            this.DQN_Classification_toolStripSplitButton,
             this.toolStripSeparator3,
             this.Batches_toolStripButton,
             this.Accuracy_toolStripButton,
@@ -155,13 +157,14 @@
             // 
             // Haplo_toolStripSplitButton
             // 
+            this.Haplo_toolStripSplitButton.DropDownButtonWidth = 23;
             this.Haplo_toolStripSplitButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.RandomForest_ToolStripMenuItem,
             this.L2SVM_ToolStripMenuItem});
             this.Haplo_toolStripSplitButton.Image = global::Host.UI.Properties.Resources.icons8_mind_map_50;
             this.Haplo_toolStripSplitButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.Haplo_toolStripSplitButton.Name = "Haplo_toolStripSplitButton";
-            this.Haplo_toolStripSplitButton.Size = new System.Drawing.Size(83, 60);
+            this.Haplo_toolStripSplitButton.Size = new System.Drawing.Size(90, 60);
             this.Haplo_toolStripSplitButton.Text = "Haplo";
             this.Haplo_toolStripSplitButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             // 
@@ -169,7 +172,7 @@
             // 
             this.RandomForest_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_query_inner_join_50;
             this.RandomForest_ToolStripMenuItem.Name = "RandomForest_ToolStripMenuItem";
-            this.RandomForest_ToolStripMenuItem.Size = new System.Drawing.Size(236, 34);
+            this.RandomForest_ToolStripMenuItem.Size = new System.Drawing.Size(278, 42);
             this.RandomForest_ToolStripMenuItem.Text = "RandomForest";
             this.RandomForest_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
@@ -177,18 +180,19 @@
             // 
             this.L2SVM_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_query_inner_join_left_50;
             this.L2SVM_ToolStripMenuItem.Name = "L2SVM_ToolStripMenuItem";
-            this.L2SVM_ToolStripMenuItem.Size = new System.Drawing.Size(236, 34);
+            this.L2SVM_ToolStripMenuItem.Size = new System.Drawing.Size(278, 42);
             this.L2SVM_ToolStripMenuItem.Text = "L2-SVM";
             this.L2SVM_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
             // Hybrid_toolStripSplitButton
             // 
+            this.Hybrid_toolStripSplitButton.DropDownButtonWidth = 23;
             this.Hybrid_toolStripSplitButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.CNN_SVM_ToolStripMenuItem});
             this.Hybrid_toolStripSplitButton.Image = global::Host.UI.Properties.Resources.icons8_multicast_50;
             this.Hybrid_toolStripSplitButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.Hybrid_toolStripSplitButton.Name = "Hybrid_toolStripSplitButton";
-            this.Hybrid_toolStripSplitButton.Size = new System.Drawing.Size(91, 60);
+            this.Hybrid_toolStripSplitButton.Size = new System.Drawing.Size(98, 60);
             this.Hybrid_toolStripSplitButton.Text = "Hybrid";
             this.Hybrid_toolStripSplitButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             // 
@@ -196,7 +200,7 @@
             // 
             this.CNN_SVM_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_flow_chart_50;
             this.CNN_SVM_ToolStripMenuItem.Name = "CNN_SVM_ToolStripMenuItem";
-            this.CNN_SVM_ToolStripMenuItem.Size = new System.Drawing.Size(200, 34);
+            this.CNN_SVM_ToolStripMenuItem.Size = new System.Drawing.Size(278, 42);
             this.CNN_SVM_ToolStripMenuItem.Text = "CNN-SVM";
             this.CNN_SVM_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
@@ -214,17 +218,6 @@
             this.CNN_toolStripButton.Text = " CNN ";
             this.CNN_toolStripButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.CNN_toolStripButton.Click += new System.EventHandler(this.Map_function_Click);
-            // 
-            // DQN_ToolStripMenuItem
-            // 
-            this.DQN_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_area_chart_50;
-            this.DQN_ToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.DQN_ToolStripMenuItem.Name = "DQN_ToolStripMenuItem";
-            this.DQN_ToolStripMenuItem.Size = new System.Drawing.Size(68, 60);
-            this.DQN_ToolStripMenuItem.Text = " DQN ";
-            this.DQN_ToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.DQN_ToolStripMenuItem.ToolTipText = "Deep Q Network alogrihtm";
-            this.DQN_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
             // toolStripSeparator3
             // 
@@ -687,6 +680,36 @@
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(93, 28);
             this.helpToolStripMenuItem.Text = "Help(&H)";
             // 
+            // DQN_Classification_toolStripSplitButton
+            // 
+            this.DQN_Classification_toolStripSplitButton.DropDownButtonWidth = 23;
+            this.DQN_Classification_toolStripSplitButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.DQN_PolSAR_Classification_ToolStripMenuItem,
+            this.Scene_Classification_ToolStripMenuItem});
+            this.DQN_Classification_toolStripSplitButton.Image = global::Host.UI.Properties.Resources.icons8_area_chart_50;
+            this.DQN_Classification_toolStripSplitButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.DQN_Classification_toolStripSplitButton.Name = "DQN_Classification_toolStripSplitButton";
+            this.DQN_Classification_toolStripSplitButton.Size = new System.Drawing.Size(82, 60);
+            this.DQN_Classification_toolStripSplitButton.Text = "DQN";
+            this.DQN_Classification_toolStripSplitButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            // 
+            // DQN_PolSAR_Classification_ToolStripMenuItem
+            // 
+            this.DQN_PolSAR_Classification_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_account_50;
+            this.DQN_PolSAR_Classification_ToolStripMenuItem.Name = "DQN_PolSAR_Classification_ToolStripMenuItem";
+            this.DQN_PolSAR_Classification_ToolStripMenuItem.Size = new System.Drawing.Size(297, 42);
+            this.DQN_PolSAR_Classification_ToolStripMenuItem.Text = "PolSAR Classification";
+            this.DQN_PolSAR_Classification_ToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.DQN_PolSAR_Classification_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
+            // 
+            // Scene_Classification_ToolStripMenuItem
+            // 
+            this.Scene_Classification_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_workflow_50;
+            this.Scene_Classification_ToolStripMenuItem.Name = "Scene_Classification_ToolStripMenuItem";
+            this.Scene_Classification_ToolStripMenuItem.Size = new System.Drawing.Size(297, 42);
+            this.Scene_Classification_ToolStripMenuItem.Text = "Scene Classification";
+            this.Scene_Classification_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
@@ -762,7 +785,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem bandExport_ToolStripMenuItem;
         private System.Windows.Forms.NotifyIcon main_notifyIcon;
-        private System.Windows.Forms.ToolStripButton DQN_ToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem 文件FToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem Open_toolstripmenuitem;
@@ -796,6 +818,9 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem Tools_Configuration_ToolStripMenuItem;
         private System.Windows.Forms.PictureBox NLP_pictureBox;
+        private System.Windows.Forms.ToolStripSplitButton DQN_Classification_toolStripSplitButton;
+        private System.Windows.Forms.ToolStripMenuItem DQN_PolSAR_Classification_ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem Scene_Classification_ToolStripMenuItem;
     }
 }
 

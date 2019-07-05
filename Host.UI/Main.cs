@@ -13,6 +13,7 @@ using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Arithmetic;
 using Engine.NLP.Forms;
 using Engine.NLP.Utils;
+using Host.UI.Forms;
 using Host.UI.Jobs;
 using Host.UI.SettingForm;
 
@@ -419,7 +420,7 @@ namespace Host.UI
             ToolStripItem item = sender as ToolStripItem;
             switch (item.Name)
             {
-                //rpc transform
+                    //rpc transform
                 case "RPC_ToolStripMenuItem":
                     RPCForm rpcForm = new RPCForm();
                     if (rpcForm.ShowDialog() == DialogResult.OK)
@@ -429,26 +430,26 @@ namespace Host.UI
                         rpcRectifyJob.Start();
                     }
                     break;
-                //task
+                    //task
                 case "Tasks_Monitor_toolStripButton":
                     TaskMonitor mapTaskForm = new TaskMonitor();
                     mapTaskForm.Jobs = _jobs;
                     mapTaskForm.ShowDialog();
                     break;
-                //calucte kappa and oa
+                    //calucte kappa and oa
                 case "Accuracy_toolStripButton":
                     KappaOaForm koaForm = new KappaOaForm();
                     koaForm.RasterDic = _rasterDic;
                     koaForm.ShowDialog();
                     break;
-                //添加图像
+                    //添加图像
                 case "Open_toolstripmenuitem":
                 case "Open_contextMenuStrip":
                     ReadImage();
                     break;
-                //dqn classification 
-                case "DQN_ToolStripMenuItem":
-                    DQNForm dqnForm = new DQNForm();
+                    //DQN PolSAR Classification 
+                case "DQN_PolSAR_Classification_ToolStripMenuItem":
+                    DQNPolSARForm dqnForm = new DQNPolSARForm();
                     dqnForm.RasterDic = _rasterDic;
                     if (dqnForm.ShowDialog() == DialogResult.OK)
                     {
@@ -465,7 +466,18 @@ namespace Host.UI
                         dqnClassifyJob.Start();
                     }
                     break;
-                //cnn classification
+                    //scene classification
+                case "Scene_Classification_ToolStripMenuItem":
+                    {
+                        DQNSceneForm dqnsceneForm = new DQNSceneForm();
+                        if (dqnsceneForm.ShowDialog() == DialogResult.OK)
+                        {
+                          //1.训练集
+                          //2.测试集
+                        }
+                    }
+                    break;
+                    //cnn classification
                 case "CNN_toolStripButton":
                     ConvForm convForm = new ConvForm();
                     convForm.RasterDic = _rasterDic;

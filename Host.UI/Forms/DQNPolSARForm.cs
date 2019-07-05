@@ -8,10 +8,10 @@ using System.Windows.Forms;
 
 namespace Host.UI.SettingForm
 {
-    public partial class DQNForm : Form
+    public partial class DQNPolSARForm : Form
     {
 
-        public DQNForm()
+        public DQNPolSARForm()
         {
             InitializeComponent();
         }
