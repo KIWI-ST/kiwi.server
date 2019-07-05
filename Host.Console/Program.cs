@@ -154,7 +154,7 @@ namespace Host.APP
             //0-GPU ，1-CPU 
             IDSupportDQN actor = new DNet2(NP.CNTK.DeviceCollection[1], 193, 193, 3, 45);
             IDSupportDQN critic = new DNet2(NP.CNTK.DeviceCollection[1], 193, 193, 3, 45);
-            DQN dqn = new DQN(env, actor, critic, epochs: 30);
+            DQN dqn = new DQN(env, actor, critic, epochs: 25);
             double dNet2Loss = 0;
             dqn.OnLearningLossEventHandler += (double loss, double totalReward, double accuracy, double progress, string epochesTime) =>
             {
