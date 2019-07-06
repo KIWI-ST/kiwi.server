@@ -122,10 +122,8 @@ namespace Host.APP
             return (sample, label);
         }
 
-        static void Main(string[] args)
+        static void Train()
         {
-            //0.样本制作
-            //CrateSampleBatch(DateTime.Now.ToFileTimeUtc().ToString());
             //1.构建学习环境
             string sampleFiledir = @"D:\BaiduNetdiskDownload\scene\output\132067897763867953";
             DirectoryInfo sampleDir = new DirectoryInfo(sampleFiledir);
@@ -152,16 +150,22 @@ namespace Host.APP
             //2.训练
             IEnv env = new SamplesEnv(samples.ToArray(), labels.ToArray());
             //0-GPU ，1-CPU 
-            IDSupportDQN actor = new DNet2(NP.CNTK.DeviceCollection[1], 193, 193, 3, 45);
-            IDSupportDQN critic = new DNet2(NP.CNTK.DeviceCollection[1], 193, 193, 3, 45);
-            DQN dqn = new DQN(env, actor, critic, epochs: 25);
+            IDSupportDQN actor = new DNet2(NP.CNTK.DeviceCollection[0], 193, 193, 3, 45);
+            IDSupportDQN critic = new DNet2(NP.CNTK.DeviceCollection[0], 193, 193, 3, 45);
+            dqn = new DQN(env, actor, critic, epochs: 1000);
             double dNet2Loss = 0;
             dqn.OnLearningLossEventHandler += (double loss, double totalReward, double accuracy, double progress, string epochesTime) =>
             {
                 dNet2Loss = loss;
-                Console.WriteLine(string.Format("{0}:训练中，当前精度{1},奖励{2},进度{3},loss{4}", DateTime.Now.ToLongTimeString(), accuracy, totalReward, progress, loss));
+                Console.WriteLine(string.Format("{0}:训练中，当前精度: {1:P}, 奖励: {2}, 进度: {3:P}, loss: {4}", DateTime.Now.ToLongTimeString(), accuracy, totalReward, progress, loss));
             };
             dqn.Learn();
+        }
+
+        static DQN dqn;
+
+        static void Apply()
+        {
             //3.应用模型
             DirectoryInfo testRoot = new DirectoryInfo(testDirectory);
             ClearXML(testRoot);
@@ -174,5 +178,17 @@ namespace Host.APP
                     sw.WriteLine(string.Format("{0} {1}", file.Name, classType));
                 }
         }
+
+        static void Main(string[] args)
+        {
+            //0.样本制作
+            //for(int i = 0; i < 99; i++) CrateSampleBatch(DateTime.Now.ToFileTimeUtc().ToString());
+            //1.train
+            Train();
+            //2.apply
+            Apply();
+        }
+
     }
 }
+
