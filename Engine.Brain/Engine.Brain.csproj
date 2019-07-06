@@ -111,6 +111,7 @@
     <Compile Include="Model\ML\L2SVM.cs" />
     <Compile Include="Model\ML\RF.cs" />
     <Compile Include="Model\RL\DQN.cs" />
+    <Compile Include="Model\RL\Env\SampleBatchEnv.cs" />
     <Compile Include="Model\RL\Env\ExtractRoadEnv.cs" />
     <Compile Include="Model\RL\Env\ImageClassifyEnv.cs" />
     <Compile Include="Model\RL\Env\SamplesEnv.cs" />

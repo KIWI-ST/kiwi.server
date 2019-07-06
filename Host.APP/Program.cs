@@ -122,7 +122,8 @@ namespace Host.APP
             return (sample, label);
         }
 
-        static void Train()
+
+        static void Train2()
         {
             //1.构建学习环境
             string sampleFiledir = @"D:\BaiduNetdiskDownload\scene\output\132067897763867953";
@@ -152,6 +153,25 @@ namespace Host.APP
             //0-GPU ，1-CPU 
             IDSupportDQN actor = new DNet2(NP.CNTK.DeviceCollection[0], 193, 193, 3, 45);
             IDSupportDQN critic = new DNet2(NP.CNTK.DeviceCollection[0], 193, 193, 3, 45);
+            dqn = new DQN(env, actor, critic, epochs: 1000);
+            double dNet2Loss = 0;
+            dqn.OnLearningLossEventHandler += (double loss, double totalReward, double accuracy, double progress, string epochesTime) =>
+            {
+                dNet2Loss = loss;
+                Console.WriteLine(string.Format("{0}:训练中，当前精度: {1:P}, 奖励: {2}, 进度: {3:P}, loss: {4}", DateTime.Now.ToLongTimeString(), accuracy, totalReward, progress, loss));
+            };
+            dqn.Learn();
+        }
+
+        static void Train()
+        {
+            //1.构建学习环境
+            string sampleRootDir = @"D:\BaiduNetdiskDownload\scene\output";
+            //2.训练
+            IEnv env = new SamplesBatchEnv(sampleRootDir);
+            //0-GPU ，1-CPU 
+            IDSupportDQN actor = new DNet2(NP.CNTK.DeviceCollection[1], 193, 193, 3, 45);
+            IDSupportDQN critic = new DNet2(NP.CNTK.DeviceCollection[1], 193, 193, 3, 45);
             dqn = new DQN(env, actor, critic, epochs: 1000);
             double dNet2Loss = 0;
             dqn.OnLearningLossEventHandler += (double loss, double totalReward, double accuracy, double progress, string epochesTime) =>
