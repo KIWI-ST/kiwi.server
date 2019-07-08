@@ -201,12 +201,41 @@ namespace Host.APP
 
         static void Main(string[] args)
         {
+            string keyFilename = @"C:\Users\81596\Desktop\workspace\ClsName2id.txt";
+
+            string trainDir = @"C:\Users\81596\Desktop\workspace\train";
+
+            Dictionary<string, string> keys = new Dictionary<string, string>();
+
+            using(StreamReader sr = new StreamReader(keyFilename))
+            {
+                string text = sr.ReadLine();
+                do
+                {
+                    string[] keyValue = text.Split(':');
+                    keys[keyValue[0]] = keyValue[2];
+                    text = sr.ReadLine();
+                } while (text != null);
+            }
+            //
+            DirectoryInfo root = new DirectoryInfo(trainDir);
+            DirectoryInfo[] difs = root.GetDirectories();
+            for (int i = 0; i < difs.Length; i++)
+            {
+                string name = keys[difs[i].Name];
+                string sourcePath = difs[i].FullName;
+                string destionationPath = Path.GetDirectoryName(difs[i].FullName) + @"\" + name;
+                Directory.Move(sourcePath, destionationPath);
+            }
+
+            //
+
             //0.样本制作
             //for(int i = 0; i < 99; i++) CrateSampleBatch(DateTime.Now.ToFileTimeUtc().ToString());
             //1.train
-            Train();
+            //Train();
             //2.apply
-            Apply();
+            //Apply();
         }
 
     }

@@ -488,7 +488,7 @@ namespace Host.UI
                         cnnTrainingJob.Start();
                     }
                     break;
-                //random forest classification
+                    //random forest classification
                 case "RF_ToolStripMenuItem":
                     RFForm rfForm = new RFForm();
                     rfForm.RasterDic = _rasterDic;
@@ -508,13 +508,20 @@ namespace Host.UI
                         }
                     }
                     break;
-                //make samples in minibatch
-                case "Batches_toolStripButton":
-                    BatchExportForm be_form = new BatchExportForm();
-                    be_form.RasterDic = _rasterDic;
-                    be_form.ShowDialog();
+                    //make samples in single-minibatch
+                case "Single_Batch_ToolStripMenuItem":
+                    SingleBatchExportForm Single_batch_form = new SingleBatchExportForm();
+                    Single_batch_form.RasterDic = _rasterDic;
+                    Single_batch_form.ShowDialog();
                     break;
-                //svm function
+                    //make sample in multi-minibatches
+                case "Multi_Batches_ToolStripMenuItem":
+                    {
+                        MultiBatchesExprotForm multi_batch_form = new MultiBatchesExprotForm();
+                        multi_batch_form.ShowDialog();
+                    }
+                    break;
+                    //svm function
                 case "SVM_ToolStripMenuItem":
                     SVMFrom svm_Form = new SVMFrom();
                     svm_Form.RasterDic = _rasterDic;

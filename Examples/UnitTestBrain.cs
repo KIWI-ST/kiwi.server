@@ -152,6 +152,67 @@ namespace Examples
         }
 
         [TestMethod]
+        public void SaveAndReloadDQN()
+        {
+            //read sample and create environment
+            IEnv env;
+            //read samples
+            List<List<double>> inputList = new List<List<double>>();
+            List<int> outputList = new List<int>();
+            List<int> keys = new List<int>();
+            using (StreamReader sr = new StreamReader(envFilename9x9x18))
+            {
+                string text = sr.ReadLine().Replace("\t", ",");
+                do
+                {
+                    string[] rawdatas = text.Split(',');
+                    int key = Convert.ToInt32(rawdatas.Last());
+                    outputList.Add(key);
+                    if (!keys.Contains(key))
+                        keys.Add(key);
+                    List<double> inputItem = new List<double>();
+                    for (int i = 0; i < rawdatas.Length - 1; i++)
+                        inputItem.Add(Convert.ToDouble(rawdatas[i]));
+                    inputList.Add(inputItem);
+                    text = sr.ReadLine();
+                } while (text != null);
+                //convert to double[][] and double[]
+                int count = inputList.Count;
+                double[][] x = new double[count][];
+                int[] y = outputList.ToArray();
+                for (int i = 0; i < count; i++)
+                    x[i] = inputList[i].ToArray();
+                //create environment for agent exploring
+                env = new SamplesEnv(x, y);
+            }
+            double dNetLoss = 999;
+            string deviceName = NP.CNTK.DeviceCollection[0];
+            //use DNet (DNN) for dqn training
+            IDSupportDQN actor = new DNet2(deviceName, 9, 9, 18, keys.Count);
+            IDSupportDQN critic = new DNet2(deviceName, 9, 9, 18, keys.Count);
+            //create dqn alogrithm
+            DQN dqn = new DQN(env, actor, critic, epochs: 2);
+            //in order to test fast, we set training epochs equals 2.
+            //please do not use so few training steps in actual use.
+            //register event to get information while training
+            dqn.OnLearningLossEventHandler += (double loss, double totalReward, double accuracy, double progress, string epochesTime) =>
+            {
+                dNetLoss = loss;
+            };
+            //start dqn alogrithm learning
+            dqn.Learn();
+            //store model
+            string modelDirectoryname = dqn.PersistencNative();
+            //reload model with new env
+            DQN dqn2 = DQN.ReLoad(modelDirectoryname, deviceName, env, 100);
+            double[] sample = inputList[0].ToArray();
+            var (action, q) = dqn.ChooseAction(sample);
+            var (action2, q2) = dqn2.ChooseAction(sample);
+            //计算结果等价
+            Assert.AreEqual(q, q2);
+        }
+
+        [TestMethod]
         public void ClassificationByCNN()
         {
             //read samples

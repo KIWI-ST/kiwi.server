@@ -87,11 +87,11 @@
     <Compile Include="Forms\BandForm.Designer.cs">
       <DependentUpon>BandForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\BatchExportForm.cs">
+    <Compile Include="Forms\Batch\SingleBatchExportForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\BatchExportForm.Designer.cs">
-      <DependentUpon>BatchExportForm.cs</DependentUpon>
+    <Compile Include="Forms\Batch\SingleBatchExportForm.Designer.cs">
+      <DependentUpon>SingleBatchExportForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\CNN-DQNForm.cs">
       <SubType>Form</SubType>
@@ -128,6 +128,12 @@
     </Compile>
     <Compile Include="Forms\KappaForm.Designer.cs">
       <DependentUpon>KappaForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Batch\MultiBatchesExprotForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Batch\MultiBatchesExprotForm.Designer.cs">
+      <DependentUpon>MultiBatchesExprotForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ParsingForm.cs">
       <SubType>Form</SubType>
@@ -173,6 +179,7 @@
     <Compile Include="Jobs\JobRFClassify.cs" />
     <Compile Include="Jobs\JobRFCSV.cs" />
     <Compile Include="Jobs\JobRNNTrain.cs" />
+    <Compile Include="Jobs\JobSceneClassify.cs" />
     <Compile Include="Jobs\JobSVMClassify.cs" />
     <Compile Include="Jobs\JobSVMCSV.cs" />
     <Compile Include="Main.cs">
@@ -189,8 +196,11 @@
     <EmbeddedResource Include="Forms\BandForm.resx">
       <DependentUpon>BandForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\BatchExportForm.resx">
-      <DependentUpon>BatchExportForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\Batch\MultiBatchesExprotForm.resx">
+      <DependentUpon>MultiBatchesExprotForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Batch\SingleBatchExportForm.resx">
+      <DependentUpon>SingleBatchExportForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\CNN-DQNForm.resx">
       <DependentUpon>CNN-DQNForm.cs</DependentUpon>

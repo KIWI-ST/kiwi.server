@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using Engine.Brain.Extend;
 using Engine.Brain.Model.DL;
 using Engine.Brain.Utils;
@@ -70,33 +70,102 @@ namespace Engine.Brain.Model.RL
         private readonly IDSupportDQN _criticNet;
 
         #region Parameters
+
         //environment
         private readonly IEnv _env;
+
         //memory limit
         readonly int _memoryCapacity = 512;
+
         //拷贝net参数
         readonly int _everycopy = 128;
+
         //学习轮次
         int _epoches = 3000;
+
         //一次学习样本数
         readonly int _batchSize = 31;
+
         //一轮学习次数
         readonly int _forward = 256;
+
         //q值积累权重
         readonly double _alpha = 0.6;
+
         //q值印象权重
         readonly double _gamma = 0.0;
+
         //输入feature长度
         readonly int _featuresNumber;
+
         //输入action长度
         readonly int _actionsNumber;
+
+        #endregion
+
+        #region 模型存储
+
+        public string PersistencNative()
+        {
+            string timex = DateTime.Now.ToShortDateString().Replace('/', '-') + "#" + DateTime.Now.ToLongTimeString().Replace(':', '_');
+            //1. crearte checkpoint
+            string directoryname = Directory.GetCurrentDirectory() + @"\tmp\" + timex;
+            if(!Directory.Exists(directoryname)) Directory.CreateDirectory(directoryname);
+            //2. save paramaters
+            using(StreamWriter sw = new StreamWriter(directoryname + @"\paramaters.log"))
+            {
+                sw.WriteLine(string.Format("{0}:{1}", "actionsNumber", _actionsNumber));
+                sw.WriteLine(string.Format("{0}:{1}", "featuresNumber", _featuresNumber));
+                sw.WriteLine(string.Format("{0}:{1}", "netType", _actorNet.GetType().Name));
+            }
+            //3. return checpoint filename;
+            string criticFilename = directoryname + @"\critic.model";
+            string actorFilename = directoryname + @"\actor.model";
+            _criticNet.PersistencNative(criticFilename);
+            _actorNet.PersistencNative(actorFilename);
+            //_criticNet.PersistencNative
+            return directoryname;
+        }
+
+        /// <summary>
+        /// env的类型必须和之前的
+        /// </summary>
+        /// <param name="modelFilename"></param>
+        /// <param name="env"></param>
+        /// <param name="epochs"></param>
+        /// <returns></returns>
+        public static DQN ReLoad(string modelDirectoryname, string deviceName, IEnv env, int epochs = 3000)
+        {
+            //0.读取参数配置
+            Dictionary<string, string> paramaters = new Dictionary<string, string>();
+            using (StreamReader sr = new StreamReader(modelDirectoryname + @"\paramaters.log"))
+            {
+                string text = sr.ReadLine();
+                do
+                {
+                    string[] key = text.Split(':');
+                    paramaters[key[0]] = key[1];
+                    text = sr.ReadLine();
+                } while (text != null);
+            }
+            //是用Dnet构造
+            if (paramaters["netType"] == typeof(DNet2).Name)
+            {
+                var critic = DNet2.Load(modelDirectoryname + @"\critic.model", deviceName);
+                var actor = DNet2.Load(modelDirectoryname + @"\actor.model", deviceName);
+                return new DQN(env, actor, critic, epochs);
+            }
+            return null;
+        }
+
+
         #endregion
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="env"></param>
-        public DQN(IEnv env, IDSupportDQN actor =null, IDSupportDQN critic = null, int epochs = 3000, double gamma = 0.0)
+        public DQN(IEnv env = null, IDSupportDQN actor =null, IDSupportDQN critic = null, int epochs = 3000, double gamma = 0.0)
         {
             _env = env;
             _gamma = gamma;

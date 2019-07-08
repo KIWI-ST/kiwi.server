@@ -9,9 +9,9 @@ using Engine.GIS.GLayer.GRasterLayer;
 
 namespace Host.UI.SettingForm
 {
-    public partial class BatchExportForm : Form
+    public partial class SingleBatchExportForm : Form
     {
-        public BatchExportForm()
+        public SingleBatchExportForm()
         {
             InitializeComponent();
         }

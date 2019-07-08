@@ -1,6 +1,6 @@
 ﻿namespace Host.UI.SettingForm
 {
-    partial class BatchExportForm
+    partial class SingleBatchExportForm
     {
         /// <summary>
         /// Required designer variable.
