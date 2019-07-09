@@ -66,7 +66,7 @@ namespace Host.UI.Jobs
         /// <param name="featureRasterLayer"></param>
         /// <param name="envSampleFilename"></param>
         /// <param name="epochs"></param>
-        public JobSceneClassify(string trainDirectoryName, string applyDirectoryName, int epochs=50)
+        public JobSceneClassify(string trainDirectoryName, string applyDirectoryName, int epochs=100)
         {
             _t = new Thread(() =>
             {
@@ -84,7 +84,7 @@ namespace Host.UI.Jobs
                 dqn.OnLearningLossEventHandler -= Dqn_OnLearningLossEventHandler;
                 string dqnDirectoryName = dqn.PersistencNative();
                 //后续训练
-                for(int i = 0; i < 100000; i++)
+                for (int i = 0; i < 1000000; i++)
                 {
                     Summary = "初始化样本中...";
                     samplesDirCollection = new DirectoryInfo(trainDirectoryName).GetDirectories().ToList();
@@ -95,8 +95,11 @@ namespace Host.UI.Jobs
                     dqn.OnLearningLossEventHandler -= Dqn_OnLearningLossEventHandler;
                     dqnDirectoryName = dqn.PersistencNative();
                     //apply结果一次
-                    string resultFilename = dqnDirectoryName + @"\result.txt";
-                    ApplyModel(applyDirectoryName, resultFilename, row, col, dqn);
+                    if (i % 5 == 0)
+                    {
+                        string resultFilename = dqnDirectoryName + @"\result.txt";
+                        ApplyModel(applyDirectoryName, resultFilename, row, col, dqn);
+                    }
                 }
                 Summary = "DQN场景分类完成";
                 Complete = true;
@@ -148,10 +151,18 @@ namespace Host.UI.Jobs
             using (StreamWriter sw = new StreamWriter(resultFilename))
                 foreach (FileInfo file in applyRoot.GetFiles())
                 {
-                    double[] sampleValue = PickSampleNormalValue(file.FullName, row, col);
-                    var (action, q) = dqn.ChooseAction(sampleValue);
-                    int classType = dqn.ActionToRawValue(NP.Argmax(action));
-                    sw.WriteLine(string.Format("{0} {1}", file.Name, classType));
+                    try
+                    {
+                        double[] sampleValue = PickSampleNormalValue(file.FullName, row, col);
+                        var (action, q) = dqn.ChooseAction(sampleValue);
+                        int classType = dqn.ActionToRawValue(NP.Argmax(action));
+                        sw.WriteLine(string.Format("{0} {1}", file.Name, classType));
+                    }
+                    catch
+                    {
+                        continue;
+                    }
+     
                 }
         }
 
