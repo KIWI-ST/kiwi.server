@@ -93,34 +93,34 @@
     <Compile Include="Forms\Batch\SingleBatchExportForm.Designer.cs">
       <DependentUpon>SingleBatchExportForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\CNN-DQNForm.cs">
+    <Compile Include="Forms\CNN\CNN-DQNForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\CNN-DQNForm.Designer.cs">
+    <Compile Include="Forms\CNN\CNN-DQNForm.Designer.cs">
       <DependentUpon>CNN-DQNForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\CNN-SVMForm.cs">
+    <Compile Include="Forms\CNN\CNN-SVMForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\CNN-SVMForm.Designer.cs">
+    <Compile Include="Forms\CNN\CNN-SVMForm.Designer.cs">
       <DependentUpon>CNN-SVMForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ConvForm.cs">
+    <Compile Include="Forms\CNN\CNNForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\ConvForm.Designer.cs">
-      <DependentUpon>ConvForm.cs</DependentUpon>
+    <Compile Include="Forms\CNN\CNNForm.Designer.cs">
+      <DependentUpon>CNNForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\DQNPolSARForm.cs">
+    <Compile Include="Forms\DQN\DQNPolSARForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\DQNPolSARForm.Designer.cs">
+    <Compile Include="Forms\DQN\DQNPolSARForm.Designer.cs">
       <DependentUpon>DQNPolSARForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\DQNSceneForm.cs">
+    <Compile Include="Forms\DQN\DQNSceneForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\DQNSceneForm.Designer.cs">
+    <Compile Include="Forms\DQN\DQNSceneForm.Designer.cs">
       <DependentUpon>DQNSceneForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\KappaForm.cs">
@@ -141,10 +141,10 @@
     <Compile Include="Forms\ParsingForm.Designer.cs">
       <DependentUpon>ParsingForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\RFForm.cs">
+    <Compile Include="Forms\TML\RFForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\RFForm.Designer.cs">
+    <Compile Include="Forms\TML\RFForm.Designer.cs">
       <DependentUpon>RFForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\RPCForm.cs">
@@ -153,10 +153,10 @@
     <Compile Include="Forms\RPCForm.Designer.cs">
       <DependentUpon>RPCForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\SVMForm.cs">
+    <Compile Include="Forms\TML\SVMForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\SVMForm.Designer.cs">
+    <Compile Include="Forms\TML\SVMForm.Designer.cs">
       <DependentUpon>SVMForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\TaskMonitor.cs">
@@ -202,17 +202,20 @@
     <EmbeddedResource Include="Forms\Batch\SingleBatchExportForm.resx">
       <DependentUpon>SingleBatchExportForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\CNN-DQNForm.resx">
+    <EmbeddedResource Include="Forms\CNN\CNN-DQNForm.resx">
       <DependentUpon>CNN-DQNForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\CNN-SVMForm.resx">
+    <EmbeddedResource Include="Forms\CNN\CNN-SVMForm.resx">
       <DependentUpon>CNN-SVMForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ConvForm.resx">
-      <DependentUpon>ConvForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\CNN\CNNForm.resx">
+      <DependentUpon>CNNForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\DQNPolSARForm.resx">
+    <EmbeddedResource Include="Forms\DQN\DQNPolSARForm.resx">
       <DependentUpon>DQNPolSARForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DQN\DQNSceneForm.resx">
+      <DependentUpon>DQNSceneForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\KappaForm.resx">
       <DependentUpon>KappaForm.cs</DependentUpon>
@@ -220,13 +223,13 @@
     <EmbeddedResource Include="Forms\ParsingForm.resx">
       <DependentUpon>ParsingForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\RFForm.resx">
+    <EmbeddedResource Include="Forms\TML\RFForm.resx">
       <DependentUpon>RFForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\RPCForm.resx">
       <DependentUpon>RPCForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SVMForm.resx">
+    <EmbeddedResource Include="Forms\TML\SVMForm.resx">
       <DependentUpon>SVMForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\TaskMonitor.resx">

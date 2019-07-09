@@ -38,8 +38,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.Repeat_Pick_numericUpDown = new System.Windows.Forms.NumericUpDown();
             this.Start_button = new System.Windows.Forms.Button();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.label5 = new System.Windows.Forms.Label();
             this.Pick_Band_Count_numericUpDown = new System.Windows.Forms.NumericUpDown();
             this.Output_Samples_button = new System.Windows.Forms.Button();
@@ -47,7 +45,6 @@
             this.label6 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.Each_Class_Size_numericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Repeat_Pick_numericUpDown)).BeginInit();
-            this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Pick_Band_Count_numericUpDown)).BeginInit();
             this.SuspendLayout();
             // 
@@ -149,23 +146,6 @@
             this.Start_button.UseVisualStyleBackColor = true;
             this.Start_button.Click += new System.EventHandler(this.Start_button_Click);
             // 
-            // statusStrip1
-            // 
-            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripProgressBar1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 423);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.statusStrip1.Size = new System.Drawing.Size(590, 22);
-            this.statusStrip1.TabIndex = 10;
-            this.statusStrip1.Text = "statusStrip1";
-            // 
-            // toolStripProgressBar1
-            // 
-            this.toolStripProgressBar1.Name = "toolStripProgressBar1";
-            this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 16);
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
@@ -177,6 +157,7 @@
             // 
             // Pick_Band_Count_numericUpDown
             // 
+            this.Pick_Band_Count_numericUpDown.Enabled = false;
             this.Pick_Band_Count_numericUpDown.Location = new System.Drawing.Point(204, 147);
             this.Pick_Band_Count_numericUpDown.Name = "Pick_Band_Count_numericUpDown";
             this.Pick_Band_Count_numericUpDown.Size = new System.Drawing.Size(120, 28);
@@ -219,13 +200,12 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(590, 445);
+            this.ClientSize = new System.Drawing.Size(590, 435);
             this.Controls.Add(this.Output_Samples_button);
             this.Controls.Add(this.Output_Samples_textBox);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.Pick_Band_Count_numericUpDown);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.Start_button);
             this.Controls.Add(this.Repeat_Pick_numericUpDown);
             this.Controls.Add(this.label4);
@@ -241,8 +221,6 @@
             this.Text = "MultiBatchExprotForm";
             ((System.ComponentModel.ISupportInitialize)(this.Each_Class_Size_numericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Repeat_Pick_numericUpDown)).EndInit();
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Pick_Band_Count_numericUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -261,8 +239,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.NumericUpDown Repeat_Pick_numericUpDown;
         private System.Windows.Forms.Button Start_button;
-        private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.NumericUpDown Pick_Band_Count_numericUpDown;
         private System.Windows.Forms.Button Output_Samples_button;

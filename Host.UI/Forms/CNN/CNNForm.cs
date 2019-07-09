@@ -8,9 +8,9 @@ using Engine.GIS.GLayer.GRasterLayer;
 
 namespace Host.UI.SettingForm
 {
-    public partial class ConvForm : Form
+    public partial class CNNForm : Form
     {
-        public ConvForm()
+        public CNNForm()
         {
             InitializeComponent();
         }

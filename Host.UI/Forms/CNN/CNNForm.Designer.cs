@@ -1,6 +1,6 @@
 ﻿namespace Host.UI.SettingForm
 {
-    partial class ConvForm
+    partial class CNNForm
     {
         /// <summary>
         /// Required designer variable.

@@ -469,17 +469,20 @@ namespace Host.UI
                     //scene classification
                 case "Scene_Classification_ToolStripMenuItem":
                     {
-                        DQNSceneForm dqnsceneForm = new DQNSceneForm();
-                        if (dqnsceneForm.ShowDialog() == DialogResult.OK)
+                        DQNSceneForm dqnSceneForm = new DQNSceneForm();
+                        if (dqnSceneForm.ShowDialog() == DialogResult.OK)
                         {
-                          //1.训练集
-                          //2.测试集
+                            string trainDirectoryName = dqnSceneForm.SampleBatchesDirectoryName;
+                            string applyDirectoryName = dqnSceneForm.ApplyDirectoryName;
+                            IJob dqnSceneClassifyJob = new JobSceneClassify(trainDirectoryName, applyDirectoryName);
+                            RegisterJob(dqnSceneClassifyJob);
+                            dqnSceneClassifyJob.Start();
                         }
                     }
                     break;
                     //cnn classification
                 case "CNN_toolStripButton":
-                    ConvForm convForm = new ConvForm();
+                    CNNForm convForm = new CNNForm();
                     convForm.RasterDic = _rasterDic;
                     if (convForm.ShowDialog() == DialogResult.OK)
                     {
