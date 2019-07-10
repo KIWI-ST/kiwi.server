@@ -123,6 +123,12 @@
     <Compile Include="Forms\DQN\DQNSceneForm.Designer.cs">
       <DependentUpon>DQNSceneForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\DQN\DQNSceneReloadForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DQN\DQNSceneReloadForm.Designer.cs">
+      <DependentUpon>DQNSceneReloadForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\KappaForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -179,6 +185,7 @@
     <Compile Include="Jobs\JobRFClassify.cs" />
     <Compile Include="Jobs\JobRFCSV.cs" />
     <Compile Include="Jobs\JobRNNTrain.cs" />
+    <Compile Include="Jobs\JobSceneReloadClassify.cs" />
     <Compile Include="Jobs\JobSceneClassify.cs" />
     <Compile Include="Jobs\JobSVMClassify.cs" />
     <Compile Include="Jobs\JobSVMCSV.cs" />
@@ -216,6 +223,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\DQN\DQNSceneForm.resx">
       <DependentUpon>DQNSceneForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DQN\DQNSceneReloadForm.resx">
+      <DependentUpon>DQNSceneReloadForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\KappaForm.resx">
       <DependentUpon>KappaForm.cs</DependentUpon>

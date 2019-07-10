@@ -157,7 +157,7 @@ namespace Engine.Brain.Model.RL
         /// <param name="env"></param>
         /// <param name="epochs"></param>
         /// <returns></returns>
-        public static DQN ReLoad(string modelDirectoryname, string deviceName, IEnv env, int epochs = 3000)
+        public static DQN ReLoad(string modelDirectoryname, string deviceName, IEnv env, int epochs = 3000, int switchEpoch = -1)
         {
             //0.读取参数配置
             Dictionary<string, string> paramaters = new Dictionary<string, string>();
@@ -176,7 +176,7 @@ namespace Engine.Brain.Model.RL
             {
                 var critic = DNet2.Load(modelDirectoryname + @"\critic.model", deviceName);
                 var actor = DNet2.Load(modelDirectoryname + @"\actor.model", deviceName);
-                return new DQN(env, actor, critic, epochs);
+                return new DQN(env, actor, critic, epochs:epochs, switchEpoch:switchEpoch);
             }
             return null;
         }

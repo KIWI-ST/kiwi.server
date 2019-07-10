@@ -98,6 +98,8 @@
             this.mapToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Tools_Configuration_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
+            this.Reloac_SceneClassification_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_main)).BeginInit();
@@ -153,7 +155,7 @@
             this.map_toolStrip.Location = new System.Drawing.Point(0, 32);
             this.map_toolStrip.Name = "map_toolStrip";
             this.map_toolStrip.Padding = new System.Windows.Forms.Padding(0);
-            this.map_toolStrip.Size = new System.Drawing.Size(1460, 63);
+            this.map_toolStrip.Size = new System.Drawing.Size(1460, 65);
             this.map_toolStrip.Stretch = true;
             this.map_toolStrip.TabIndex = 1;
             this.map_toolStrip.Text = "classification tools";
@@ -175,7 +177,7 @@
             // 
             this.RandomForest_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_query_inner_join_50;
             this.RandomForest_ToolStripMenuItem.Name = "RandomForest_ToolStripMenuItem";
-            this.RandomForest_ToolStripMenuItem.Size = new System.Drawing.Size(218, 30);
+            this.RandomForest_ToolStripMenuItem.Size = new System.Drawing.Size(236, 34);
             this.RandomForest_ToolStripMenuItem.Text = "RandomForest";
             this.RandomForest_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
@@ -183,7 +185,7 @@
             // 
             this.L2SVM_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_query_inner_join_left_50;
             this.L2SVM_ToolStripMenuItem.Name = "L2SVM_ToolStripMenuItem";
-            this.L2SVM_ToolStripMenuItem.Size = new System.Drawing.Size(218, 30);
+            this.L2SVM_ToolStripMenuItem.Size = new System.Drawing.Size(236, 34);
             this.L2SVM_ToolStripMenuItem.Text = "L2-SVM";
             this.L2SVM_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
@@ -203,14 +205,14 @@
             // 
             this.CNN_SVM_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_flow_chart_50;
             this.CNN_SVM_ToolStripMenuItem.Name = "CNN_SVM_ToolStripMenuItem";
-            this.CNN_SVM_ToolStripMenuItem.Size = new System.Drawing.Size(182, 30);
+            this.CNN_SVM_ToolStripMenuItem.Size = new System.Drawing.Size(200, 34);
             this.CNN_SVM_ToolStripMenuItem.Text = "CNN-SVM";
             this.CNN_SVM_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 63);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 65);
             // 
             // CNN_toolStripButton
             // 
@@ -227,7 +229,9 @@
             this.DQN_Classification_toolStripSplitButton.DropDownButtonWidth = 23;
             this.DQN_Classification_toolStripSplitButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.DQN_PolSAR_Classification_ToolStripMenuItem,
-            this.Scene_Classification_ToolStripMenuItem});
+            this.toolStripMenuItem3,
+            this.Scene_Classification_ToolStripMenuItem,
+            this.Reloac_SceneClassification_ToolStripMenuItem});
             this.DQN_Classification_toolStripSplitButton.Image = global::Host.UI.Properties.Resources.icons8_area_chart_50;
             this.DQN_Classification_toolStripSplitButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.DQN_Classification_toolStripSplitButton.Name = "DQN_Classification_toolStripSplitButton";
@@ -239,7 +243,7 @@
             // 
             this.DQN_PolSAR_Classification_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_account_50;
             this.DQN_PolSAR_Classification_ToolStripMenuItem.Name = "DQN_PolSAR_Classification_ToolStripMenuItem";
-            this.DQN_PolSAR_Classification_ToolStripMenuItem.Size = new System.Drawing.Size(271, 30);
+            this.DQN_PolSAR_Classification_ToolStripMenuItem.Size = new System.Drawing.Size(350, 42);
             this.DQN_PolSAR_Classification_ToolStripMenuItem.Text = "PolSAR Classification";
             this.DQN_PolSAR_Classification_ToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.DQN_PolSAR_Classification_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
@@ -248,14 +252,14 @@
             // 
             this.Scene_Classification_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_workflow_50;
             this.Scene_Classification_ToolStripMenuItem.Name = "Scene_Classification_ToolStripMenuItem";
-            this.Scene_Classification_ToolStripMenuItem.Size = new System.Drawing.Size(271, 30);
+            this.Scene_Classification_ToolStripMenuItem.Size = new System.Drawing.Size(350, 42);
             this.Scene_Classification_ToolStripMenuItem.Text = "Scene Classification";
             this.Scene_Classification_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 63);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 65);
             // 
             // Smaple_Batches_toolStripSplitButton
             // 
@@ -275,20 +279,20 @@
             // 
             this.Single_Batch_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_database_50;
             this.Single_Batch_ToolStripMenuItem.Name = "Single_Batch_ToolStripMenuItem";
-            this.Single_Batch_ToolStripMenuItem.Size = new System.Drawing.Size(209, 30);
+            this.Single_Batch_ToolStripMenuItem.Size = new System.Drawing.Size(227, 34);
             this.Single_Batch_ToolStripMenuItem.Text = "Single Batch";
             this.Single_Batch_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(206, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(224, 6);
             // 
             // Multi_Batches_ToolStripMenuItem
             // 
             this.Multi_Batches_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_database_view_50;
             this.Multi_Batches_ToolStripMenuItem.Name = "Multi_Batches_ToolStripMenuItem";
-            this.Multi_Batches_ToolStripMenuItem.Size = new System.Drawing.Size(209, 30);
+            this.Multi_Batches_ToolStripMenuItem.Size = new System.Drawing.Size(227, 34);
             this.Multi_Batches_ToolStripMenuItem.Text = "Multi Batches";
             this.Multi_Batches_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
@@ -305,7 +309,7 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 63);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 65);
             // 
             // Open_RawFile_toolStripButton
             // 
@@ -340,7 +344,7 @@
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 63);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 65);
             // 
             // Load_Words_Embedding_ToolStripMenuItem
             // 
@@ -367,7 +371,7 @@
             // toolStripSeparator10
             // 
             this.toolStripSeparator10.Name = "toolStripSeparator10";
-            this.toolStripSeparator10.Size = new System.Drawing.Size(6, 63);
+            this.toolStripSeparator10.Size = new System.Drawing.Size(6, 65);
             // 
             // Tasks_Monitor_toolStripButton
             // 
@@ -386,11 +390,11 @@
             this.empty_statusLabel,
             this.Main_processBar,
             this.Main_statusLabel});
-            this.map_statusStrip.Location = new System.Drawing.Point(0, 942);
+            this.map_statusStrip.Location = new System.Drawing.Point(0, 940);
             this.map_statusStrip.Name = "map_statusStrip";
             this.map_statusStrip.Padding = new System.Windows.Forms.Padding(1, 0, 21, 0);
             this.map_statusStrip.ShowItemToolTips = true;
-            this.map_statusStrip.Size = new System.Drawing.Size(1460, 29);
+            this.map_statusStrip.Size = new System.Drawing.Size(1460, 31);
             this.map_statusStrip.TabIndex = 2;
             this.map_statusStrip.Text = "statusStrip1";
             // 
@@ -419,7 +423,7 @@
             // 
             this.splitContainer_main.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.splitContainer_main.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer_main.Location = new System.Drawing.Point(0, 95);
+            this.splitContainer_main.Location = new System.Drawing.Point(0, 97);
             this.splitContainer_main.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.splitContainer_main.Name = "splitContainer_main";
             // 
@@ -430,7 +434,7 @@
             // splitContainer_main.Panel2
             // 
             this.splitContainer_main.Panel2.Controls.Add(this.Main_tabControl);
-            this.splitContainer_main.Size = new System.Drawing.Size(1460, 847);
+            this.splitContainer_main.Size = new System.Drawing.Size(1460, 843);
             this.splitContainer_main.SplitterDistance = 334;
             this.splitContainer_main.SplitterWidth = 6;
             this.splitContainer_main.TabIndex = 3;
@@ -443,7 +447,7 @@
             this.map_tabControl.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.map_tabControl.Name = "map_tabControl";
             this.map_tabControl.SelectedIndex = 0;
-            this.map_tabControl.Size = new System.Drawing.Size(330, 843);
+            this.map_tabControl.Size = new System.Drawing.Size(330, 839);
             this.map_tabControl.TabIndex = 0;
             // 
             // tab_treeview
@@ -453,7 +457,7 @@
             this.tab_treeview.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tab_treeview.Name = "tab_treeview";
             this.tab_treeview.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tab_treeview.Size = new System.Drawing.Size(322, 811);
+            this.tab_treeview.Size = new System.Drawing.Size(322, 807);
             this.tab_treeview.TabIndex = 0;
             this.tab_treeview.Text = "TreeView";
             this.tab_treeview.UseVisualStyleBackColor = true;
@@ -464,7 +468,7 @@
             this.map_treeView.Location = new System.Drawing.Point(4, 5);
             this.map_treeView.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.map_treeView.Name = "map_treeView";
-            this.map_treeView.Size = new System.Drawing.Size(314, 801);
+            this.map_treeView.Size = new System.Drawing.Size(314, 797);
             this.map_treeView.TabIndex = 0;
             this.map_treeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.Map_treeView_NodeMouseClick);
             // 
@@ -477,7 +481,7 @@
             this.Main_tabControl.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Main_tabControl.Name = "Main_tabControl";
             this.Main_tabControl.SelectedIndex = 0;
-            this.Main_tabControl.Size = new System.Drawing.Size(1116, 843);
+            this.Main_tabControl.Size = new System.Drawing.Size(1116, 839);
             this.Main_tabControl.TabIndex = 0;
             // 
             // tab_mapview
@@ -487,7 +491,7 @@
             this.tab_mapview.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tab_mapview.Name = "tab_mapview";
             this.tab_mapview.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tab_mapview.Size = new System.Drawing.Size(1108, 811);
+            this.tab_mapview.Size = new System.Drawing.Size(1108, 807);
             this.tab_mapview.TabIndex = 1;
             this.tab_mapview.Text = "MapView";
             this.tab_mapview.UseVisualStyleBackColor = true;
@@ -508,8 +512,8 @@
             // Map_splitContainer.Panel2
             // 
             this.Map_splitContainer.Panel2.Controls.Add(this.MAP_listBox);
-            this.Map_splitContainer.Size = new System.Drawing.Size(1100, 801);
-            this.Map_splitContainer.SplitterDistance = 553;
+            this.Map_splitContainer.Size = new System.Drawing.Size(1100, 797);
+            this.Map_splitContainer.SplitterDistance = 550;
             this.Map_splitContainer.SplitterWidth = 5;
             this.Map_splitContainer.TabIndex = 1;
             // 
@@ -520,7 +524,7 @@
             this.map_pictureBox.Location = new System.Drawing.Point(0, 0);
             this.map_pictureBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.map_pictureBox.Name = "map_pictureBox";
-            this.map_pictureBox.Size = new System.Drawing.Size(1096, 549);
+            this.map_pictureBox.Size = new System.Drawing.Size(1096, 546);
             this.map_pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.map_pictureBox.TabIndex = 0;
             this.map_pictureBox.TabStop = false;
@@ -532,12 +536,12 @@
             this.Open_contextMenuStrip});
             this.map_contextMenuStrip.Name = "map_contextMenuStrip";
             this.map_contextMenuStrip.ShowImageMargin = false;
-            this.map_contextMenuStrip.Size = new System.Drawing.Size(136, 32);
+            this.map_contextMenuStrip.Size = new System.Drawing.Size(136, 34);
             // 
             // Open_contextMenuStrip
             // 
             this.Open_contextMenuStrip.Name = "Open_contextMenuStrip";
-            this.Open_contextMenuStrip.Size = new System.Drawing.Size(135, 28);
+            this.Open_contextMenuStrip.Size = new System.Drawing.Size(135, 30);
             this.Open_contextMenuStrip.Text = "Open (&O)";
             this.Open_contextMenuStrip.Click += new System.EventHandler(this.Map_function_Click);
             // 
@@ -549,7 +553,7 @@
             this.MAP_listBox.Location = new System.Drawing.Point(0, 0);
             this.MAP_listBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.MAP_listBox.Name = "MAP_listBox";
-            this.MAP_listBox.Size = new System.Drawing.Size(1096, 239);
+            this.MAP_listBox.Size = new System.Drawing.Size(1096, 238);
             this.MAP_listBox.TabIndex = 0;
             // 
             // tab_nlpview
@@ -637,12 +641,12 @@
             this.bandExport_ToolStripMenuItem});
             this.tree_contextMenuStrip.Name = "tree_contextMenuStrip";
             this.tree_contextMenuStrip.ShowImageMargin = false;
-            this.tree_contextMenuStrip.Size = new System.Drawing.Size(181, 66);
+            this.tree_contextMenuStrip.Size = new System.Drawing.Size(181, 70);
             // 
             // bandCombine_ToolStripMenuItem
             // 
             this.bandCombine_ToolStripMenuItem.Name = "bandCombine_ToolStripMenuItem";
-            this.bandCombine_ToolStripMenuItem.Size = new System.Drawing.Size(180, 28);
+            this.bandCombine_ToolStripMenuItem.Size = new System.Drawing.Size(180, 30);
             this.bandCombine_ToolStripMenuItem.Text = "Layer Stacking";
             this.bandCombine_ToolStripMenuItem.Click += new System.EventHandler(this.Map_treeView_Click);
             // 
@@ -654,7 +658,7 @@
             // bandExport_ToolStripMenuItem
             // 
             this.bandExport_ToolStripMenuItem.Name = "bandExport_ToolStripMenuItem";
-            this.bandExport_ToolStripMenuItem.Size = new System.Drawing.Size(180, 28);
+            this.bandExport_ToolStripMenuItem.Size = new System.Drawing.Size(180, 30);
             this.bandExport_ToolStripMenuItem.Text = "Band Export";
             this.bandExport_ToolStripMenuItem.Click += new System.EventHandler(this.Map_treeView_Click);
             // 
@@ -672,7 +676,7 @@
             this.文件FToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.Open_toolstripmenuitem});
             this.文件FToolStripMenuItem.Name = "文件FToolStripMenuItem";
-            this.文件FToolStripMenuItem.Size = new System.Drawing.Size(79, 28);
+            this.文件FToolStripMenuItem.Size = new System.Drawing.Size(83, 28);
             this.文件FToolStripMenuItem.Text = "File (&F)";
             // 
             // Open_toolstripmenuitem
@@ -681,7 +685,7 @@
             this.Open_toolstripmenuitem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.Open_toolstripmenuitem.Name = "Open_toolstripmenuitem";
             this.Open_toolstripmenuitem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.Open_toolstripmenuitem.Size = new System.Drawing.Size(241, 30);
+            this.Open_toolstripmenuitem.Size = new System.Drawing.Size(259, 34);
             this.Open_toolstripmenuitem.Text = "Open (&O)";
             this.Open_toolstripmenuitem.Click += new System.EventHandler(this.Map_function_Click);
             // 
@@ -690,13 +694,13 @@
             this.工具TToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.RPC_ToolStripMenuItem});
             this.工具TToolStripMenuItem.Name = "工具TToolStripMenuItem";
-            this.工具TToolStripMenuItem.Size = new System.Drawing.Size(147, 28);
+            this.工具TToolStripMenuItem.Size = new System.Drawing.Size(151, 28);
             this.工具TToolStripMenuItem.Text = "Map Tools (&M)";
             // 
             // RPC_ToolStripMenuItem
             // 
             this.RPC_ToolStripMenuItem.Name = "RPC_ToolStripMenuItem";
-            this.RPC_ToolStripMenuItem.Size = new System.Drawing.Size(191, 30);
+            this.RPC_ToolStripMenuItem.Size = new System.Drawing.Size(209, 34);
             this.RPC_ToolStripMenuItem.Text = "RPC Rectify";
             this.RPC_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
@@ -721,22 +725,35 @@
             this.mapToolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.Tools_Configuration_ToolStripMenuItem});
             this.mapToolsToolStripMenuItem.Name = "mapToolsToolStripMenuItem";
-            this.mapToolsToolStripMenuItem.Size = new System.Drawing.Size(129, 28);
+            this.mapToolsToolStripMenuItem.Size = new System.Drawing.Size(133, 28);
             this.mapToolsToolStripMenuItem.Text = "NLPTools(&N)";
             // 
             // Tools_Configuration_ToolStripMenuItem
             // 
             this.Tools_Configuration_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_configurator_50;
             this.Tools_Configuration_ToolStripMenuItem.Name = "Tools_Configuration_ToolStripMenuItem";
-            this.Tools_Configuration_ToolStripMenuItem.Size = new System.Drawing.Size(261, 30);
+            this.Tools_Configuration_ToolStripMenuItem.Size = new System.Drawing.Size(279, 34);
             this.Tools_Configuration_ToolStripMenuItem.Text = "Tools Configuration";
             this.Tools_Configuration_ToolStripMenuItem.Click += new System.EventHandler(this.NLP_funciton_Click);
             // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(89, 28);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(93, 28);
             this.helpToolStripMenuItem.Text = "Help(&H)";
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(347, 6);
+            // 
+            // Reloac_SceneClassification_ToolStripMenuItem
+            // 
+            this.Reloac_SceneClassification_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_configurator_50;
+            this.Reloac_SceneClassification_ToolStripMenuItem.Name = "Reloac_SceneClassification_ToolStripMenuItem";
+            this.Reloac_SceneClassification_ToolStripMenuItem.Size = new System.Drawing.Size(350, 42);
+            this.Reloac_SceneClassification_ToolStripMenuItem.Text = "Reload Scene Classification";
+            this.Reloac_SceneClassification_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
             // Main
             // 
@@ -852,6 +869,8 @@
         private System.Windows.Forms.ToolStripMenuItem Single_Batch_ToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem Multi_Batches_ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem Reloac_SceneClassification_ToolStripMenuItem;
     }
 }
 

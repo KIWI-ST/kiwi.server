@@ -14,6 +14,7 @@ using Engine.GIS.GOperation.Arithmetic;
 using Engine.NLP.Forms;
 using Engine.NLP.Utils;
 using Host.UI.Forms;
+using Host.UI.Forms.DQN;
 using Host.UI.Jobs;
 using Host.UI.SettingForm;
 
@@ -477,6 +478,21 @@ namespace Host.UI
                             IJob dqnSceneClassifyJob = new JobSceneClassify(trainDirectoryName, applyDirectoryName);
                             RegisterJob(dqnSceneClassifyJob);
                             dqnSceneClassifyJob.Start();
+                        }
+                    }
+                    break;
+                    //reload scene classification
+                case "Reloac_SceneClassification_ToolStripMenuItem":
+                    {
+                        DQNSceneReloadForm dqnSceneReloadForm = new DQNSceneReloadForm();
+                        if (dqnSceneReloadForm.ShowDialog() == DialogResult.OK)
+                        {
+                            string trainDirectoryName = dqnSceneReloadForm.SampleBatchesDirectoryName;
+                            string applyDirectoryName = dqnSceneReloadForm.ApplyDirectoryName;
+                            string dqnModelDirectoryName = dqnSceneReloadForm.DQNModelDirectoryName;
+                            IJob dqnSceneReloadClassifyJob = new JobSceneReloadClassify(trainDirectoryName, applyDirectoryName, dqnModelDirectoryName);
+                            RegisterJob(dqnSceneReloadClassifyJob);
+                            dqnSceneReloadClassifyJob.Start();
                         }
                     }
                     break;
