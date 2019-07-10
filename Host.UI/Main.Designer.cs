@@ -50,6 +50,10 @@
             this.DQN_PolSAR_Classification_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Scene_Classification_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.Smaple_Batches_toolStripSplitButton = new System.Windows.Forms.ToolStripSplitButton();
+            this.Single_Batch_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+            this.Multi_Batches_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Accuracy_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.Open_RawFile_toolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -94,10 +98,6 @@
             this.mapToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Tools_Configuration_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.Smaple_Batches_toolStripSplitButton = new System.Windows.Forms.ToolStripSplitButton();
-            this.Single_Batch_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.Multi_Batches_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_main)).BeginInit();
@@ -239,7 +239,7 @@
             // 
             this.DQN_PolSAR_Classification_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_account_50;
             this.DQN_PolSAR_Classification_ToolStripMenuItem.Name = "DQN_PolSAR_Classification_ToolStripMenuItem";
-            this.DQN_PolSAR_Classification_ToolStripMenuItem.Size = new System.Drawing.Size(279, 38);
+            this.DQN_PolSAR_Classification_ToolStripMenuItem.Size = new System.Drawing.Size(271, 30);
             this.DQN_PolSAR_Classification_ToolStripMenuItem.Text = "PolSAR Classification";
             this.DQN_PolSAR_Classification_ToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.DQN_PolSAR_Classification_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
@@ -248,7 +248,7 @@
             // 
             this.Scene_Classification_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_workflow_50;
             this.Scene_Classification_ToolStripMenuItem.Name = "Scene_Classification_ToolStripMenuItem";
-            this.Scene_Classification_ToolStripMenuItem.Size = new System.Drawing.Size(279, 38);
+            this.Scene_Classification_ToolStripMenuItem.Size = new System.Drawing.Size(271, 30);
             this.Scene_Classification_ToolStripMenuItem.Text = "Scene Classification";
             this.Scene_Classification_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
@@ -256,6 +256,41 @@
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(6, 63);
+            // 
+            // Smaple_Batches_toolStripSplitButton
+            // 
+            this.Smaple_Batches_toolStripSplitButton.DropDownButtonWidth = 23;
+            this.Smaple_Batches_toolStripSplitButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.Single_Batch_ToolStripMenuItem,
+            this.toolStripMenuItem2,
+            this.Multi_Batches_ToolStripMenuItem});
+            this.Smaple_Batches_toolStripSplitButton.Image = global::Host.UI.Properties.Resources.icons8_database_export_50;
+            this.Smaple_Batches_toolStripSplitButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.Smaple_Batches_toolStripSplitButton.Name = "Smaple_Batches_toolStripSplitButton";
+            this.Smaple_Batches_toolStripSplitButton.Size = new System.Drawing.Size(104, 60);
+            this.Smaple_Batches_toolStripSplitButton.Text = "Batches";
+            this.Smaple_Batches_toolStripSplitButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            // 
+            // Single_Batch_ToolStripMenuItem
+            // 
+            this.Single_Batch_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_database_50;
+            this.Single_Batch_ToolStripMenuItem.Name = "Single_Batch_ToolStripMenuItem";
+            this.Single_Batch_ToolStripMenuItem.Size = new System.Drawing.Size(209, 30);
+            this.Single_Batch_ToolStripMenuItem.Text = "Single Batch";
+            this.Single_Batch_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(206, 6);
+            // 
+            // Multi_Batches_ToolStripMenuItem
+            // 
+            this.Multi_Batches_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_database_view_50;
+            this.Multi_Batches_ToolStripMenuItem.Name = "Multi_Batches_ToolStripMenuItem";
+            this.Multi_Batches_ToolStripMenuItem.Size = new System.Drawing.Size(209, 30);
+            this.Multi_Batches_ToolStripMenuItem.Text = "Multi Batches";
+            this.Multi_Batches_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
             // Accuracy_toolStripButton
             // 
@@ -702,41 +737,6 @@
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(89, 28);
             this.helpToolStripMenuItem.Text = "Help(&H)";
-            // 
-            // Smaple_Batches_toolStripSplitButton
-            // 
-            this.Smaple_Batches_toolStripSplitButton.DropDownButtonWidth = 23;
-            this.Smaple_Batches_toolStripSplitButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.Single_Batch_ToolStripMenuItem,
-            this.toolStripMenuItem2,
-            this.Multi_Batches_ToolStripMenuItem});
-            this.Smaple_Batches_toolStripSplitButton.Image = global::Host.UI.Properties.Resources.icons8_database_export_50;
-            this.Smaple_Batches_toolStripSplitButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.Smaple_Batches_toolStripSplitButton.Name = "Smaple_Batches_toolStripSplitButton";
-            this.Smaple_Batches_toolStripSplitButton.Size = new System.Drawing.Size(104, 60);
-            this.Smaple_Batches_toolStripSplitButton.Text = "Batches";
-            this.Smaple_Batches_toolStripSplitButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            // 
-            // Single_Batch_ToolStripMenuItem
-            // 
-            this.Single_Batch_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_database_50;
-            this.Single_Batch_ToolStripMenuItem.Name = "Single_Batch_ToolStripMenuItem";
-            this.Single_Batch_ToolStripMenuItem.Size = new System.Drawing.Size(260, 38);
-            this.Single_Batch_ToolStripMenuItem.Text = "Single Batch";
-            this.Single_Batch_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
-            // 
-            // Multi_Batches_ToolStripMenuItem
-            // 
-            this.Multi_Batches_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_database_view_50;
-            this.Multi_Batches_ToolStripMenuItem.Name = "Multi_Batches_ToolStripMenuItem";
-            this.Multi_Batches_ToolStripMenuItem.Size = new System.Drawing.Size(260, 38);
-            this.Multi_Batches_ToolStripMenuItem.Text = "Multi Batches";
-            this.Multi_Batches_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
-            // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(257, 6);
             // 
             // Main
             // 

@@ -17,6 +17,16 @@ namespace Engine.Brain.Model.RL
     public delegate void UpdateLearningLossHandler(double loss, double totalReward, double accuracy, double progress, string epochesTime);
 
     /// <summary>
+    /// 切换学习环境
+    /// </summary>
+    public delegate void SwitchEnvironmentHandler();
+
+    /// <summary>
+    /// 保存环境
+    /// </summary>
+    public delegate void SaveCheckpointHandler(int i);
+
+    /// <summary>
     /// memory
     /// </summary>
     public class Memory
@@ -55,6 +65,16 @@ namespace Engine.Brain.Model.RL
         public event UpdateLearningLossHandler OnLearningLossEventHandler;
 
         /// <summary>
+        /// switch envrionment
+        /// </summary>
+        public event SwitchEnvironmentHandler OnSwitchEnvironmentHandler;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public event SaveCheckpointHandler OnSaveCheckpointHandler;
+
+        /// <summary>
         /// memory
         /// </summary>
         private readonly List<Memory> _memoryList = new List<Memory>();
@@ -72,7 +92,7 @@ namespace Engine.Brain.Model.RL
         #region Parameters
 
         //environment
-        private readonly IEnv _env;
+        public IEnv Env { get; set; }
 
         //memory limit
         readonly int _memoryCapacity = 512;
@@ -100,6 +120,9 @@ namespace Engine.Brain.Model.RL
 
         //输入action长度
         readonly int _actionsNumber;
+
+        //切换环境步长
+        readonly int _switchEpoch;
 
         #endregion
 
@@ -158,24 +181,25 @@ namespace Engine.Brain.Model.RL
             return null;
         }
 
-
         #endregion
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="env"></param>
-        public DQN(IEnv env = null, IDSupportDQN actor =null, IDSupportDQN critic = null, int epochs = 3000, double gamma = 0.0)
+        public DQN(IEnv env = null, IDSupportDQN actor =null, IDSupportDQN critic = null, int epochs = 3000, double gamma = 0.0, int switchEpoch = -1)
         {
-            _env = env;
+            Env = env;
             _gamma = gamma;
             _epoches = epochs;
+            //设置切换环境步长
+            _switchEpoch = switchEpoch == -1 ? _epoches : switchEpoch;
             //input and output
-            _actionsNumber = _env.ActionNum;
-            _featuresNumber = _env.FeatureNum.Product();
+            _actionsNumber = Env.ActionNum;
+            _featuresNumber = Env.FeatureNum.Product();
             //actor-critic
-            _actorNet = actor??new DNet(_env.FeatureNum, _actionsNumber);
-            _criticNet = critic??new DNet(_env.FeatureNum, _actionsNumber);
+            _actorNet = actor??new DNet(Env.FeatureNum, _actionsNumber);
+            _criticNet = critic??new DNet(Env.FeatureNum, _actionsNumber);
         }
 
         /// <summary>
@@ -185,7 +209,7 @@ namespace Engine.Brain.Model.RL
         /// <returns></returns>
         public int ActionToRawValue(int action)
         {
-            return _env.RandomSeedKeys[action];
+            return Env.RandomSeedKeys[action];
         }
 
         /// <summary>
@@ -287,7 +311,7 @@ namespace Engine.Brain.Model.RL
             int totalEpochs = Convert.ToInt32(_epoches * 0.9);
             var epsion = EpsilonCalcute(step,eps_total: totalEpochs);
             if (NP.Random() < epsion)
-                return (_env.RandomAction(), 0);
+                return (Env.RandomAction(), 0);
             else
             {
                 var (action, q) = ChooseAction(state);
@@ -318,7 +342,7 @@ namespace Engine.Brain.Model.RL
         {
             //eval data batchSize
             const int evalSize = 100;
-            var (states, rawLabels) = _env.RandomEval(evalSize);
+            var (states, rawLabels) = Env.RandomEval(evalSize);
             double[] predicts = new double[evalSize];
             double[] targets = new double[evalSize];
             for (int i = 0; i < evalSize; i++)
@@ -338,16 +362,18 @@ namespace Engine.Brain.Model.RL
         /// <param name="rememberSize"></param>
         public void PreRemember(int rememberSize)
         {
-            double[] state = _env.Reset();
+            double[] state = Env.Reset();
             for (int i = 0; i < rememberSize; i++)
             {
                 //增加随机探索记忆
-                double[] action = _env.RandomAction();
-                var (nextState, reward) = _env.Step(action);
+                double[] action = Env.RandomAction();
+                var (nextState, reward) = Env.Step(action);
                 Remember(state, action, 0, reward, nextState);
                 state = nextState;
             }
         }
+
+        int _switchStep = 0;
 
         /// <summary>
         /// 批次训练
@@ -359,7 +385,15 @@ namespace Engine.Brain.Model.RL
             PreRemember(_memoryCapacity);
             for (int e = 1; e <= _epoches; e++)
             {
-                double[] state = _env.Reset();
+                //如果达到需要切换环境的步长，则提出构建策略
+                _switchStep++;
+                if (_switchStep > _switchEpoch)
+                {
+                    OnSaveCheckpointHandler?.Invoke(e/_switchEpoch);
+                    OnSwitchEnvironmentHandler?.Invoke();
+                    _switchStep = 0;
+                }
+                double[] state = Env.Reset();
                 DateTime now = DateTime.Now;
                 double loss = 0, accuracy = 0, totalRewards = 0;
                 for (int step = 0; step <= _forward; step++)
@@ -368,7 +402,7 @@ namespace Engine.Brain.Model.RL
                     //choose action by epsilon_greedy
                     var (action, q) = EpsilonGreedy(e, state);
                     //play
-                    var (nextState, reward) = _env.Step(action);
+                    var (nextState, reward) = Env.Step(action);
                     //store state and reward
                     Remember(state, action, q, reward, nextState);
                     //train

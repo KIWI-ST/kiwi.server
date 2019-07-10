@@ -60,13 +60,14 @@ namespace Host.UI.Jobs
         /// </summary>
         public event OnStateChangedHandler OnStateChanged;
 
+
         /// <summary>
         /// classification tast by DQN
         /// </summary>
         /// <param name="featureRasterLayer"></param>
         /// <param name="envSampleFilename"></param>
-        /// <param name="epochs"></param>
-        public JobSceneClassify(string trainDirectoryName, string applyDirectoryName, int epochs=100)
+        /// <param name="totalEpochs"></param>
+        public JobSceneClassify(string trainDirectoryName, string applyDirectoryName, int totalEpochs=12000, int switchEpoch = 55)
         {
             _t = new Thread(() =>
             {
@@ -78,39 +79,33 @@ namespace Host.UI.Jobs
                 IEnv env = LoadSampleBatch(samplesDirCollection.RandomTake());
                 IDSupportDQN actor = new DNet2(deviceName, 193, 193, 3, 45);
                 IDSupportDQN critic = new DNet2(deviceName, 193, 193, 3, 45);
-                DQN dqn = new DQN(env, actor, critic, epochs: epochs);
-                dqn.OnLearningLossEventHandler += Dqn_OnLearningLossEventHandler;
-                dqn.Learn();
-                dqn.OnLearningLossEventHandler -= Dqn_OnLearningLossEventHandler;
-                string dqnDirectoryName = dqn.PersistencNative();
-                //后续训练
-                for (int i = 0; i < 1000000; i++)
-                {
-                    Summary = "初始化样本中...";
+                DQN dqn = new DQN(env, actor, critic, epochs: totalEpochs, switchEpoch: switchEpoch);
+                dqn.OnLearningLossEventHandler += (double loss, double totalReward, double accuracy, double progress, string epochesTime) => {
+                    Process = progress;
+                    Summary = string.Format("accuracy: {0:P}, loss:{1:0.000}, reward:{2}", accuracy, loss, totalReward);
+                };
+                dqn.OnSwitchEnvironmentHandler += ()=> {
+                    Summary = "环境切换, 载入中...";
                     samplesDirCollection = new DirectoryInfo(trainDirectoryName).GetDirectories().ToList();
                     env = LoadSampleBatch(samplesDirCollection.RandomTake());
-                    dqn = DQN.ReLoad(dqnDirectoryName, deviceName, env, epochs: epochs);
-                    dqn.OnLearningLossEventHandler += Dqn_OnLearningLossEventHandler;
-                    dqn.Learn();
-                    dqn.OnLearningLossEventHandler -= Dqn_OnLearningLossEventHandler;
-                    dqnDirectoryName = dqn.PersistencNative();
-                    //apply结果一次
-                    if (i % 5 == 0)
+                    dqn.Env = env;
+                };
+                dqn.OnSaveCheckpointHandler += (int i) =>
+                {
+                    //保存模型
+                    string dqnDirectoryName = dqn.PersistencNative();
+                    if (i % 10 == 0)
                     {
                         string resultFilename = dqnDirectoryName + @"\result.txt";
                         ApplyModel(applyDirectoryName, resultFilename, row, col, dqn);
                     }
-                }
+                };
+                //开始训练
+                dqn.Learn();
                 Summary = "DQN场景分类完成";
                 Complete = true;
                 OnTaskComplete?.Invoke(Name, "Complete");
             });
-        }
-
-        private void Dqn_OnLearningLossEventHandler(double loss, double totalReward, double accuracy, double progress, string epochesTime)
-        {
-            Process = progress;
-            Summary = string.Format("accuracy: {0:P}, loss:{1:0.000}, reward:{2}", accuracy, loss, totalReward);
         }
 
         private IEnv LoadSampleBatch(DirectoryInfo sampleDir)
