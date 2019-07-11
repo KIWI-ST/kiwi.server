@@ -67,7 +67,7 @@ namespace Host.UI.Jobs
         /// <param name="featureRasterLayer"></param>
         /// <param name="envSampleFilename"></param>
         /// <param name="totalEpochs"></param>
-        public JobSceneReloadClassify(string trainDirectoryName, string applyDirectoryName, string dqnModelDirectoryName,int totalEpochs=12000, int switchEpoch = 55)
+        public JobSceneReloadClassify(string trainDirectoryName, string applyDirectoryName, string dqnModelDirectoryName,int totalEpochs=12000, int switchEpoch = 2)
         {
             _t = new Thread(() =>
             {
@@ -108,8 +108,8 @@ namespace Host.UI.Jobs
 
         private IEnv LoadSampleBatch(DirectoryInfo sampleDir)
         {
-            List<double[]> samples = new List<double[]>();
-            List<int> labels = new List<int>();
+            List<double[]> sampleCollection = new List<double[]>();
+            List<int> labelCollection = new List<int>();
             foreach (FileInfo file in sampleDir.GetFiles())
             {
                 using (StreamReader sr = new StreamReader(file.FullName))
@@ -118,13 +118,19 @@ namespace Host.UI.Jobs
                     do
                     {
                         var (sample, label) = ConvertToSample(text);
-                        samples.Add(sample);
-                        labels.Add(label);
+                        sampleCollection.Add(sample);
+                        labelCollection.Add(label);
                         text = sr.ReadLine();
                     } while (text != null);
                 }
             }
-            return new SamplesEnv(samples.ToArray(), labels.ToArray());
+            double[][] samples = sampleCollection.ToArray();
+            int[] labels = labelCollection.ToArray();
+            //release memory
+            sampleCollection.Clear();
+            labelCollection.Clear();
+            //return pair of labeled samples
+            return new SamplesEnv(samples, labels);
         }
 
         private (double[] sample, int label) ConvertToSample(string text)
@@ -155,7 +161,6 @@ namespace Host.UI.Jobs
                     {
                         continue;
                     }
-     
                 }
         }
 
@@ -181,19 +186,6 @@ namespace Host.UI.Jobs
         }
 
         /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="loss"></param>
-        /// <param name="totalReward"></param>
-        /// <param name="accuracy"></param>
-        /// <param name="progress"></param>
-        /// <param name="epochesTime"></param>
-        private void _dqn_OnLearningLossEventHandler(double loss, double totalReward, double accuracy, double progress, string epochesTime)
-        {
-            Process = progress;
-            Summary = string.Format("accuracy: {0:P}, loss:{1:0.000}, reward:{2}", accuracy, loss, totalReward);
-        }
-        /// <summary>
         /// example samples
         /// </summary>
         /// <param name="fullFilename"></param>
@@ -210,5 +202,6 @@ namespace Host.UI.Jobs
             _t.IsBackground = true;
             _t.Start();
         }
+
     }
 }

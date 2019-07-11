@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Engine.NLP;
@@ -91,8 +92,32 @@ namespace Examples
         [TestMethod]
         public void RecognizeTextDateTimeSpec()
         {
-            //DateTimeSpec timeML = new DateTimeSpec()
-            //Microsoft.Bot.Builder.AI.Luis.
+            string keyFilename = @"D:\workspace\ClsName2id.txt";
+
+            string trainDir = @"D:\workspace\train";
+
+            Dictionary<string, string> keys = new Dictionary<string, string>();
+
+            using (StreamReader sr = new StreamReader(keyFilename))
+            {
+                string text = sr.ReadLine();
+                do
+                {
+                    string[] keyValue = text.Split(':');
+                    keys[keyValue[0]] = keyValue[2];
+                    text = sr.ReadLine();
+                } while (text != null);
+            }
+            //
+            DirectoryInfo root = new DirectoryInfo(trainDir);
+            DirectoryInfo[] difs = root.GetDirectories();
+            for (int i = 0; i < difs.Length; i++)
+            {
+                string name = keys[difs[i].Name];
+                string sourcePath = difs[i].FullName;
+                string destionationPath = Path.GetDirectoryName(difs[i].FullName) + @"\" + name;
+                Directory.Move(sourcePath, destionationPath);
+            }
         }
 
         [TestMethod]

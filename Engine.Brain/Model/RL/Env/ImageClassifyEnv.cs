@@ -207,5 +207,11 @@ namespace Engine.Brain.Model.RL.Env
             }
         }
 
+        public void Dispose()
+        {
+            _memory.Clear();
+            _memory = null;
+            _pGRasterLayerCursorTool = null;
+        }
     }
 }

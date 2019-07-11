@@ -14,26 +14,32 @@ namespace Engine.Brain.Model.RL.Env
         /// input data collection
         /// </summary>
         double[][] _inputs;
+
         /// <summary>
         /// label collection
         /// </summary>
         int[] _labels;
+
         /// <summary>
         /// sample size
         /// </summary>
         int _count;
+
         /// <summary>
         /// 指示agent每次只能做一个操作
         /// </summary>
         public bool SingleAction { get { return true; } }
+
         /// <summary>
         /// _current_inputIndex, input index
         /// </summary>
         int _current_inputIndex;
+
         /// <summary>
         /// _current_classIndex, label value to oneHot
         /// </summary>
         double[] _current_classIndex;
+
         /// <summary>
         /// build env according to the samples
         /// </summary>
@@ -48,6 +54,16 @@ namespace Engine.Brain.Model.RL.Env
             //preprocess
             Prepare();
         }
+
+        /// <summary>
+        /// release memory resource to reduce memory leak
+        /// </summary>
+        public void Dispose()
+        {
+            _inputs = null;
+            _labels = null;
+        }
+
         /// <summary>
         /// prepare parameters
         /// </summary>
@@ -69,14 +85,17 @@ namespace Engine.Brain.Model.RL.Env
         /// 
         /// </summary>
         public int[] RandomSeedKeys { get; private set; }
+
         /// <summary>
         /// 
         /// </summary>
         public int ActionNum { get; private set; }
+
         /// <summary>
         /// 
         /// </summary>
         public int[] FeatureNum { get; private set; }
+
         /// <summary>
         /// 
         /// </summary>
@@ -87,6 +106,7 @@ namespace Engine.Brain.Model.RL.Env
         {
             throw new NotImplementedException();
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -96,6 +116,7 @@ namespace Engine.Brain.Model.RL.Env
             int action = NP.Random(ActionNum);
             return NP.ToOneHot(action, ActionNum);
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -108,6 +129,7 @@ namespace Engine.Brain.Model.RL.Env
             double[] classIndex = NP.ToOneHot(Array.IndexOf(RandomSeedKeys, lableValue), ActionNum);
             return (inputIndex, classIndex);
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -126,6 +148,7 @@ namespace Engine.Brain.Model.RL.Env
             }
             return (states, labels);
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -134,6 +157,7 @@ namespace Engine.Brain.Model.RL.Env
         {
             return Step(null).state;
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -156,5 +180,6 @@ namespace Engine.Brain.Model.RL.Env
                 return (raw, reward);
             }
         }
+
     }
 }

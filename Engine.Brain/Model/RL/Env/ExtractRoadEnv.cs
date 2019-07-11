@@ -253,6 +253,11 @@ namespace Engine.Brain.Model.RL.Env
                 return (raw, reward);
             }
         }
+
+        public void Dispose()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
 }

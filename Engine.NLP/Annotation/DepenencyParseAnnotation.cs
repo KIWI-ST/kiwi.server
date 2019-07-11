@@ -169,23 +169,44 @@ namespace Engine.NLP.Annotation
         /// <summary>
         /// analysis the dependency in sentenc, and then extract information
         /// https://nlp.stanford.edu/software/dependencies_manual.pdf
-        /// 
         /// </summary>
         private void ElementExtractByDependencyPrase(edu.stanford.nlp.util.CoreMap sentence)
         {
             edu.stanford.nlp.semgraph.SemanticGraph dependencies = sentence.get(basicDependenciesAnnotationClass) as edu.stanford.nlp.semgraph.SemanticGraph;
             edu.stanford.nlp.ling.IndexedWord root = dependencies.getFirstRoot();
-            //getting the typed dependency
-            java.util.Collection typedDependencies = dependencies.typedDependencies();
-            java.util.Iterator itr = typedDependencies.iterator();
-            while (itr.hasNext())
+            //逐token分析名字和其修饰
+            java.util.AbstractList tokens = sentence.get(tokensAnnotationClass) as java.util.AbstractList;
+            foreach (edu.stanford.nlp.ling.CoreLabel token in tokens)
             {
-                edu.stanford.nlp.trees.TypedDependency td = itr.next() as edu.stanford.nlp.trees.TypedDependency;
+                string word = (string)token.get(textAnnotationClass);
+                string pos = (string)token.get(partOfSpeechAnnotationClass);
+                string ner = (string)token.get(namedEntityTagAnnotationClass);
+                string type = (string)token.get(entityTypeAnnotationClass);
+                string value = (string)token.get(normalizedNamedEntityTagAnnotationClass);
+                //根据pos判断词性, 这里主要解析NN类
+                if(pos == "NN")
+                {
+
+                }
 
             }
-            //
-
         }
+
+        /// <summary>
+        /// 搜索与targetWord相关的修饰
+        /// </summary>
+        /// <param name="dependencies"></param>
+        /// <param name="targetWord">目标名词</param>
+        private void FindAmod(edu.stanford.nlp.semgraph.SemanticGraph dependencies, string targetWord)
+        {
+            java.util.Collection typedDependencies = dependencies.typedDependencies();
+            java.util.Iterator itr = typedDependencies.iterator();
+            //while (itr.hasNext())
+            //{
+            //    edu.stanford.nlp.trees.TypedDependency td = itr.next() as edu.stanford.nlp.trees.TypedDependency;
+            //}
+        }
+
 
     }
 }

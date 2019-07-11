@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Engine.Brain.Model.RL
 {
     /// <summary>
     /// 定义基本环境编写接口
     /// </summary>
-    public interface IEnv
+    public interface IEnv: IDisposable
     {
         /// <summary>
         /// exprot the sample
