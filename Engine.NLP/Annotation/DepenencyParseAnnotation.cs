@@ -151,18 +151,6 @@ namespace Engine.NLP.Annotation
                 edu.stanford.nlp.trees.Tree tree = sentence.get(treeAnnotationClass) as edu.stanford.nlp.trees.Tree;
                 //2.build semantic graph
                 ElementExtractByDependencyPrase(sentence);
-                edu.stanford.nlp.semgraph.SemanticGraph dependencies = sentence.get(basicDependenciesAnnotationClass) as edu.stanford.nlp.semgraph.SemanticGraph;
-                //
-                java.util.AbstractList tokens = sentence.get(tokensAnnotationClass) as java.util.AbstractList;
-                foreach (edu.stanford.nlp.ling.CoreLabel token in tokens)
-                {
-                    string word = (string)token.get(textAnnotationClass);
-                    string pos = (string)token.get(partOfSpeechAnnotationClass);
-                    string ner = (string)token.get(namedEntityTagAnnotationClass);
-                    string type = (string)token.get(entityTypeAnnotationClass);
-                    string value = (string)token.get(normalizedNamedEntityTagAnnotationClass);
-                }
-
             }
         }
 

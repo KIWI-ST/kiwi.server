@@ -67,7 +67,7 @@ namespace Host.UI.Jobs
         /// <param name="featureRasterLayer"></param>
         /// <param name="envSampleFilename"></param>
         /// <param name="totalEpochs"></param>
-        public JobSceneReloadClassify(string trainDirectoryName, string applyDirectoryName, string dqnModelDirectoryName,int totalEpochs=12000, int switchEpoch = 2)
+        public JobSceneReloadClassify(string trainDirectoryName, string applyDirectoryName, string dqnModelDirectoryName,int totalEpochs=9000, int switchEpoch = 30)
         {
             _t = new Thread(() =>
             {
@@ -92,7 +92,7 @@ namespace Host.UI.Jobs
                 {
                     //保存模型
                     string dqnDirectoryName = dqn.PersistencNative();
-                    if (i % 10 == 0)
+                    if (i % 9 == 0)
                     {
                         string resultFilename = dqnDirectoryName + @"\result.txt";
                         ApplyModel(applyDirectoryName, resultFilename, row, col, dqn);
