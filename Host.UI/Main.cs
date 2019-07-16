@@ -475,7 +475,9 @@ namespace Host.UI
                         {
                             string trainDirectoryName = dqnSceneForm.SampleBatchesDirectoryName;
                             string applyDirectoryName = dqnSceneForm.ApplyDirectoryName;
-                            IJob dqnSceneClassifyJob = new JobSceneClassify(trainDirectoryName, applyDirectoryName);
+                            int epochs = dqnSceneForm.Epochs;
+                            int switchEpochs = dqnSceneForm.SwitchEpochs;
+                            IJob dqnSceneClassifyJob = new JobSceneClassify(trainDirectoryName, applyDirectoryName, epochs, switchEpochs);
                             RegisterJob(dqnSceneClassifyJob);
                             dqnSceneClassifyJob.Start();
                         }
@@ -490,7 +492,9 @@ namespace Host.UI
                             string trainDirectoryName = dqnSceneReloadForm.SampleBatchesDirectoryName;
                             string applyDirectoryName = dqnSceneReloadForm.ApplyDirectoryName;
                             string dqnModelDirectoryName = dqnSceneReloadForm.DQNModelDirectoryName;
-                            IJob dqnSceneReloadClassifyJob = new JobSceneReloadClassify(trainDirectoryName, applyDirectoryName, dqnModelDirectoryName);
+                            int epochs = dqnSceneReloadForm.Epochs;
+                            int switchEpochs = dqnSceneReloadForm.SwitchEpochs;
+                            IJob dqnSceneReloadClassifyJob = new JobSceneReloadClassify(trainDirectoryName, applyDirectoryName, dqnModelDirectoryName, epochs, switchEpochs);
                             RegisterJob(dqnSceneReloadClassifyJob);
                             dqnSceneReloadClassifyJob.Start();
                         }

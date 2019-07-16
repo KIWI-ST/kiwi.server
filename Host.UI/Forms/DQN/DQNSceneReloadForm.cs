@@ -23,6 +23,10 @@ namespace Host.UI.Forms.DQN
 
         public string DQNModelDirectoryName { get { return DQN_Directory_textBox.Text; } }
 
+        public int Epochs { get { return Convert.ToInt32(Epochs_numericUpDown.Value); } }
+
+        public int SwitchEpochs { get { return Convert.ToInt32(Switch_Epoch_numericUpDown.Value); } }
+
         private void SampleBatches_button_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog dialog = new FolderBrowserDialog();

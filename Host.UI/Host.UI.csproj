@@ -75,16 +75,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Forms\BandExportForm.cs">
+    <Compile Include="Forms\Band\BandExportForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\BandExportForm.Designer.cs">
+    <Compile Include="Forms\Band\BandExportForm.Designer.cs">
       <DependentUpon>BandExportForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\BandForm.cs">
+    <Compile Include="Forms\Band\BandForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\BandForm.Designer.cs">
+    <Compile Include="Forms\Band\BandForm.Designer.cs">
       <DependentUpon>BandForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Batch\SingleBatchExportForm.cs">
@@ -129,10 +129,10 @@
     <Compile Include="Forms\DQN\DQNSceneReloadForm.Designer.cs">
       <DependentUpon>DQNSceneReloadForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\KappaForm.cs">
+    <Compile Include="Forms\Tools\KappaForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\KappaForm.Designer.cs">
+    <Compile Include="Forms\Tools\KappaForm.Designer.cs">
       <DependentUpon>KappaForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Batch\MultiBatchesExprotForm.cs">
@@ -141,34 +141,34 @@
     <Compile Include="Forms\Batch\MultiBatchesExprotForm.Designer.cs">
       <DependentUpon>MultiBatchesExprotForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ParsingForm.cs">
+    <Compile Include="Forms\Tools\ParsingForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\ParsingForm.Designer.cs">
+    <Compile Include="Forms\Tools\ParsingForm.Designer.cs">
       <DependentUpon>ParsingForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\TML\RFForm.cs">
+    <Compile Include="Forms\TMLS\RFForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\TML\RFForm.Designer.cs">
+    <Compile Include="Forms\TMLS\RFForm.Designer.cs">
       <DependentUpon>RFForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\RPCForm.cs">
+    <Compile Include="Forms\Tools\RPCForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\RPCForm.Designer.cs">
+    <Compile Include="Forms\Tools\RPCForm.Designer.cs">
       <DependentUpon>RPCForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\TML\SVMForm.cs">
+    <Compile Include="Forms\TMLS\SVMForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\TML\SVMForm.Designer.cs">
+    <Compile Include="Forms\TMLS\SVMForm.Designer.cs">
       <DependentUpon>SVMForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\TaskMonitor.cs">
+    <Compile Include="Forms\Tools\TaskMonitor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\TaskMonitor.Designer.cs">
+    <Compile Include="Forms\Tools\TaskMonitor.Designer.cs">
       <DependentUpon>TaskMonitor.cs</DependentUpon>
     </Compile>
     <Compile Include="Jobs\IJob.cs" />
@@ -197,10 +197,10 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Forms\BandExportForm.resx">
+    <EmbeddedResource Include="Forms\Band\BandExportForm.resx">
       <DependentUpon>BandExportForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\BandForm.resx">
+    <EmbeddedResource Include="Forms\Band\BandForm.resx">
       <DependentUpon>BandForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Batch\MultiBatchesExprotForm.resx">
@@ -227,22 +227,22 @@
     <EmbeddedResource Include="Forms\DQN\DQNSceneReloadForm.resx">
       <DependentUpon>DQNSceneReloadForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\KappaForm.resx">
+    <EmbeddedResource Include="Forms\Tools\KappaForm.resx">
       <DependentUpon>KappaForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ParsingForm.resx">
+    <EmbeddedResource Include="Forms\Tools\ParsingForm.resx">
       <DependentUpon>ParsingForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\TML\RFForm.resx">
+    <EmbeddedResource Include="Forms\TMLS\RFForm.resx">
       <DependentUpon>RFForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\RPCForm.resx">
+    <EmbeddedResource Include="Forms\Tools\RPCForm.resx">
       <DependentUpon>RPCForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\TML\SVMForm.resx">
+    <EmbeddedResource Include="Forms\TMLS\SVMForm.resx">
       <DependentUpon>SVMForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\TaskMonitor.resx">
+    <EmbeddedResource Include="Forms\Tools\TaskMonitor.resx">
       <DependentUpon>TaskMonitor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">

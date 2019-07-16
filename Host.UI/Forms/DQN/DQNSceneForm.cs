@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Host.UI.Forms
@@ -20,6 +13,10 @@ namespace Host.UI.Forms
         public string SampleBatchesDirectoryName { get { return Sample_Batches_Directory_textBox.Text; } }
 
         public string ApplyDirectoryName { get { return Apply_Directory_textBox.Text; } }
+
+        public int Epochs { get { return Convert.ToInt32(Epochs_numericUpDown.Value); } }
+
+        public int SwitchEpochs { get { return Convert.ToInt32(Switch_Epoch_numericUpDown.Value); } }
 
         private void SampleBatches_button_Click(object sender, EventArgs e)
         {
@@ -56,5 +53,6 @@ namespace Host.UI.Forms
             DialogResult = DialogResult.OK;
             Close();
         }
+
     }
 }

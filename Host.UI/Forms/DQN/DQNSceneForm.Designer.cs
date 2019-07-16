@@ -36,6 +36,12 @@
             this.Apply_Directory_textBox = new System.Windows.Forms.TextBox();
             this.Apply_button = new System.Windows.Forms.Button();
             this.OK_button = new System.Windows.Forms.Button();
+            this.Switch_Epoch_numericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.label6 = new System.Windows.Forms.Label();
+            this.Epochs_numericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.label5 = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.Switch_Epoch_numericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Epochs_numericUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -102,7 +108,7 @@
             // 
             // OK_button
             // 
-            this.OK_button.Location = new System.Drawing.Point(541, 206);
+            this.OK_button.Location = new System.Drawing.Point(541, 327);
             this.OK_button.Name = "OK_button";
             this.OK_button.Size = new System.Drawing.Size(83, 32);
             this.OK_button.TabIndex = 7;
@@ -110,12 +116,75 @@
             this.OK_button.UseVisualStyleBackColor = true;
             this.OK_button.Click += new System.EventHandler(this.OK_button_Click);
             // 
+            // Switch_Epoch_numericUpDown
+            // 
+            this.Switch_Epoch_numericUpDown.Location = new System.Drawing.Point(232, 273);
+            this.Switch_Epoch_numericUpDown.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.Switch_Epoch_numericUpDown.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            this.Switch_Epoch_numericUpDown.Name = "Switch_Epoch_numericUpDown";
+            this.Switch_Epoch_numericUpDown.Size = new System.Drawing.Size(120, 28);
+            this.Switch_Epoch_numericUpDown.TabIndex = 27;
+            this.Switch_Epoch_numericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.Switch_Epoch_numericUpDown.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(94, 278);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(134, 18);
+            this.label6.TabIndex = 26;
+            this.label6.Text = "环境切换轮次：";
+            // 
+            // Epochs_numericUpDown
+            // 
+            this.Epochs_numericUpDown.Location = new System.Drawing.Point(233, 205);
+            this.Epochs_numericUpDown.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.Epochs_numericUpDown.Name = "Epochs_numericUpDown";
+            this.Epochs_numericUpDown.Size = new System.Drawing.Size(120, 28);
+            this.Epochs_numericUpDown.TabIndex = 25;
+            this.Epochs_numericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.Epochs_numericUpDown.Value = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(130, 210);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(98, 18);
+            this.label5.TabIndex = 24;
+            this.label5.Text = "训练轮次：";
+            // 
             // DQNSceneForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(648, 277);
+            this.ClientSize = new System.Drawing.Size(648, 384);
+            this.Controls.Add(this.Switch_Epoch_numericUpDown);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.Epochs_numericUpDown);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.OK_button);
             this.Controls.Add(this.Apply_button);
             this.Controls.Add(this.Apply_Directory_textBox);
@@ -127,6 +196,8 @@
             this.Name = "DQNSceneForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "DQNSceneForm";
+            ((System.ComponentModel.ISupportInitialize)(this.Switch_Epoch_numericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Epochs_numericUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -142,5 +213,9 @@
         private System.Windows.Forms.TextBox Apply_Directory_textBox;
         private System.Windows.Forms.Button Apply_button;
         private System.Windows.Forms.Button OK_button;
+        private System.Windows.Forms.NumericUpDown Switch_Epoch_numericUpDown;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.NumericUpDown Epochs_numericUpDown;
+        private System.Windows.Forms.Label label5;
     }
 }
