@@ -23,7 +23,7 @@ namespace Engine.NLP.Utils
         /// <summary>
         /// corenlp server address
         /// </summary>
-        private static readonly string corenlpaddress = @"http://192.168.253.3";
+        private static readonly string corenlpaddress = @"http://127.0.0.1";
 
         /// <summary>
         /// port of core nlp server

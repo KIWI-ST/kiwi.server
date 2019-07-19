@@ -30,12 +30,12 @@ namespace Engine.NLP.Entity
             _sentences = Regex.Split(rawText, _boundaryTokenRegex);
         }
 
-        public void RegroupByTimeline()
+        public void RegroupByTimeline(string culture = Culture.English)
         {
             //清理dict信息
             Groups.Clear();
             //get timeline from rawtext
-            List<ModelResult> timeline = DateTimeRecognizer.RecognizeDateTime(_rawText, Culture.English);
+            List<ModelResult> timeline = DateTimeRecognizer.RecognizeDateTime(_rawText, culture);
             // analysis sentences point, get start point and end point 
             ModelResult time = timeline.First();
             string timex = GetTimexString(time);

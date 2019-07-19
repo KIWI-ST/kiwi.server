@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using edu.stanford.nlp.coref.data;
 using Engine.NLP.Utils;
 
 namespace Engine.NLP.Annotation
@@ -116,8 +111,8 @@ namespace Engine.NLP.Annotation
                 "ssplit, " +
                 //part of speech https://stanfordnlp.github.io/CoreNLP/pos.html
                 "pos, " +
-                //lemma https://stanfordnlp.github.io/CoreNLP/lemma.html
-                "lemma, " +
+                ////lemma https://stanfordnlp.github.io/CoreNLP/lemma.html
+                //"lemma, " +
                 //named entity recongnition https://stanfordnlp.github.io/CoreNLP/ner.html
                 "ner, " +
                 //parse https://stanfordnlp.github.io/CoreNLP/parse.html
