@@ -81,6 +81,11 @@ namespace Engine.NLP.Annotation
         /// </summary>
         readonly static java.lang.Class mentionsAnnotationClass = new edu.stanford.nlp.ling.CoreAnnotations.MentionsAnnotation().getClass();
 
+        /// <summary>
+        /// https://nlp.stanford.edu/nlp/javadoc/javanlp/edu/stanford/nlp/ling/CoreAnnotations.CanonicalEntityMentionIndexAnnotation.html
+        /// </summary>
+        readonly static java.lang.Class canonicalEntityMentionIndexAnnotation = new edu.stanford.nlp.ling.CoreAnnotations.CanonicalEntityMentionIndexAnnotation().getClass();
+
         #endregion
 
         /// <summary>
@@ -150,6 +155,8 @@ namespace Engine.NLP.Annotation
             }
         }
 
+        java.util.AbstractList _tokens;
+
         /// <summary>
         /// analysis the dependency in sentenc, and then extract information
         /// https://nlp.stanford.edu/software/dependencies_manual.pdf
@@ -159,7 +166,7 @@ namespace Engine.NLP.Annotation
             edu.stanford.nlp.semgraph.SemanticGraph dependencies = sentence.get(basicDependenciesAnnotationClass) as edu.stanford.nlp.semgraph.SemanticGraph;
             //逐token分析名字和其修饰
             java.util.AbstractList mentions = sentence.get(mentionsAnnotationClass) as java.util.AbstractList;
-            java.util.AbstractList tokens = sentence.get(tokensAnnotationClass) as java.util.AbstractList;
+            _tokens = sentence.get(tokensAnnotationClass) as java.util.AbstractList;
             //
             foreach(edu.stanford.nlp.util.CoreMap mention in mentions)
             {
@@ -178,7 +185,7 @@ namespace Engine.NLP.Annotation
                 else if (ner == "NUMBER")
                 {
                     //寻找修饰单位
-                    FindAmod(dependencies, mention, tokens);
+                    FindAmod(dependencies, mention);
                 }
                 else if(ner == "CITY")
                 {
@@ -201,14 +208,32 @@ namespace Engine.NLP.Annotation
         }
 
         /// <summary>
+        /// find token by index
+        /// </summary>
+        /// <param name="idx"></param>
+        /// <returns></returns>
+        private edu.stanford.nlp.ling.CoreLabel FindTokenByIdx(string idx)
+        {
+            foreach (edu.stanford.nlp.ling.CoreLabel token in _tokens)
+                if (idx == token.index().ToString())
+                    return token;
+            return null;
+        }
+
+        /// <summary>
         /// 搜索与targetWord相关的修饰
         /// </summary>
         /// <param name="dependencies"></param>
         /// <param name="targetWord">目标名词</param>
-        private void FindAmod(edu.stanford.nlp.semgraph.SemanticGraph dependencies, edu.stanford.nlp.util.CoreMap mention, java.util.AbstractList totalTokens)
+        private void FindAmod(edu.stanford.nlp.semgraph.SemanticGraph dependencies, edu.stanford.nlp.util.CoreMap mention)
         {
             //获取mention里的token，得到关键词并寻找修饰关系
             java.util.AbstractList tokens = mention.get(tokensAnnotationClass) as java.util.AbstractList;
+            string cemIdx = (string)mention.get(canonicalEntityMentionIndexAnnotation);
+            //根据cemidx寻找修饰关系，记录返回
+            edu.stanford.nlp.ling.CoreLabel cemToken =FindTokenByIdx(cemIdx);
+
+            //
             java.util.Collection typedDependencies = dependencies.typedDependencies();
             java.util.Iterator itr = typedDependencies.iterator();
             //while (itr.hasNext())
