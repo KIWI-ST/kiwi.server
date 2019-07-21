@@ -5,12 +5,13 @@ using Engine.NLP.Utils;
 namespace Engine.NLP.Annotation
 {
     /// <summary>
+    /// 分析处理句子集，构建情景
     /// 分析构建以下内容：
     /// 1. tokens
     /// 2. split words
     /// 3. 
     /// </summary>
-    public class DepenencyParseAnnotation : IAnnotation
+    public class ScenarioAnnotation : IAnnotation
     {
 
         #region Annotation ClassName
@@ -100,7 +101,7 @@ namespace Engine.NLP.Annotation
         /// <summary>
         ///  Annotation with SUTime
         /// </summary>
-        public DepenencyParseAnnotation()
+        public ScenarioAnnotation()
         {
             _props = new java.util.Properties();
             //refrenece https://stanfordnlp.github.io/CoreNLP/annotators.html
@@ -111,8 +112,8 @@ namespace Engine.NLP.Annotation
                 "ssplit, " +
                 //part of speech https://stanfordnlp.github.io/CoreNLP/pos.html
                 "pos, " +
-                ////lemma https://stanfordnlp.github.io/CoreNLP/lemma.html
-                //"lemma, " +
+                //lemma https://stanfordnlp.github.io/CoreNLP/lemma.html
+                "lemma, " +
                 //named entity recongnition https://stanfordnlp.github.io/CoreNLP/ner.html
                 "ner, " +
                 //parse https://stanfordnlp.github.io/CoreNLP/parse.html
@@ -156,23 +157,47 @@ namespace Engine.NLP.Annotation
         private void ElementExtractByDependencyPrase(edu.stanford.nlp.util.CoreMap sentence)
         {
             edu.stanford.nlp.semgraph.SemanticGraph dependencies = sentence.get(basicDependenciesAnnotationClass) as edu.stanford.nlp.semgraph.SemanticGraph;
-            edu.stanford.nlp.ling.IndexedWord root = dependencies.getFirstRoot();
             //逐token分析名字和其修饰
+            java.util.AbstractList mentions = sentence.get(mentionsAnnotationClass) as java.util.AbstractList;
             java.util.AbstractList tokens = sentence.get(tokensAnnotationClass) as java.util.AbstractList;
-            foreach (edu.stanford.nlp.ling.CoreLabel token in tokens)
+            //
+            foreach(edu.stanford.nlp.util.CoreMap mention in mentions)
             {
-                string word = (string)token.get(textAnnotationClass);
-                string pos = (string)token.get(partOfSpeechAnnotationClass);
-                string ner = (string)token.get(namedEntityTagAnnotationClass);
-                string type = (string)token.get(entityTypeAnnotationClass);
-                string value = (string)token.get(normalizedNamedEntityTagAnnotationClass);
-                //根据pos判断词性, 这里主要解析NN类
-                if(pos == "NN")
+                string text =(string)mention.get(textAnnotationClass);
+                string ner= (string)mention.get(namedEntityTagAnnotationClass);
+                string noramlValue = (string)mention.get(normalizedNamedEntityTagAnnotationClass);
+                //处理不同类型的ner，得到修饰依赖
+                if (ner == "DATE")
+                {
+                    //情景时间
+                }
+                else if (ner == "ORGNIZATION")
+                {
+                    //备注信息
+                }
+                else if (ner == "NUMBER")
+                {
+                    //寻找修饰单位
+                    FindAmod(dependencies, mention, tokens);
+                }
+                else if(ner == "CITY")
+                {
+                    //地点
+                }
+                else if(ner == "GPE")
                 {
 
                 }
-
             }
+            //foreach (edu.stanford.nlp.ling.CoreLabel token in tokens)
+            //{
+            //    string word = (string)token.get(textAnnotationClass);
+            //    string pos = (string)token.get(partOfSpeechAnnotationClass);
+            //    string ner = (string)token.get(namedEntityTagAnnotationClass);
+            //    string type = (string)token.get(entityTypeAnnotationClass);
+            //    string value = (string)token.get(normalizedNamedEntityTagAnnotationClass);
+            //    //根据ner判断命名实体内容，根据dependencies, 找到相关修饰关系
+            //}
         }
 
         /// <summary>
@@ -180,8 +205,10 @@ namespace Engine.NLP.Annotation
         /// </summary>
         /// <param name="dependencies"></param>
         /// <param name="targetWord">目标名词</param>
-        private void FindAmod(edu.stanford.nlp.semgraph.SemanticGraph dependencies, string targetWord)
+        private void FindAmod(edu.stanford.nlp.semgraph.SemanticGraph dependencies, edu.stanford.nlp.util.CoreMap mention, java.util.AbstractList totalTokens)
         {
+            //获取mention里的token，得到关键词并寻找修饰关系
+            java.util.AbstractList tokens = mention.get(tokensAnnotationClass) as java.util.AbstractList;
             java.util.Collection typedDependencies = dependencies.typedDependencies();
             java.util.Iterator itr = typedDependencies.iterator();
             //while (itr.hasNext())

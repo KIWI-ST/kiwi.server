@@ -36,20 +36,32 @@ namespace Engine.NLP.Entity
             Groups.Clear();
             //get timeline from rawtext
             List<ModelResult> timeline = DateTimeRecognizer.RecognizeDateTime(_rawText, culture);
+            int timeStampCount = timeline == null ? 0 : timeline.Count;
+            if  (timeStampCount == 0) return;
             // analysis sentences point, get start point and end point 
             ModelResult time = timeline.First();
             string timex = GetTimexString(time);
             int idx = time.Start;
-            for (int i = 1; i < timeline.Count; i++)
+            //只有一个时间片时
+            if (timeStampCount == 1)
             {
-                time = timeline[i];
-                var (start, end) = FixPosition(time.Start);
-                //idx - start 区间是记录上一次timex的句子集
-                List<string> sentences = GetStentencesByPositionRange(idx, start);
+                var (start, end) = FixPosition(idx);
+                List<string> sentences = GetStentencesByPositionRange(idx, end);
                 Groups.Add(timex, sentences);
-                //更新timex index的信息
-                timex = GetTimexString(time);
-                idx = end;
+            }
+            else if(timeStampCount > 1)
+            {
+                for (int i = 1; i < timeline.Count; i++)
+                {
+                    time = timeline[i];
+                    var (start, end) = FixPosition(time.Start);
+                    //idx - start 区间是记录上一次timex的句子集
+                    List<string> sentences = GetStentencesByPositionRange(idx, start);
+                    Groups.Add(timex, sentences);
+                    //更新timex index的信息
+                    timex = GetTimexString(time);
+                    idx = end;
+                }
             }
         }
 
@@ -63,9 +75,10 @@ namespace Engine.NLP.Entity
         {
             int idx = 0;
             List<string> sentences = new List<string>();
-            Array.ForEach(_sentences, (sentence) => {
+            Array.ForEach(_sentences, (sentence) =>
+            {
                 idx += sentence.Length;
-                if (idx >= start && idx<=end)
+                if (idx >= start && idx <= end)
                     sentences.Add(sentence);
             });
             return sentences;
@@ -80,7 +93,7 @@ namespace Engine.NLP.Entity
         private (int start, int end) FixPosition(int positionIndex)
         {
             int start = 0, end = 0;
-            for(int i = 0; i < _sentences.Length; i++)
+            for (int i = 0; i < _sentences.Length; i++)
             {
                 end += _sentences[i].Length;
                 if (end > positionIndex)
@@ -93,7 +106,7 @@ namespace Engine.NLP.Entity
         private string GetTimexString(ModelResult timeResult)
         {
             string timeString = "";
-            foreach(var res in timeResult.Resolution.Values)
+            foreach (var res in timeResult.Resolution.Values)
             {
                 List<Dictionary<string, string>> resDict = res as List<Dictionary<string, string>>;
                 Dictionary<string, string> timeObject = resDict[0];

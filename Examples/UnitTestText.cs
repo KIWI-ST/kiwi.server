@@ -26,6 +26,8 @@ namespace Examples
 
         string rawTextzh = "2010年7月15日Tanker Pacific Management (Singapore) Pte Ltd（新加坡太平洋油轮公司）所属利比里亚籍（最初误报道为巴拿马籍[1]）“COSMIC JEWEL”(“宇宙宝石”)号30万吨级VLCC油轮在大连新港向国际储运公司原油灌区卸送中石油控股的中油燃料油股份有限公司委托中国联合石油有限责任公司进口的委内瑞拉祖阿塔原油15.3万吨，卸载入中国联合石油有限责任公司租赁的国际储运公司原油灌区304、401、403号罐。由于该原油H2S含量较高，中油燃料油股份有限公司委托天津辉盛达石化技术有限公司负责加入原油脱硫剂作业。辉盛达公司委托上海祥诚商品检验技术服务有限公司大连分公司在国际储运公司原油罐区输油管道上进行现场作业。所添加的“HD-硫化氢脱除剂”原油脱硫剂由辉盛达公司生产。卸油作业于7月15日15时30分开始，在两条输油管道同时进行。7月15日20时，油轮开始用2号输油管线向国际储运公司的原油罐区卸送，祥诚公司作业人员开始通过原油罐区内一套内径90厘米输油管道上的排空阀向输油管道内注入脱硫剂。加剂过程中由于由于输油管内压力高，加注软管多处出现超压鼓泡，连接处脱落造成脱硫化剂泄漏等情况，致使加注作业多次中断共计约4个小时，以致未能按计划在17小时卸油作业中加入全部的脱硫剂。7月16日13时，油轮进行原油洗舱集油作业，停止向岸上卸油并关闭船岸间控制阀。此时，中石油大连石化公司石油储运公司生产调度通知上海祥诚大连分公司经理“船上停止卸油了”，但注入脱硫剂的作业没有停止，又继续加入了22.6t脱硫剂。18时，在注入了全部的88立方米脱硫剂后，现场作业人员用消防泵房（位于103号油罐东侧）内的消防水对脱硫剂管路和泵进行冲洗，冲洗液0.1t直接经加剂口入该输油管线。18时02分，靠近脱硫剂注入部位的输油管道突然发生爆炸，引发火灾，造成部分输油管道、附近储罐阀门、输油泵房和电力系统损坏和大量原油泄漏。事故导致储罐阀门无法及时关闭，火灾不断扩大。原油顺地下管沟流淌，形成地面流淌火，火势蔓延。";
 
+        //string rawTextzh = "2010年7月15日,快速的棕色狐狸跳过了懒惰的狗";
+
         TextAnalyticsClient _client;
 
         public RecognizersText()
@@ -97,13 +99,12 @@ namespace Examples
             SentenceGroup sGroup = new SentenceGroup(rawTextzh);
             sGroup.RegroupByTimeline(Culture.Chinese);
             //2. annotation
-            IAnnotation annotation = new DepenencyParseAnnotation();
+            IAnnotation annotation = new ScenarioAnnotation();
             foreach (var group in sGroup.Groups)
             {
                 string rawText = string.Join(".", group.Value.ToArray());
                 annotation.Process(rawText);
             }
-
             //2. key parse for each group
             //foreach (var group in sGroup.Groups)
             //{
