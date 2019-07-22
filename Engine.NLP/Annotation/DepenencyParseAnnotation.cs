@@ -212,10 +212,11 @@ namespace Engine.NLP.Annotation
         /// </summary>
         /// <param name="idx"></param>
         /// <returns></returns>
-        private edu.stanford.nlp.ling.CoreLabel FindTokenByIdx(string idx)
+        private edu.stanford.nlp.ling.CoreLabel FindTokenByIdx(java.lang.Number idx)
         {
+            int target = idx.intValue();
             foreach (edu.stanford.nlp.ling.CoreLabel token in _tokens)
-                if (idx == token.index().ToString())
+                if (target == token.index())
                     return token;
             return null;
         }
@@ -227,21 +228,42 @@ namespace Engine.NLP.Annotation
         /// <param name="targetWord">目标名词</param>
         private void FindAmod(edu.stanford.nlp.semgraph.SemanticGraph dependencies, edu.stanford.nlp.util.CoreMap mention)
         {
-            //获取mention里的token，得到关键词并寻找修饰关系
+            //方法1：根据cemidx寻找修饰关系，记录返回
+            //java.lang.Number cemIdx = mention.get(canonicalEntityMentionIndexAnnotation) as java.lang.Number;
+            //edu.stanford.nlp.ling.CoreLabel cemToken =FindTokenByIdx(cemIdx);
+            //方法2：根据当前词idx, 寻找修饰关系, 获取mention里的token，得到关键词并寻找修饰关系
             java.util.AbstractList tokens = mention.get(tokensAnnotationClass) as java.util.AbstractList;
-            string cemIdx = (string)mention.get(canonicalEntityMentionIndexAnnotation);
-            //根据cemidx寻找修饰关系，记录返回
-            edu.stanford.nlp.ling.CoreLabel cemToken =FindTokenByIdx(cemIdx);
-
-            //
             java.util.Collection typedDependencies = dependencies.typedDependencies();
-            java.util.Iterator itr = typedDependencies.iterator();
-            //while (itr.hasNext())
-            //{
-            //    edu.stanford.nlp.trees.TypedDependency td = itr.next() as edu.stanford.nlp.trees.TypedDependency;
-            //}
+            foreach(edu.stanford.nlp.ling.CoreLabel token in tokens)
+            {
+                //2.1 搜索与token相关的deps
+                List<edu.stanford.nlp.trees.TypedDependency> deps =   FindRefs(dependencies, token);
+                //2.2 重点关注 
+                //不限于：nn:noun compound modifier
+
+            }
         }
 
+        /// <summary>
+        /// 搜索与target token相关的dpendency关系集合
+        /// </summary>
+        /// <param name="dependencies"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        private List<edu.stanford.nlp.trees.TypedDependency> FindRefs(edu.stanford.nlp.semgraph.SemanticGraph dependencies, edu.stanford.nlp.ling.CoreLabel token)
+        {
+            List<edu.stanford.nlp.trees.TypedDependency> tds = new List<edu.stanford.nlp.trees.TypedDependency>();
+            string tokenValue = token.ToString();
+            java.util.Collection typedDependencies = dependencies.typedDependencies();
+            java.util.Iterator itr = typedDependencies.iterator();
+            while (itr.hasNext())
+            {
+                edu.stanford.nlp.trees.TypedDependency td = itr.next() as edu.stanford.nlp.trees.TypedDependency;
+                string tdValue = td.toString();
+                if (tdValue.IndexOf(tokenValue) != -1) tds.Add(td);
+            }
+            return tds;
+        }
 
     }
 }
