@@ -185,7 +185,7 @@ namespace Engine.NLP.Annotation
                 else if (ner == "NUMBER")
                 {
                     //寻找修饰单位
-                    FindAmod(dependencies, mention);
+                    FindNumberDeps(dependencies, mention);
                 }
                 else if(ner == "CITY")
                 {
@@ -222,26 +222,63 @@ namespace Engine.NLP.Annotation
         }
 
         /// <summary>
-        /// 搜索与targetWord相关的修饰
+        /// 搜索与number相关的依赖：
+        /// 1. 数字单位
+        /// 2. target entity
         /// </summary>
         /// <param name="dependencies"></param>
         /// <param name="targetWord">目标名词</param>
-        private void FindAmod(edu.stanford.nlp.semgraph.SemanticGraph dependencies, edu.stanford.nlp.util.CoreMap mention)
+        private (string targetEntity, string numericValue) FindNumberDeps(edu.stanford.nlp.semgraph.SemanticGraph dependencies, edu.stanford.nlp.util.CoreMap mention)
         {
+            string numericValue=null, targetEntity = null;
             //方法1：根据cemidx寻找修饰关系，记录返回
             //java.lang.Number cemIdx = mention.get(canonicalEntityMentionIndexAnnotation) as java.lang.Number;
             //edu.stanford.nlp.ling.CoreLabel cemToken =FindTokenByIdx(cemIdx);
             //方法2：根据当前词idx, 寻找修饰关系, 获取mention里的token，得到关键词并寻找修饰关系
+            string value = (string)mention.get(normalizedNamedEntityTagAnnotationClass);
             java.util.AbstractList tokens = mention.get(tokensAnnotationClass) as java.util.AbstractList;
             java.util.Collection typedDependencies = dependencies.typedDependencies();
+            //处理entity里包含的tokens
             foreach(edu.stanford.nlp.ling.CoreLabel token in tokens)
             {
                 //2.1 搜索与token相关的deps
                 List<edu.stanford.nlp.trees.TypedDependency> deps =   FindRefs(dependencies, token);
-                //2.2 重点关注 
+                //2.2 参考：Marie-Catherine de Marneffe, Christopher D. Manning ,Stanford typed dependencies manual, 2016
                 //不限于：nn:noun compound modifier
+                foreach(edu.stanford.nlp.trees.TypedDependency dep in deps)
+                {
+                    //2.2.1 查找数值修饰单位 (mark:clf)
+                    if (dep.reln().getShortName() == "mark:clf")
+                    {
+                        numericValue = string.Format("{0} {1}", value, dep.toString());
+                    }
+                    //2.2.2 num修饰关系
+                    if(dep.reln().getShortName() == "nummod")
+                    {
+
+                    }
+                    //2.2.2 查找修饰主体 (nsubj)
+                }
+                //2.3
 
             }
+            return (targetEntity, numericValue);
+
+        }
+
+        /// <summary>
+        /// FindTargetTokenByDependencytype(dep, token, "nsubj");
+        /// </summary>
+        /// <param name="depTypeString"></param>
+        /// <returns></returns>
+        private edu.stanford.nlp.ling.CoreLabel FindTargetTokenByDependencytype(edu.stanford.nlp.semgraph.SemanticGraph dependencies, edu.stanford.nlp.ling.CoreLabel token, string depTypeString)
+        {
+            List<edu.stanford.nlp.trees.TypedDependency> deps = FindRefs(dependencies, token);
+            foreach (edu.stanford.nlp.trees.TypedDependency dep in deps)
+            {
+            }
+
+            return null;
         }
 
         /// <summary>
