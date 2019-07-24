@@ -11,14 +11,14 @@
         /// <param name="inputs"></param>
         /// <param name="outputs"></param>
         /// <returns>loss</returns>
-        double Train(double[][] inputs, double[][] outputs);
+        double Train(float[][] inputs, float[][] outputs);
 
         /// <summary>
         ///
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        double[] Predict(params object[] inputs);
+        float[] Predict(params object[] inputs);
 
         /// <summary>
         /// persistence in local dir

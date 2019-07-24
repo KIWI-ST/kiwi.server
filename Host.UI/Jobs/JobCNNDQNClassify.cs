@@ -38,7 +38,7 @@ namespace Host.UI.Jobs
             _t = new Thread(() =>
             {
                 //input list
-                List<List<double>> inputList = new List<List<double>>();
+                List<List<float>> inputList = new List<List<float>>();
                 List<int> outputList = new List<int>();
                 List<int> outputKey = new List<int>();
                 using (StreamReader sr = new StreamReader(sampleFilename))
@@ -51,9 +51,9 @@ namespace Host.UI.Jobs
                         outputList.Add(key);
                         if (!outputKey.Contains(key))
                             outputKey.Add(key);
-                        List<double> inputItem = new List<double>();
+                        List<float> inputItem = new List<float>();
                         for (int i = 0; i < rawdatas.Length - 1; i++)
-                            inputItem.Add(Convert.ToDouble(rawdatas[i]));
+                            inputItem.Add(float.Parse(rawdatas[i]));
                         inputList.Add(inputItem);
                         text = sr.ReadLine();
                     } while (text != null);
@@ -69,8 +69,8 @@ namespace Host.UI.Jobs
                 //train model
                 for (int i = 0; i < epochs; i++)
                 {
-                    double[][] inputs = new double[batchSize][];
-                    double[][] labels = new double[batchSize][];
+                    float[][] inputs = new float[batchSize][];
+                    float[][] labels = new float[batchSize][];
                     for (int k = 0; k < batchSize; k++)
                     {
                         int index = NP.Random(smapleSize);
@@ -84,7 +84,7 @@ namespace Host.UI.Jobs
                 //训练DQN
                 Summary = "DQN训练中";
                 cnn.ConvertToExtractNetwork();
-                double[][] svmInputs = new double[inputList.Count][];
+                float[][] svmInputs = new float[inputList.Count][];
                 int[] svmOutputs = new int[inputList.Count];
                 //2.recalcute smaples
                 for (int i = 0; i < inputList.Count; i++)
@@ -111,7 +111,7 @@ namespace Host.UI.Jobs
                     for (int j = 0; j < featureRasterLayer.YSize; j++)
                     {
                         //get normalized input raw value
-                        double[] normal = pRasterLayerCursorTool.PickRagneNormalValue(i, j, width, height);
+                        float[] normal = pRasterLayerCursorTool.PickRagneNormalValue(i, j, width, height);
                         //}{debug
                         var (action, q) = dqn.ChooseAction(normal);
                         int gray = dqn.ActionToRawValue(NP.Argmax(action));

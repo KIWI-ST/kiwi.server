@@ -9,11 +9,12 @@
         /// remove softmax, convert it to Extract Feature Network
         /// </summary>
         void ConvertToExtractNetwork();
+
         /// <summary>
         /// predicts
         /// </summary>
         /// <param name="inputs"></param>
         /// <returns></returns>
-        double[][] Predicts(double[][] inputs);
+        float[][] Predicts(float[][] inputs);
     }
 }

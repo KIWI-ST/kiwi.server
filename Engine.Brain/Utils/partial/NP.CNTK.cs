@@ -57,15 +57,15 @@ namespace Engine.Brain.Utils
             /// <param name="numRows"></param>
             /// <param name="numCols"></param>
             /// <returns></returns>
-            public static double[][] LoadBinary(string binaryFilename, int numRows, int numCols)
+            public static float[][] LoadBinary(string binaryFilename, int numRows, int numCols)
             {
                 var buffer = new byte[sizeof(float) * numRows * numCols];
-                var dst = new double[numRows][];
+                var dst = new float[numRows][];
                 using (var reader = new System.IO.BinaryReader(System.IO.File.OpenRead(binaryFilename)))
                     reader.Read(buffer, 0, buffer.Length);
                 for (int row = 0; row < dst.Length; row++)
                 {
-                    dst[row] = new double[numCols];
+                    dst[row] = new float[numCols];
                     Buffer.BlockCopy(buffer, row * numCols * sizeof(float), dst[row], 0, numCols * sizeof(float));
                 }
                 return dst;
@@ -135,7 +135,7 @@ namespace Engine.Brain.Utils
             {
                 var W = new Parameter(
                     NDShape.CreateNDShape(convolution_map_size),
-                    DataType.Double,
+                    DataType.Float,
                     CNTKLib.GlorotUniformInitializer(CNTKLib.DefaultParamInitScale, CNTKLib.SentinelValueForInferParamInitRank, CNTKLib.SentinelValueForInferParamInitRank, 1),
                     device,
                     outputName + "_W");
@@ -271,10 +271,10 @@ namespace Engine.Brain.Utils
                 Func<Variable, Function> activation = null,
                 string outputName = "")
             {
-                double convWScale = 0.26;
+                float convWScale = 0.26f;
                 var W = new Parameter(
                     new int[] { kernelWidth, kernelHeight, inputChannel, outputChannel },
-                    DataType.Double,
+                    DataType.Float,
                     CNTKLib.GlorotUniformInitializer(convWScale, -1, 2),
                     device);
                 Function y = CNTKLib.Convolution(W, input, new int[] { 1, 1, inputChannel });
@@ -300,13 +300,13 @@ namespace Engine.Brain.Utils
             {
                 int inputDim = input.Shape[0];
                 int[] i = { outputDim, inputDim };
-                var timesParam = new Parameter(i, DataType.Double, CNTKLib.GlorotUniformInitializer(
+                var timesParam = new Parameter(i, DataType.Float, CNTKLib.GlorotUniformInitializer(
                     CNTKLib.DefaultParamInitScale,
                     CNTKLib.SentinelValueForInferParamInitRank,
                     CNTKLib.SentinelValueForInferParamInitRank, 1), device, "timesParam");
                 var timesFunction = CNTKLib.Times(timesParam, input, "times");
                 int[] o = { outputDim };
-                var plusParam = new Parameter(o, 0.0, device, "plusParam");
+                var plusParam = new Parameter(o, 0.0f, device, "plusParam");
                 return CNTKLib.Plus(plusParam, timesFunction, outputName);
             }
 
@@ -339,14 +339,14 @@ namespace Engine.Brain.Utils
             /// <param name="weights"></param>
             /// <param name="name"></param>
             /// <returns></returns>
-            public static Function Embedding(Variable x, int shape, DeviceDescriptor device, double[][] weights = null, string name = "")
+            public static Function Embedding(Variable x, int shape, DeviceDescriptor device, float[][] weights = null, string name = "")
             {
                 if (weights == null)
                 {
                     var weightShape = new int[] { shape, NDShape.InferredDimension };
                     var E = new Parameter(
                         weightShape,
-                        DataType.Double,
+                        DataType.Float,
                         CNTKLib.GlorotUniformInitializer(),
                         device,
                         name);
@@ -370,7 +370,7 @@ namespace Engine.Brain.Utils
             /// <param name="inputs"></param>
             /// <param name="outputs"></param>
             /// <returns></returns>
-            public static Dictionary<Variable, Value> CreateMiniBatch(double[][] inputs, double[][] outputs, Variable inputVariable, Variable outputVariable, DeviceDescriptor device)
+            public static Dictionary<Variable, Value> CreateMiniBatch(float[][] inputs, float[][] outputs, Variable inputVariable, Variable outputVariable, DeviceDescriptor device)
             {
                 Value inputsValue = Value.CreateBatch(inputVariable.Shape, NP.ToOneDimensional(inputs), device);
                 Value outputsValue = Value.CreateBatch(outputVariable.Shape, NP.ToOneDimensional(outputs), device);
@@ -430,12 +430,12 @@ namespace Engine.Brain.Utils
                 public static Constant GetProjectionMap(int outputDim, int inputDim, DeviceDescriptor device)
                 {
                     if (inputDim > outputDim) throw new Exception("Can only project from lower to higher dimensionality");
-                    double[] projectionMapValues = new double[inputDim * outputDim];
+                    float[] projectionMapValues = new float[inputDim * outputDim];
                     for (int i = 0; i < inputDim * outputDim; i++)
                         projectionMapValues[i] = 0;
                     for (int i = 0; i < inputDim; ++i)
-                        projectionMapValues[(i * inputDim) + i] = 1.0;
-                    var projectionMap = new NDArrayView(DataType.Double, new int[] { 1, 1, inputDim, outputDim }, device);
+                        projectionMapValues[(i * inputDim) + i] = 1.0f;
+                    var projectionMap = new NDArrayView(DataType.Float, new int[] { 1, 1, inputDim, outputDim }, device);
                     projectionMap.CopyFrom(new NDArrayView(new int[] { 1, 1, inputDim, outputDim }, projectionMapValues, (uint)projectionMapValues.Count(), device));
                     return new Constant(projectionMap);
                 }
@@ -451,14 +451,14 @@ namespace Engine.Brain.Utils
                 /// <param name="bnTimeConst"></param>
                 /// <param name="device"></param>
                 /// <returns></returns>
-                public static Function ProjectLayer(Variable wProj, Variable input, int hStride, int vStride, double bValue, double scValue, int bnTimeConst, DeviceDescriptor device)
+                public static Function ProjectLayer(Variable wProj, Variable input, int hStride, int vStride, float bValue, float scValue, int bnTimeConst, DeviceDescriptor device)
                 {
                     int outFeatureMapCount = wProj.Shape[0];
                     var b = new Parameter(new int[] { outFeatureMapCount }, bValue, device, "");
                     var sc = new Parameter(new int[] { outFeatureMapCount }, scValue, device, "");
-                    var m = new Constant(new int[] { outFeatureMapCount }, DataType.Double, 0.0, device);
-                    var v = new Constant(new int[] { outFeatureMapCount }, DataType.Double, 0.0, device);
-                    var n = Constant.Scalar(DataType.Double, 0.0, device);
+                    var m = new Constant(new int[] { outFeatureMapCount }, DataType.Float, 0.0f, device);
+                    var v = new Constant(new int[] { outFeatureMapCount }, DataType.Float, 0.0f, device);
+                    var n = Constant.Scalar(DataType.Float, 0.0f, device);
                     int numInputChannels = input.Shape[input.Shape.Rank - 1];
                     var c = CNTKLib.Convolution(wProj, input, new int[] { hStride, vStride, numInputChannels }, new bool[] { true }, new bool[] { false });
                     return CNTKLib.BatchNormalization(c, sc, b, m, v, n, true /*spatial*/, bnTimeConst, 0, 1e-5, false);
@@ -478,7 +478,7 @@ namespace Engine.Brain.Utils
                 /// <param name="wProj"></param>
                 /// <param name="device"></param>
                 /// <returns></returns>
-                public static Function ResNetNodeInc(Variable input, int outFeatureMapCount, int kernelWidth, int kernelHeight, double wScale, double bValue, double scValue, int bnTimeConst, bool spatial, Variable wProj, DeviceDescriptor device)
+                public static Function ResNetNodeInc(Variable input, int outFeatureMapCount, int kernelWidth, int kernelHeight, float wScale, float bValue, float scValue, int bnTimeConst, bool spatial, Variable wProj, DeviceDescriptor device)
                 {
                     var c1 = ConvBatchNormalizationReLULayer(input, outFeatureMapCount, kernelWidth, kernelHeight, 2, 2, wScale, bValue, scValue, bnTimeConst, spatial, device);
                     var c2 = ConvBatchNormalizationLayer(c1, outFeatureMapCount, kernelWidth, kernelHeight, 1, 1, wScale, bValue, scValue, bnTimeConst, spatial, device);
@@ -500,7 +500,7 @@ namespace Engine.Brain.Utils
                 /// <param name="spatial"></param>
                 /// <param name="device"></param>
                 /// <returns></returns>
-                public static Function ResNetNode(Variable input, int outFeatureMapCount, int kernelWidth, int kernelHeight, double wScale, double bValue, double scValue, int bnTimeConst, bool spatial, DeviceDescriptor device)
+                public static Function ResNetNode(Variable input, int outFeatureMapCount, int kernelWidth, int kernelHeight, float wScale, float bValue, float scValue, int bnTimeConst, bool spatial, DeviceDescriptor device)
                 {
                     var c1 = ConvBatchNormalizationReLULayer(input, outFeatureMapCount, kernelWidth, kernelHeight, 1, 1, wScale, bValue, scValue, bnTimeConst, spatial, device);
                     var c2 = ConvBatchNormalizationLayer(c1, outFeatureMapCount, kernelWidth, kernelHeight, 1, 1, wScale, bValue, scValue, bnTimeConst, spatial, device);
@@ -523,7 +523,7 @@ namespace Engine.Brain.Utils
                 /// <param name="spatial"></param>
                 /// <param name="device"></param>
                 /// <returns></returns>
-                public static Function ConvBatchNormalizationReLULayer(Variable input, int outFeatureMapCount, int kernelWidth, int kernelHeight, int hStride, int vStride, double wScale, double bValue, double scValue, int bnTimeConst, bool spatial, DeviceDescriptor device)
+                public static Function ConvBatchNormalizationReLULayer(Variable input, int outFeatureMapCount, int kernelWidth, int kernelHeight, int hStride, int vStride, float wScale, float bValue, float scValue, int bnTimeConst, bool spatial, DeviceDescriptor device)
                 {
                     var convBNFunction = ConvBatchNormalizationLayer(input, outFeatureMapCount, kernelWidth, kernelHeight, hStride, vStride, wScale, bValue, scValue, bnTimeConst, spatial, device);
                     return CNTKLib.ReLU(convBNFunction);
@@ -544,16 +544,16 @@ namespace Engine.Brain.Utils
                 /// <param name="spatial"></param>
                 /// <param name="device"></param>
                 /// <returns></returns>
-                public static Function ConvBatchNormalizationLayer(Variable input, int outFeatureMapCount, int kernelWidth, int kernelHeight, int hStride, int vStride, double wScale, double bValue, double scValue, int bnTimeConst, bool spatial, DeviceDescriptor device)
+                public static Function ConvBatchNormalizationLayer(Variable input, int outFeatureMapCount, int kernelWidth, int kernelHeight, int hStride, int vStride, float wScale, float bValue, float scValue, int bnTimeConst, bool spatial, DeviceDescriptor device)
                 {
                     int numInputChannels = input.Shape[input.Shape.Rank - 1];
-                    var convParams = new Parameter(new int[] { kernelWidth, kernelHeight, numInputChannels, outFeatureMapCount }, DataType.Double, CNTKLib.GlorotUniformInitializer(wScale, -1, 2), device);
+                    var convParams = new Parameter(new int[] { kernelWidth, kernelHeight, numInputChannels, outFeatureMapCount }, DataType.Float, CNTKLib.GlorotUniformInitializer(wScale, -1, 2), device);
                     var convFunction = CNTKLib.Convolution(convParams, input, new int[] { hStride, vStride, numInputChannels });
                     var biasParams = new Parameter(new int[] { NDShape.InferredDimension }, bValue, device, "");
                     var scaleParams = new Parameter(new int[] { NDShape.InferredDimension }, scValue, device, "");
-                    var runningMean = new Constant(new int[] { NDShape.InferredDimension }, DataType.Double, 0.0, device);
-                    var runningInvStd = new Constant(new int[] { NDShape.InferredDimension }, DataType.Double, 0.0, device);
-                    var runningCount = Constant.Scalar(DataType.Double, 0.0, device);
+                    var runningMean = new Constant(new int[] { NDShape.InferredDimension }, DataType.Float, 0.0f, device);
+                    var runningInvStd = new Constant(new int[] { NDShape.InferredDimension }, DataType.Float, 0.0f, device);
+                    var runningCount = Constant.Scalar(DataType.Float, 0.0f, device);
                     return CNTKLib.BatchNormalization(convFunction, scaleParams, biasParams, runningMean, runningInvStd, runningCount, spatial, bnTimeConst, 0.0, 1e-5 /* epsilon */);
                 }
             }

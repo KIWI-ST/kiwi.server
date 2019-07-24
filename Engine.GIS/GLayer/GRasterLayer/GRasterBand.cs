@@ -66,12 +66,13 @@ namespace Engine.GIS.GLayer.GRasterLayer
         /// <summary>
         /// normalized data
         /// </summary>
-        public double[,] NormalData { get; private set; }
+        public float[,] NormalData { get; private set; }
 
         /// <summary>
         /// raw data
         /// </summary>
-        public double[] RawData { get; private set; }
+        public float[] RawData { get; private set; }
+
         #endregion
 
         #region 应用拉伸
@@ -100,7 +101,7 @@ namespace Engine.GIS.GLayer.GRasterLayer
                     break;
                 }
             }
-            NormalData = new double[Width, Height];
+            NormalData = new float[Width, Height];
             //calcute scale
             for (int count = 0; count < RawData.Length; count++)
             {
@@ -112,16 +113,18 @@ namespace Engine.GIS.GLayer.GRasterLayer
                     NormalData[count % Width, count / Width]= (RawData[count] - dbMin) / (dbMax - dbMin);
             }
         }
+
         /// <summary>
         /// only normalization
         /// </summary>
         private void Normalization()
         {
-            NormalData = new double[Width, Height];
+            NormalData = new float[Width, Height];
             double scale = _max - _min;
             for (int count = 0; count < RawData.Length; count++)
-                NormalData[count % Width, count / Width] = RawData[count] == 0 ? 0 : (RawData[count] - _min) / scale;
+                NormalData[count % Width, count / Width] = RawData[count] == 0.0f ? 0.0f : (float)((RawData[count] - _min) / scale);
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -184,7 +187,7 @@ namespace Engine.GIS.GLayer.GRasterLayer
             //bForce：表示扫描图统计生成xml
             pBand.GetStatistics(0, 1, out _min, out _max, out _mean, out _stdDev);
             //读取rawdata
-            RawData = new double[Width * Height];
+            RawData = new float[Width * Height];
             pBand.ReadRaster(0, 0, Width, Height, RawData, Width, Height, 0, 0);
             //remove error data
             CleaningError();
@@ -209,7 +212,7 @@ namespace Engine.GIS.GLayer.GRasterLayer
         /// 获取未拉伸的原始bytebuffer
         /// </summary>
         /// <returns></returns>
-        public double[] GetRawBuffer()
+        public float[] GetRawBuffer()
         {
             return RawData;
         }

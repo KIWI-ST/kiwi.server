@@ -74,8 +74,8 @@ namespace Examples
             IRasterLayerCursorTool pRasterLayerCursorTool = new GRasterLayerCursorTool();
             pRasterLayerCursorTool.Visit(featureLayer);
             //
-            double[] state = pRasterLayerCursorTool.PickNormalValue(50, 50);
-            double[] action = dqn.ChooseAction(state).action;
+            float[] state = pRasterLayerCursorTool.PickNormalValue(50, 50);
+            float[] action = dqn.ChooseAction(state).action;
             int landCoverType = dqn.ActionToRawValue(NP.Argmax(action));
             //do something as you need. i.e. draw landCoverType to bitmap at position ( i , j )
             //the classification results are not stable because of the training epochs are too few.
@@ -88,7 +88,7 @@ namespace Examples
             //read sample and create environment
             IEnv env;
             //read samples
-            List<List<double>> inputList = new List<List<double>>();
+            List<List<float>> inputList = new List<List<float>>();
             List<int> outputList = new List<int>();
             List<int> keys = new List<int>();
             using (StreamReader sr = new StreamReader(envFilename3x3x18))
@@ -101,15 +101,15 @@ namespace Examples
                     outputList.Add(key);
                     if (!keys.Contains(key))
                         keys.Add(key);
-                    List<double> inputItem = new List<double>();
+                    List<float> inputItem = new List<float>();
                     for (int i = 0; i < rawdatas.Length - 1; i++)
-                        inputItem.Add(Convert.ToDouble(rawdatas[i]));
+                        inputItem.Add(float.Parse(rawdatas[i]));
                     inputList.Add(inputItem);
                     text = sr.ReadLine();
                 } while (text != null);
                 //convert to double[][] and double[]
                 int count = inputList.Count;
-                double[][] x = new double[count][];
+                float[][] x = new float[count][];
                 int[] y = outputList.ToArray();
                 for (int i = 0; i < count; i++)
                     x[i] = inputList[i].ToArray();
@@ -157,7 +157,7 @@ namespace Examples
             //read sample and create environment
             IEnv env;
             //read samples
-            List<List<double>> inputList = new List<List<double>>();
+            List<List<float>> inputList = new List<List<float>>();
             List<int> outputList = new List<int>();
             List<int> keys = new List<int>();
             using (StreamReader sr = new StreamReader(envFilename9x9x18))
@@ -170,15 +170,15 @@ namespace Examples
                     outputList.Add(key);
                     if (!keys.Contains(key))
                         keys.Add(key);
-                    List<double> inputItem = new List<double>();
+                    List<float> inputItem = new List<float>();
                     for (int i = 0; i < rawdatas.Length - 1; i++)
-                        inputItem.Add(Convert.ToDouble(rawdatas[i]));
+                        inputItem.Add(float.Parse(rawdatas[i]));
                     inputList.Add(inputItem);
                     text = sr.ReadLine();
                 } while (text != null);
                 //convert to double[][] and double[]
                 int count = inputList.Count;
-                double[][] x = new double[count][];
+                float[][] x = new float[count][];
                 int[] y = outputList.ToArray();
                 for (int i = 0; i < count; i++)
                     x[i] = inputList[i].ToArray();
@@ -205,7 +205,7 @@ namespace Examples
             string modelDirectoryname = dqn.PersistencNative();
             //reload model with new env
             DQN dqn2 = DQN.ReLoad(modelDirectoryname, deviceName, env, 100);
-            double[] sample = inputList[0].ToArray();
+            float[] sample = inputList[0].ToArray();
             var (action, q) = dqn.ChooseAction(sample);
             var (action2, q2) = dqn2.ChooseAction(sample);
             //计算结果等价
@@ -215,13 +215,10 @@ namespace Examples
         [TestMethod]
         public void ClassificationByCNN()
         {
-            //read samples
-            double[][] x;
-            double[][] y;
             List<int> keys = new List<int>();
             using (StreamReader sr = new StreamReader(envFilename3x3x18))
             {
-                List<List<double>> inputList = new List<List<double>>();
+                List<List<float>> inputList = new List<List<float>>();
                 List<int> outputList = new List<int>();
                 string text = sr.ReadLine().Replace("\t", ",");
                 do
@@ -231,36 +228,36 @@ namespace Examples
                     outputList.Add(key);
                     if (!keys.Contains(key))
                         keys.Add(key);
-                    List<double> inputItem = new List<double>();
+                    List<float> inputItem = new List<float>();
                     for (int i = 0; i < rawdatas.Length - 1; i++)
-                        inputItem.Add(Convert.ToDouble(rawdatas[i]));
+                        inputItem.Add(float.Parse(rawdatas[i]));
                     inputList.Add(inputItem);
                     text = sr.ReadLine();
                 } while (text != null);
                 //convert to double[][] and double[]
                 int count = inputList.Count;
-                x = new double[count][];
-                y = new double[count][];
+                float[][] x = new float[count][];
+                float[][] y = new float[count][];
                 for (int i = 0; i < count; i++)
                 {
                     x[i] = inputList[i].ToArray();
                     y[i] = NP.ToOneHot(outputList[i], keys.Count);
                 }
+                double _loss = 1.0;
+                int epochs = 100, batchSize = 19;
+                //use fullychannelnet 
+                IDConvNet cnn = new FullyChannelNet9(3, 3, 18, keys.Count, NP.CNTK.DeviceCollection[0]);
+                //training epochs
+                for (int i = 0; i < epochs; i++)
+                {
+                    NP.Shuffle(x, y);
+                    float[][] inputs = x.Take(batchSize).ToArray();
+                    float[][] labels = y.Take(batchSize).ToArray();
+                    _loss = cnn.Train(inputs, labels);
+                }
+                //training result
+                Assert.IsTrue(_loss < 1.0);
             }
-            double _loss = 1.0;
-            int epochs = 100, batchSize = 19;
-            //use fullychannelnet 
-            IDConvNet cnn = new FullyChannelNet9(3, 3, 18, keys.Count, NP.CNTK.DeviceCollection[0]);
-            //training epochs
-            for (int i = 0; i < epochs; i++)
-            {
-                NP.Shuffle(x, y);
-                double[][] inputs = x.Take(batchSize).ToArray();
-                double[][] labels = y.Take(batchSize).ToArray();
-                _loss = cnn.Train(inputs, labels);
-            }
-            //training result
-            Assert.IsTrue(_loss < 1.0);
         }
 
         [TestMethod]
@@ -275,18 +272,16 @@ namespace Examples
             var madam = net.Predict("brother");
             var sir = net.Predict("sister");
 
-            var s1 = NP.Sub(woman, man);
-            var s2 = NP.Sub(madam, sir);
-
-            var s3 = NP.Cosine(s1, s2);
-
+            //var s1 = NP.Sub(woman, man);
+            //var s2 = NP.Sub(madam, sir);
+            //var s3 = NP.Cosine(s1, s2);
         }
 
         [TestMethod]
         public void ClassificationByDNN()
         {
-            List<double[]> inputList = new List<double[]>();
-            List<double> labelList = new List<double>();
+            List<float[]> inputList = new List<float[]>();
+            List<float> labelList = new List<float>();
             //
             string featureFullFilename = Directory.GetCurrentDirectory() + @"\Datasets\dnnSamples.csv";
             using (StreamReader sr = new StreamReader(featureFullFilename))
@@ -295,10 +290,10 @@ namespace Examples
                 while (text != null)
                 {
                     string[] texts = text.Split(',');
-                    double lable = Convert.ToDouble(texts.Last());
-                    double[] input = new double[texts.Length - 1];
+                    float lable = float.Parse(texts.Last());
+                    float[] input = new float[texts.Length - 1];
                     for (int i = 0; i < texts.Length - 1; i++)
-                        input[i] = Convert.ToDouble(texts[i]);
+                        input[i] = float.Parse(texts[i]);
                     inputList.Add(input);
                     labelList.Add(lable);
                     //read new line
@@ -306,12 +301,12 @@ namespace Examples
                 }
             }
             int count = inputList.Count;
-            double[][] inputs = new double[count][];
-            double[][] labels = new double[count][];
+            float[][] inputs = new float[count][];
+            float[][] labels = new float[count][];
             for (int i = 0; i < count; i++)
             {
                 inputs[i] = inputList[i];
-                labels[i] = new double[1] { labelList[i] };
+                labels[i] = new float[1] { labelList[i] };
             }
             IDNet net = new DNet(new int[] { 8, 1, 1 }, 8);
             string loss = "";
@@ -341,20 +336,20 @@ namespace Examples
             RF rf = new RF(30);
             using (StreamReader sr = new StreamReader(samplesFilename))
             {
-                List<List<double>> inputList = new List<List<double>>();
+                List<List<float>> inputList = new List<List<float>>();
                 List<int> outputList = new List<int>();
                 string text = sr.ReadLine();
                 do
                 {
                     string[] rawdatas = text.Split(',');
                     outputList.Add(Convert.ToInt32(rawdatas.Last()));
-                    List<double> inputItem = new List<double>();
+                    List<float> inputItem = new List<float>();
                     for (int i = 0; i < rawdatas.Length - 1; i++)
-                        inputItem.Add(Convert.ToDouble(rawdatas[i]));
+                        inputItem.Add(float.Parse(rawdatas[i]));
                     inputList.Add(inputItem);
                     text = sr.ReadLine();
                 } while (text != null);
-                double[][] inputs = new double[inputList.Count][];
+                float[][] inputs = new float[inputList.Count][];
                 int[] outputs = outputList.ToArray();
                 for (int i = 0; i < inputList.Count; i++)
                     inputs[i] = inputList[i].ToArray();
@@ -369,7 +364,7 @@ namespace Examples
             double loss = 1.0;
             using (StreamReader sr = new StreamReader(samplesFilename))
             {
-                List<List<double>> inputList = new List<List<double>>();
+                List<List<float>> inputList = new List<List<float>>();
                 List<int> outputList = new List<int>();
                 List<int> keys = new List<int>();
                 string text = sr.ReadLine();
@@ -380,13 +375,13 @@ namespace Examples
                     if (!keys.Contains(key))
                         keys.Add(key);
                     outputList.Add(key);
-                    List<double> inputItem = new List<double>();
+                    List<float> inputItem = new List<float>();
                     for (int i = 0; i < rawdatas.Length - 1; i++)
-                        inputItem.Add(Convert.ToDouble(rawdatas[i]));
+                        inputItem.Add(float.Parse(rawdatas[i]));
                     inputList.Add(inputItem);
                     text = sr.ReadLine();
                 } while (text != null);
-                double[][] inputs = new double[inputList.Count][];
+                float[][] inputs = new float[inputList.Count][];
                 int[] outputs = outputList.ToArray();
                 //convert to training samples
                 for (int i = 0; i < inputList.Count; i++)

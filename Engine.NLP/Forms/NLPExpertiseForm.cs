@@ -230,7 +230,7 @@ namespace Engine.NLP.Forms
                 Invoke(new UpdateProcessTipHandler(UpdateProcessTip), 0.0);
                 int totalNum = hazard.Count + exposure.Count + humanBehavior.Count;
                 //1. 构建词W集合
-                double[][] words = new double[totalNum][];
+                float[][] words = new float[totalNum][];
                 //2.定义词颜色
                 for (int i = 0; i < hazard.Count; i++)
                     words[i] = GloveNet.Predict(hazard[i]);

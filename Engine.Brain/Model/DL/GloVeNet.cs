@@ -15,36 +15,40 @@ namespace Engine.Brain.Model.DL
     /// </summary>
     public class GloVeNet : IDEmbeddingNet
     {
-      
         /// <summary>
         /// 
         /// </summary>
         public int TrainingSize { get; private set; } = 200;
-        /// <summary>
-        /// 
-        /// </summary>
-        public int ValidationSize { get; private set; } = 200;
-        /// <summary>
-        /// 
-        /// </summary>
-        public int MaxlenNum { get; private set; } = 100;
-        /// <summary>
-        /// 
-        /// </summary>
-        public int MaxWordsNum { get; private set; } = 0;
-        /// <summary>
-        /// 
-        /// </summary>
-        public int EmbeddingDimNum { get; private set; } = 0;
-        /// <summary>
-        /// 
-        /// </summary>
-        public double[][] W { get; private set; }
 
         /// <summary>
         /// 
         /// </summary>
-        Dictionary<string, double[]> embeddingsIndex;
+        public int ValidationSize { get; private set; } = 200;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int MaxlenNum { get; private set; } = 100;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int MaxWordsNum { get; private set; } = 0;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int EmbeddingDimNum { get; private set; } = 0;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public float[][] W { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        Dictionary<string, float[]> embeddingsIndex;
 
         /// <summary>
         /// 
@@ -74,7 +78,7 @@ namespace Engine.Brain.Model.DL
         /// <summary>
         /// 
         /// </summary>
-        public double[][] embedding_weights = null;
+        public float[][] embedding_weights = null;
 
         /// <summary>
         /// 
@@ -99,7 +103,7 @@ namespace Engine.Brain.Model.DL
             embeddingsIndex = PreprocessEmbeddings(_gloVeFilename);
             //initial w
             int seed = 0;
-            W = new double[embeddingsIndex.Count][];
+            W = new float[embeddingsIndex.Count][];
             foreach (var element in embeddingsIndex)
                 W[seed++] = element.Value;
         }
@@ -138,9 +142,9 @@ namespace Engine.Brain.Model.DL
         /// <param name="inputs"></param>
         /// <param name="outputs"></param>
         /// <returns></returns>
-        public double Train(double[][] inputs, double[] outputs)
+        public double Train(float[][] inputs, float[][] outputs)
         {
-            var metric = 0.0;
+            double metric = 0.0;
             var (xBatch, yBatch) = NP.ShuffleBatch(inputs, outputs, 1);
             for (int epoch = 0; epoch < 1000; epoch++)
             {
@@ -170,21 +174,21 @@ namespace Engine.Brain.Model.DL
         /// </summary>
         /// <param name="tokenizer"></param>
         /// <returns></returns>
-        private double[][] ComputeEmbeddingMatrix(NP.FromKeras.Tokenizer tokenizer)
+        private float[][] ComputeEmbeddingMatrix(NP.FromKeras.Tokenizer tokenizer)
         {
-            var embedding_matrix = new double[MaxWordsNum][];
+            var embedding_matrix = new float[MaxWordsNum][];
             foreach (var entry in tokenizer.word_index)
             {
                 var word = entry.Key;
                 var i = entry.Value;
                 if (i >= MaxWordsNum) { continue; }
-                embeddingsIndex.TryGetValue(word, out double[] embedding_vector);
-                embedding_matrix[i] = embedding_vector != null && embedding_vector.Length == EmbeddingDimNum ? embedding_vector : new double[EmbeddingDimNum];
+                embeddingsIndex.TryGetValue(word, out float[] embedding_vector);
+                embedding_matrix[i] = embedding_vector != null && embedding_vector.Length == EmbeddingDimNum ? embedding_vector : new float[EmbeddingDimNum];
             }
             for (int i = 0; i < embedding_matrix.Length; i++)
             {
                 if (embedding_matrix[i] != null) { continue; }
-                embedding_matrix[i] = new double[EmbeddingDimNum];
+                embedding_matrix[i] = new float[EmbeddingDimNum];
             }
             return embedding_matrix;
         }
@@ -193,16 +197,16 @@ namespace Engine.Brain.Model.DL
         /// </summary>
         /// <param name="modelFilename"></param>
         /// <returns></returns>
-        private Dictionary<string, double[]> PreprocessEmbeddings(string modelFilename)
+        private Dictionary<string, float[]> PreprocessEmbeddings(string modelFilename)
         {
-            var embeddings_index = new Dictionary<string, double[]>();
+            var embeddings_index = new Dictionary<string, float[]>();
             IEnumerable<string> lines = File.ReadLines(modelFilename, Encoding.UTF8);
             int seed = 0, totalNum = lines.Count();
             foreach (var line in lines)
             {
                 var values = line.Split(' ');
                 var word = values[0];
-                var coefs = values.Skip(1).Select(v => double.Parse(v)).ToArray();
+                var coefs = values.Skip(1).Select(v => float.Parse(v)).ToArray();
                 var d = NP.Len(coefs);
                 embeddings_index[word] = coefs.Select(v => v / d).ToArray();
                 //embeddings_index[word] = coefs;
@@ -288,15 +292,16 @@ namespace Engine.Brain.Model.DL
             throw new System.NotImplementedException();
         }
 
-        public double[] Predict(params object[] inputs)
+        public float[] Predict(params object[] inputs)
         {
             string input = inputs[0] as string;
-            return embeddingsIndex.Keys.Contains(input) ? embeddingsIndex[input] : new double[EmbeddingDimNum];
+            return embeddingsIndex.Keys.Contains(input) ? embeddingsIndex[input] : new float[EmbeddingDimNum];
         }
 
         public double Train(double[][] inputs, double[][] outputs)
         {
             throw new System.NotImplementedException();
         }
+
     }
 }

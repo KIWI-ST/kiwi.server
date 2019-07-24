@@ -52,8 +52,8 @@ namespace Engine.Brain.Model.DL
             device = NP.CNTK.GetDeviceByName(deviceName);
             int[] inputDim = new int[] { w, h, c };
             int[] outputDim = new int[] { outputClassNum };
-            inputVariable = Variable.InputVariable(NDShape.CreateNDShape(inputDim), DataType.Double, "inputVariable");
-            outputVariable = Variable.InputVariable(NDShape.CreateNDShape(outputDim), DataType.Double, "labelVariable");
+            inputVariable = Variable.InputVariable(NDShape.CreateNDShape(inputDim), DataType.Float, "inputVariable");
+            outputVariable = Variable.InputVariable(NDShape.CreateNDShape(outputDim), DataType.Float, "labelVariable");
             classifierOutput = CreateFullyChannelNetwork(inputVariable, c, outputClassNum);
             var trainingLoss = CNTKLib.CrossEntropyWithSoftmax(classifierOutput, outputVariable);
             var prediction = CNTKLib.ClassificationError(classifierOutput, outputVariable);
@@ -72,7 +72,7 @@ namespace Engine.Brain.Model.DL
         {
             device = NP.CNTK.GetDeviceByName(deviceName);
             inputVariable = model.Inputs.First(v => v.Name == "inputVariable");
-            outputVariable = Variable.InputVariable(model.Output.Shape, DataType.Double, "labelVariable");
+            outputVariable = Variable.InputVariable(model.Output.Shape, DataType.Float, "labelVariable");
             classifierOutput = model;
             var trainingLoss = CNTKLib.CrossEntropyWithSoftmax(classifierOutput, outputVariable);
             var prediction = CNTKLib.ClassificationError(classifierOutput, outputVariable);
@@ -92,7 +92,7 @@ namespace Engine.Brain.Model.DL
             return NP.CNTK.Dense(pooling4, outputClassNum, device, CNTKLib.ReLU, "ouput");
         }
 
-        public double Train(double[][] inputs, double[][] outputs)
+        public double Train(float[][] inputs, float[][] outputs)
         {
             //ensure that data is destroyed after use
             using (Value inputsValue = Value.CreateBatch(inputVariable.Shape, NP.ToOneDimensional(inputs), device))
@@ -127,28 +127,28 @@ namespace Engine.Brain.Model.DL
             return modelFilename;
         }
 
-        public double[] Predict(params object[] inputs)
+        public float[] Predict(params object[] inputs)
         {
-            double[] input = inputs[0] as double[];
+            float[] input = inputs[0] as float[];
             using (Value inputsValue = Value.CreateBatch(inputVariable.Shape, input, device))
             {
                 var inputDict = new Dictionary<Variable, Value>() { { inputVariable, inputsValue } };
                 var outputDict = new Dictionary<Variable, Value>() { { classifierOutput.Output, null} };
                 classifierOutput.Evaluate(inputDict, outputDict, device);
-                var prdict = outputDict[classifierOutput.Output].GetDenseData<double>(classifierOutput.Output);
+                var prdict = outputDict[classifierOutput.Output].GetDenseData<float>(classifierOutput.Output);
                 return prdict[0].ToArray() ;
             }
         }
 
-       public double[][] Predicts(double[][] inputs)
+       public float[][] Predicts(float[][] inputs)
         {
             using (Value inputsValue = Value.CreateBatch(inputVariable.Shape, NP.ToOneDimensional(inputs), device))
             {
                 var inputDict = new Dictionary<Variable, Value>() { { inputVariable, inputsValue } };
                 var outputDict = new Dictionary<Variable, Value>() { { classifierOutput.Output, null } };
                 classifierOutput.Evaluate(inputDict, outputDict, device);
-                var prdict = outputDict[classifierOutput.Output].GetDenseData<double>(classifierOutput.Output);
-                double[][] outputs = new double[inputs.Length][];
+                var prdict = outputDict[classifierOutput.Output].GetDenseData<float>(classifierOutput.Output);
+                float[][] outputs = new float[inputs.Length][];
                 for (int i = 0; i < inputs.Length; i++)
                     outputs[i] = prdict[i].ToArray();
                 return outputs;

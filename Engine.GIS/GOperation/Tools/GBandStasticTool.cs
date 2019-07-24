@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Engine.GIS.GOperation.Tools
 {
-    public class GRasterBandStatisticTool : IRasterBandStatisticTool,IDisposable
+    public class GRasterBandStatisticTool : IRasterBandStatisticTool, IDisposable
     {
 
         /// <summary>
@@ -17,12 +17,12 @@ namespace Engine.GIS.GOperation.Tools
         /// <summary>
         /// noramlized data
         /// </summary>
-        double[,] _normalData;
+        float[,] _normalData;
 
         /// <summary>
         /// raw data
         /// </summary>
-        double[] _rawData;
+        float[] _rawData;
 
         GRasterBand _pBand;
 
@@ -40,11 +40,11 @@ namespace Engine.GIS.GOperation.Tools
             _pBand = null;
         }
 
-        public double[,] StatisticalRawQueryTable
+        public float[,] StatisticalRawQueryTable
         {
             get
             {
-                double[,] queryTable = new double[_width, _height];
+                float[,] queryTable = new float[_width, _height];
                 for (int position = 0; position < _width * _height; position++)
                     queryTable[position % _width, position / _width] = _rawData[position];
                 return queryTable;

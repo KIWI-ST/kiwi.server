@@ -39,7 +39,7 @@ namespace Host.UI.Jobs
             _t = new Thread(() =>
             {
                 //input list
-                List<List<double>> inputList = new List<List<double>>();
+                List<List<float>> inputList = new List<List<float>>();
                 List<int> outputList = new List<int>();
                 List<int> keys = new List<int>();
                 using (StreamReader sr = new StreamReader(sampleFilename))
@@ -52,9 +52,9 @@ namespace Host.UI.Jobs
                         outputList.Add(key);
                         if (!keys.Contains(key))
                             keys.Add(key);
-                        List<double> inputItem = new List<double>();
+                        List<float> inputItem = new List<float>();
                         for (int i = 0; i < rawdatas.Length - 1; i++)
-                            inputItem.Add(Convert.ToDouble(rawdatas[i]));
+                            inputItem.Add(float.Parse(rawdatas[i]));
                         inputList.Add(inputItem);
                         text = sr.ReadLine();
                     } while (text != null);
@@ -70,8 +70,8 @@ namespace Host.UI.Jobs
                 //train model
                 for (int i = 0; i < epochs; i++)
                 {
-                    double[][] inputs = new double[batchSize][];
-                    double[][] labels = new double[batchSize][];
+                    float[][] inputs = new float[batchSize][];
+                    float[][] labels = new float[batchSize][];
                     for (int k = 0; k < batchSize; k++)
                     {
                         int index = NP.Random(smapleSize);
@@ -93,16 +93,16 @@ namespace Host.UI.Jobs
                 byte[] buffer = new byte[totalPixels];
                 for(int j = 0; j < rasterLayer.YSize; j++)
                 {
-                    double[][] inputs = new double[rasterLayer.XSize][];
+                    float[][] inputs = new float[rasterLayer.XSize][];
                     for(int i=0;i<rasterLayer.XSize;i++)
                         inputs[i] = pRasterLayerCursorTool.PickRagneNormalValue(i, j, width, height);
-                    double[][] preds = cnn.Predicts(inputs);
+                    float[][] preds = cnn.Predicts(inputs);
                     for(int i=0;i< rasterLayer.XSize; i++)
                     {
-                        double[] pred = preds[i];
+                        float[] pred = preds[i];
                         int gray = keys.ToArray()[NP.Argmax(pred)];
                         buffer[j * rasterLayer.XSize + i] = Convert.ToByte(gray);
-                        Process = (double)(seed++) / totalPixels;
+                        Process = (float)(seed++) / totalPixels;
                     }
                 }
                 //save result

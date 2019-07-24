@@ -23,46 +23,57 @@ namespace Host.UI.Jobs
         /// background thread
         /// </summary>
         Thread _t;
+
         /// <summary>
         /// 
         /// </summary>
         DQN _dqn;
+
         /// <summary>
         /// 
         /// </summary>
-        double _gamma = 0.0;
+        float _gamma = 0.0f;
+
         /// <summary>
         /// task name
         /// </summary>
         public string Name => "DqnClassificationTask";
+
         /// <summary>
         /// run process
         /// </summary>
         public double Process { get; private set; } = 0.0;
+
         /// <summary>
         /// task start time
         /// </summary>
         public DateTime StartTime { get; private set; }
+
         /// <summary>
         /// 
         /// </summary>
         public string Summary { get; private set; }
+
         /// <summary>
         /// 
         /// </summary>
         public bool Complete { get; private set; } = false;
+
         /// <summary>
         /// 
         /// </summary>
         public event OnTaskCompleteHandler OnTaskComplete;
+
         /// <summary>
         /// 
         /// </summary>
         public event OnStateChangedHandler OnStateChanged;
+
         /// <summary>
         /// 
         /// </summary>
         IEnv _env;
+
         /// <summary>
         /// classification tast by DQN
         /// </summary>
@@ -73,7 +84,7 @@ namespace Host.UI.Jobs
         {
             _t = new Thread(() =>
             {
-                List<List<double>> inputList = new List<List<double>>();
+                List<List<float>> inputList = new List<List<float>>();
                 List<int> outputList = new List<int>();
                 List<int> keys = new List<int>();
                 using (StreamReader sr = new StreamReader(envSampleFilename))
@@ -86,15 +97,15 @@ namespace Host.UI.Jobs
                         outputList.Add(key);
                         if (!keys.Contains(key))
                             keys.Add(key);
-                        List<double> inputItem = new List<double>();
+                        List<float> inputItem = new List<float>();
                         for (int i = 0; i < rawdatas.Length - 1; i++)
-                            inputItem.Add(Convert.ToDouble(rawdatas[i]));
+                            inputItem.Add(float.Parse(rawdatas[i]));
                         inputList.Add(inputItem);
                         text = sr.ReadLine();
                     } while (text != null);
                     //转换成指定类型
                     int count = inputList.Count;
-                    double[][] x = new double[count][];
+                    float[][] x = new float[count][];
                     int[] y = outputList.ToArray();
                     for (int i = 0; i < count; i++)
                         x[i] = inputList[i].ToArray();
@@ -134,7 +145,7 @@ namespace Host.UI.Jobs
                     for (int j = 0; j < featureRasterLayer.YSize; j++)
                     {
                         //get normalized input raw value
-                        double[] normal = pRasterLayerCursorTool.PickRagneNormalValue(i, j, width, height);
+                        float[] normal = pRasterLayerCursorTool.PickRagneNormalValue(i, j, width, height);
                         var (action, q) = _dqn.ChooseAction(normal);
                         //convert action to raw byte value
                         int gray = _dqn.ActionToRawValue(NP.Argmax(action));

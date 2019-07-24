@@ -43,7 +43,7 @@ namespace Engine.Brain.Model.RL.Env
         /// <summary>
         /// use one-hot vector represent image class(anno)
         /// </summary>
-        double[] _current_classindex;
+        float[] _current_classindex;
 
         //lerp pick samples ,default is true
         private bool _lerpPick;
@@ -72,22 +72,27 @@ namespace Engine.Brain.Model.RL.Env
             //statical graph
             Prepare();
         }
+
         /// <summary>
         /// number of actions
         /// </summary>
         public int ActionNum { get; }
+
         /// <summary>
         /// number of features
         /// </summary>
         public int[] FeatureNum { get { return new int[] { _featureRasterLayer.BandCount }; } }
+
         /// <summary>
         /// 
         /// </summary>
         public int[] RandomSeedKeys { get; private set; }
+
         /// <summary>
         /// indicate the agent can can do only one-kind action at once, default is ture
         /// </summary>
         public bool SingleAction { get { return true; } }
+
         /// <summary>
         /// 
         /// </summary>
@@ -121,6 +126,7 @@ namespace Engine.Brain.Model.RL.Env
                 }
             }
         }
+
         /// <summary>
         /// 分析标注道路区域
         /// </summary>
@@ -137,81 +143,90 @@ namespace Engine.Brain.Model.RL.Env
             //
             (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
         }
+
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public double[] Reset()
+        public float[] Reset()
         {
             return Step(null).state;
         }
+
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        private (int x, int y, double[] classIndex) RandomAccessMemory()
+        private (int x, int y, float[] classIndex) RandomAccessMemory()
         {
             //use actionNumber represent real types
             int rawValueIndex = NP.Random(RandomSeedKeys);
             Point p = _memory[rawValueIndex].RandomTake();
             //current one-hot action
-            double[] classIndex = NP.ToOneHot(Array.IndexOf(RandomSeedKeys, rawValueIndex), ActionNum);
+            float[] classIndex = NP.ToOneHot(Array.IndexOf(RandomSeedKeys, rawValueIndex), ActionNum);
             return (p.X, p.Y, classIndex);
         }
+
         /// <summary>
         /// random测试集
         /// </summary>
         /// <param name="batchSize"></param>
         /// <returns></returns>
-        public (List<double[]> states, double[][] labels) RandomEval(int batchSize = 64)
+        public (List<float[]> states, float[][] labels) RandomEval(int batchSize = 64)
         {
-            List<double[]> states = new List<double[]>();
-            double[][] labels = new double[batchSize][];
+            List<float[]> states = new List<float[]>();
+            float[][] labels = new float[batchSize][];
             for (int i = 0; i < batchSize; i++)
             {
                 var (x, y, classIndex) = RandomAccessMemory();
-                double[] normal = _pGRasterLayerCursorTool.PickRagneNormalValue(x, y);
+                float[] normal = _pGRasterLayerCursorTool.PickRagneNormalValue(x, y);
                 states.Add(normal);
                 labels[i] = classIndex;
             }
             return (states, labels);
         }
+
         /// <summary>
         /// random数据集
         /// </summary>
-        public double[] RandomAction()
+        public float[] RandomAction()
         {
             int action = NP.Random(ActionNum);
             return NP.ToOneHot(action, ActionNum);
         }
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="action">use null to reset environment,else use one-hot vector</param>
         /// <returns></returns>
-        public (double[] state, double reward) Step(double[] action)
+        public (float[] state, float reward) Step(float[] action)
         {
             if (action == null)
             {
                 var (_c_x, _c_y, _c_classIndex) = (_current_x, _current_y, _current_classindex);
                 (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
-                double[] raw = _pGRasterLayerCursorTool.PickNormalValue(_c_x, _c_y);
-                return (raw, 0.0);
+                float[] raw = _pGRasterLayerCursorTool.PickNormalValue(_c_x, _c_y);
+                return (raw, 0.0f);
             }
             else
             {
-                double reward = NP.Argmax(action) == NP.Argmax(_current_classindex) ? 1.0 : -1.0;
+                float reward = NP.Argmax(action) == NP.Argmax(_current_classindex) ? 1.0f : -1.0f;
                 (_current_x, _current_y, _current_classindex) = RandomAccessMemory();
-                double[] raw = _pGRasterLayerCursorTool.PickNormalValue(_current_x, _current_y);
+                float[] raw = _pGRasterLayerCursorTool.PickNormalValue(_current_x, _current_y);
                 return (raw, reward);
             }
         }
 
+        /// <summary>
+        /// 清理内存
+        /// </summary>
         public void Dispose()
         {
             _memory.Clear();
             _memory = null;
             _pGRasterLayerCursorTool = null;
         }
+
     }
 }

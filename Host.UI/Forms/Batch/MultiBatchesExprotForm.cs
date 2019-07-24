@@ -64,14 +64,14 @@ namespace Host.UI.Forms
         /// </summary>
         /// <param name="fullFilename"></param>
         /// <returns></returns>
-        private double[] PickSampleNormalValue(string fullFilename, int row, int col, int bandCount)
+        private float[] PickSampleNormalValue(string fullFilename, int row, int col, int bandCount)
         {
             GRasterLayer featureRasterLayer = new GRasterLayer(fullFilename);
             IRasterLayerCursorTool pRasterLayerCursorTool = new GRasterLayerCursorTool();
             pRasterLayerCursorTool.Visit(featureRasterLayer);
             int centerX = featureRasterLayer.XSize / 2;
             int centerY = featureRasterLayer.YSize / 2;
-            double[] sampleValue = pRasterLayerCursorTool.PickRagneNormalValue(centerX, centerY, row, col);
+            float[] sampleValue = pRasterLayerCursorTool.PickRagneNormalValue(centerX, centerY, row, col);
             return sampleValue;
         }
 
@@ -94,7 +94,7 @@ namespace Host.UI.Forms
                     try
                     {
                         //sampleing
-                        double[] sampleValue = PickSampleNormalValue(file.FullName, row, col, bandCount);
+                        float[] sampleValue = PickSampleNormalValue(file.FullName, row, col, bandCount);
                         lines.Add(string.Join(",", sampleValue) + "," + key);
                     }
                     catch

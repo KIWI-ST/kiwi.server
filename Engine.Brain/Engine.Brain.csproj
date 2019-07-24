@@ -102,7 +102,6 @@
     <Compile Include="Model\DL\FullyChannelNet9.cs" />
     <Compile Include="Model\DL\DCGANet.cs" />
     <Compile Include="Model\DL\GloVeNet.cs" />
-    <Compile Include="Model\DL\ResNet.cs" />
     <Compile Include="Model\IDConvNet.cs" />
     <Compile Include="Model\IDEmbeddingNet.cs" />
     <Compile Include="Model\IDNet.cs" />
@@ -111,7 +110,6 @@
     <Compile Include="Model\ML\L2SVM.cs" />
     <Compile Include="Model\ML\RF.cs" />
     <Compile Include="Model\RL\DQN.cs" />
-    <Compile Include="Model\RL\Env\ExtractRoadEnv.cs" />
     <Compile Include="Model\RL\Env\ImageClassifyEnv.cs" />
     <Compile Include="Model\RL\Env\SamplesEnv.cs" />
     <Compile Include="Model\RL\IEnv.cs" />

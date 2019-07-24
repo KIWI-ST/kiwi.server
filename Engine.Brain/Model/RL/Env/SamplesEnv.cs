@@ -13,7 +13,7 @@ namespace Engine.Brain.Model.RL.Env
         /// <summary>
         /// input data collection
         /// </summary>
-        double[][] _inputs;
+        float[][] _inputs;
 
         /// <summary>
         /// label collection
@@ -38,14 +38,14 @@ namespace Engine.Brain.Model.RL.Env
         /// <summary>
         /// _current_classIndex, label value to oneHot
         /// </summary>
-        double[] _current_classIndex;
+        float[] _current_classIndex;
 
         /// <summary>
         /// build env according to the samples
         /// </summary>
         /// <param name="inputs"></param>
         /// <param name="labels"></param>
-        public SamplesEnv(double[][] inputs, int[] labels)
+        public SamplesEnv(float[][] inputs, int[] labels)
         {
             if (inputs.Count() != labels.Count())
                 throw new Exception("the inputs and lables must be at the same count");
@@ -111,7 +111,7 @@ namespace Engine.Brain.Model.RL.Env
         /// 
         /// </summary>
         /// <returns></returns>
-        public double[] RandomAction()
+        public float[] RandomAction()
         {
             int action = NP.Random(ActionNum);
             return NP.ToOneHot(action, ActionNum);
@@ -121,12 +121,12 @@ namespace Engine.Brain.Model.RL.Env
         /// 
         /// </summary>
         /// <returns></returns>
-        public (int inputIndex, double[] classIndex) RandomAccessMemory()
+        public (int inputIndex, float[] classIndex) RandomAccessMemory()
         {
             //use actionNumber represent real types
             int inputIndex = NP.Random(_count);
             int lableValue = _labels[inputIndex];
-            double[] classIndex = NP.ToOneHot(Array.IndexOf(RandomSeedKeys, lableValue), ActionNum);
+            float[] classIndex = NP.ToOneHot(Array.IndexOf(RandomSeedKeys, lableValue), ActionNum);
             return (inputIndex, classIndex);
         }
 
@@ -135,14 +135,14 @@ namespace Engine.Brain.Model.RL.Env
         /// </summary>
         /// <param name="batchSize"></param>
         /// <returns></returns>
-        public (List<double[]> states, double[][] labels) RandomEval(int batchSize = 64)
+        public (List<float[]> states, float[][] labels) RandomEval(int batchSize = 64)
         {
-            List<double[]> states = new List<double[]>();
-            double[][] labels = new double[batchSize][];
+            List<float[]> states = new List<float[]>();
+            float[][] labels = new float[batchSize][];
             for (int i = 0; i < batchSize; i++)
             {
                 var ( inputIndex, classIndex) = RandomAccessMemory();
-                double[] normal = _inputs[inputIndex];
+                float[] normal = _inputs[inputIndex];
                 states.Add(normal);
                 labels[i] = classIndex;
             }
@@ -153,7 +153,7 @@ namespace Engine.Brain.Model.RL.Env
         /// 
         /// </summary>
         /// <returns></returns>
-        public double[] Reset()
+        public float[] Reset()
         {
             return Step(null).state;
         }
@@ -163,20 +163,20 @@ namespace Engine.Brain.Model.RL.Env
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public (double[] state, double reward) Step(double[] action)
+        public (float[] state, float reward) Step(float[] action)
         {
             if (action == null)
             {
                 var (_c_inputIndex, _c_classIndex) = (_current_inputIndex, _current_classIndex);
                 (_current_inputIndex, _current_classIndex) = RandomAccessMemory();
-                double[] raw = _inputs[_c_inputIndex];
-                return (raw, 0.0);
+                float[] raw = _inputs[_c_inputIndex];
+                return (raw, 0.0f);
             }
             else
             {
-                double reward = NP.Argmax(action) == NP.Argmax(_current_classIndex) ? 1.0 : -1.0;
+                float reward = NP.Argmax(action) == NP.Argmax(_current_classIndex) ? 1.0f : -1.0f;
                 (_current_inputIndex, _current_classIndex) = RandomAccessMemory();
-                double[] raw = _inputs[_current_inputIndex];
+                float[] raw = _inputs[_current_inputIndex];
                 return (raw, reward);
             }
         }

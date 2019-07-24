@@ -11,7 +11,7 @@
         /// <summary>
         /// get the weight
         /// </summary>
-        double[][] W { get; }
+        float[][] W { get; }
 
         /// <summary>
         /// load model

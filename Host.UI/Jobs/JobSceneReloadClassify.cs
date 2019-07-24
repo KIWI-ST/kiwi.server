@@ -108,7 +108,7 @@ namespace Host.UI.Jobs
 
         private IEnv LoadSampleBatch(DirectoryInfo sampleDir)
         {
-            List<double[]> sampleCollection = new List<double[]>();
+            List<float[]> sampleCollection = new List<float[]>();
             List<int> labelCollection = new List<int>();
             foreach (FileInfo file in sampleDir.GetFiles())
             {
@@ -124,7 +124,7 @@ namespace Host.UI.Jobs
                     } while (text != null);
                 }
             }
-            double[][] samples = sampleCollection.ToArray();
+            float[][] samples = sampleCollection.ToArray();
             int[] labels = labelCollection.ToArray();
             //release memory
             sampleCollection.Clear();
@@ -133,13 +133,13 @@ namespace Host.UI.Jobs
             return new SamplesEnv(samples, labels);
         }
 
-        private (double[] sample, int label) ConvertToSample(string text)
+        private (float[] sample, int label) ConvertToSample(string text)
         {
             string[] samplesText = text.Split(',');
             int label = Convert.ToInt32(samplesText.Last());
-            double[] sample = new double[samplesText.Length - 1];
+            float[] sample = new float[samplesText.Length - 1];
             for (int i = 0; i < samplesText.Length - 1; i++)
-                sample[i] = Convert.ToDouble(samplesText[i]);
+                sample[i] = float.Parse(samplesText[i]);
             return (sample, label);
         }
 
@@ -152,7 +152,7 @@ namespace Host.UI.Jobs
                 {
                     try
                     {
-                        double[] sampleValue = PickSampleNormalValue(file.FullName, row, col);
+                        float[] sampleValue = PickSampleNormalValue(file.FullName, row, col);
                         var (action, q) = dqn.ChooseAction(sampleValue);
                         int classType = dqn.ActionToRawValue(NP.Argmax(action));
                         sw.WriteLine(string.Format("{0} {1}", file.Name, classType));
@@ -174,14 +174,14 @@ namespace Host.UI.Jobs
                 file.Delete();
         }
 
-        private double[] PickSampleNormalValue(string fullFilename, int row, int col)
+        private float[] PickSampleNormalValue(string fullFilename, int row, int col)
         {
             GRasterLayer featureRasterLayer = new GRasterLayer(fullFilename);
             IRasterLayerCursorTool pRasterLayerCursorTool = new GRasterLayerCursorTool();
             pRasterLayerCursorTool.Visit(featureRasterLayer);
             int centerX = featureRasterLayer.XSize / 2;
             int centerY = featureRasterLayer.YSize / 2;
-            double[] sampleValue = pRasterLayerCursorTool.PickRagneNormalValue(centerX, centerY, row, col);
+            float[] sampleValue = pRasterLayerCursorTool.PickRagneNormalValue(centerX, centerY, row, col);
             return sampleValue;
         }
 

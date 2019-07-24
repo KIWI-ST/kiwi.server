@@ -5,7 +5,7 @@ namespace Engine.GIS.GOperation.Arithmetic
 {
     public class ConvarianceIndex
     {
-        public static double CalcuteConvariance(double[] x, double[] y)
+        public static float CalcuteConvariance(float[] x, float[] y)
         {
             //0.统计length
             int length = 0;
@@ -14,31 +14,32 @@ namespace Engine.GIS.GOperation.Arithmetic
             else
                 length = x.Length;
             //1.计算协方差
-            double ex = x.Sum() / (length - 1);
-            double ey = y.Sum() / (length - 1);
-            double exy = 0.0;
+            float ex = x.Sum() / (length - 1);
+            float ey = y.Sum() / (length - 1);
+            float exy = 0.0f;
             for (int i = 0; i < length; i++)
                 exy += x[i] * y[i];
             exy = exy / (length - 1);
             //2.计算相关系数
-            double covxy = exy - ex * ey;
+            float covxy = exy - ex * ey;
             return covxy;
         }
 
-        public static double Variance(double[] x)
+        public static float Variance(float[] x)
         {
             int length = x.Length;
-            double ex = x.Sum() / length;
-            double vx = 0.0;
+            float ex = x.Sum() / length;
+            float vx = 0.0f;
             for (int i = 0; i < length; i++)
                 vx += (x[i]-ex);
             return vx / length;
         }
 
-        public static double CalcuteConvarianceIndex(double[] x, double[] y)
+        public static float CalcuteConvarianceIndex(float[] x, float[] y)
         {
-            double cov = CalcuteConvariance(x, y);
-            return cov / Math.Sqrt(Variance(x) * Variance(y));
+            float cov = CalcuteConvariance(x, y);
+            double input = Variance(x) * Variance(y);
+            return cov / (float)Math.Sqrt(input);
         }
 
     }

@@ -53,14 +53,16 @@ namespace Engine.GIS.GOperation.Tools
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        double[] PickRawValue(int x, int y);
+        float[] PickRawValue(int x, int y);
+
         /// <summary>
         /// pick normalized value
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        double[] PickNormalValue(int x, int y);
+        float[] PickNormalValue(int x, int y);
+
         /// <summary>
         /// pick normalized with range
         /// </summary>
@@ -69,7 +71,7 @@ namespace Engine.GIS.GOperation.Tools
         /// <param name="row"></param>
         /// <param name="col"></param>
         /// <returns></returns>
-        double[] PickRagneNormalValue(int x, int y, int row = 5, int col = 5);
+        float[] PickRagneNormalValue(int x, int y, int row = 5, int col = 5);
     }
     /// <summary>
     /// cursor tool
@@ -80,24 +82,28 @@ namespace Engine.GIS.GOperation.Tools
         /// 
         /// </summary>
         IEnumerable<(int, int, double)> ValidatedRawCollection { get; }
+
         /// <summary>
         /// 
         /// </summary>
         IEnumerable<(int, int, double)> ValidatedNormalCollection { get; }
+
         /// <summary>
         /// pick raw value
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        double PickRawValue(int x, int y);
+        float PickRawValue(int x, int y);
+
         /// <summary>
         /// pick normalized value
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        double PickNormalValue(int x, int y);
+        float PickNormalValue(int x, int y);
+
         /// <summary>
         /// pick value by conv
         /// </summary>
@@ -106,7 +112,8 @@ namespace Engine.GIS.GOperation.Tools
         /// <param name="row"></param>
         /// <param name="col"></param>
         /// <returns></returns>
-        double[] PickRangeNormalValue(int x, int y, int row = 5, int col = 5);
+        float[] PickRangeNormalValue(int x, int y, int row = 5, int col = 5);
+
         /// <summary>
         /// pick raw value by cov
         /// </summary>
@@ -115,7 +122,7 @@ namespace Engine.GIS.GOperation.Tools
         /// <param name="row"></param>
         /// <param name="col"></param>
         /// <returns></returns>
-        double[] PickRangeRawValue(int x, int y, int row = 5, int col = 5);
+        float[] PickRangeRawValue(int x, int y, int row = 5, int col = 5);
     }
 
     public interface IRasterBandStatisticTool : IRasterBandTool
@@ -123,7 +130,7 @@ namespace Engine.GIS.GOperation.Tools
         /// <summary>
         /// static raw value query table (convert one-dim to [x,y] two dim]
         /// </summary>
-        double[,] StatisticalRawQueryTable { get; }
+        float[,] StatisticalRawQueryTable { get; }
         /// <summary>
         /// static raw value graph
         /// </summary>

@@ -11,12 +11,13 @@
         /// <param name="inputs"></param>
         /// <param name="outputs"></param>
         /// <returns></returns>
-        double Train(double[][] inputs, int[] outputs);
+        double Train(float[][] inputs, int[] outputs);
+
         /// <summary>
         /// Predict By Model
         /// </summary>
         /// <param name="inputs"></param>
         /// <returns></returns>
-        int[] Predict(double[][] inputs);
+        int[] Predict(float[][] inputs);
     }
 }

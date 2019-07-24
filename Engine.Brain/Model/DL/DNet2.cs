@@ -143,7 +143,7 @@ namespace Engine.Brain.Model.DL
             return new DNet2(modelStream, deviceName);
         }
 
-        public double[] Predict(params object[] inputs)
+        public float[] Predict(params object[] inputs)
         {
             double[] input = inputs[0] as double[];
             using (Value inputsValue = Value.CreateBatch(inputVariable.Shape, input, device))
@@ -151,12 +151,12 @@ namespace Engine.Brain.Model.DL
                 var inputDict = new Dictionary<Variable, Value>() { { inputVariable, inputsValue } };
                 var outputDict = new Dictionary<Variable, Value>() { { classifierOutput.Output, null } };
                 classifierOutput.Evaluate(inputDict, outputDict, device);
-                var prdict = outputDict[classifierOutput.Output].GetDenseData<double>(classifierOutput.Output);
+                var prdict = outputDict[classifierOutput.Output].GetDenseData<float>(classifierOutput.Output);
                 return prdict[0].ToArray();
             }
         }
 
-        public double Train(double[][] inputs, double[][] outputs)
+        public double Train(float[][] inputs, float[][] outputs)
         {
             //ensure that data is destroyed after use
             using (Value inputsValue = Value.CreateBatch(inputVariable.Shape, NP.ToOneDimensional(inputs), device))

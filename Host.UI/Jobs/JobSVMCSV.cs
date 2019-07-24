@@ -34,7 +34,7 @@ namespace Host.UI.Jobs
                 List<int> outputKey = new List<int>();
                 using (StreamReader sr = new StreamReader(sampleFullFilename))
                 {
-                    List<List<double>> inputList = new List<List<double>>();
+                    List<List<float>> inputList = new List<List<float>>();
                     List<int> outputList = new List<int>();
                     string text = sr.ReadLine().Replace("\t", ",").Replace("N/A", "0");
                     do
@@ -45,13 +45,13 @@ namespace Host.UI.Jobs
                         int output = Convert.ToInt32(rawdatas.Last());
                         outputList.Add(output);
                         if (!outputKey.Contains(output)) outputKey.Add(output);
-                        List<double> inputItem = new List<double>();
+                        List<float> inputItem = new List<float>();
                         for (int i = 0; i < rawdatas.Length - 1; i++)
-                            inputItem.Add(Convert.ToDouble(rawdatas[i]));
+                            inputItem.Add(float.Parse(rawdatas[i]));
                         inputList.Add(inputItem);
                         text = sr.ReadLine();
                     } while (text != null);
-                    double[][] inputs = new double[inputList.Count][];
+                    float[][] inputs = new float[inputList.Count][];
                     int[] outputs = new int[inputList.Count];
                     for (int i = 0; i < inputList.Count; i++)
                     {
@@ -77,10 +77,10 @@ namespace Host.UI.Jobs
                         {
                             text = text.Replace("N/A", "0");
                             string[] rawdatas = text.Split(',');
-                            double[][] inputs = new double[1][];
-                            List<double> inputItem = new List<double>();
+                            float[][] inputs = new float[1][];
+                            List<float> inputItem = new List<float>();
                             for (int i = 0; i < rawdatas.Length; i++)
-                                inputItem.Add(Convert.ToDouble(rawdatas[i]));
+                                inputItem.Add(float.Parse(rawdatas[i]));
                             inputs[0] = inputItem.ToArray();
                             int[] ouputs = svm.Predict(inputs);
                             int classtype = outputKey[ouputs[0]];

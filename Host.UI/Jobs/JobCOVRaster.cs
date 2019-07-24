@@ -42,16 +42,16 @@ namespace Host.UI.Jobs
                 for (int i = 0; i < target1band.Width; i++)
                     for (int j = 0; j < target1band.Height; j++)
                     {
-                        double[] raw1 = pRasterBandCursorTool1.PickRangeRawValue(i, j, 3, 3);
-                        double[] raw2 = pRasterBandCursorTool2.PickRangeRawValue(i, j, 3, 3);
-                        double cov = ConvarianceIndex.CalcuteConvarianceIndex(raw1, raw2);
+                        float[] raw1 = pRasterBandCursorTool1.PickRangeRawValue(i, j, 3, 3);
+                        float[] raw2 = pRasterBandCursorTool2.PickRangeRawValue(i, j, 3, 3);
+                        float cov = ConvarianceIndex.CalcuteConvarianceIndex(raw1, raw2);
                         //拉伸-1 - 1 
                         int gray = Convert.ToInt32((cov + 1.0) * 20);
                         Color c = Color.FromArgb(gray, gray, gray);
                         Pen p = new Pen(c);
                         SolidBrush brush = new SolidBrush(c);
                         g.FillRectangle(brush, new Rectangle(i, j, 1, 1));
-                        Process = (double)(seed++) / totalPixels;
+                        Process = (float)(seed++) / totalPixels;
                     }
                 //save result
                 string fullFileName = Directory.GetCurrentDirectory() + @"\tmp\" + DateTime.Now.ToFileTimeUtc() + ".png";

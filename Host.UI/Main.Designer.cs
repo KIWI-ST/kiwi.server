@@ -48,7 +48,9 @@
             this.CNN_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.DQN_Classification_toolStripSplitButton = new System.Windows.Forms.ToolStripSplitButton();
             this.DQN_PolSAR_Classification_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
             this.Scene_Classification_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Reloac_SceneClassification_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.Smaple_Batches_toolStripSplitButton = new System.Windows.Forms.ToolStripSplitButton();
             this.Single_Batch_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -98,8 +100,6 @@
             this.mapToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Tools_Configuration_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
-            this.Reloac_SceneClassification_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_main)).BeginInit();
@@ -177,7 +177,7 @@
             // 
             this.RandomForest_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_query_inner_join_50;
             this.RandomForest_ToolStripMenuItem.Name = "RandomForest_ToolStripMenuItem";
-            this.RandomForest_ToolStripMenuItem.Size = new System.Drawing.Size(236, 34);
+            this.RandomForest_ToolStripMenuItem.Size = new System.Drawing.Size(278, 42);
             this.RandomForest_ToolStripMenuItem.Text = "RandomForest";
             this.RandomForest_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
@@ -185,7 +185,7 @@
             // 
             this.L2SVM_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_query_inner_join_left_50;
             this.L2SVM_ToolStripMenuItem.Name = "L2SVM_ToolStripMenuItem";
-            this.L2SVM_ToolStripMenuItem.Size = new System.Drawing.Size(236, 34);
+            this.L2SVM_ToolStripMenuItem.Size = new System.Drawing.Size(278, 42);
             this.L2SVM_ToolStripMenuItem.Text = "L2-SVM";
             this.L2SVM_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
@@ -243,18 +243,31 @@
             // 
             this.DQN_PolSAR_Classification_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_account_50;
             this.DQN_PolSAR_Classification_ToolStripMenuItem.Name = "DQN_PolSAR_Classification_ToolStripMenuItem";
-            this.DQN_PolSAR_Classification_ToolStripMenuItem.Size = new System.Drawing.Size(350, 42);
+            this.DQN_PolSAR_Classification_ToolStripMenuItem.Size = new System.Drawing.Size(342, 34);
             this.DQN_PolSAR_Classification_ToolStripMenuItem.Text = "PolSAR Classification";
             this.DQN_PolSAR_Classification_ToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.DQN_PolSAR_Classification_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(339, 6);
             // 
             // Scene_Classification_ToolStripMenuItem
             // 
             this.Scene_Classification_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_workflow_50;
             this.Scene_Classification_ToolStripMenuItem.Name = "Scene_Classification_ToolStripMenuItem";
-            this.Scene_Classification_ToolStripMenuItem.Size = new System.Drawing.Size(350, 42);
+            this.Scene_Classification_ToolStripMenuItem.Size = new System.Drawing.Size(342, 34);
             this.Scene_Classification_ToolStripMenuItem.Text = "Scene Classification";
             this.Scene_Classification_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
+            // 
+            // Reloac_SceneClassification_ToolStripMenuItem
+            // 
+            this.Reloac_SceneClassification_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_configurator_50;
+            this.Reloac_SceneClassification_ToolStripMenuItem.Name = "Reloac_SceneClassification_ToolStripMenuItem";
+            this.Reloac_SceneClassification_ToolStripMenuItem.Size = new System.Drawing.Size(342, 34);
+            this.Reloac_SceneClassification_ToolStripMenuItem.Text = "Reload Scene Classification";
+            this.Reloac_SceneClassification_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
             // toolStripSeparator3
             // 
@@ -561,7 +574,7 @@
             this.tab_nlpview.Controls.Add(this.Nlp_splitContainer);
             this.tab_nlpview.Location = new System.Drawing.Point(4, 28);
             this.tab_nlpview.Name = "tab_nlpview";
-            this.tab_nlpview.Size = new System.Drawing.Size(1108, 811);
+            this.tab_nlpview.Size = new System.Drawing.Size(1108, 807);
             this.tab_nlpview.TabIndex = 2;
             this.tab_nlpview.Text = "NLPView";
             this.tab_nlpview.UseVisualStyleBackColor = true;
@@ -581,8 +594,8 @@
             // Nlp_splitContainer.Panel2
             // 
             this.Nlp_splitContainer.Panel2.Controls.Add(this.NLP_pictureBox);
-            this.Nlp_splitContainer.Size = new System.Drawing.Size(1108, 811);
-            this.Nlp_splitContainer.SplitterDistance = 311;
+            this.Nlp_splitContainer.Size = new System.Drawing.Size(1108, 807);
+            this.Nlp_splitContainer.SplitterDistance = 309;
             this.Nlp_splitContainer.TabIndex = 0;
             // 
             // NLP_splitContainer_top
@@ -599,7 +612,7 @@
             // NLP_splitContainer_top.Panel2
             // 
             this.NLP_splitContainer_top.Panel2.Controls.Add(this.NLP_Timeline_listBox);
-            this.NLP_splitContainer_top.Size = new System.Drawing.Size(1108, 311);
+            this.NLP_splitContainer_top.Size = new System.Drawing.Size(1108, 309);
             this.NLP_splitContainer_top.SplitterDistance = 548;
             this.NLP_splitContainer_top.TabIndex = 0;
             // 
@@ -610,7 +623,7 @@
             this.NLP_RawText_listBox.ItemHeight = 18;
             this.NLP_RawText_listBox.Location = new System.Drawing.Point(0, 0);
             this.NLP_RawText_listBox.Name = "NLP_RawText_listBox";
-            this.NLP_RawText_listBox.Size = new System.Drawing.Size(544, 307);
+            this.NLP_RawText_listBox.Size = new System.Drawing.Size(544, 305);
             this.NLP_RawText_listBox.TabIndex = 0;
             // 
             // NLP_Timeline_listBox
@@ -620,7 +633,7 @@
             this.NLP_Timeline_listBox.ItemHeight = 18;
             this.NLP_Timeline_listBox.Location = new System.Drawing.Point(0, 0);
             this.NLP_Timeline_listBox.Name = "NLP_Timeline_listBox";
-            this.NLP_Timeline_listBox.Size = new System.Drawing.Size(552, 307);
+            this.NLP_Timeline_listBox.Size = new System.Drawing.Size(552, 305);
             this.NLP_Timeline_listBox.TabIndex = 0;
             // 
             // NLP_pictureBox
@@ -628,7 +641,7 @@
             this.NLP_pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.NLP_pictureBox.Location = new System.Drawing.Point(0, 0);
             this.NLP_pictureBox.Name = "NLP_pictureBox";
-            this.NLP_pictureBox.Size = new System.Drawing.Size(1104, 492);
+            this.NLP_pictureBox.Size = new System.Drawing.Size(1104, 490);
             this.NLP_pictureBox.TabIndex = 0;
             this.NLP_pictureBox.TabStop = false;
             // 
@@ -707,6 +720,7 @@
             // map_menuStrip
             // 
             this.map_menuStrip.BackColor = System.Drawing.Color.White;
+            this.map_menuStrip.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.map_menuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.map_menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.文件FToolStripMenuItem,
@@ -741,19 +755,6 @@
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(93, 28);
             this.helpToolStripMenuItem.Text = "Help(&H)";
-            // 
-            // toolStripMenuItem3
-            // 
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(347, 6);
-            // 
-            // Reloac_SceneClassification_ToolStripMenuItem
-            // 
-            this.Reloac_SceneClassification_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_configurator_50;
-            this.Reloac_SceneClassification_ToolStripMenuItem.Name = "Reloac_SceneClassification_ToolStripMenuItem";
-            this.Reloac_SceneClassification_ToolStripMenuItem.Size = new System.Drawing.Size(350, 42);
-            this.Reloac_SceneClassification_ToolStripMenuItem.Text = "Reload Scene Classification";
-            this.Reloac_SceneClassification_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
             // Main
             // 

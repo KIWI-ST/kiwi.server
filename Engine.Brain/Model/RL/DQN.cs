@@ -34,23 +34,27 @@ namespace Engine.Brain.Model.RL
         /// <summary>
         /// state at t
         /// </summary>
-        public double[] ST { get; set; }
+        public float[] ST { get; set; }
+
         /// <summary>
         /// state at t+1
         /// </summary>
-        public double[] S_NEXT { get; set; }
+        public float[] S_NEXT { get; set; }
+
         /// <summary>
         /// action at t
         /// </summary>
-        public double[] AT { get; set; }
+        public float[] AT { get; set; }
+
         /// <summary>
         /// q value at t
         /// </summary>
-        public double QT { get; set; }
+        public float QT { get; set; }
+
         /// <summary>
         /// reward at t
         /// </summary>
-        public double RT { get; set; }
+        public float RT { get; set; }
     }
 
     /// <summary>
@@ -110,10 +114,10 @@ namespace Engine.Brain.Model.RL
         readonly int _forward = 256;
 
         //q值积累权重
-        readonly double _alpha = 0.6;
+        readonly float _alpha = 0.6f;
 
         //q值印象权重
-        readonly double _gamma = 0.0;
+        readonly float _gamma = 0.0f;
 
         //输入feature长度
         readonly int _featuresNumber;
@@ -187,7 +191,7 @@ namespace Engine.Brain.Model.RL
         /// 
         /// </summary>
         /// <param name="env"></param>
-        public DQN(IEnv env = null, IDSupportDQN actor =null, IDSupportDQN critic = null, int epochs = 3000, double gamma = 0.0, int switchEpoch = -1)
+        public DQN(IEnv env = null, IDSupportDQN actor =null, IDSupportDQN critic = null, int epochs = 3000, float gamma = 0.0f, int switchEpoch = -1)
         {
             Env = env;
             _gamma = gamma;
@@ -215,7 +219,7 @@ namespace Engine.Brain.Model.RL
         /// <summary>
         /// 控制记忆容量
         /// </summary>
-        public void Remember(double[] state, double[] action, double q, double reward, double[] stateNext)
+        public void Remember(float[] state, float[] action, float q, float reward, float[] stateNext)
         {
             //容量上限限制
             _memoryList.DequeRemove(_memoryCapacity);
@@ -234,9 +238,9 @@ namespace Engine.Brain.Model.RL
         /// 输出每一个 state 对应的 action 值
         /// </summary>
         /// <returns></returns>
-        public (double[] action, double q) ChooseAction(double[] state)
+        public (float[] action, float q) ChooseAction(float[] state)
         {
-            double[] pred = _actorNet.Predict(state);
+            float[] pred = _actorNet.Predict(state);
             return (pred, pred[NP.Argmax(pred)]);
         }
 
@@ -262,19 +266,19 @@ namespace Engine.Brain.Model.RL
         /// <param name="input_features_tensor"></param>
         /// <param name="input_qvalue_tensor"></param>
         /// <param name="batchSize"></param>
-        private (double[][] inputs, double[][] outputs) MakeBatch(List<Memory> list)
+        private (float[][] inputs, float[][] outputs) MakeBatch(List<Memory> list)
         {
             //batchSize个样本
             int batchSize = list.Count;
             //feature input
-            double[][] input_features = new double[batchSize][];
+            float[][] input_features = new float[batchSize][];
             //qvalue input
-            double[][] input_qValue = new double[batchSize][];
+            float[][] input_qValue = new float[batchSize][];
             for (int i = 0; i < batchSize; i++)
             {
                 //input_qValue[i] = new double[_actionsNumber];
                 //写入当前sample
-                double[] array = input_features[i] = new double[_featuresNumber];
+                float[] array = input_features[i] = new float[_featuresNumber];
                 //input features assign
                 Array.ConstrainedCopy(list[i].ST, 0, array, 0, _featuresNumber);
                 //calcute q_next
@@ -306,7 +310,7 @@ namespace Engine.Brain.Model.RL
         /// <param name="step"></param>
         /// <param name="state"></param>
         /// <returns></returns>
-        public (double[] action, double q) EpsilonGreedy(int step, double[] state)
+        public (float[] action, float q) EpsilonGreedy(int step, float[] state)
         {
             int totalEpochs = Convert.ToInt32(_epoches * 0.9);
             var epsion = EpsilonCalcute(step,eps_total: totalEpochs);
@@ -362,11 +366,11 @@ namespace Engine.Brain.Model.RL
         /// <param name="rememberSize"></param>
         public void PreRemember(int rememberSize)
         {
-            double[] state = Env.Reset();
+            float[] state = Env.Reset();
             for (int i = 0; i < rememberSize; i++)
             {
                 //增加随机探索记忆
-                double[] action = Env.RandomAction();
+                float[] action = Env.RandomAction();
                 var (nextState, reward) = Env.Step(action);
                 Remember(state, action, 0, reward, nextState);
                 state = nextState;
@@ -393,7 +397,7 @@ namespace Engine.Brain.Model.RL
                     OnSwitchEnvironmentHandler?.Invoke();
                     _switchStep = 0;
                 }
-                double[] state = Env.Reset();
+                float[] state = Env.Reset();
                 DateTime now = DateTime.Now;
                 double loss = 0, accuracy = 0, totalRewards = 0;
                 for (int step = 0; step <= _forward; step++)

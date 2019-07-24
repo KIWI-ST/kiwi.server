@@ -17,12 +17,12 @@ namespace Engine.GIS.GOperation.Tools
         /// <summary>
         /// noramlized data
         /// </summary>
-        double[,] _normalData;
+        float[,] _normalData;
 
         /// <summary>
         /// raw data
         /// </summary>
-        double[] _rawData;
+        float[] _rawData;
 
         /// <summary>
         /// visit band
@@ -66,7 +66,7 @@ namespace Engine.GIS.GOperation.Tools
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public double PickRawValue(int x, int y)
+        public float PickRawValue(int x, int y)
         {
             int position = y * _width + x;
             return _rawData[position];
@@ -77,7 +77,7 @@ namespace Engine.GIS.GOperation.Tools
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public double PickNormalValue(int x,int y)
+        public float PickNormalValue(int x,int y)
         {
             return _normalData[x, y];
         }
@@ -87,10 +87,10 @@ namespace Engine.GIS.GOperation.Tools
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="rowcol">represent matrix rows and col,the matrix is row*col,i.e  9 represent 3x3 </param>
-        public double[] PickRangeNormalValue(int x,int y,int row=5,int col = 5)
+        public float[] PickRangeNormalValue(int x,int y,int row=5,int col = 5)
         {
             int offset = row / 2;
-            List<double> pixels = new List<double>();
+            List<float> pixels = new List<float>();
             for (int i = -offset; i < row - offset; i++)
                 for (int j = -offset; j < col - offset; j++)
                 {
@@ -102,6 +102,7 @@ namespace Engine.GIS.GOperation.Tools
                 }
             return pixels.ToArray();
         }
+
         /// <summary>
         /// 获取raw value of x,y with cov [row,col]
         /// </summary>
@@ -110,10 +111,10 @@ namespace Engine.GIS.GOperation.Tools
         /// <param name="row"></param>
         /// <param name="col"></param>
         /// <returns></returns>
-        public double[] PickRangeRawValue(int x, int y, int row = 5, int col = 5)
+        public float[] PickRangeRawValue(int x, int y, int row = 5, int col = 5)
         {
             int offset = row / 2;
-            List<double> pixels = new List<double>();
+            List<float> pixels = new List<float>();
             for (int i = -offset; i < row - offset; i++)
                 for (int j = -offset; j < col - offset; j++)
                 {
@@ -131,5 +132,6 @@ namespace Engine.GIS.GOperation.Tools
             _normalData = null;
             _rawData = null;
         }
+
     }
 }

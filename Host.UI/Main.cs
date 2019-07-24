@@ -512,7 +512,7 @@ namespace Host.UI
                     }
                     break;
                     //random forest classification
-                case "RF_ToolStripMenuItem":
+                case "RandomForest_ToolStripMenuItem":
                     RFForm rfForm = new RFForm();
                     rfForm.RasterDic = _rasterDic;
                     if (rfForm.ShowDialog() == DialogResult.OK)
@@ -545,7 +545,7 @@ namespace Host.UI
                     }
                     break;
                     //svm function
-                case "SVM_ToolStripMenuItem":
+                case "L2SVM_ToolStripMenuItem":
                     SVMFrom svm_Form = new SVMFrom();
                     svm_Form.RasterDic = _rasterDic;
                     if (svm_Form.ShowDialog() == DialogResult.OK)

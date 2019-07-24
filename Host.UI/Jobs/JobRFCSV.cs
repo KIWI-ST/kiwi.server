@@ -46,7 +46,7 @@ namespace Host.UI.Jobs
                 Summary = "随机森林训练中";
                 using (StreamReader sr = new StreamReader(smapleFullFilename))
                 {
-                    List<List<double>> inputList = new List<List<double>>();
+                    List<List<float>> inputList = new List<List<float>>();
                     List<int> outputList = new List<int>();
                     string text = sr.ReadLine().Replace("\t", ",").Replace("N/A", "0");
                     do
@@ -54,13 +54,13 @@ namespace Host.UI.Jobs
                         text = text.Replace("N/A", "0");
                         string[] rawdatas = text.Split(',');
                         outputList.Add(Convert.ToInt32(rawdatas.Last()));
-                        List<double> inputItem = new List<double>();
+                        List<float> inputItem = new List<float>();
                         for (int i = 0; i < rawdatas.Length - 1; i++)
-                            inputItem.Add(Convert.ToDouble(rawdatas[i]));
+                            inputItem.Add(float.Parse(rawdatas[i]));
                         inputList.Add(inputItem);
                         text = sr.ReadLine();
                     } while (text != null);
-                    double[][] inputs = new double[inputList.Count][];
+                    float[][] inputs = new float[inputList.Count][];
                     int[] outputs = outputList.ToArray();
                     for (int i = 0; i < inputList.Count; i++)
                         inputs[i] = inputList[i].ToArray();
@@ -78,10 +78,10 @@ namespace Host.UI.Jobs
                         while (text != null){
                             text = text.Replace("N/A", "0");
                             string[] rawdatas = text.Split(',');
-                            double[][] inputs = new double[1][];
-                            List<double> inputItem = new List<double>();
+                            float[][] inputs = new float[1][];
+                            List<float> inputItem = new List<float>();
                             for (int i = 0; i < rawdatas.Length; i++)
-                                inputItem.Add(Convert.ToDouble(rawdatas[i]));
+                                inputItem.Add(float.Parse(rawdatas[i]));
                             inputs[0] = inputItem.ToArray();
                             int[] ouputs = rf.Predict(inputs);
                             int classtype = ouputs[0];

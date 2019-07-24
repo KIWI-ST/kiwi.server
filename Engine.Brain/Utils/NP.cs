@@ -31,7 +31,7 @@ namespace Engine.Brain.Utils
         /// </summary>
         /// <param name="observations"></param>
         /// <returns></returns>
-        public static double[][] TSNE2(double[][] observations)
+        public static float[][] TSNE2(float[][] observations)
         {
             Accord.Math.Random.Generator.Seed = 0;
             TSNE tSNE = new TSNE()
@@ -39,8 +39,8 @@ namespace Engine.Brain.Utils
                 NumberOfOutputs = 2,
                 Perplexity = 1
             };
-            double[][] output = tSNE.Transform(observations);
-            return output;
+            double[][] output = tSNE.Transform(NP.FloatArrayToDoubleArray(observations));
+            return NP.DoubleArrayToFloatArray(output);
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Engine.Brain.Utils
         /// <param name="pred"></param>
         /// <param name="label"></param>
         /// <returns></returns>
-        public static bool Equal(double[] pred, double[] label)
+        public static bool Equal(float[] pred, float[] label)
         {
             int predCount = pred.Length;
             int labelCount = label.Length;
@@ -153,9 +153,9 @@ namespace Engine.Brain.Utils
         /// <param name="hotIndex"></param>
         /// <param name="hotLength"></param>
         /// <returns></returns>
-        public static double[] ToOneHot(int hotIndex, int hotLength)
+        public static float[] ToOneHot(int hotIndex, int hotLength)
         {
-            double[] oneHot = new double[hotLength];
+            float[] oneHot = new float[hotLength];
             for (int i = 0; i < hotLength; i++)
                 oneHot[i] = i == hotIndex ? 1 : 0;
             return oneHot;
@@ -166,13 +166,13 @@ namespace Engine.Brain.Utils
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static double[] ToOneDimensional(double[][] input)
+        public static float[] ToOneDimensional(float[][] input)
         {
             var list = input.ToList();
             int rows = list.Count;
             int cols = list[0].Length;
             int totalCount = rows * cols;
-            double[] output = new double[totalCount];
+            float[] output = new float[totalCount];
             for (int i = 0; i < totalCount; i++)
                 output[i] = input[i / cols][i % cols];
             return output;
@@ -213,16 +213,16 @@ namespace Engine.Brain.Utils
         /// </summary>
         /// <param name="batchSzie">样本数量</param>
         /// <returns></returns>
-        public static List<double> CreateLabels(int batchSzie = 15, int oneHot = 10)
+        public static List<float> CreateLabels(int batchSzie = 15, int oneHot = 10)
         {
-            var inputs = new List<double[]>();
+            var inputs = new List<float[]>();
             //构建多样本的输出label
             for (int i = 0; i < batchSzie; i++)
             {
                 var label = Random(10);
                 inputs.Add(ToOneHot(label, oneHot));
             }
-            var outputs = new List<double>();
+            var outputs = new List<float>();
             inputs.ForEach(p =>
             {
                 outputs.AddRange(p);
@@ -263,9 +263,9 @@ namespace Engine.Brain.Utils
         /// </summary>
         /// <param name="inputs"></param>
         /// <returns></returns>
-        public static int Argmax(double[] inputs)
+        public static int Argmax(float[] inputs)
         {
-            double max = inputs.Max();
+            float max = inputs.Max();
             return Array.IndexOf(inputs, max);
         }
 
@@ -282,7 +282,7 @@ namespace Engine.Brain.Utils
             int[] output = new int[dim0];
             for (int i = 0; i < dim0; i++)
             {
-                double[] arr = new double[dim1];
+                float[] arr = new float[dim1];
                 for (int j = 0; j < dim1; j++)
                     arr[j] = inputs[i, j];
                 output[i] = Argmax(arr);
@@ -346,10 +346,10 @@ namespace Engine.Brain.Utils
         /// <param name="source"></param>
         /// <param name="target"></param>
         /// <returns></returns>
-        public static double Cosine(double[] a, double[] b)
+        public static float Cosine(float[] a, float[] b)
         {
             if (a.Length != b.Length) throw new Exception("Error: Distance, source and target length must be same");
-            double si = 0;
+            float si = 0.0f;
             for (int i = 0; i < a.Length; i++)
                 si += a[i] * b[i];
             return si / (Len(a) * Len(b));
@@ -390,12 +390,12 @@ namespace Engine.Brain.Utils
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static double Len(double[] source)
+        public static float Len(float[] source)
         {
-            double sum = 0;
+            float sum = 0.0f;
             for (int i = 0; i < source.Length; i++)
                 sum += source[i] * source[i];
-            return Math.Sqrt(sum);
+            return (float)Math.Sqrt(sum);
         }
 
         /// <summary>
@@ -414,7 +414,7 @@ namespace Engine.Brain.Utils
         }
 
         /// <summary>
-        /// 
+        /// 乱序样本集， array1 为输入 array2是label
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <typeparam name="T2"></typeparam>
@@ -460,16 +460,36 @@ namespace Engine.Brain.Utils
         }
 
         /// <summary>
-        /// 
+        /// 对输入的样本集，乱序提取出batchSize个样本对
         /// </summary>
         /// <param name="inputs"></param>
         /// <param name="outputs"></param>
         /// <param name="batchSize"></param>
         /// <returns></returns>
-        public static (double[][] inputs, double[] labels) ShuffleBatch(double[][] inputs, double[] outputs, int batchSize)
+        public static (float[][] inputs, float[] labels) ShuffleBatch(float[][] inputs, float[] outputs, int batchSize)
         {
-            double[][] x = new double[batchSize][];
-            double[] y = new double[batchSize];
+            float[][] x = new float[batchSize][];
+            float[] y = new float[batchSize];
+            Shuffle(inputs, outputs);
+            for (int i = 0; i < batchSize; i++)
+            {
+                x[i] = inputs[i];
+                y[i] = outputs[i];
+            }
+            return (x, y);
+        }
+
+        /// <summary>
+        /// 对输入的样本集，乱序提取出batchSize个样本对
+        /// </summary>
+        /// <param name="inputs"></param>
+        /// <param name="outputs"></param>
+        /// <param name="batchSize"></param>
+        /// <returns></returns>
+        public static (float[][] inputs, float[][] labels) ShuffleBatch(float[][] inputs, float[][] outputs, int batchSize)
+        {
+            float[][] x = new float[batchSize][];
+            float[][] y = new float[batchSize][];
             Shuffle(inputs, outputs);
             for (int i = 0; i < batchSize; i++)
             {
@@ -506,6 +526,70 @@ namespace Engine.Brain.Utils
             for (int i = 0; i < result.Length; i++) { result[i] = value; }
             return result;
         }
-  
+
+        /// <summary>
+        /// double数值转换成float数组
+        /// </summary>
+        /// <param name="array"></param>
+        /// <returns></returns>
+        public static float[] DoubleArrayToFloatArray(double[] array)
+        {
+            float[] arr = new float[array.Length];
+            for (int i = 0; i < array.Length; i++)
+                arr[i] = (float)array[i];
+            return arr;
+        }
+
+        /// <summary>
+        /// float数值转换成double数组
+        /// </summary>
+        /// <param name="array"></param>
+        /// <returns></returns>
+        public static float[][] DoubleArrayToFloatArray(double[][] array)
+        {
+            int n0 = array.GetLength(0);
+            float[][] arr = new float[n0][];
+            for (int i = 0; i < n0; i++)
+            {
+                int n1 = array[i].Length;
+                arr[i] = new float[n1];
+                for (int k = 0; k < n1; k++)
+                    arr[i][k] = (float)array[i][k];
+            }
+            return arr;
+        }
+
+        /// <summary>
+        /// float数值转换成double数组
+        /// </summary>
+        /// <param name="array"></param>
+        /// <returns></returns>
+        public static double[] FloatArrayToDoubleArray(float[] array)
+        {
+            double[] arr = new double[array.Length];
+            for (int i = 0; i < array.Length; i++)
+                arr[i] = Convert.ToDouble(array[i]);
+            return arr;
+        }
+
+        /// <summary>
+        /// float数值转换成double数组
+        /// </summary>
+        /// <param name="array"></param>
+        /// <returns></returns>
+        public static double[][] FloatArrayToDoubleArray(float[][] array)
+        {
+            int n0 = array.GetLength(0);
+            double[][] arr = new double[n0][];
+            for (int i = 0; i < n0; i++)
+            {
+                int n1 = array[i].Length;
+                arr[i] = new double[n1];
+                for (int k = 0; k < n1; k++)
+                    arr[i][k] = Convert.ToDouble(array[i][k]);
+            }
+            return arr;
+        }
+
     }
 }

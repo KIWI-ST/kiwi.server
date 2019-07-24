@@ -1,6 +1,7 @@
 ﻿using Accord.MachineLearning.VectorMachines;
 using Accord.MachineLearning.VectorMachines.Learning;
 using Accord.Statistics.Kernels;
+using Engine.Brain.Utils;
 
 namespace Engine.Brain.Model.ML
 {
@@ -26,15 +27,15 @@ namespace Engine.Brain.Model.ML
             };
         }
 
-        public double Train(double[][] inputs, int[] outputs)
+        public double Train(float[][] inputs, int[] outputs)
         {
-            ksvm = teacher.Learn(inputs, outputs);
+            ksvm = teacher.Learn(NP.FloatArrayToDoubleArray(inputs), outputs);
             return 0.0;
         }
 
-        public int[] Predict(double[][] inputs)
+        public int[] Predict(float[][] inputs)
         {
-            int[] predicted = ksvm.Decide(inputs);
+            int[] predicted = ksvm.Decide(NP.FloatArrayToDoubleArray(inputs));
             return predicted;
         }
 

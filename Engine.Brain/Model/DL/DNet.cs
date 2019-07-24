@@ -3,6 +3,7 @@ using System.IO;
 using Accord.Math;
 using Accord.Neuro;
 using Accord.Neuro.Learning;
+using Engine.Brain.Utils;
 
 namespace Engine.Brain.Model.DL
 {
@@ -83,10 +84,11 @@ namespace Engine.Brain.Model.DL
             };
         }
 
-        public double Train(double[][] inputs, double[][] outputs)
+        public double Train(float[][] inputs, float[][] outputs)
         {
+     
             int samples = inputs.GetLength(0);
-            double loss = _teacher.RunEpoch(inputs, outputs) / samples;
+            double loss = _teacher.RunEpoch(NP.FloatArrayToDoubleArray(inputs), NP.FloatArrayToDoubleArray(outputs)) / samples;
             return loss;
         }
 
@@ -120,11 +122,11 @@ namespace Engine.Brain.Model.DL
             };
         }
 
-        public double[] Predict(params object[] inputs)
+        public float[] Predict(params object[] inputs)
         {
-            double[] input = inputs[0] as double[];
-            double[] output = _network.Compute(input);
-            return output;
+            float[] input = inputs[0] as float[];
+            double[] output = _network.Compute(NP.FloatArrayToDoubleArray(input));
+            return NP.DoubleArrayToFloatArray(output);
         }
 
     }

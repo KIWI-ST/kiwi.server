@@ -16,7 +16,7 @@ namespace Engine.GIS.GEntity
         /// <param name="width">图像的宽度</param>
         /// <param name="height">图像的高度</param>
         /// <returns>位图对象</returns>
-        public static Bitmap ToGrayBitmap(double[,] normalbuffer, int width, int height)
+        public static Bitmap ToGrayBitmap(float[,] normalbuffer, int width, int height)
         {
             //将用户指定的imageArray二维数组转换为一维数组rawValues
             byte[] rawValues = new byte[width * height];
