@@ -225,7 +225,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Annotation\DepenencyParseAnnotation.cs" />
+    <Compile Include="Annotation\ScenarioAnnotation.cs" />
     <Compile Include="Forms\NLPConfigForm.cs">
       <SubType>Form</SubType>
     </Compile>
