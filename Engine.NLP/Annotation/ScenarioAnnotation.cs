@@ -250,17 +250,22 @@ namespace Engine.NLP.Annotation
                     //2.2.1 查找数值修饰单位 (mark:clf)
                     if (dep.reln().getShortName() == "mark:clf")
                     {
-                        numericValue = string.Format("{0} {1}", value, dep.toString());
+                        string unitText = (string)dep.dep().get(textAnnotationClass);
+                        numericValue = string.Format("{0} {1}", value, unitText);
                     }
-                    //2.2.2 num修饰关系
+                    //2.2.2 num修饰关系（名词修饰关系）
                     if(dep.reln().getShortName() == "nummod")
                     {
-
+                        //2.2.2.1 得到被修饰词
+                        edu.stanford.nlp.ling.CoreLabel nummodToken = dep.gov().backingLabel();
+                        //2.2.2.2 找到 nsubj 修饰的主体subject名词(NN)
+                        edu.stanford.nlp.ling.CoreLabel targetToken =  FindTargetTokenByDependencytype(dependencies, nummodToken, "compound:nn");
+                        //2.2.2.3 修饰主体
+                        targetEntity = (string)targetToken.get(textAnnotationClass);
                     }
-                    //2.2.2 查找修饰主体 (nsubj)
-                }
-                //2.3
+                    //2.2.3 num修饰关系（动词修饰关系）
 
+                }
             }
             return (targetEntity, numericValue);
 
@@ -276,8 +281,9 @@ namespace Engine.NLP.Annotation
             List<edu.stanford.nlp.trees.TypedDependency> deps = FindRefs(dependencies, token);
             foreach (edu.stanford.nlp.trees.TypedDependency dep in deps)
             {
+                if (dep.reln().getShortName() == depTypeString)
+                    return dep.gov().backingLabel();
             }
-
             return null;
         }
 

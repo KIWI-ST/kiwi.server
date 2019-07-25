@@ -1,7 +1,7 @@
-﻿using Engine.GIS.GEntity;
-using OSGeo.GDAL;
-using System;
+﻿using System;
 using System.Drawing;
+using Engine.GIS.GEntity;
+using OSGeo.GDAL;
 
 namespace Engine.GIS.GLayer.GRasterLayer
 {
@@ -197,6 +197,7 @@ namespace Engine.GIS.GLayer.GRasterLayer
             else
                 Normalization();
         }
+
         /// <summary>
         /// byte数据流
         /// </summary>
@@ -208,6 +209,7 @@ namespace Engine.GIS.GLayer.GRasterLayer
                 _stretchedByteData[count % Width, count / Width] = Convert.ToByte(NormalData[count % Width, count / Width] * 255);
             return _stretchedByteData;
         }
+
         /// <summary>
         /// 获取未拉伸的原始bytebuffer
         /// </summary>
@@ -216,6 +218,7 @@ namespace Engine.GIS.GLayer.GRasterLayer
         {
             return RawData;
         }
+
         /// <summary>
         /// get normal data buffer
         /// </summary>
@@ -227,6 +230,7 @@ namespace Engine.GIS.GLayer.GRasterLayer
                 normalDataBuffer[count] = NormalData[count % Width, count / Width];
             return normalDataBuffer;
         }
+
         /// <summary>
         /// 释放资源
         /// </summary>
