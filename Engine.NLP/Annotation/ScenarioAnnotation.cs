@@ -172,28 +172,6 @@ namespace Engine.NLP.Annotation
         }
 
         /// <summary>
-        /// 分析主语相关依赖, 得到相关修饰关系（针对可量化的）
-        /// </summary>
-        /// <param name="token"></param>
-        /// <param name="sentence"></param>
-        private void AnalysisSubjectDepsInSentence(edu.stanford.nlp.util.CoreMap sentence, edu.stanford.nlp.ling.IndexedWord word, Pipunit punit)
-        {
-            List<string> properties = new List<string>();
-            //根据tree搜索
-            edu.stanford.nlp.semgraph.SemanticGraph dependencies = sentence.get(basicDependenciesAnnotationClass) as edu.stanford.nlp.semgraph.SemanticGraph;
-            java.util.Set result = dependencies.getChildren(word);
-             //dependencies
-
-            //1.搜索全部依赖
-            //List<edu.stanford.nlp.trees.TypedDependency> deps = FindDeirctRefs(sentence, token);
-            //deps.ForEach(dep => {
-            //    //2. 解析名词修饰关系 noun compound modifie(nn)
-            //    dep.dep
-
-            //});
-        }
-
-        /// <summary>
         /// 找到target word全部的修饰关系，组成最后的词组
         /// </summary>
         /// <param name="sentence"></param>
@@ -201,20 +179,26 @@ namespace Engine.NLP.Annotation
         /// <returns></returns>
         private string FindNoun(edu.stanford.nlp.util.CoreMap sentence, edu.stanford.nlp.ling.IndexedWord word)
         {
-            string property = "";
             edu.stanford.nlp.semgraph.SemanticGraph dependencies = sentence.get(basicDependenciesAnnotationClass) as edu.stanford.nlp.semgraph.SemanticGraph;
             java.util.List children = dependencies.outgoingEdgeList(word);
+            if (children.isEmpty()) return word.value();
+            string property = "";
             java.util.Iterator itr = children.iterator();
             while (itr.hasNext())
             {
                 edu.stanford.nlp.semgraph.SemanticGraphEdge edge = itr.next() as edu.stanford.nlp.semgraph.SemanticGraphEdge;
                 edu.stanford.nlp.ling.IndexedWord target = edge.getTarget();
                 string relname = edge.getRelation().getShortName();
-                //如果是 noun compound modifer时， 需要递归得到修饰关系
-                if (relname.Contains("compound:nn"))
-                    property += FindNoun(sentence, target);
-                else if (relname.Contains("assmode"))
+                //需要递归得到修饰关系
+                //包括：noun compound modifer，number modifer
+                if (relname.Contains("compound:nn")|| relname.Contains("nummod"))
+                    property += FindNoun(sentence, target)+word.value();
+                //ass修饰即结束
+                else if (relname.Contains("assmod"))
                     property += target.value();
+                //数字单位，结束
+                else if(relname.Contains("mark:clf"))
+                    property += word.value()+target.value();
             }
             return property;
         }
@@ -238,7 +222,7 @@ namespace Engine.NLP.Annotation
                 if(relname.Contains("nmod"))
                 {
                     string property = FindNoun(sentence, target);
-                    punit.AddDesc(property+target.value());
+                    punit.AddDesc(property);
                 }
                 //2. 宾语结构，直接添加
                 if(relname.Contains("dobj") || relname.Contains("iobj") || relname.Contains("pobj"))
@@ -247,23 +231,43 @@ namespace Engine.NLP.Annotation
                     punit.AddDesc(property);
                 }
             }
-            //List<edu.stanford.nlp.trees.TypedDependency> deps = FindDeirctRefs(sentence, token);
-            //deps.ForEach(dep => {
-            ////1. 动-宾结构
-            //string relname = dep.reln().getShortName();
-            //if (relname.Contains("dobj") || relname.Contains("iobj") || relname.Contains("pobj"))
-            //{
-            //    edu.stanford.nlp.ling.CoreLabel oToken = dep.dep().backingLabel();
-            //    states.Add((string)oToken.get(textAnnotationClass));
-            //}
-            ////2. 解析名词关系，定语结构
-            // if(relname.Contains("nmod:prep"))
-            //{
-            //    edu.stanford.nlp.ling.CoreLabel pToken = dep.dep().backingLabel();
-            //    //因为是名词，所以直接重组出修饰关系带入
-            //    string nounPropertyValue = FindNounProperty(sentence, pToken);
-            //}
-            //});
+        }
+
+        /// <summary>
+        /// 分析主语相关依赖, 得到相关修饰关系（针对可量化的）
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="sentence"></param>
+        private void AnalysisSubjectDepsInSentence(edu.stanford.nlp.util.CoreMap sentence, edu.stanford.nlp.ling.IndexedWord word, Pipunit punit)
+        {
+            edu.stanford.nlp.semgraph.SemanticGraph dependencies = sentence.get(basicDependenciesAnnotationClass) as edu.stanford.nlp.semgraph.SemanticGraph;
+            java.util.List children = dependencies.outgoingEdgeList(word);
+            java.util.Iterator itr = children.iterator();
+            while (itr.hasNext())
+            {
+                edu.stanford.nlp.semgraph.SemanticGraphEdge edge = itr.next() as edu.stanford.nlp.semgraph.SemanticGraphEdge;
+                edu.stanford.nlp.ling.IndexedWord target = edge.getTarget();
+                string relname = edge.getRelation().getShortName();
+                //1. nmod, 继续下探一层，寻找修饰
+                if (relname.Contains("nmod")||relname.Contains("compound:nn"))
+                {
+                    string property = FindNoun(sentence, target);
+                    punit.AddDesc(property);
+                }
+                //2.直接修饰
+                //ass修饰即结束
+                else if (relname.Contains("assmod"))
+                {
+                    string property = target.value();
+                    punit.AddDesc(property);
+                }
+                //数字单位，结束
+                else if (relname.Contains("mark:clf"))
+                {
+                    string property = word.value() + target.value();
+                    punit.AddDesc(property);
+                }
+            }
         }
 
         /// <summary>
@@ -286,7 +290,7 @@ namespace Engine.NLP.Annotation
                 //2.构建流水线
                 Pipline pline = new Pipline(sunit, tunit);
                 //3. 分析主语相关修饰, 谓语相关修饰
-                //AnalysisSubjectDepsInSentence(sentence, sToken, sunit);
+                AnalysisSubjectDepsInSentence(sentence, sToken, sunit);
                 AnalysisActionDepsInSentence(sentence, tToken, tunit);
                 //4. 添加到 pipeline
                 plines.Add(pline);
