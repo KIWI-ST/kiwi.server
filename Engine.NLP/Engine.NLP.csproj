@@ -226,6 +226,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Annotation\ScenarioAnnotation.cs" />
+    <Compile Include="Entity\Pipline.cs" />
+    <Compile Include="Entity\Scenario.cs" />
     <Compile Include="Forms\NLPConfigForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -244,7 +246,6 @@
     <Compile Include="Forms\NLPScottPlotForm.Designer.cs">
       <DependentUpon>NLPScottPlotForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Entity\Scenario.cs" />
     <Compile Include="IAnnotation.cs" />
     <Compile Include="Utils\ApiKeyServiceClientCredentials.cs" />
     <Compile Include="Extend\StringExtend.cs" />

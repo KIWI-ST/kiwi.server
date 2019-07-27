@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Engine.NLP.Entity;
 using Engine.NLP.Utils;
 
 namespace Engine.NLP.Annotation
@@ -11,7 +13,7 @@ namespace Engine.NLP.Annotation
     /// 2. split words
     /// 3. 
     /// </summary>
-    public class ScenarioAnnotation : IAnnotation
+    public class ScenarioAnnotation : IScenarioAnnotation
     {
 
         #region Annotation ClassName
@@ -94,11 +96,6 @@ namespace Engine.NLP.Annotation
         java.util.Properties _props;
 
         /// <summary>
-        /// cache sentences
-        /// </summary>
-        java.util.AbstractList _sentences;
-
-        /// <summary>
         /// 记录时间-情景句子集
         /// </summary>
         Dictionary<DateTime, edu.stanford.nlp.util.CoreMap> timeStampSentences = new Dictionary<DateTime, edu.stanford.nlp.util.CoreMap>();
@@ -129,81 +126,206 @@ namespace Engine.NLP.Annotation
         /// reference:
         /// https://stanfordnlp.github.io/CoreNLP/api.html
         /// </summary>
-        /// <param name="rawText"></param>
-        public void Process(string rawText)
+        /// <param name="groupedText">已经过timeml重组后的文本资料</param>
+        public Scenario Process(string groupedText)
         {
-            edu.stanford.nlp.pipeline.StanfordCoreNLPClient pipeline = new edu.stanford.nlp.pipeline.StanfordCoreNLPClient(_props,  NLPConfiguration.CoreNLPAddress, Convert.ToInt32(NLPConfiguration.CoreNLPPort));
-            edu.stanford.nlp.pipeline.Annotation document = new edu.stanford.nlp.pipeline.Annotation(rawText);
-            //run all Annotators on this text
+            if (groupedText == null || groupedText.Length == 0) return null;
+            Scenario scenario = new Scenario();
+            edu.stanford.nlp.pipeline.StanfordCoreNLPClient pipeline = new edu.stanford.nlp.pipeline.StanfordCoreNLPClient(_props, NLPConfiguration.CoreNLPAddress, Convert.ToInt32(NLPConfiguration.CoreNLPPort));
+            edu.stanford.nlp.pipeline.Annotation document = new edu.stanford.nlp.pipeline.Annotation(groupedText);
             pipeline.annotate(document);
-            //cache sentences
-            _sentences = document.get(sentencesAnnotationClass) as java.util.AbstractList;
-            //var timeAll = document.get(timexAnnotationClass);
-            if (_sentences == null) return;
-            //分析时间顺序，得到 时间-情景句子集
-            foreach (edu.stanford.nlp.util.CoreMap sentence in _sentences)
+            java.util.AbstractList sentences = document.get(sentencesAnnotationClass) as java.util.AbstractList;
+            //逐一分析句子结构，即 主语+谓语+xxxx
+            foreach (edu.stanford.nlp.util.CoreMap sentence in sentences)
             {
-                //句子内容
+                //}{debug 展示句子内容
                 string text = (string)sentence.get(textAnnotationClass);
+                //2.build semantic graph
+                List<Pipline> plines = ElementExtractByDependencyPrase(sentence);
+                //3.concat result
+                //processResult = processResult.Concat(dict).ToDictionary(k => k.Key, v => v.Value);
                 //https://github.com/stanfordnlp/CoreNLP/blob/c709c037aebb3ea3eb1e1591849e5a963b1d938f/src/edu/stanford/nlp/pipeline/GenderAnnotator.java#L42
                 //edu.stanford.nlp.util, edu.stanford.nlp.coref.data.Mention
                 //var mentions = sentence.get(mentionsAnnotationClass) as java.util.AbstractList
                 //1.get tree sturcture
-                edu.stanford.nlp.trees.Tree tree = sentence.get(treeAnnotationClass) as edu.stanford.nlp.trees.Tree;
-                //2.build semantic graph
-                ElementExtractByDependencyPrase(sentence);
+                //edu.stanford.nlp.trees.Tree tree = sentence.get(treeAnnotationClass) as edu.stanford.nlp.trees.Tree;
+                scenario.MergePipline(plines);
             }
+            //concat the result and return
+            return scenario;
+        }
+        
+        private string FindNounProperty(edu.stanford.nlp.util.CoreMap sentence, edu.stanford.nlp.ling.CoreLabel token)
+        {
+            string target = "";
+            List<edu.stanford.nlp.trees.TypedDependency> deps = FindDeirctRefs(sentence, token);
+            deps.ForEach(dep => {
+                string relname = dep.reln().getShortName();
+                //名词修饰关系
+                if (relname == "compound:nn" || relname =="nmod:assmod")
+                {
+                    target += (string)dep.dep().backingLabel().get(textAnnotationClass);
+                }
+     
+            });
+            return target;
         }
 
-        java.util.AbstractList _tokens;
+        /// <summary>
+        /// 分析主语相关依赖, 得到相关修饰关系（针对可量化的）
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="sentence"></param>
+        private void AnalysisSubjectDepsInSentence(edu.stanford.nlp.util.CoreMap sentence, edu.stanford.nlp.ling.IndexedWord word, Pipunit punit)
+        {
+            List<string> properties = new List<string>();
+            //根据tree搜索
+            edu.stanford.nlp.semgraph.SemanticGraph dependencies = sentence.get(basicDependenciesAnnotationClass) as edu.stanford.nlp.semgraph.SemanticGraph;
+            java.util.Set result = dependencies.getChildren(word);
+             //dependencies
+
+            //1.搜索全部依赖
+            //List<edu.stanford.nlp.trees.TypedDependency> deps = FindDeirctRefs(sentence, token);
+            //deps.ForEach(dep => {
+            //    //2. 解析名词修饰关系 noun compound modifie(nn)
+            //    dep.dep
+
+            //});
+        }
+
+        /// <summary>
+        /// 找到target word全部的修饰关系，组成最后的词组
+        /// </summary>
+        /// <param name="sentence"></param>
+        /// <param name="word"></param>
+        /// <returns></returns>
+        private string FindNoun(edu.stanford.nlp.util.CoreMap sentence, edu.stanford.nlp.ling.IndexedWord word)
+        {
+            string property = "";
+            edu.stanford.nlp.semgraph.SemanticGraph dependencies = sentence.get(basicDependenciesAnnotationClass) as edu.stanford.nlp.semgraph.SemanticGraph;
+            java.util.List children = dependencies.outgoingEdgeList(word);
+            java.util.Iterator itr = children.iterator();
+            while (itr.hasNext())
+            {
+                edu.stanford.nlp.semgraph.SemanticGraphEdge edge = itr.next() as edu.stanford.nlp.semgraph.SemanticGraphEdge;
+                edu.stanford.nlp.ling.IndexedWord target = edge.getTarget();
+                string relname = edge.getRelation().getShortName();
+                //如果是 noun compound modifer时， 需要递归得到修饰关系
+                if (relname.Contains("compound:nn"))
+                    property += FindNoun(sentence, target);
+                else if (relname.Contains("assmode"))
+                    property += target.value();
+            }
+            return property;
+        }
+
+        /// <summary>
+        /// 分析谓语依赖，得到修饰关系（针对可量化的）
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="sentence"></param>
+        private void AnalysisActionDepsInSentence(edu.stanford.nlp.util.CoreMap sentence, edu.stanford.nlp.ling.IndexedWord word, Pipunit punit)
+        {
+            edu.stanford.nlp.semgraph.SemanticGraph dependencies = sentence.get(basicDependenciesAnnotationClass) as edu.stanford.nlp.semgraph.SemanticGraph;
+            java.util.List children =  dependencies.outgoingEdgeList(word);
+            java.util.Iterator itr = children.iterator();
+            while (itr.hasNext())
+            {
+                edu.stanford.nlp.semgraph.SemanticGraphEdge edge = itr.next() as edu.stanford.nlp.semgraph.SemanticGraphEdge;
+                edu.stanford.nlp.ling.IndexedWord target = edge.getTarget();
+                string relname = edge.getRelation().getShortName();
+                //1. nmod, 继续下探一层，寻找修饰
+                if(relname.Contains("nmod"))
+                {
+                    string property = FindNoun(sentence, target);
+                    punit.AddDesc(property+target.value());
+                }
+                //2. 宾语结构，直接添加
+                if(relname.Contains("dobj") || relname.Contains("iobj") || relname.Contains("pobj"))
+                {
+                    string property = target.value();
+                    punit.AddDesc(property);
+                }
+            }
+            //List<edu.stanford.nlp.trees.TypedDependency> deps = FindDeirctRefs(sentence, token);
+            //deps.ForEach(dep => {
+            ////1. 动-宾结构
+            //string relname = dep.reln().getShortName();
+            //if (relname.Contains("dobj") || relname.Contains("iobj") || relname.Contains("pobj"))
+            //{
+            //    edu.stanford.nlp.ling.CoreLabel oToken = dep.dep().backingLabel();
+            //    states.Add((string)oToken.get(textAnnotationClass));
+            //}
+            ////2. 解析名词关系，定语结构
+            // if(relname.Contains("nmod:prep"))
+            //{
+            //    edu.stanford.nlp.ling.CoreLabel pToken = dep.dep().backingLabel();
+            //    //因为是名词，所以直接重组出修饰关系带入
+            //    string nounPropertyValue = FindNounProperty(sentence, pToken);
+            //}
+            //});
+        }
 
         /// <summary>
         /// analysis the dependency in sentenc, and then extract information
         /// https://nlp.stanford.edu/software/dependencies_manual.pdf
         /// </summary>
-        private void ElementExtractByDependencyPrase(edu.stanford.nlp.util.CoreMap sentence)
+        private List<Pipline> ElementExtractByDependencyPrase(edu.stanford.nlp.util.CoreMap sentence)
         {
-            edu.stanford.nlp.semgraph.SemanticGraph dependencies = sentence.get(basicDependenciesAnnotationClass) as edu.stanford.nlp.semgraph.SemanticGraph;
-            //逐token分析名字和其修饰
-            java.util.AbstractList mentions = sentence.get(mentionsAnnotationClass) as java.util.AbstractList;
-            _tokens = sentence.get(tokensAnnotationClass) as java.util.AbstractList;
-            //
-            foreach(edu.stanford.nlp.util.CoreMap mention in mentions)
+            //result properties
+            List<Pipline> plines = new List<Pipline>();
+            //1. 分析句子组成，即 主(NN)+谓(VV)
+            List<edu.stanford.nlp.trees.TypedDependency> deps = FindDeptypeFromSentence(sentence, "nsubj");
+            foreach(edu.stanford.nlp.trees.TypedDependency dep in deps)
             {
-                string text =(string)mention.get(textAnnotationClass);
-                string ner= (string)mention.get(namedEntityTagAnnotationClass);
-                string noramlValue = (string)mention.get(normalizedNamedEntityTagAnnotationClass);
-                //处理不同类型的ner，得到修饰依赖
-                if (ner == "DATE")
-                {
-                    //情景时间
-                }
-                else if (ner == "ORGNIZATION")
-                {
-                    //备注信息
-                }
-                else if (ner == "NUMBER")
-                {
-                    //寻找修饰单位
-                    FindNumberDeps(dependencies, mention);
-                }
-                else if(ner == "CITY")
-                {
-                    //地点
-                }
-                else if(ner == "GPE")
-                {
-
-                }
+                //寻找修饰主语或者谓语的关系词
+                edu.stanford.nlp.ling.IndexedWord sToken = dep.dep(), tToken = dep.gov();
+                //1.当前情景片断主线已被解析出来，即 subject + action
+                Pipunit sunit = new Pipunit((string)sToken.get(textAnnotationClass));
+                Pipunit tunit = new Pipunit((string)tToken.get(textAnnotationClass));
+                //2.构建流水线
+                Pipline pline = new Pipline(sunit, tunit);
+                //3. 分析主语相关修饰, 谓语相关修饰
+                //AnalysisSubjectDepsInSentence(sentence, sToken, sunit);
+                AnalysisActionDepsInSentence(sentence, tToken, tunit);
+                //4. 添加到 pipeline
+                plines.Add(pline);
             }
-            //foreach (edu.stanford.nlp.ling.CoreLabel token in tokens)
+            return plines;
+            //逐token分析名字和其修饰
+            //java.util.AbstractList mentions = sentence.get(mentionsAnnotationClass) as java.util.AbstractList;
+            //_tokens = sentence.get(tokensAnnotationClass) as java.util.AbstractList;
+            //
+            //foreach (edu.stanford.nlp.util.CoreMap mention in mentions)
             //{
-            //    string word = (string)token.get(textAnnotationClass);
-            //    string pos = (string)token.get(partOfSpeechAnnotationClass);
-            //    string ner = (string)token.get(namedEntityTagAnnotationClass);
-            //    string type = (string)token.get(entityTypeAnnotationClass);
-            //    string value = (string)token.get(normalizedNamedEntityTagAnnotationClass);
-            //    //根据ner判断命名实体内容，根据dependencies, 找到相关修饰关系
+            //    string text = (string)mention.get(textAnnotationClass);
+            //    string ner = (string)mention.get(namedEntityTagAnnotationClass);
+            //    string noramlValue = (string)mention.get(normalizedNamedEntityTagAnnotationClass);
+            //    //处理不同类型的ner，得到修饰依赖
+            //    if (ner == "DATE")
+            //    {
+            //        //情景时间
+            //    }
+            //    else if (ner == "ORGNIZATION")
+            //    {
+            //        //备注信息
+            //    }
+            //    else if (ner == "NUMBER")
+            //    {
+            //        //寻找修饰单位
+            //        var (targetEntity, targetAction, numericValue) = FindNumberDeps(dependencies, mention);
+            //        //合并key-value, value 累加
+            //        if (targetEntity != null) properties[targetEntity] = numericValue;
+            //        if (targetAction != null) properties[targetAction] = numericValue;
+            //    }
+            //    else if (ner == "CITY")
+            //    {
+            //        //地点
+            //    }
+            //    else if (ner == "GPE")
+            //    {
+
+            //    }
             //}
         }
 
@@ -212,14 +334,14 @@ namespace Engine.NLP.Annotation
         /// </summary>
         /// <param name="idx"></param>
         /// <returns></returns>
-        private edu.stanford.nlp.ling.CoreLabel FindTokenByIdx(java.lang.Number idx)
-        {
-            int target = idx.intValue();
-            foreach (edu.stanford.nlp.ling.CoreLabel token in _tokens)
-                if (target == token.index())
-                    return token;
-            return null;
-        }
+        //private edu.stanford.nlp.ling.CoreLabel FindTokenByIdx(java.lang.Number idx)
+        //{
+        //    int target = idx.intValue();
+        //    foreach (edu.stanford.nlp.ling.CoreLabel token in _tokens)
+        //        if (target == token.index())
+        //            return token;
+        //    return null;
+        //}
 
         /// <summary>
         /// 搜索与number相关的依赖：
@@ -228,47 +350,67 @@ namespace Engine.NLP.Annotation
         /// </summary>
         /// <param name="dependencies"></param>
         /// <param name="targetWord">目标名词</param>
-        private (string targetEntity, string numericValue) FindNumberDeps(edu.stanford.nlp.semgraph.SemanticGraph dependencies, edu.stanford.nlp.util.CoreMap mention)
+        private (string targetEntity, string targetAction, string numericValue) FindNumberDeps(edu.stanford.nlp.semgraph.SemanticGraph dependencies, edu.stanford.nlp.util.CoreMap mention)
         {
-            string numericValue=null, targetEntity = null;
+            string numericValue = null, targetEntity = null, targetAction = null;
             //方法1：根据cemidx寻找修饰关系，记录返回
             //java.lang.Number cemIdx = mention.get(canonicalEntityMentionIndexAnnotation) as java.lang.Number;
             //edu.stanford.nlp.ling.CoreLabel cemToken =FindTokenByIdx(cemIdx);
             //方法2：根据当前词idx, 寻找修饰关系, 获取mention里的token，得到关键词并寻找修饰关系
             string value = (string)mention.get(normalizedNamedEntityTagAnnotationClass);
+            value = value ?? (string)mention.get(textAnnotationClass);
             java.util.AbstractList tokens = mention.get(tokensAnnotationClass) as java.util.AbstractList;
             java.util.Collection typedDependencies = dependencies.typedDependencies();
             //处理entity里包含的tokens
-            foreach(edu.stanford.nlp.ling.CoreLabel token in tokens)
+            foreach (edu.stanford.nlp.ling.CoreLabel token in tokens)
             {
-                //2.1 搜索与token相关的deps
-                List<edu.stanford.nlp.trees.TypedDependency> deps =   FindRefs(dependencies, token);
-                //2.2 参考：Marie-Catherine de Marneffe, Christopher D. Manning ,Stanford typed dependencies manual, 2016
+                //1 搜索与token相关的deps
+                List<edu.stanford.nlp.trees.TypedDependency> deps = FindRefs(dependencies, token);
+                //2 参考：Marie-Catherine de Marneffe, Christopher D. Manning ,Stanford typed dependencies manual, 2016
                 //不限于：nn:noun compound modifier
-                foreach(edu.stanford.nlp.trees.TypedDependency dep in deps)
+                foreach (edu.stanford.nlp.trees.TypedDependency dep in deps)
                 {
-                    //2.2.1 查找数值修饰单位 (mark:clf)
+                    //2.1 查找数值修饰单位 (mark:clf)
                     if (dep.reln().getShortName() == "mark:clf")
                     {
                         string unitText = (string)dep.dep().get(textAnnotationClass);
                         numericValue = string.Format("{0} {1}", value, unitText);
                     }
-                    //2.2.2 num修饰关系（名词修饰关系）
-                    if(dep.reln().getShortName() == "nummod")
+                    //2.2 num修饰关系（名词修饰关系）
+                    if (dep.reln().getShortName() == "nummod")
                     {
-                        //2.2.2.1 得到被修饰词
+                        //2.2.1 得到被修饰词
                         edu.stanford.nlp.ling.CoreLabel nummodToken = dep.gov().backingLabel();
-                        //2.2.2.2 找到 nsubj 修饰的主体subject名词(NN)
-                        edu.stanford.nlp.ling.CoreLabel targetToken =  FindTargetTokenByDependencytype(dependencies, nummodToken, "compound:nn");
-                        //2.2.2.3 修饰主体
-                        targetEntity = (string)targetToken.get(textAnnotationClass);
+                        //2.2.2 找到 nsubj 修饰的主体subject名词(NN)
+                        //2.2.3 compound修饰的主语
+                        edu.stanford.nlp.ling.CoreLabel targetToken = FindTargetTokenByDependencytype(dependencies, nummodToken, "compound:nn");
+                        if (targetToken != null)
+                            targetEntity = targetToken != null ? (string)targetToken.get(textAnnotationClass) : null;
+                        //2.2.4 acl修饰主语
+                        if (targetToken == null)
+                        {
+                            targetToken = FindTargetTokenByDependencytype(dependencies, nummodToken, "acl");
+                            if (targetToken != null) numericValue += (string)nummodToken.get(textAnnotationClass);
+                            string poa = (string)targetToken.get(partOfSpeechAnnotationClass);
+                            if (poa == "VV") targetAction = (string)targetToken.get(textAnnotationClass);
+                        }
                     }
-                    //2.2.3 num修饰关系（动词修饰关系）
-
+                    //2.3 num修饰关系（动词修饰关系）
+                    if (dep.reln().getShortName() == "dep" && (string)dep.gov().backingLabel().get(partOfSpeechAnnotationClass) == "VV")
+                    {
+                        targetAction = (string)dep.gov().backingLabel().get(textAnnotationClass);
+                    }
+                    //2.4 num修饰名词
+                    if (dep.reln().getShortName() == "dep" && (string)dep.gov().backingLabel().get(partOfSpeechAnnotationClass) == "NN")
+                    {
+                        numericValue = (string)dep.dep().backingLabel().get(textAnnotationClass) + (string)dep.gov().backingLabel().get(textAnnotationClass);
+                        edu.stanford.nlp.ling.CoreLabel targetToken = FindTargetTokenByDependencytype(dependencies, dep.gov().backingLabel(), "nmod:prep");
+                        string poa = (string)targetToken.get(partOfSpeechAnnotationClass);
+                        if (poa == "VV") targetAction = (string)targetToken.get(textAnnotationClass);
+                    }
                 }
             }
-            return (targetEntity, numericValue);
-
+            return (targetEntity, targetAction, numericValue);
         }
 
         /// <summary>
@@ -280,10 +422,8 @@ namespace Engine.NLP.Annotation
         {
             List<edu.stanford.nlp.trees.TypedDependency> deps = FindRefs(dependencies, token);
             foreach (edu.stanford.nlp.trees.TypedDependency dep in deps)
-            {
                 if (dep.reln().getShortName() == depTypeString)
-                    return dep.gov().backingLabel();
-            }
+                    return dep.gov().backingLabel() == token ? dep.dep().backingLabel() : dep.gov().backingLabel();
             return null;
         }
 
@@ -304,6 +444,46 @@ namespace Engine.NLP.Annotation
                 edu.stanford.nlp.trees.TypedDependency td = itr.next() as edu.stanford.nlp.trees.TypedDependency;
                 string tdValue = td.toString();
                 if (tdValue.IndexOf(tokenValue) != -1) tds.Add(td);
+            }
+            return tds;
+        }
+
+        /// <summary>
+        /// 搜索token的直接关联关系
+        /// </summary>
+        /// <param name="sentence"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        private List<edu.stanford.nlp.trees.TypedDependency> FindDeirctRefs(edu.stanford.nlp.util.CoreMap sentence, edu.stanford.nlp.ling.CoreLabel token)
+        {
+            string tokenValue = token.ToString();
+            List<edu.stanford.nlp.trees.TypedDependency> tds = new List<edu.stanford.nlp.trees.TypedDependency>();
+            edu.stanford.nlp.semgraph.SemanticGraph dependencies = sentence.get(basicDependenciesAnnotationClass) as edu.stanford.nlp.semgraph.SemanticGraph;
+            java.util.Collection typedDependencies = dependencies.typedDependencies();
+            java.util.Iterator itr = typedDependencies.iterator();
+            while (itr.hasNext())
+            {
+                edu.stanford.nlp.trees.TypedDependency td = itr.next() as edu.stanford.nlp.trees.TypedDependency;
+                string tdValue = td.toString();
+                if (tdValue.IndexOf(tokenValue) != -1) tds.Add(td);
+            }
+            return tds;
+        }
+
+        /// <summary>
+        /// 因为句子并非要求语法上严格正确，所有经常出现错误的结果，但是结果不会变化
+        /// </summary>
+        /// <returns></returns>
+        private List<edu.stanford.nlp.trees.TypedDependency> FindDeptypeFromSentence(edu.stanford.nlp.util.CoreMap sentence, string depTypeString)
+        {
+            List<edu.stanford.nlp.trees.TypedDependency> tds = new List<edu.stanford.nlp.trees.TypedDependency>();
+            edu.stanford.nlp.semgraph.SemanticGraph dependencies = sentence.get(basicDependenciesAnnotationClass) as edu.stanford.nlp.semgraph.SemanticGraph;
+            java.util.Collection typedDependencies = dependencies.typedDependencies();
+            java.util.Iterator itr = typedDependencies.iterator();
+            while (itr.hasNext())
+            {
+                edu.stanford.nlp.trees.TypedDependency td = itr.next() as edu.stanford.nlp.trees.TypedDependency;
+                if(td.reln().getShortName()==depTypeString) tds.Add(td);
             }
             return tds;
         }

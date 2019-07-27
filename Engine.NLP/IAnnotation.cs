@@ -1,10 +1,17 @@
-﻿namespace Engine.NLP
+﻿using Engine.NLP.Entity;
+
+namespace Engine.NLP
 {
     /// <summary>
     /// annotation text
     /// </summary>
     public interface IAnnotation
     {
-        void Process(string rawText);
     }
+
+    public interface IScenarioAnnotation
+    {
+        Scenario Process(string rawText);
+    }
+
 }
