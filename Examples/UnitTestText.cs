@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using Engine.NLP;
 using Engine.NLP.Annotation;
@@ -113,6 +112,7 @@ namespace Examples
             IScenarioAnnotation annotation = new ScenarioAnnotation();
             foreach (var group in sGroup.Groups)
             {
+                string timeStamp = group.Key;
                 string rawText = string.Join(".", group.Value.ToArray());
                 Scenario scenario =  annotation.Process(rawText);
             }

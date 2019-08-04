@@ -24,7 +24,8 @@ namespace Engine.Brain.Model.ML
 
         public double Train(float[][] inputs,int[] outputs)
         {
-            _forest = _teacher.Learn(NP.FloatArrayToDoubleArray(inputs), outputs);
+            double[][] dInputs = NP.FloatArrayToDoubleArray(inputs);
+            _forest = _teacher.Learn(dInputs, outputs);
             return 0.0;
         }
 
