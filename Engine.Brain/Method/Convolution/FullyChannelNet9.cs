@@ -13,7 +13,7 @@ namespace Engine.Brain.Method.Convolution
     /// 4 conv layer
     /// 1 dense layer
     /// </summary>
-    public class FullyChannelNet9 : IDConvNet
+    public class FullyChannelNet9 : IConvNet
     {
         /// <summary>
         /// store traind epochs
@@ -49,7 +49,7 @@ namespace Engine.Brain.Method.Convolution
         /// <param name="deviceName"></param>
         public FullyChannelNet9(int w, int h, int c, int outputClassNum, string deviceName)
         {
-            device = NP.CNTK.GetDeviceByName(deviceName);
+            device = NP.CNTKHelper.GetDeviceByName(deviceName);
             int[] inputDim = new int[] { w, h, c };
             int[] outputDim = new int[] { outputClassNum };
             inputVariable = Variable.InputVariable(NDShape.CreateNDShape(inputDim), DataType.Float, "inputVariable");
@@ -70,7 +70,7 @@ namespace Engine.Brain.Method.Convolution
         /// <param name="deviceName"></param>
         public FullyChannelNet9(Function model, string deviceName)
         {
-            device = NP.CNTK.GetDeviceByName(deviceName);
+            device = NP.CNTKHelper.GetDeviceByName(deviceName);
             inputVariable = model.Inputs.First(v => v.Name == "inputVariable");
             outputVariable = Variable.InputVariable(model.Output.Shape, DataType.Float, "labelVariable");
             classifierOutput = model;
@@ -85,11 +85,11 @@ namespace Engine.Brain.Method.Convolution
         private Function CreateFullyChannelNetwork(Variable input, int inputChannel, int outputClassNum)
         {
             int[] channels = new int[] { inputChannel, inputChannel, Math.Max(inputChannel / 2, 3), Math.Max(inputChannel / 3, 3), Math.Max(inputChannel / 3, 3) };
-            Function pooling1 = NP.CNTK.ConvolutionWithMaxPooling(input, 3, 3, channels[0], channels[1], 1, 1, 3, 3, device, CNTKLib.ReLU);
-            Function pooling2 = NP.CNTK.ConvolutionWithMaxPooling(pooling1, 3, 3, channels[1], channels[2], 1, 1, 3, 3, device, CNTKLib.ReLU);
-            Function pooling3 = NP.CNTK.ConvolutionWithMaxPooling(pooling2, 3, 3, channels[2], channels[3], 1, 1, 3, 3, device, CNTKLib.ReLU);
-            Function pooling4 = NP.CNTK.ConvolutionWithMaxPooling(pooling3, 3, 3, channels[3], channels[4], 1, 1, 3, 3, device, CNTKLib.ReLU);
-            return NP.CNTK.Dense(pooling4, outputClassNum, device, CNTKLib.ReLU, "ouput");
+            Function pooling1 = NP.CNTKHelper.ConvolutionWithMaxPooling(input, 3, 3, channels[0], channels[1], 1, 1, 3, 3, device, CNTKLib.ReLU);
+            Function pooling2 = NP.CNTKHelper.ConvolutionWithMaxPooling(pooling1, 3, 3, channels[1], channels[2], 1, 1, 3, 3, device, CNTKLib.ReLU);
+            Function pooling3 = NP.CNTKHelper.ConvolutionWithMaxPooling(pooling2, 3, 3, channels[2], channels[3], 1, 1, 3, 3, device, CNTKLib.ReLU);
+            Function pooling4 = NP.CNTKHelper.ConvolutionWithMaxPooling(pooling3, 3, 3, channels[3], channels[4], 1, 1, 3, 3, device, CNTKLib.ReLU);
+            return NP.CNTKHelper.Dense(pooling4, outputClassNum, device, CNTKLib.ReLU, "ouput");
         }
 
         public double Train(float[][] inputs, float[][] outputs)
@@ -105,7 +105,7 @@ namespace Engine.Brain.Method.Convolution
             }
         }
 
-        public void Accept(INet sourceNet)
+        public void Accept(INeuralNet sourceNet)
         {
             throw new NotImplementedException();
         }

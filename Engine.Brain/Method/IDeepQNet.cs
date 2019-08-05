@@ -3,7 +3,7 @@
     /// <summary>
     /// 强化学习模型
     /// </summary>
-    public interface IDeepQNet
+    public interface IDeepQNet : IMachineLarning
     {
     }
 }

@@ -3,7 +3,7 @@
     /// <summary>
     /// basically neural network definition
     /// </summary>
-    public interface INet : IMachineLarning
+    public interface INeuralNet : IMachineLarning
     {
         /// <summary>
         /// train net

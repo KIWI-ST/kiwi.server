@@ -13,7 +13,7 @@ namespace Engine.Brain.Utils
     /// </summary>
     public partial class NP
     {
-        public static class CNTK
+        public static class CNTKHelper
         {
             /// <summary>
             /// device get
@@ -38,7 +38,7 @@ namespace Engine.Brain.Utils
             /// <param name="modelFilename"></param>
             /// <param name="deviceName"></param>
             /// <returns></returns>
-            public static IDConvNet LoadModel(string modelFilename, string deviceName)
+            public static IConvNet LoadModel(string modelFilename, string deviceName)
             {
                 string modelType = System.IO.Path.GetFileNameWithoutExtension(modelFilename).Split('_').Last();
                 var device = devices[deviceName];

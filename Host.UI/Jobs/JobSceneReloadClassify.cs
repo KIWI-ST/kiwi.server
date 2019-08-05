@@ -68,7 +68,7 @@ namespace Host.UI.Jobs
         {
             _t = new Thread(() =>
             {
-                string deviceName = NP.CNTK.DeviceCollection[0];
+                string deviceName = NP.CNTKHelper.DeviceCollection[0];
                 int row = 193, col = 193;
                 //初始化训练
                 Summary = "初始化样本中...";

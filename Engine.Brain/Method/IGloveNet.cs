@@ -6,6 +6,9 @@
     /// <param name="percentage"></param>
     public delegate void LoadingEventHandler(double percentage);
 
+    /// <summary>
+    /// 词向量模型
+    /// </summary>
     public interface IDEmbeddingNet : IMachineLarning
     {
         /// <summary>
@@ -23,7 +26,7 @@
         /// </summary>
         /// <param name="word"></param>
         /// <returns>word vector</returns>
-        float[] MappingToVector(string word);
+        float[] Predict(string word);
 
         /// <summary>
         /// 

@@ -4,7 +4,7 @@
     /// deep convolution neural network
     /// expecially suitable for deep feature extract
     /// </summary>
-    public interface IDConvNet : INet
+    public interface IConvNet : INeuralNet
     {
 
         /// <summary>

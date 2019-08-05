@@ -69,14 +69,14 @@ namespace Host.UI.Jobs
         {
             _t = new Thread(() =>
             {
-                string deviceName = NP.CNTK.DeviceCollection[0];
+                string deviceName = NP.CNTKHelper.DeviceCollection[0];
                 int row = 193, col = 193;
                 //初始化训练
                 Summary = "初始化样本中...";
                 List<DirectoryInfo> samplesDirCollection = new DirectoryInfo(trainDirectoryName).GetDirectories().ToList();
                 IEnv env = LoadSampleBatch(samplesDirCollection.RandomTake());
-                IDNet actor = new DNetCNN(deviceName, 193, 193, 3, 45);
-                IDNet critic = new DNetCNN(deviceName, 193, 193, 3, 45);
+                ISupportNet actor = new DNetCNN(deviceName, 193, 193, 3, 45);
+                ISupportNet critic = new DNetCNN(deviceName, 193, 193, 3, 45);
                 DQN dqn = new DQN(env, actor, critic, epochs: totalEpochs, switchEpoch: switchEpoch);
                 dqn.OnLearningLossEventHandler += (double loss, double totalReward, double accuracy, double progress, string epochesTime) => {
                     Process = progress;

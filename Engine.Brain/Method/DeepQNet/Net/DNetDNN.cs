@@ -60,7 +60,7 @@ namespace Engine.Brain.Method.DeepQNet.Net
     /// <summary>
     /// DQN State Prediction NeuralNetwork 
     /// </summary>
-    public class DNetDNN : IDNet
+    public class DNetDNN : ISupportNet
     {
         ActivationNetwork _network;
 
@@ -112,7 +112,7 @@ namespace Engine.Brain.Method.DeepQNet.Net
             return memory;
         }
 
-        public void Accept(IDNet sourceNet)
+        public void Accept(ISupportNet sourceNet)
         {
             _network = Network.Load(sourceNet.PersistenceMemory()) as ActivationNetwork;
             _teacher = new BackPropagationLearning(_network)

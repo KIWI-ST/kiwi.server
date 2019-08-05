@@ -1,7 +1,7 @@
 ﻿namespace Engine.Brain.Method
 {
     /// <summary>
-    /// supervised learning methods
+    /// Machine leanring interface
     /// </summary>
     public interface IMachineLarning
     {

@@ -63,7 +63,7 @@ namespace Engine.Brain.Method
         /// <summary>
         /// learning rate scheduler
         /// </summary>
-        NP.CNTK.ReduceLROnPlateau lrs;
+        NP.CNTKHelper.ReduceLROnPlateau lrs;
 
         /// <summary>
         /// 
@@ -94,7 +94,7 @@ namespace Engine.Brain.Method
         /// <param name="gloVeFilename"></param>
         public GloVeNet(string deviceName, string gloVeFilename)
         {
-            device = NP.CNTK.GetDeviceByName(deviceName);
+            device = NP.CNTKHelper.GetDeviceByName(deviceName);
             _gloVeFilename = gloVeFilename;
         }
 
@@ -118,10 +118,10 @@ namespace Engine.Brain.Method
             y = Variable.InputVariable(new int[] { 1 }, DataType.Double);
             //create model 
             model = CNTKLib.OneHotOp(x, numClass: (uint)MaxWordsNum, outputSparse: true, axis: new Axis(0));
-            model = NP.CNTK.Embedding(model, EmbeddingDimNum, device, embedding_weights, "Embedding_1");
-            model = NP.CNTK.Dense(model, 32, device, CNTKLib.SELU);
+            model = NP.CNTKHelper.Embedding(model, EmbeddingDimNum, device, embedding_weights, "Embedding_1");
+            model = NP.CNTKHelper.Dense(model, 32, device, CNTKLib.SELU);
             model = CNTKLib.ReLU(model);
-            model = NP.CNTK.Dense(model, 1, device, CNTKLib.ReLU);
+            model = NP.CNTKHelper.Dense(model, 1, device, CNTKLib.ReLU);
             model = CNTKLib.Sigmoid(model);
             //
             var loss_function = CNTKLib.BinaryCrossEntropy(model, y);
@@ -277,7 +277,7 @@ namespace Engine.Brain.Method
         /// 
         /// </summary>
         /// <param name="sourceNet"></param>
-        public void Accept(INet sourceNet)
+        public void Accept(INeuralNet sourceNet)
         {
             throw new System.NotImplementedException();
         }
@@ -292,7 +292,7 @@ namespace Engine.Brain.Method
             throw new System.NotImplementedException();
         }
 
-        public float[] MappingToVector(string word)
+        public float[] Predict(string word)
         {
             return embeddingsIndex.Keys.Contains(word) ? embeddingsIndex[word] : new float[EmbeddingDimNum];
         }

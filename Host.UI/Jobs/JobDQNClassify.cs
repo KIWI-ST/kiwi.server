@@ -114,7 +114,7 @@ namespace Host.UI.Jobs
                 }
                 Summary = "模型训练中";
                 //create actor and critic
-                IDNet actor = null, critic = null;
+                ISupportNet actor = null, critic = null;
                 if(supportNetName == typeof(DNetDNN).Name)
                 {
                     actor = new DNetDNN(new int[] { width, height, depth }, _env.ActionNum);

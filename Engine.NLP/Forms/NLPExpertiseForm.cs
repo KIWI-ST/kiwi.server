@@ -233,11 +233,11 @@ namespace Engine.NLP.Forms
                 float[][] words = new float[totalNum][];
                 //2.定义词颜色
                 for (int i = 0; i < hazard.Count; i++)
-                    words[i] = GloveNet.MappingToVector(hazard[i]);
+                    words[i] = GloveNet.Predict(hazard[i]);
                 for (int i = 0; i < exposure.Count; i++)
-                    words[hazard.Count + i] = GloveNet.MappingToVector(exposure[i]);
+                    words[hazard.Count + i] = GloveNet.Predict(exposure[i]);
                 for (int i = 0; i < humanBehavior.Count; i++)
-                    words[hazard.Count + exposure.Count + i] = GloveNet.MappingToVector(humanBehavior[i]);
+                    words[hazard.Count + exposure.Count + i] = GloveNet.Predict(humanBehavior[i]);
                 //3.t-SNE算法降维
                 var vWords = NP.TSNE2(words);
                 //4.可视化

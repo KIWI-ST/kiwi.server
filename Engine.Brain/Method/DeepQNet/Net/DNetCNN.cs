@@ -10,7 +10,7 @@ namespace Engine.Brain.Method.DeepQNet.Net
     /// <summary>
     /// use Fully Channel Convoluation Neural Network instead of Deep Neural Network
     /// </summary>
-    public class DNetCNN : IDNet
+    public class DNetCNN : ISupportNet
     {
         /// <summary>
         /// log trained epochs
@@ -52,7 +52,7 @@ namespace Engine.Brain.Method.DeepQNet.Net
         /// <param name="o">output class num</param>
         public DNetCNN(string deviceName, int w, int h, int c, int o)
         {
-            device = NP.CNTK.GetDeviceByName(deviceName);
+            device = NP.CNTKHelper.GetDeviceByName(deviceName);
             int[] inputDim = new int[] { w, h, c };
             int[] outputDim = new int[] { o };
             inputVariable = Variable.InputVariable(NDShape.CreateNDShape(inputDim), DataType.Double, "inputVariable");
@@ -68,7 +68,7 @@ namespace Engine.Brain.Method.DeepQNet.Net
 
         public DNetCNN(MemoryStream modelStream, string deviceName)
         {
-            device = NP.CNTK.GetDeviceByName(deviceName);
+            device = NP.CNTKHelper.GetDeviceByName(deviceName);
             byte[] bytes = new byte[modelStream.Length];
             modelStream.Read(bytes, 0, bytes.Length);
             modelStream.Seek(0, SeekOrigin.Begin);
@@ -94,18 +94,18 @@ namespace Engine.Brain.Method.DeepQNet.Net
         private Function CreateFullyChannelNetwork(Variable input, int inputChannel, int outputClassNum)
         {
             int[] channels = new int[] { inputChannel, inputChannel, Math.Max(inputChannel / 2, 3), Math.Max(inputChannel / 3, 3), Math.Max(inputChannel / 3, 3) };
-            Function pooling1 = NP.CNTK.ConvolutionWithMaxPooling(input, 3, 3, channels[0], channels[1], 1, 1, 3, 3, device, CNTKLib.SELU);
-            Function pooling2 = NP.CNTK.ConvolutionWithMaxPooling(pooling1, 3, 3, channels[1], channels[2], 1, 1, 3, 3, device, CNTKLib.SELU);
-            Function pooling3 = NP.CNTK.ConvolutionWithMaxPooling(pooling2, 3, 3, channels[2], channels[3], 1, 1, 3, 3, device, CNTKLib.SELU);
-            Function pooling4 = NP.CNTK.ConvolutionWithMaxPooling(pooling3, 3, 3, channels[3], channels[4], 1, 1, 3, 3, device, CNTKLib.SELU);
-            return NP.CNTK.Dense(pooling4, outputClassNum, device, CNTKLib.SELU, "ouput");
+            Function pooling1 = NP.CNTKHelper.ConvolutionWithMaxPooling(input, 3, 3, channels[0], channels[1], 1, 1, 3, 3, device, CNTKLib.SELU);
+            Function pooling2 = NP.CNTKHelper.ConvolutionWithMaxPooling(pooling1, 3, 3, channels[1], channels[2], 1, 1, 3, 3, device, CNTKLib.SELU);
+            Function pooling3 = NP.CNTKHelper.ConvolutionWithMaxPooling(pooling2, 3, 3, channels[2], channels[3], 1, 1, 3, 3, device, CNTKLib.SELU);
+            Function pooling4 = NP.CNTKHelper.ConvolutionWithMaxPooling(pooling3, 3, 3, channels[3], channels[4], 1, 1, 3, 3, device, CNTKLib.SELU);
+            return NP.CNTKHelper.Dense(pooling4, outputClassNum, device, CNTKLib.SELU, "ouput");
         }
 
         /// <summary>
         /// async parameters
         /// </summary>
         /// <param name="sourceNet"></param>
-        public void Accept(IDNet sourceNet)
+        public void Accept(ISupportNet sourceNet)
         {
             //convert to bytes 
             Stream modelStream = sourceNet.PersistenceMemory();

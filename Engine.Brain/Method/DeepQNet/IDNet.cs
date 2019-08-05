@@ -5,7 +5,7 @@ namespace Engine.Brain.Method.DeepQNet
     /// <summary>
     /// support dqn training and apply
     /// </summary>
-    public interface IDNet : INet
+    public interface ISupportNet : INeuralNet
     {
         /// <summary>
         /// persistence in memory
@@ -16,6 +16,6 @@ namespace Engine.Brain.Method.DeepQNet
         /// copy sourceNet parameters to this Net
         /// </summary>
         /// <param name="sourceNet"></param>
-        void Accept(IDNet sourceNet);
+        void Accept(ISupportNet sourceNet);
     }
 }

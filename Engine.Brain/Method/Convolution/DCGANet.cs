@@ -33,7 +33,7 @@ namespace Engine.Brain.Model.DL
         /// <param name="discriminatorNet"></param>
         public DCGANet(string deviceName, int w = 32, int h = 32, int c = 3, int latent_dim =32)
         {
-            _device = NP.CNTK.GetDeviceByName(deviceName);
+            _device = NP.CNTKHelper.GetDeviceByName(deviceName);
             var label_var = CNTK.Variable.InputVariable(shape: new CNTK.NDShape(0), dataType: CNTK.DataType.Float, name: "label_var");
             var generator = CreateGenerator(latent_dim, c);
             var discriminator = CreateDiscriminator(w,h,c);
@@ -69,19 +69,19 @@ namespace Engine.Brain.Model.DL
         private Function CreateGenerator(int latent_dim, int channels)
         {
             var input_variable = Variable.InputVariable(new int[] { latent_dim }, CNTK.DataType.Float, name: "generator_input");
-            var x = NP.CNTK.Dense(input_variable, 128 * 16 * 16, _device, null);
+            var x = NP.CNTKHelper.Dense(input_variable, 128 * 16 * 16, _device, null);
             //set leakrelu alpha equals 0.3
             x = CNTKLib.LeakyReLU(x, 0.3);
             x = CNTK.CNTKLib.Reshape(x, new int[] { 16, 16, 128 });
-            x = NP.CNTK.Convolution2D(x, 256, new int[] { 5, 5 }, _device, null ,true);
+            x = NP.CNTKHelper.Convolution2D(x, 256, new int[] { 5, 5 }, _device, null ,true);
             x = CNTKLib.LeakyReLU(x, 0.3);
-            x = NP.CNTK.ConvolutionTranspose(x,new int[] { 4, 4 },256,_device, null, true, new int[] { 2, 2 }, true, new int[] { 32, 32 });
+            x = NP.CNTKHelper.ConvolutionTranspose(x,new int[] { 4, 4 },256,_device, null, true, new int[] { 2, 2 }, true, new int[] { 32, 32 });
             x = CNTKLib.LeakyReLU(x, 0.3);
-            x = NP.CNTK.Convolution2D(x, 256, new int[] { 5, 5 }, _device, use_padding:true);
+            x = NP.CNTKHelper.Convolution2D(x, 256, new int[] { 5, 5 }, _device, use_padding:true);
             x = CNTKLib.LeakyReLU(x, 0.3);
-            x = NP.CNTK.Convolution2D(x, 256, new int[] { 5, 5 }, _device, use_padding: true);
+            x = NP.CNTKHelper.Convolution2D(x, 256, new int[] { 5, 5 }, _device, use_padding: true);
             x = CNTKLib.LeakyReLU(x, 0.3);
-            x = NP.CNTK.Convolution2D(x, channels, new int[] { 7, 7 }, _device, CNTKLib.Tanh, use_padding: true);
+            x = NP.CNTKHelper.Convolution2D(x, channels, new int[] { 7, 7 }, _device, CNTKLib.Tanh, use_padding: true);
             return x; ;
         }
 
@@ -92,16 +92,16 @@ namespace Engine.Brain.Model.DL
         private Function CreateDiscriminator(int w, int h, int c)
         {
             var input_variable = Variable.InputVariable(new int[] { w, h, c }, DataType.Double, name: "discriminator_input");
-            var x = NP.CNTK.Convolution2D(input_variable, 128, new int[] { 3, 3 },_device);
+            var x = NP.CNTKHelper.Convolution2D(input_variable, 128, new int[] { 3, 3 },_device);
             x = CNTKLib.LeakyReLU(x, 0.3);
-            x = NP.CNTK.Convolution2D(x, 128, new int[] { 4, 4 }, _device, strides: new int[] { 2, 2 });
+            x = NP.CNTKHelper.Convolution2D(x, 128, new int[] { 4, 4 }, _device, strides: new int[] { 2, 2 });
             x = CNTKLib.LeakyReLU(x, 0.3);
-            x = NP.CNTK.Convolution2D(x, 128, new int[] { 4, 4 }, _device, strides: new int[] { 2, 2 });
+            x = NP.CNTKHelper.Convolution2D(x, 128, new int[] { 4, 4 }, _device, strides: new int[] { 2, 2 });
             x = CNTKLib.LeakyReLU(x, 0.3);
-            x = NP.CNTK.Convolution2D(x, 128, new int[] { 4, 4 }, _device, strides: new int[] { 2, 2 });
+            x = NP.CNTKHelper.Convolution2D(x, 128, new int[] { 4, 4 }, _device, strides: new int[] { 2, 2 });
             x = CNTKLib.LeakyReLU(x, 0.3);
             x = CNTKLib.Dropout(x, 0.4);
-            x = NP.CNTK.Dense(x, 1, _device, CNTKLib.Sigmoid);
+            x = NP.CNTKHelper.Dense(x, 1, _device, CNTKLib.Sigmoid);
             return x;
         }
 

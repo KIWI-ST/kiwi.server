@@ -18,7 +18,7 @@ namespace Engine.Brain.Utils
             /// </summary>
             public static List<string> ConvSupportCollection {
                 get {
-                    IEnumerable<string> typeNames = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.GetInterfaces().Contains(typeof(IDConvNet))).Select(s => s.ToString().Split('.').Last());
+                    IEnumerable<string> typeNames = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.GetInterfaces().Contains(typeof(IConvNet))).Select(s => s.ToString().Split('.').Last());
                     return typeNames.ToList();
                 }
             }
@@ -30,7 +30,7 @@ namespace Engine.Brain.Utils
             {
                 get
                 {
-                    IEnumerable<string> typeNames = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.GetInterfaces().Contains(typeof(IDNet))).Select(s => s.ToString().Split('.').Last());
+                    IEnumerable<string> typeNames = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.GetInterfaces().Contains(typeof(ISupportNet))).Select(s => s.ToString().Split('.').Last());
                     return typeNames.ToList();
                 }
             }

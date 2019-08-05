@@ -119,8 +119,8 @@ namespace Examples
             }
             double dNetLoss = 999;
             //use DNet (DNN) for dqn training
-            IDNet actor = new DNetDNN(new int[] { 3, 3, 18 }, keys.Count);
-            IDNet critic = new DNetDNN(new int[] { 3, 3, 18 }, keys.Count);
+            ISupportNet actor = new DNetDNN(new int[] { 3, 3, 18 }, keys.Count);
+            ISupportNet critic = new DNetDNN(new int[] { 3, 3, 18 }, keys.Count);
             //create dqn alogrithm
             DQN dqn = new DQN(env, actor, critic, epochs: 10);
             //in order to test fast, we set training epochs equals 10.
@@ -136,8 +136,8 @@ namespace Examples
             Assert.IsTrue(dNetLoss < 1.0);
             double dNet2Loss = 999;
             //use DNet2(CNN) for dqn training
-            IDNet actor2 = new DNetCNN(NP.CNTK.DeviceCollection[0], 9, 9, 18, keys.Count);
-            IDNet critic2 = new DNetCNN(NP.CNTK.DeviceCollection[0], 9, 9, 18, keys.Count);
+            ISupportNet actor2 = new DNetCNN(NP.CNTKHelper.DeviceCollection[0], 9, 9, 18, keys.Count);
+            ISupportNet critic2 = new DNetCNN(NP.CNTKHelper.DeviceCollection[0], 9, 9, 18, keys.Count);
             //create dqn alogrithm
             DQN dqn2 = new DQN(env, actor2, critic2, epochs: 10);
             //in order to test fast, we set training epochs equals 10.
@@ -187,10 +187,10 @@ namespace Examples
                 env = new SamplesEnv(x, y);
             }
             double dNetLoss = 999;
-            string deviceName = NP.CNTK.DeviceCollection[0];
+            string deviceName = NP.CNTKHelper.DeviceCollection[0];
             //use DNet (DNN) for dqn training
-            IDNet actor = new DNetCNN(deviceName, 9, 9, 18, keys.Count);
-            IDNet critic = new DNetCNN(deviceName, 9, 9, 18, keys.Count);
+            ISupportNet actor = new DNetCNN(deviceName, 9, 9, 18, keys.Count);
+            ISupportNet critic = new DNetCNN(deviceName, 9, 9, 18, keys.Count);
             //create dqn alogrithm
             DQN dqn = new DQN(env, actor, critic, epochs: 2);
             //in order to test fast, we set training epochs equals 2.
@@ -247,7 +247,7 @@ namespace Examples
                 double _loss = 1.0;
                 int epochs = 100, batchSize = 19;
                 //use fullychannelnet 
-                IDConvNet cnn = new FullyChannelNet9(3, 3, 18, keys.Count, NP.CNTK.DeviceCollection[0]);
+                IConvNet cnn = new FullyChannelNet9(3, 3, 18, keys.Count, NP.CNTKHelper.DeviceCollection[0]);
                 //training epochs
                 for (int i = 0; i < epochs; i++)
                 {
@@ -264,14 +264,14 @@ namespace Examples
         [TestMethod]
         public void EmbeddingNet()
         {
-            var deviceName = NP.CNTK.DeviceCollection[0];
+            var deviceName = NP.CNTKHelper.DeviceCollection[0];
             GloVeNet net = new GloVeNet(deviceName, gloVeFilename);
             //net.UseGloVeWordEmebdding(imdbDir, gloveFullFilename);
 
-            var woman = net.MappingToVector("boy");
-            var man = net.MappingToVector("girl");
-            var madam = net.MappingToVector("brother");
-            var sir = net.MappingToVector("sister");
+            var woman = net.Predict("boy");
+            var man = net.Predict("girl");
+            var madam = net.Predict("brother");
+            var sir = net.Predict("sister");
 
             //var s1 = NP.Sub(woman, man);
             //var s2 = NP.Sub(madam, sir);
@@ -309,7 +309,7 @@ namespace Examples
                 inputs[i] = inputList[i];
                 labels[i] = new float[1] { labelList[i] };
             }
-            INet net = new DNetDNN(new int[] { 8, 1, 1 }, 8);
+            INeuralNet net = new DNetDNN(new int[] { 8, 1, 1 }, 8);
             string loss = "";
             for (int i = 0; i < 10000; i++)
             {
@@ -323,10 +323,10 @@ namespace Examples
         [TestMethod]
         public void SaveAndLoad()
         {
-            var devicesName = NP.CNTK.DeviceCollection[0];
-            IDConvNet cnn = new FullyChannelNet9(11, 11, 18, 10, devicesName);
+            var devicesName = NP.CNTKHelper.DeviceCollection[0];
+            IConvNet cnn = new FullyChannelNet9(11, 11, 18, 10, devicesName);
             string modelFilename = cnn.PersistencNative();
-            IDConvNet cnn2 = NP.CNTK.LoadModel(modelFilename, devicesName);
+            IConvNet cnn2 = NP.CNTKHelper.LoadModel(modelFilename, devicesName);
         }
 
         [TestMethod]

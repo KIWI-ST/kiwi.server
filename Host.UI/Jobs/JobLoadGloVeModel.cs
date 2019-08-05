@@ -27,7 +27,7 @@ namespace Host.UI.Jobs
         {
             _t = new Thread(() =>
             {
-                string deviceName = NP.CNTK.DeviceCollection[0];
+                string deviceName = NP.CNTKHelper.DeviceCollection[0];
                 Summary = "构建GloveNet开始";
                 IDEmbeddingNet gloVeNet = new GloVeNet(deviceName, gloVeFilename);
                 gloVeNet.OnLoading += (double percentage) => {

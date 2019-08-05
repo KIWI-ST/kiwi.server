@@ -86,12 +86,12 @@ namespace Engine.Brain.Method.DeepQNet
         /// <summary>
         /// actor model
         /// </summary>
-        private readonly IDNet _actorNet;
+        private readonly ISupportNet _actorNet;
 
         /// <summary>
         /// critic model
         /// </summary>
-        private readonly IDNet _criticNet;
+        private readonly ISupportNet _criticNet;
 
         #region Parameters
 
@@ -191,7 +191,7 @@ namespace Engine.Brain.Method.DeepQNet
         /// 
         /// </summary>
         /// <param name="env"></param>
-        public DQN(IEnv env = null, IDNet actor = null, IDNet critic = null, int epochs = 3000, float gamma = 0.0f, int switchEpoch = -1)
+        public DQN(IEnv env = null, ISupportNet actor = null, ISupportNet critic = null, int epochs = 3000, float gamma = 0.0f, int switchEpoch = -1)
         {
             Env = env;
             _gamma = gamma;

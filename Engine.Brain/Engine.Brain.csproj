@@ -107,7 +107,7 @@
     <Compile Include="Method\Embedding\GloVeNet.cs" />
     <Compile Include="Method\IConvNet.cs" />
     <Compile Include="Method\IGloveNet.cs" />
-    <Compile Include="Method\INet.cs" />
+    <Compile Include="Method\INeuralNet.cs" />
     <Compile Include="Method\IMachineLarning.cs" />
     <Compile Include="Method\DeepQNet\IDNet.cs" />
     <Compile Include="Method\Discriminate\L2SVM.cs" />
@@ -119,7 +119,7 @@
     <Compile Include="Method\IDeepQNet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\NP.cs" />
-    <Compile Include="Utils\partial\NP.CNTK.cs" />
+    <Compile Include="Utils\partial\NP.CNTKHelper.cs" />
     <Compile Include="Utils\partial\NP.FromKeras.cs" />
     <Compile Include="Utils\partial\NP.SupportModels.cs" />
   </ItemGroup>

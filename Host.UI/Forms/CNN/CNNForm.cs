@@ -85,7 +85,7 @@ namespace Host.UI.SettingForm
                 NetName = ConvType_comboBox.Items[0].ToString();
             }
             //check devices name
-            List<string> devices = NP.CNTK.DeviceCollection;
+            List<string> devices = NP.CNTKHelper.DeviceCollection;
             device_comboBox.Items.Clear();
             if (devices != null&&devices.Count>0)
             {
