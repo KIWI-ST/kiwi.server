@@ -9,7 +9,7 @@ using Engine.Brain.Utils;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Tools;
 
-namespace Engine.Brain.Model.RL.Env
+namespace Engine.Brain.Method.DeepQNet.Env
 {
     /// <summary>
     ///  the environment of image classification

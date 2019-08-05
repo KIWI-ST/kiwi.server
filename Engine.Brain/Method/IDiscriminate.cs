@@ -1,9 +1,9 @@
-﻿namespace Engine.Brain.Model
+﻿namespace Engine.Brain.Method
 {
     /// <summary>
-    /// 
+    /// 判别模型
     /// </summary>
-    public interface IDSupervised
+    public interface IDiscriminate : IMachineLarning
     {
         /// <summary>
         /// Train Machine Learning Model
@@ -14,10 +14,10 @@
         double Train(float[][] inputs, int[] outputs);
 
         /// <summary>
-        /// Predict By Model
+        /// 
         /// </summary>
-        /// <param name="inputs"></param>
+        /// <param name="input"></param>
         /// <returns></returns>
-        int[] Predict(float[][] inputs);
+        int Predict(float[] input);
     }
 }

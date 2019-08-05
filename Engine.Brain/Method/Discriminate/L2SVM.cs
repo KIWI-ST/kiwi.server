@@ -1,22 +1,22 @@
 ﻿using Accord.MachineLearning.VectorMachines;
 using Accord.MachineLearning.VectorMachines.Learning;
 using Accord.Statistics.Kernels;
-using Engine.Brain.Utils;
+using Engine.Brain.Extend;
 
-namespace Engine.Brain.Model.ML
+namespace Engine.Brain.Method.Discriminate
 {
     /// <summary>
     /// support vector machines
     /// </summary>
-    public class L2SVM: IDSupervised
+    public class L2SVM: IDiscriminate
     {
-        MulticlassSupportVectorMachine<Linear> ksvm;
+        MulticlassSupportVectorMachine<Linear> _ksvm;
 
-        MulticlassSupportVectorLearning<Linear> teacher;
+        MulticlassSupportVectorLearning<Linear> _teacher;
 
-        public L2SVM(int inputDimension, int outputClasses)
+        public L2SVM()
         {
-            teacher = new MulticlassSupportVectorLearning<Linear>
+            _teacher = new MulticlassSupportVectorLearning<Linear>
             {
                 // using LIBLINEAR's L2-loss SVC dual for each SVM
                 //Learner = (p) => new Accord.MachineLearning.VectorMachines.Learning.LinearCoordinateDescent()
@@ -29,13 +29,15 @@ namespace Engine.Brain.Model.ML
 
         public double Train(float[][] inputs, int[] outputs)
         {
-            ksvm = teacher.Learn(NP.FloatArrayToDoubleArray(inputs), outputs);
+            double[][] dInputs = inputs.toDouble();
+            _ksvm = _teacher.Learn(dInputs, outputs);
             return 0.0;
         }
 
-        public int[] Predict(float[][] inputs)
+        public int Predict(float[] input)
         {
-            int[] predicted = ksvm.Decide(NP.FloatArrayToDoubleArray(inputs));
+            double[] dInput = input.toDouble();
+            int predicted = _ksvm.Decide(dInput);
             return predicted;
         }
 

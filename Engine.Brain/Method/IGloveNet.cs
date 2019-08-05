@@ -1,4 +1,4 @@
-﻿namespace Engine.Brain.Model
+﻿namespace Engine.Brain.Method
 {
     /// <summary>
     /// loading percentage
@@ -6,7 +6,7 @@
     /// <param name="percentage"></param>
     public delegate void LoadingEventHandler(double percentage);
 
-    public interface IDEmbeddingNet:IDNet
+    public interface IDEmbeddingNet : IMachineLarning
     {
         /// <summary>
         /// get the weight
@@ -17,6 +17,13 @@
         /// load model
         /// </summary>
         void Load();
+
+        /// <summary>
+        /// word mapping to vector
+        /// </summary>
+        /// <param name="word"></param>
+        /// <returns>word vector</returns>
+        float[] MappingToVector(string word);
 
         /// <summary>
         /// 

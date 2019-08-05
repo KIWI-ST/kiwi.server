@@ -1,12 +1,22 @@
-﻿using Engine.GIS.GLayer.GRasterLayer;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using Engine.GIS.GLayer.GRasterLayer;
 
 namespace Host.UI.SettingForm
 {
     public partial class BandForm : Form
     {
+        /// <summary>
+        /// rasterlayer
+        /// </summary>
+        private GRasterLayer _gdalLayer;
+
+        /// <summary>
+        /// 合并波段
+        /// </summary>
+        public List<int> BanCombineIndex { get; private set; } = new List<int>();
+
         public BandForm()
         {
             InitializeComponent();
@@ -19,10 +29,6 @@ namespace Host.UI.SettingForm
             // Select the item and subitems when selection is made.
             band_listView.FullRowSelect = true;
         }
-
-        private Engine.GIS.GLayer.GRasterLayer.GRasterLayer _gdalLayer;
-
-        private List<int>_bandIndexSave = new List<int>();
 
         public GRasterLayer GdalLayer
         {
@@ -41,14 +47,9 @@ namespace Host.UI.SettingForm
             }
         }
 
-        public List<int> BanCombineIndex
-        {
-            get { return _bandIndexSave; }
-        }
-
         private void UpdateBands()
         {
-            _bandIndexSave = new List<int>();
+            BanCombineIndex = new List<int>();
             ImageList imageList = new ImageList();
             for(int i = 0; i < _gdalLayer.BandCollection.Count; i++)
             {
@@ -70,14 +71,14 @@ namespace Host.UI.SettingForm
         {
             //选中时,这里实际返回结果是反向的
             if (e.CurrentValue == CheckState.Unchecked)
-                if (!_bandIndexSave.Contains(e.Index))
-                    _bandIndexSave.Add(e.Index);
+                if (!BanCombineIndex.Contains(e.Index))
+                    BanCombineIndex.Add(e.Index);
                 else
                     return;
             else
-                _bandIndexSave.Remove(e.Index);
+                BanCombineIndex.Remove(e.Index);
             //总波段数达到3时，合并图层
-            if (_bandIndexSave.Count == 3)
+            if (BanCombineIndex.Count == 3)
             {
                 DialogResult = DialogResult.OK;
                 Close();

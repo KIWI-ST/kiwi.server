@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using Engine.Brain.Model.ML;
+using Engine.Brain.Method;
+using Engine.Brain.Method.Discriminate;
 
 namespace Host.UI.Jobs
 {
@@ -41,7 +42,7 @@ namespace Host.UI.Jobs
         {
             _t = new Thread(() =>
             {
-                RF rf = new RF(treeCount);
+                IDiscriminate rf = new RandomForest(treeCount);
                 //training
                 Summary = "随机森林训练中";
                 using (StreamReader sr = new StreamReader(smapleFullFilename))
@@ -68,7 +69,7 @@ namespace Host.UI.Jobs
                 }
                 //image classify
                 Summary = "分类应用中";
-
+                //
                 using(StreamReader sr = new StreamReader(waitFullFilename))
                 {
                     using (StreamWriter sw = new StreamWriter(saveFullFilename))
@@ -78,13 +79,11 @@ namespace Host.UI.Jobs
                         while (text != null){
                             text = text.Replace("N/A", "0");
                             string[] rawdatas = text.Split(',');
-                            float[][] inputs = new float[1][];
                             List<float> inputItem = new List<float>();
                             for (int i = 0; i < rawdatas.Length; i++)
                                 inputItem.Add(float.Parse(rawdatas[i]));
-                            inputs[0] = inputItem.ToArray();
-                            int[] ouputs = rf.Predict(inputs);
-                            int classtype = ouputs[0];
+                            float[]  input = inputItem.ToArray();
+                            int classtype = rf.Predict(input);
                             sw.WriteLine(classtype);
                             text = sr.ReadLine();
                             Process++;

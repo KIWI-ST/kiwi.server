@@ -1,13 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Engine.Brain.Model;
+using Engine.Brain.Method;
+using Engine.Brain.Method.DeepQNet;
 
 namespace Engine.Brain.Utils
 {
     public partial class NP
     {
-        public static class Model
+        /// <summary>
+        /// support models in this library
+        /// </summary>
+        public static class SupportNeualNetwork
         {
             /// <summary>
             /// get convnet support only
@@ -18,6 +22,7 @@ namespace Engine.Brain.Utils
                     return typeNames.ToList();
                 }
             }
+
             /// <summary>
             /// get deep reinforcement neural net support , for DQN
             /// </summary>
@@ -25,7 +30,7 @@ namespace Engine.Brain.Utils
             {
                 get
                 {
-                    IEnumerable<string> typeNames = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.GetInterfaces().Contains(typeof(IDSupportDQN))).Select(s => s.ToString().Split('.').Last());
+                    IEnumerable<string> typeNames = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.GetInterfaces().Contains(typeof(IDNet))).Select(s => s.ToString().Split('.').Last());
                     return typeNames.ToList();
                 }
             }

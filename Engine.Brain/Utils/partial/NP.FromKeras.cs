@@ -118,7 +118,6 @@ namespace Engine.Brain.Utils
                 }
 
             }
-
         }
     }
 }

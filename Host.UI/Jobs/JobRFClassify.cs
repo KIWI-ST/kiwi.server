@@ -4,7 +4,8 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using Engine.Brain.Model.ML;
+using Engine.Brain.Method;
+using Engine.Brain.Method.Discriminate;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Tools;
 
@@ -50,7 +51,7 @@ namespace Host.UI.Jobs
                 int depth = Convert.ToInt32(parameters[parameters.Length - 1]);
                 int width = Convert.ToInt32(parameters[parameters.Length - 2]);
                 int height = Convert.ToInt32(parameters[parameters.Length - 3]);
-                RF rf = new RF(treeCount);
+                IDiscriminate rf = new RandomForest(treeCount);
                 //training
                 Summary = "随机森林训练中";
                 using (StreamReader sr = new StreamReader(fullFilename))
@@ -91,11 +92,7 @@ namespace Host.UI.Jobs
                     {
                         //get normalized input raw value
                         float[] raw = pRasterLayerCursorTool.PickRagneNormalValue(i, j,width,height);
-                        float[][] inputs = new float[1][];
-                        inputs[0] = raw;
-                        //}{debug
-                        int[] ouputs = rf.Predict(inputs);
-                        int gray = ouputs[0];
+                        int gray = rf.Predict(raw);
                         //convert action to raw byte value
                         Color c = Color.FromArgb(gray, gray, gray);
                         Pen p = new Pen(c);

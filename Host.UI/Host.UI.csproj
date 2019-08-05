@@ -184,7 +184,6 @@
     <Compile Include="Jobs\JobReadRaster.cs" />
     <Compile Include="Jobs\JobRFClassify.cs" />
     <Compile Include="Jobs\JobRFCSV.cs" />
-    <Compile Include="Jobs\JobRNNTrain.cs" />
     <Compile Include="Jobs\JobSceneReloadClassify.cs" />
     <Compile Include="Jobs\JobSceneClassify.cs" />
     <Compile Include="Jobs\JobSVMClassify.cs" />
@@ -290,6 +289,8 @@
   <ItemGroup>
     <Content Include="globe.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Utils\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,27 +1,27 @@
-﻿namespace Engine.Brain.Model
+﻿namespace Engine.Brain.Method
 {
     /// <summary>
-    /// DNN结构网络
+    /// basically neural network definition
     /// </summary>
-    public interface IDNet
+    public interface INet : IMachineLarning
     {
         /// <summary>
-        /// train the network
+        /// train net
         /// </summary>
         /// <param name="inputs"></param>
         /// <param name="outputs"></param>
-        /// <returns>loss</returns>
+        /// <returns></returns>
         double Train(float[][] inputs, float[][] outputs);
 
         /// <summary>
-        ///
+        /// Predict By Model
         /// </summary>
-        /// <param name="input"></param>
+        /// <param name="inputs"></param>
         /// <returns></returns>
-        float[] Predict(params object[] inputs);
+        float[] Predict(float[] input);
 
         /// <summary>
-        /// persistence in local dir
+        /// persistence in local dir, default in debug/tmp
         /// </summary>
         string PersistencNative(string modelFilename = null);
     }

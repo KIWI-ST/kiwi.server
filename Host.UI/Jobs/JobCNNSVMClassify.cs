@@ -4,9 +4,9 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using Engine.Brain.Model;
-using Engine.Brain.Model.DL;
-using Engine.Brain.Model.ML;
+using Engine.Brain.Method;
+using Engine.Brain.Method.Convolution;
+using Engine.Brain.Method.Discriminate;
 using Engine.Brain.Utils;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Tools;
@@ -92,7 +92,7 @@ namespace Host.UI.Jobs
                 }
                 int inputDiminsion = svmInputs[0].Length;
                 int outputDiminsion = outputKey.Count;
-                L2SVM svm = new L2SVM(inputDiminsion, outputDiminsion);
+                IDiscriminate svm = new L2SVM();
                 svm.Train(svmInputs, svmOutputs);
                 //3.applay classification
                 Summary = "CNNSVM分类应用中";
@@ -111,12 +111,8 @@ namespace Host.UI.Jobs
                     {
                         //get normalized input raw value
                         float[] raw = pRasterLayerCursorTool.PickNormalValue(i, j);
-                        float[][] inputs = new float[1][];
-                        inputs[0] = cnn.Predict(raw);
                         //}{debug
-                        int[] ouputs = svm.Predict(inputs);
-                        //from 0
-                        int gray = outputKey[ouputs[0]];
+                        int gray = svm.Predict(raw);
                         //convert action to raw byte value
                         Color c = Color.FromArgb(gray, gray, gray);
                         Pen p = new Pen(c);

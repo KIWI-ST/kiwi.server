@@ -5,7 +5,7 @@ using System.Text;
 using CNTK;
 using Engine.Brain.Utils;
 
-namespace Engine.Brain.Model.DL
+namespace Engine.Brain.Method
 {
     /// <summary>
     /// reference:
@@ -277,7 +277,7 @@ namespace Engine.Brain.Model.DL
         /// 
         /// </summary>
         /// <param name="sourceNet"></param>
-        public void Accept(IDNet sourceNet)
+        public void Accept(INet sourceNet)
         {
             throw new System.NotImplementedException();
         }
@@ -292,10 +292,18 @@ namespace Engine.Brain.Model.DL
             throw new System.NotImplementedException();
         }
 
-        public float[] Predict(params object[] inputs)
+        public float[] MappingToVector(string word)
         {
-            string input = inputs[0] as string;
-            return embeddingsIndex.Keys.Contains(input) ? embeddingsIndex[input] : new float[EmbeddingDimNum];
+            return embeddingsIndex.Keys.Contains(word) ? embeddingsIndex[word] : new float[EmbeddingDimNum];
+        }
+
+        /// <summary>
+        /// embedding net 
+        /// </summary>
+        /// <param name="input"></param>
+        public float[] Predict(float[] input)
+        {
+            throw new System.NotImplementedException();
         }
 
         public double Train(double[][] inputs, double[][] outputs)

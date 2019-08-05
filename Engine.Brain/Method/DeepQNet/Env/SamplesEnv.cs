@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Engine.Brain.Utils;
 
-namespace Engine.Brain.Model.RL.Env
+namespace Engine.Brain.Method.DeepQNet.Env
 {
     /// <summary>
     /// 基于样本构建反馈环境

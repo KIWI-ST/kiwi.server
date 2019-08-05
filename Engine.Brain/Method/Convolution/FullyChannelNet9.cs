@@ -5,7 +5,7 @@ using System.Linq;
 using CNTK;
 using Engine.Brain.Utils;
 
-namespace Engine.Brain.Model.DL
+namespace Engine.Brain.Method.Convolution
 {
     /// <summary>
     /// fully channel net with 9 layers
@@ -105,7 +105,7 @@ namespace Engine.Brain.Model.DL
             }
         }
 
-        public void Accept(IDNet sourceNet)
+        public void Accept(INet sourceNet)
         {
             throw new NotImplementedException();
         }
@@ -127,16 +127,21 @@ namespace Engine.Brain.Model.DL
             return modelFilename;
         }
 
-        public float[] Predict(params object[] inputs)
+        /// <summary>
+        ///  forward calcute, same as batch size equals one
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public float[] Predict(float[] input)
         {
-            float[] input = inputs[0] as float[];
             using (Value inputsValue = Value.CreateBatch(inputVariable.Shape, input, device))
             {
                 var inputDict = new Dictionary<Variable, Value>() { { inputVariable, inputsValue } };
                 var outputDict = new Dictionary<Variable, Value>() { { classifierOutput.Output, null} };
                 classifierOutput.Evaluate(inputDict, outputDict, device);
-                var prdict = outputDict[classifierOutput.Output].GetDenseData<float>(classifierOutput.Output);
-                return prdict[0].ToArray() ;
+                IList<IList<float>> prdicts = outputDict[classifierOutput.Output].GetDenseData<float>(classifierOutput.Output);
+                float[] result = prdicts[0].ToArray();
+                return result;
             }
         }
 
@@ -154,6 +159,5 @@ namespace Engine.Brain.Model.DL
                 return outputs;
             }
         }
-
     }
 }

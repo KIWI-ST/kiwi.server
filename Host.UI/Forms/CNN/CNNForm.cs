@@ -72,7 +72,7 @@ namespace Host.UI.SettingForm
         public void Initial(Dictionary<string, GRasterLayer> rasterDic)
         {
             //convNet types
-            List<string> convTypes = NP.Model.ConvSupportCollection;
+            List<string> convTypes = NP.SupportNeualNetwork.ConvSupportCollection;
             if (convTypes != null&&convTypes.Count>0)
             {
                 ConvType_comboBox.Items.Clear();

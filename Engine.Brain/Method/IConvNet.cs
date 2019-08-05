@@ -1,10 +1,12 @@
-﻿namespace Engine.Brain.Model
+﻿namespace Engine.Brain.Method
 {
     /// <summary>
-    /// suitable for deep feature extract
+    /// deep convolution neural network
+    /// expecially suitable for deep feature extract
     /// </summary>
-    public interface IDConvNet : IDNet
+    public interface IDConvNet : INet
     {
+
         /// <summary>
         /// remove softmax, convert it to Extract Feature Network
         /// </summary>

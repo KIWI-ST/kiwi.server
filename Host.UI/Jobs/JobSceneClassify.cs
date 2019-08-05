@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using Engine.Brain.Extend;
-using Engine.Brain.Model;
-using Engine.Brain.Model.DL;
-using Engine.Brain.Model.RL;
-using Engine.Brain.Model.RL.Env;
+using Engine.Brain.Method.DeepQNet;
+using Engine.Brain.Method.DeepQNet.Env;
+using Engine.Brain.Method.DeepQNet.Net;
 using Engine.Brain.Utils;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Tools;
@@ -77,8 +75,8 @@ namespace Host.UI.Jobs
                 Summary = "初始化样本中...";
                 List<DirectoryInfo> samplesDirCollection = new DirectoryInfo(trainDirectoryName).GetDirectories().ToList();
                 IEnv env = LoadSampleBatch(samplesDirCollection.RandomTake());
-                IDSupportDQN actor = new DNet2(deviceName, 193, 193, 3, 45);
-                IDSupportDQN critic = new DNet2(deviceName, 193, 193, 3, 45);
+                IDNet actor = new DNetCNN(deviceName, 193, 193, 3, 45);
+                IDNet critic = new DNetCNN(deviceName, 193, 193, 3, 45);
                 DQN dqn = new DQN(env, actor, critic, epochs: totalEpochs, switchEpoch: switchEpoch);
                 dqn.OnLearningLossEventHandler += (double loss, double totalReward, double accuracy, double progress, string epochesTime) => {
                     Process = progress;

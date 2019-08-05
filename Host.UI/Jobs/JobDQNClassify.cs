@@ -4,10 +4,10 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using Engine.Brain.Model;
-using Engine.Brain.Model.DL;
-using Engine.Brain.Model.RL;
-using Engine.Brain.Model.RL.Env;
+using Engine.Brain.Method;
+using Engine.Brain.Method.DeepQNet;
+using Engine.Brain.Method.DeepQNet.Env;
+using Engine.Brain.Method.DeepQNet.Net;
 using Engine.Brain.Utils;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Tools;
@@ -114,21 +114,16 @@ namespace Host.UI.Jobs
                 }
                 Summary = "模型训练中";
                 //create actor and critic
-                IDSupportDQN actor, critic;
-                if(supportNetName == typeof(DNet).Name)
+                IDNet actor = null, critic = null;
+                if(supportNetName == typeof(DNetDNN).Name)
                 {
-                    actor = new DNet(new int[] { width, height, depth }, _env.ActionNum);
-                    critic = new DNet(new int[] { width, height, depth }, _env.ActionNum);
+                    actor = new DNetDNN(new int[] { width, height, depth }, _env.ActionNum);
+                    critic = new DNetDNN(new int[] { width, height, depth }, _env.ActionNum);
                 }
-                else if(supportNetName == typeof(DNet2).Name)
+                else if(supportNetName == typeof(DNetCNN).Name)
                 {
-                    actor = new DNet2(deviceName, width, height, depth, _env.ActionNum);
-                    critic = new DNet2(deviceName, width, height, depth, _env.ActionNum);
-                }
-                else
-                {
-                    actor = new DNet(new int[] { width, height, depth }, _env.ActionNum);
-                    critic = new DNet(new int[] { width, height, depth }, _env.ActionNum);
+                    actor = new DNetCNN(deviceName, width, height, depth, _env.ActionNum);
+                    critic = new DNetCNN(deviceName, width, height, depth, _env.ActionNum);
                 }
                 _dqn = new DQN(_env, actor, critic ,epochs: epochs, gamma: _gamma);
                 _dqn.OnLearningLossEventHandler += _dqn_OnLearningLossEventHandler;

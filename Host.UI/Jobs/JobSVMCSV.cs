@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using Engine.Brain.Model.ML;
+using Engine.Brain.Method;
+using Engine.Brain.Method.Discriminate;
 
 namespace Host.UI.Jobs
 {
@@ -30,7 +31,7 @@ namespace Host.UI.Jobs
             _t = new Thread(() =>
             {
                 Summary = "SVM训练中";
-                L2SVM svm;
+                IDiscriminate svm;
                 List<int> outputKey = new List<int>();
                 using (StreamReader sr = new StreamReader(sampleFullFilename))
                 {
@@ -63,7 +64,7 @@ namespace Host.UI.Jobs
                     }
                     int inputDiminsion = inputs[0].Length;
                     int outputDiminsion = outputKey.Count;
-                    svm = new L2SVM(inputDiminsion, outputDiminsion);
+                    svm = new L2SVM();
                     svm.Train(inputs, outputs);
                 }
                 Summary = "分类应用中";
@@ -77,13 +78,11 @@ namespace Host.UI.Jobs
                         {
                             text = text.Replace("N/A", "0");
                             string[] rawdatas = text.Split(',');
-                            float[][] inputs = new float[1][];
                             List<float> inputItem = new List<float>();
                             for (int i = 0; i < rawdatas.Length; i++)
                                 inputItem.Add(float.Parse(rawdatas[i]));
-                            inputs[0] = inputItem.ToArray();
-                            int[] ouputs = svm.Predict(inputs);
-                            int classtype = outputKey[ouputs[0]];
+                            float[] input = inputItem.ToArray();
+                            int classtype = svm.Predict(input);
                             sw.WriteLine(classtype);
                             text = sr.ReadLine();
                             Process++;

@@ -4,7 +4,8 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using Engine.Brain.Model.ML;
+using Engine.Brain.Method;
+using Engine.Brain.Method.Discriminate;
 using Engine.GIS.GEntity;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Tools;
@@ -38,7 +39,7 @@ namespace Host.UI.Jobs
                 int width = Convert.ToInt32(parameters[parameters.Length - 2]);
                 int height = Convert.ToInt32(parameters[parameters.Length - 3]);
                 Summary = "SVM训练中";
-                L2SVM svm;
+                IDiscriminate svm;
                 List<int> outputKey = new List<int>();
                 using (StreamReader sr = new StreamReader(fullFilename))
                 {
@@ -70,7 +71,7 @@ namespace Host.UI.Jobs
                     }
                     int inputDiminsion = inputs[0].Length;
                     int outputDiminsion = outputKey.Count;
-                    svm = new L2SVM(inputDiminsion, outputDiminsion);
+                    svm = new L2SVM();
                     svm.Train(inputs, outputs);
                 }
                 Summary = "分类应用中";
@@ -87,12 +88,7 @@ namespace Host.UI.Jobs
                     {
                         //get normalized input raw value
                         float[] raw = pRasterLayerCursorTool.PickRagneNormalValue(i, j, width, height);
-                        float[][] inputs = new float[1][];
-                        inputs[0] = raw;
-                        //}{debug
-                        int[] ouputs = svm.Predict(inputs);
-                        //from 0
-                        int gray = outputKey[ouputs[0]];
+                        int gray = svm.Predict(raw);
                         buffer[j*rasterLayer.XSize + i] = Convert.ToByte(gray);
                         //report progress
                         Process = (double)seed++ / totalPixels;

@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Engine.Brain.Model;
-using Engine.Brain.Model.DL;
-using Engine.Brain.Model.ML;
-using Engine.Brain.Model.RL;
-using Engine.Brain.Model.RL.Env;
+using Engine.Brain.Method;
+using Engine.Brain.Method.Convolution;
+using Engine.Brain.Method.Discriminate;
+using Engine.Brain.Method.DeepQNet;
+using Engine.Brain.Method.DeepQNet.Env;
+using Engine.Brain.Method.DeepQNet.Net;
 using Engine.Brain.Utils;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Tools;
@@ -118,8 +119,8 @@ namespace Examples
             }
             double dNetLoss = 999;
             //use DNet (DNN) for dqn training
-            IDSupportDQN actor = new DNet(new int[] { 3, 3, 18 }, keys.Count);
-            IDSupportDQN critic = new DNet(new int[] { 3, 3, 18 }, keys.Count);
+            IDNet actor = new DNetDNN(new int[] { 3, 3, 18 }, keys.Count);
+            IDNet critic = new DNetDNN(new int[] { 3, 3, 18 }, keys.Count);
             //create dqn alogrithm
             DQN dqn = new DQN(env, actor, critic, epochs: 10);
             //in order to test fast, we set training epochs equals 10.
@@ -135,8 +136,8 @@ namespace Examples
             Assert.IsTrue(dNetLoss < 1.0);
             double dNet2Loss = 999;
             //use DNet2(CNN) for dqn training
-            IDSupportDQN actor2 = new DNet2(NP.CNTK.DeviceCollection[0], 9, 9, 18, keys.Count);
-            IDSupportDQN critic2 = new DNet2(NP.CNTK.DeviceCollection[0], 9, 9, 18, keys.Count);
+            IDNet actor2 = new DNetCNN(NP.CNTK.DeviceCollection[0], 9, 9, 18, keys.Count);
+            IDNet critic2 = new DNetCNN(NP.CNTK.DeviceCollection[0], 9, 9, 18, keys.Count);
             //create dqn alogrithm
             DQN dqn2 = new DQN(env, actor2, critic2, epochs: 10);
             //in order to test fast, we set training epochs equals 10.
@@ -188,8 +189,8 @@ namespace Examples
             double dNetLoss = 999;
             string deviceName = NP.CNTK.DeviceCollection[0];
             //use DNet (DNN) for dqn training
-            IDSupportDQN actor = new DNet2(deviceName, 9, 9, 18, keys.Count);
-            IDSupportDQN critic = new DNet2(deviceName, 9, 9, 18, keys.Count);
+            IDNet actor = new DNetCNN(deviceName, 9, 9, 18, keys.Count);
+            IDNet critic = new DNetCNN(deviceName, 9, 9, 18, keys.Count);
             //create dqn alogrithm
             DQN dqn = new DQN(env, actor, critic, epochs: 2);
             //in order to test fast, we set training epochs equals 2.
@@ -267,10 +268,10 @@ namespace Examples
             GloVeNet net = new GloVeNet(deviceName, gloVeFilename);
             //net.UseGloVeWordEmebdding(imdbDir, gloveFullFilename);
 
-            var woman = net.Predict("boy");
-            var man = net.Predict("girl");
-            var madam = net.Predict("brother");
-            var sir = net.Predict("sister");
+            var woman = net.MappingToVector("boy");
+            var man = net.MappingToVector("girl");
+            var madam = net.MappingToVector("brother");
+            var sir = net.MappingToVector("sister");
 
             //var s1 = NP.Sub(woman, man);
             //var s2 = NP.Sub(madam, sir);
@@ -308,7 +309,7 @@ namespace Examples
                 inputs[i] = inputList[i];
                 labels[i] = new float[1] { labelList[i] };
             }
-            IDNet net = new DNet(new int[] { 8, 1, 1 }, 8);
+            INet net = new DNetDNN(new int[] { 8, 1, 1 }, 8);
             string loss = "";
             for (int i = 0; i < 10000; i++)
             {
@@ -333,7 +334,7 @@ namespace Examples
         {
             double loss = 1.0;
             //Randforest Method
-            RF rf = new RF(30);
+            RandomForest rf = new RandomForest(30);
             using (StreamReader sr = new StreamReader(samplesFilename))
             {
                 List<List<float>> inputList = new List<List<float>>();
@@ -391,7 +392,7 @@ namespace Examples
                     outputs[i] = keys.IndexOf(outputList[i]);
                 }
                 //svm
-                L2SVM l2svm = new L2SVM(inputs[0].Length, keys.Count);
+                IDiscriminate l2svm = new L2SVM();
                 loss = l2svm.Train(inputs, outputs);
             }
             Assert.IsTrue(loss < 1.0);

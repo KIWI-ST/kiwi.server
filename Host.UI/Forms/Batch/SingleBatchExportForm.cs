@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using Engine.Brain.Model.RL.Env;
+using Engine.Brain.Method.DeepQNet.Env;
 using Engine.GIS.GLayer.GRasterLayer;
 
 namespace Host.UI.SettingForm
@@ -47,10 +47,12 @@ namespace Host.UI.SettingForm
             " 15x15 Mask picked in each band",
             " 17x17 Mask picked in each band"
         };
+
         /// <summary>
         /// natvie store
         /// </summary>
         Dictionary<string, GRasterLayer> _rasterDic;
+
         /// <summary>
         /// raster dict
         /// </summary>
@@ -62,6 +64,7 @@ namespace Host.UI.SettingForm
                 Initial(_rasterDic);
             }
         }
+
         //set dict
         public void Initial(Dictionary<string, GRasterLayer> rasterDic)
         {
@@ -85,11 +88,13 @@ namespace Host.UI.SettingForm
                 ROWCOL_DICT[pName] = new RowCol(_masks[i], _masks[i]);
             }
         }
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="process"></param>
         private delegate void UpdateProcessTipHandler(double process);
+
         /// <summary>
         /// 
         /// </summary>
@@ -105,6 +110,7 @@ namespace Host.UI.SettingForm
             else
                 EXPORT_PATH_button.Text = string.Format("{0:P}", process);
         }
+
         /// <summary>
         /// select feature layer
         /// </summary>
@@ -115,6 +121,7 @@ namespace Host.UI.SettingForm
             string key = (sender as ComboBox).SelectedItem as string;
             selectedFeatureLayer = key;
         }
+
         /// <summary>
         /// labeled layer
         /// </summary>
@@ -125,6 +132,7 @@ namespace Host.UI.SettingForm
             string key = (sender as ComboBox).SelectedItem as string;
             selectLabelLayer = key;
         }
+
         /// <summary>
         /// pick method
         /// </summary>
@@ -135,6 +143,7 @@ namespace Host.UI.SettingForm
             string key = (sender as ComboBox).SelectedItem as string;
             pickMethod = key;
         }
+
         /// <summary>
         /// 
         /// export file path
@@ -176,6 +185,7 @@ namespace Host.UI.SettingForm
                 }
             }
         }
+
         /// <summary>
         /// clear directory
         /// </summary>
@@ -203,6 +213,7 @@ namespace Host.UI.SettingForm
                 }
             }
         }
+
         /// <summary>
         /// create batch samples in new thread
         /// </summary>
@@ -242,6 +253,7 @@ namespace Host.UI.SettingForm
             t.Start();
         }
     }
+
 
     class RowCol
     {

@@ -96,28 +96,32 @@
   <ItemGroup>
     <Compile Include="Extend\ArrayExtend.cs" />
     <Compile Include="Extend\DictionaryExtend.cs" />
+    <Compile Include="Extend\DoubleExtend.cs" />
+    <Compile Include="Extend\FloatExtend.cs" />
     <Compile Include="Extend\ListExtend.cs" />
-    <Compile Include="Model\DL\DNet.cs" />
-    <Compile Include="Model\DL\DNet2.cs" />
-    <Compile Include="Model\DL\FullyChannelNet9.cs" />
-    <Compile Include="Model\DL\DCGANet.cs" />
-    <Compile Include="Model\DL\GloVeNet.cs" />
-    <Compile Include="Model\IDConvNet.cs" />
-    <Compile Include="Model\IDEmbeddingNet.cs" />
-    <Compile Include="Model\IDNet.cs" />
-    <Compile Include="Model\IDSupervised.cs" />
-    <Compile Include="Model\IDSupportDQN.cs" />
-    <Compile Include="Model\ML\L2SVM.cs" />
-    <Compile Include="Model\ML\RF.cs" />
-    <Compile Include="Model\RL\DQN.cs" />
-    <Compile Include="Model\RL\Env\ImageClassifyEnv.cs" />
-    <Compile Include="Model\RL\Env\SamplesEnv.cs" />
-    <Compile Include="Model\RL\IEnv.cs" />
+    <Compile Include="Method\IDiscriminate.cs" />
+    <Compile Include="Method\DeepQNet\Net\DNetDNN.cs" />
+    <Compile Include="Method\DeepQNet\Net\DNetCNN.cs" />
+    <Compile Include="Method\Convolution\FullyChannelNet9.cs" />
+    <Compile Include="Method\Convolution\DCGANet.cs" />
+    <Compile Include="Method\Embedding\GloVeNet.cs" />
+    <Compile Include="Method\IConvNet.cs" />
+    <Compile Include="Method\IGloveNet.cs" />
+    <Compile Include="Method\INet.cs" />
+    <Compile Include="Method\IMachineLarning.cs" />
+    <Compile Include="Method\DeepQNet\IDNet.cs" />
+    <Compile Include="Method\Discriminate\L2SVM.cs" />
+    <Compile Include="Method\Discriminate\RandomForest.cs" />
+    <Compile Include="Method\DeepQNet\DQN.cs" />
+    <Compile Include="Method\DeepQNet\Env\ImageClassifyEnv.cs" />
+    <Compile Include="Method\DeepQNet\Env\SamplesEnv.cs" />
+    <Compile Include="Method\DeepQNet\IEnv.cs" />
+    <Compile Include="Method\IDeepQNet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\NP.cs" />
     <Compile Include="Utils\partial\NP.CNTK.cs" />
     <Compile Include="Utils\partial\NP.FromKeras.cs" />
-    <Compile Include="Utils\partial\NP.Model.cs" />
+    <Compile Include="Utils\partial\NP.SupportModels.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -129,6 +133,7 @@
       <Name>Engine.GIS</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Accord.3.8.0\build\Accord.targets" Condition="Exists('..\packages\Accord.3.8.0\build\Accord.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

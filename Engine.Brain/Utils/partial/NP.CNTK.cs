@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using CNTK;
-using Engine.Brain.Model;
-using Engine.Brain.Model.DL;
+using Engine.Brain.Method;
+using Engine.Brain.Method.Convolution;
 
 namespace Engine.Brain.Utils
 {
@@ -14,7 +14,6 @@ namespace Engine.Brain.Utils
     public partial class NP
     {
         public static class CNTK
-
         {
             /// <summary>
             /// device get

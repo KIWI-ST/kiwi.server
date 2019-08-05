@@ -5,37 +5,43 @@ using System.Linq;
 using CNTK;
 using Engine.Brain.Utils;
 
-namespace Engine.Brain.Model.DL
+namespace Engine.Brain.Method.DeepQNet.Net
 {
     /// <summary>
     /// use Fully Channel Convoluation Neural Network instead of Deep Neural Network
     /// </summary>
-    public class DNet2 : IDSupportDQN
+    public class DNetCNN : IDNet
     {
         /// <summary>
         /// log trained epochs
         /// </summary>
         private int traindEpochs = 0;
+
         /// <summary>
         /// trainer function
         /// </summary>
         Trainer trainer;
+
         /// <summary>
         /// model 
         /// </summary>
         Function classifierOutput;
+
         /// <summary>
         /// 
         /// </summary>
         private Variable inputVariable;
+
         /// <summary>
         /// 
         /// </summary>
         private Variable outputVariable;
+
         /// <summary>
         /// device
         /// </summary>
         readonly DeviceDescriptor device;
+
         /// <summary>
         /// select device to run model
         /// </summary>
@@ -44,7 +50,7 @@ namespace Engine.Brain.Model.DL
         /// <param name="h">height</param>
         /// <param name="c">channel</param>
         /// <param name="o">output class num</param>
-        public DNet2(string deviceName, int w, int h, int c, int o)
+        public DNetCNN(string deviceName, int w, int h, int c, int o)
         {
             device = NP.CNTK.GetDeviceByName(deviceName);
             int[] inputDim = new int[] { w, h, c };
@@ -60,7 +66,7 @@ namespace Engine.Brain.Model.DL
             trainer = Trainer.CreateTrainer(classifierOutput, trainingLoss, prediction, parameterLearners);
         }
 
-        public DNet2(MemoryStream modelStream, string deviceName)
+        public DNetCNN(MemoryStream modelStream, string deviceName)
         {
             device = NP.CNTK.GetDeviceByName(deviceName);
             byte[] bytes = new byte[modelStream.Length];
@@ -94,11 +100,12 @@ namespace Engine.Brain.Model.DL
             Function pooling4 = NP.CNTK.ConvolutionWithMaxPooling(pooling3, 3, 3, channels[3], channels[4], 1, 1, 3, 3, device, CNTKLib.SELU);
             return NP.CNTK.Dense(pooling4, outputClassNum, device, CNTKLib.SELU, "ouput");
         }
+
         /// <summary>
         /// async parameters
         /// </summary>
         /// <param name="sourceNet"></param>
-        public void Accept(IDSupportDQN sourceNet)
+        public void Accept(IDNet sourceNet)
         {
             //convert to bytes 
             Stream modelStream = sourceNet.PersistenceMemory();
@@ -116,6 +123,7 @@ namespace Engine.Brain.Model.DL
             IList<Learner> parameterLearners = new List<Learner>() { Learner.MomentumSGDLearner(classifierOutput.Parameters(), learningRatePerSample, momentumTimeConstant, true) };
             trainer = Trainer.CreateTrainer(classifierOutput, trainingLoss, prediction, parameterLearners);
         }
+
         /// <summary>
         /// store in memeory
         /// </summary>
@@ -137,22 +145,27 @@ namespace Engine.Brain.Model.DL
             return modelFilename;
         }
 
-        public static DNet2 Load(string modelFilename, string deviceName)
+        public static DNetCNN Load(string modelFilename, string deviceName)
         {
             MemoryStream modelStream = new MemoryStream(File.ReadAllBytes(modelFilename));
-            return new DNet2(modelStream, deviceName);
+            return new DNetCNN(modelStream, deviceName);
         }
 
-        public float[] Predict(params object[] inputs)
+        /// <summary>
+        /// calcute forward once
+        /// </summary>
+        /// <param name="inputs"></param>
+        /// <returns></returns>
+        public float[] Predict(float[] input)
         {
-            double[] input = inputs[0] as double[];
             using (Value inputsValue = Value.CreateBatch(inputVariable.Shape, input, device))
             {
                 var inputDict = new Dictionary<Variable, Value>() { { inputVariable, inputsValue } };
                 var outputDict = new Dictionary<Variable, Value>() { { classifierOutput.Output, null } };
                 classifierOutput.Evaluate(inputDict, outputDict, device);
-                var prdict = outputDict[classifierOutput.Output].GetDenseData<float>(classifierOutput.Output);
-                return prdict[0].ToArray();
+                IList<IList<float>> prdicts = outputDict[classifierOutput.Output].GetDenseData<float>(classifierOutput.Output);
+                float[] result = prdicts[0].ToArray();
+                return result;
             }
         }
 
@@ -168,6 +181,5 @@ namespace Engine.Brain.Model.DL
                 return trainer.PreviousMinibatchEvaluationAverage();
             }
         }
-
     }
 }

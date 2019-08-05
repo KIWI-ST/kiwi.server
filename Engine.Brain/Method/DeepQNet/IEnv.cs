@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Engine.Brain.Model.RL
+namespace Engine.Brain.Method.DeepQNet
 {
     /// <summary>
     /// 定义基本环境编写接口

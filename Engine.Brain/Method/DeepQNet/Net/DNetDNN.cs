@@ -1,11 +1,11 @@
 ﻿using System;
 using System.IO;
-using Accord.Math;
 using Accord.Neuro;
 using Accord.Neuro.Learning;
+using Engine.Brain.Extend;
 using Engine.Brain.Utils;
 
-namespace Engine.Brain.Model.DL
+namespace Engine.Brain.Method.DeepQNet.Net
 {
     /// <summary>
     /// Selu激活函数
@@ -60,7 +60,7 @@ namespace Engine.Brain.Model.DL
     /// <summary>
     /// DQN State Prediction NeuralNetwork 
     /// </summary>
-    public class DNet : IDSupportDQN
+    public class DNetDNN : IDNet
     {
         ActivationNetwork _network;
 
@@ -70,7 +70,7 @@ namespace Engine.Brain.Model.DL
 
         string _dqnFilename = DateTime.Now.ToFileTimeUtc().ToString() + ".ann";
 
-        public DNet(int[] featureNum, int actionNum, double learningRate = 0.002)
+        public DNetDNN(int[] featureNum, int actionNum, double learningRate = 0.002)
         {
             int input = featureNum.Product();
             _learningRate = learningRate;
@@ -112,7 +112,7 @@ namespace Engine.Brain.Model.DL
             return memory;
         }
 
-        public void Accept(IDSupportDQN sourceNet)
+        public void Accept(IDNet sourceNet)
         {
             _network = Network.Load(sourceNet.PersistenceMemory()) as ActivationNetwork;
             _teacher = new BackPropagationLearning(_network)
@@ -122,12 +122,11 @@ namespace Engine.Brain.Model.DL
             };
         }
 
-        public float[] Predict(params object[] inputs)
+        public float[] Predict(float[] input)
         {
-            float[] input = inputs[0] as float[];
-            double[] output = _network.Compute(NP.FloatArrayToDoubleArray(input));
-            return NP.DoubleArrayToFloatArray(output);
+            double[] dInput = input.toDouble();
+            double[] output = _network.Compute(dInput);
+            return output.toFloat();
         }
-
     }
 }

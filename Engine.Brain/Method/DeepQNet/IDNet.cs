@@ -1,11 +1,11 @@
 ﻿using System.IO;
 
-namespace Engine.Brain.Model
+namespace Engine.Brain.Method.DeepQNet
 {
     /// <summary>
-    /// support dqn training
+    /// support dqn training and apply
     /// </summary>
-    public interface IDSupportDQN:IDNet
+    public interface IDNet : INet
     {
         /// <summary>
         /// persistence in memory
@@ -16,6 +16,6 @@ namespace Engine.Brain.Model
         /// copy sourceNet parameters to this Net
         /// </summary>
         /// <param name="sourceNet"></param>
-        void Accept(IDSupportDQN sourceNet);
+        void Accept(IDNet sourceNet);
     }
 }

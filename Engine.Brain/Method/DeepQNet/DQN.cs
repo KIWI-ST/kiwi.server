@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using Engine.Brain.Extend;
-using Engine.Brain.Model.DL;
+using Engine.Brain.Method.DeepQNet.Net;
 using Engine.Brain.Utils;
 
-namespace Engine.Brain.Model.RL
+namespace Engine.Brain.Method.DeepQNet
 {
     /// <summary>
     /// 
@@ -61,7 +61,7 @@ namespace Engine.Brain.Model.RL
     /// 用于影像分类的dqn学习机
     /// action固定为label图层的类别数
     /// </summary>
-    public class DQN
+    public class DQN : IDeepQNet
     {
         /// <summary>
         /// reporter
@@ -86,12 +86,12 @@ namespace Engine.Brain.Model.RL
         /// <summary>
         /// actor model
         /// </summary>
-        private readonly IDSupportDQN _actorNet;
+        private readonly IDNet _actorNet;
 
         /// <summary>
         /// critic model
         /// </summary>
-        private readonly IDSupportDQN _criticNet;
+        private readonly IDNet _criticNet;
 
         #region Parameters
 
@@ -137,9 +137,9 @@ namespace Engine.Brain.Model.RL
             string timex = DateTime.Now.ToShortDateString().Replace('/', '-') + "#" + DateTime.Now.ToLongTimeString().Replace(':', '_');
             //1. crearte checkpoint
             string directoryname = Directory.GetCurrentDirectory() + @"\tmp\" + timex;
-            if(!Directory.Exists(directoryname)) Directory.CreateDirectory(directoryname);
+            if (!Directory.Exists(directoryname)) Directory.CreateDirectory(directoryname);
             //2. save paramaters
-            using(StreamWriter sw = new StreamWriter(directoryname + @"\paramaters.log"))
+            using (StreamWriter sw = new StreamWriter(directoryname + @"\paramaters.log"))
             {
                 sw.WriteLine(string.Format("{0}:{1}", "actionsNumber", _actionsNumber));
                 sw.WriteLine(string.Format("{0}:{1}", "featuresNumber", _featuresNumber));
@@ -176,11 +176,11 @@ namespace Engine.Brain.Model.RL
                 } while (text != null);
             }
             //是用Dnet构造
-            if (paramaters["netType"] == typeof(DNet2).Name)
+            if (paramaters["netType"] == typeof(DNetCNN).Name)
             {
-                var critic = DNet2.Load(modelDirectoryname + @"\critic.model", deviceName);
-                var actor = DNet2.Load(modelDirectoryname + @"\actor.model", deviceName);
-                return new DQN(env, actor, critic, epochs:epochs, switchEpoch:switchEpoch);
+                var critic = DNetCNN.Load(modelDirectoryname + @"\critic.model", deviceName);
+                var actor = DNetCNN.Load(modelDirectoryname + @"\actor.model", deviceName);
+                return new DQN(env, actor, critic, epochs: epochs, switchEpoch: switchEpoch);
             }
             return null;
         }
@@ -191,7 +191,7 @@ namespace Engine.Brain.Model.RL
         /// 
         /// </summary>
         /// <param name="env"></param>
-        public DQN(IEnv env = null, IDSupportDQN actor =null, IDSupportDQN critic = null, int epochs = 3000, float gamma = 0.0f, int switchEpoch = -1)
+        public DQN(IEnv env = null, IDNet actor = null, IDNet critic = null, int epochs = 3000, float gamma = 0.0f, int switchEpoch = -1)
         {
             Env = env;
             _gamma = gamma;
@@ -202,8 +202,8 @@ namespace Engine.Brain.Model.RL
             _actionsNumber = Env.ActionNum;
             _featuresNumber = Env.FeatureNum.Product();
             //actor-critic
-            _actorNet = actor??new DNet(Env.FeatureNum, _actionsNumber);
-            _criticNet = critic??new DNet(Env.FeatureNum, _actionsNumber);
+            _actorNet = actor ?? new DNetDNN(Env.FeatureNum, _actionsNumber);
+            _criticNet = critic ?? new DNetDNN(Env.FeatureNum, _actionsNumber);
         }
 
         /// <summary>
@@ -313,7 +313,7 @@ namespace Engine.Brain.Model.RL
         public (float[] action, float q) EpsilonGreedy(int step, float[] state)
         {
             int totalEpochs = Convert.ToInt32(_epoches * 0.9);
-            var epsion = EpsilonCalcute(step,eps_total: totalEpochs);
+            var epsion = EpsilonCalcute(step, eps_total: totalEpochs);
             if (NP.Random() < epsion)
                 return (Env.RandomAction(), 0);
             else
@@ -393,7 +393,7 @@ namespace Engine.Brain.Model.RL
                 _switchStep++;
                 if (_switchStep > _switchEpoch)
                 {
-                    OnSaveCheckpointHandler?.Invoke(e/_switchEpoch);
+                    OnSaveCheckpointHandler?.Invoke(e / _switchEpoch);
                     OnSwitchEnvironmentHandler?.Invoke();
                     _switchStep = 0;
                 }
