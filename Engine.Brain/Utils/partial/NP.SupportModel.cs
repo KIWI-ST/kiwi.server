@@ -9,9 +9,19 @@ namespace Engine.Brain.Utils
     public partial class NP
     {
         /// <summary>
+        /// 模型保存实体
+        /// </summary>
+        public class ModelEntity
+        {
+            public string ModelName { get; set; }
+
+            List<byte[]> ModelStream { get; set; }
+        }
+
+        /// <summary>
         /// support models in this library
         /// </summary>
-        public static class SupportNeualNetwork
+        public static class SupportModel
         {
             /// <summary>
             /// get convnet support only

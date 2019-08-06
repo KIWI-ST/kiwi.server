@@ -57,7 +57,7 @@ namespace Host.UI.SettingForm
             }
             //add support net keys
             SupportNet_comboBox.Items.Clear();
-            List<string> supportNetTypes = NP.SupportNeualNetwork.ReinforceSupportCollection;
+            List<string> supportNetTypes = NP.SupportModel.ReinforceSupportCollection;
             if (supportNetTypes != null && supportNetTypes.Count > 0)
             {
                 SupportNet_comboBox.Items.Clear();

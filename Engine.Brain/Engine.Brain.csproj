@@ -121,7 +121,7 @@
     <Compile Include="Utils\NP.cs" />
     <Compile Include="Utils\partial\NP.CNTKHelper.cs" />
     <Compile Include="Utils\partial\NP.FromKeras.cs" />
-    <Compile Include="Utils\partial\NP.SupportModels.cs" />
+    <Compile Include="Utils\partial\NP.SupportModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
