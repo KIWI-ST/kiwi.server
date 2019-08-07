@@ -13,9 +13,28 @@ namespace Engine.Brain.Utils
         /// </summary>
         public class ModelEntity
         {
+            /// <summary>
+            /// 模型类型，与需要与类名一致
+            /// </summary>
+            public string TypeName { get; set; }
+
+            /// <summary>
+            /// 模型名称
+            /// </summary>
             public string ModelName { get; set; }
 
-            List<byte[]> ModelStream { get; set; }
+            /// <summary>
+            /// 模型的byte数据
+            /// </summary>
+            public byte[] ModelStream { get; set; }
+        }
+
+        /// <summary>
+        /// 每个保存点需要带有的信息
+        /// </summary>
+        public class CheckpointEntity
+        {
+            List<ModelEntity> Model { get;set }
         }
 
         /// <summary>

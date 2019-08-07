@@ -8,7 +8,6 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using Engine.Brain.Method;
-using Engine.Brain.Model;
 using Engine.GIS.Entity;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Arithmetic;

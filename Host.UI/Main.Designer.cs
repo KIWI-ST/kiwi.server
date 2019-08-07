@@ -175,7 +175,7 @@
             // 
             // RandomForest_ToolStripMenuItem
             // 
-            this.RandomForest_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_query_inner_join_50;
+            this.RandomForest_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_radar_plot_50;
             this.RandomForest_ToolStripMenuItem.Name = "RandomForest_ToolStripMenuItem";
             this.RandomForest_ToolStripMenuItem.Size = new System.Drawing.Size(278, 42);
             this.RandomForest_ToolStripMenuItem.Text = "RandomForest";
@@ -183,7 +183,7 @@
             // 
             // L2SVM_ToolStripMenuItem
             // 
-            this.L2SVM_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_query_inner_join_left_50;
+            this.L2SVM_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_scatter_plot_50;
             this.L2SVM_ToolStripMenuItem.Name = "L2SVM_ToolStripMenuItem";
             this.L2SVM_ToolStripMenuItem.Size = new System.Drawing.Size(278, 42);
             this.L2SVM_ToolStripMenuItem.Text = "L2-SVM";
@@ -194,7 +194,7 @@
             this.Hybrid_toolStripSplitButton.DropDownButtonWidth = 23;
             this.Hybrid_toolStripSplitButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.CNN_SVM_ToolStripMenuItem});
-            this.Hybrid_toolStripSplitButton.Image = global::Host.UI.Properties.Resources.icons8_multicast_50;
+            this.Hybrid_toolStripSplitButton.Image = global::Host.UI.Properties.Resources.icons8_table_50;
             this.Hybrid_toolStripSplitButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.Hybrid_toolStripSplitButton.Name = "Hybrid_toolStripSplitButton";
             this.Hybrid_toolStripSplitButton.Size = new System.Drawing.Size(98, 60);
@@ -205,7 +205,7 @@
             // 
             this.CNN_SVM_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_flow_chart_50;
             this.CNN_SVM_ToolStripMenuItem.Name = "CNN_SVM_ToolStripMenuItem";
-            this.CNN_SVM_ToolStripMenuItem.Size = new System.Drawing.Size(200, 34);
+            this.CNN_SVM_ToolStripMenuItem.Size = new System.Drawing.Size(278, 42);
             this.CNN_SVM_ToolStripMenuItem.Text = "CNN-SVM";
             this.CNN_SVM_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
@@ -720,7 +720,6 @@
             // map_menuStrip
             // 
             this.map_menuStrip.BackColor = System.Drawing.Color.White;
-            this.map_menuStrip.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.map_menuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.map_menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.文件FToolStripMenuItem,
