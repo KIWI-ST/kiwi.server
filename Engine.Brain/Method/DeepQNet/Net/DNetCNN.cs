@@ -152,6 +152,8 @@ namespace Engine.Brain.Method.DeepQNet.Net
 
         /// <summary>
         /// calcute forward once
+        /// }{ bug repo:
+        /// https://github.com/Microsoft/CNTK/issues/1354
         /// </summary>
         /// <param name="inputs"></param>
         /// <returns></returns>
@@ -164,6 +166,12 @@ namespace Engine.Brain.Method.DeepQNet.Net
                 classifierOutput.Evaluate(inputDict, outputDict, device);
                 IList<IList<float>> prdicts = outputDict[classifierOutput.Output].GetDenseData<float>(classifierOutput.Output);
                 float[] result = prdicts[0].ToArray();
+                //}{debug fix Resize error
+                outputDict[classifierOutput.Output].Erase();
+                outputDict[classifierOutput.Output].Dispose();
+                inputDict[inputVariable].Erase();
+                inputDict[inputVariable].Dispose();
+                //
                 return result;
             }
         }

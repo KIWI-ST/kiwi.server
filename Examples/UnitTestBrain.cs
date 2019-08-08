@@ -164,10 +164,7 @@ namespace Examples
             int cover1 = dqn.Predict(state);
             int seed = 0;
             //
-            Parallel.For(0, 10000, new ParallelOptions() {
-                MaxDegreeOfParallelism = 4
-            } , (i) =>
-            {
+            Parallel.For(0, 10000, (i) =>{
                 float[] raw = pRasterLayerCursorTool.PickRagneNormalValue(i%featureLayer.XSize, i/featureLayer.XSize, 9, 9);
                 int cover = dqn.Predict(state);
                 seed++;
