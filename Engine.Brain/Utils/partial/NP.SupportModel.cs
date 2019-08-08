@@ -51,7 +51,18 @@ namespace Engine.Brain.Utils
         /// <summary>
         /// 环境类型索引
         /// </summary>
-        public List<int> Key { get; set; }
+        public int[] ActionKeys{ get; set; }
+
+        /// <summary>
+        /// the number of actions (one-hot length)
+        /// </summary>
+        public int ActionsNum { get; set; }
+
+        /// <summary>
+        /// the lenght of input feature
+        /// </summary>
+        public int FeaturesNum { get; set; }
+
     }
 
     public partial class NP
@@ -122,14 +133,17 @@ namespace Engine.Brain.Utils
             /// <param name="filename"></param>
             public static void SaveModel(IDeepQNet network, string filename)
             {
-                var (actorBuffer, criticBuffer, innerTypeName, actionsNumber, featuresNumber ,actionKeys) = network.PersistencMemory();
+                var (actorBuffer, criticBuffer, innerTypeName, actionsNum, featuresNum ,actionKeys) = network.PersistencMemory();
                 string typeName = network.GetType().Name;
                 DeepQNetEntity entity = new DeepQNetEntity()
                 {
                     ActorBuffer = actorBuffer,
                     CriticBuffer = criticBuffer,
                     TypeName = typeName,
-                    InnerTypeName = innerTypeName
+                    InnerTypeName = innerTypeName,
+                    FeaturesNum = featuresNum,
+                    ActionsNum = actionsNum,
+                    ActionKeys = actionKeys
                 };
                 string jsonText = Newtonsoft.Json.JsonConvert.SerializeObject(entity);
                 using (Stream ms = new MemoryStream())
@@ -162,7 +176,11 @@ namespace Engine.Brain.Utils
                     else if (entity.TypeName == typeof(DQN).Name) //dqn
                     {
                         DeepQNetEntity deepQNetEntity = Newtonsoft.Json.JsonConvert.DeserializeObject<DeepQNetEntity>(jsonText);
-                        return DQN.Load(deepQNetEntity.ActorBuffer, deepQNetEntity.CriticBuffer);
+                        return DQN.Load(
+                            deepQNetEntity.ActorBuffer, deepQNetEntity.CriticBuffer, 
+                            deepQNetEntity.ActionsNum, deepQNetEntity.FeaturesNum, deepQNetEntity.ActionKeys, 
+                            deepQNetEntity.InnerTypeName, 
+                            deviceName);
                     }
                     //not support
                     else

@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Engine.Brain.Extend;
 using Engine.Brain.Method;
 using Engine.Brain.Method.DeepQNet;
@@ -28,7 +29,7 @@ namespace Host.UI.Jobs
         /// <summary>
         /// 
         /// </summary>
-        DQN _dqn;
+        IDeepQNet _dqn;
 
         /// <summary>
         /// 
@@ -133,7 +134,10 @@ namespace Host.UI.Jobs
                 _dqn.OnLearningLossEventHandler += _dqn_OnLearningLossEventHandler;
                 _dqn.PrepareLearn(_env, epochs, _gamma);
                 _dqn.Learn();
-                //classification
+                //save model
+                Summary = "保存模型";
+                string modleFilename = string.Format("{0}{1}", Directory.GetCurrentDirectory() + @"\tmp\", DateTime.Now.ToFileTimeUtc() + ".bin");
+                NP.SupportModel.SaveModel(_dqn, modleFilename);
                 Summary = "分类应用中";
                 IRasterLayerCursorTool pRasterLayerCursorTool = new GRasterLayerCursorTool();
                 pRasterLayerCursorTool.Visit(featureRasterLayer);
@@ -141,14 +145,14 @@ namespace Host.UI.Jobs
                 Graphics g = Graphics.FromImage(classificationBitmap);
                 int seed = 0;
                 int totalPixels = featureRasterLayer.XSize * featureRasterLayer.YSize;
+                //apply loop
                 for (int i = 0; i < featureRasterLayer.XSize; i++)
                     for (int j = 0; j < featureRasterLayer.YSize; j++)
                     {
                         //get normalized input raw value
                         float[] normal = pRasterLayerCursorTool.PickRagneNormalValue(i, j, width, height);
-                        var (action, q) = _dqn.ChooseAction(normal);
+                        int gray = _dqn.Predict(normal);
                         //convert action to raw byte value
-                        int gray = _dqn.ActionToRawValue(NP.Argmax(action));
                         Color c = Color.FromArgb(gray, gray, gray);
                         Pen p = new Pen(c);
                         SolidBrush brush = new SolidBrush(c);

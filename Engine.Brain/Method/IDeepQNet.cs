@@ -46,6 +46,6 @@ namespace Engine.Brain.Method
         /// store in memory
         /// </summary>
         /// <returns></returns>
-        (byte[] actorBuffer, byte[] cirticBuffer, string innerTypeName, int actionsNumber, int featuresNumber,int[] actionKeys) PersistencMemory();
+        (byte[] actorBuffer, byte[] cirticBuffer, string innerTypeName, int actionsNum, int featuresNum,int[] actionKeys) PersistencMemory();
     }
 }

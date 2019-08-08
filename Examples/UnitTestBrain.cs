@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using Engine.Brain.Extend;
 using Engine.Brain.Method;
 using Engine.Brain.Method.Convolution;
-using Engine.Brain.Method.Discriminate;
 using Engine.Brain.Method.DeepQNet;
 using Engine.Brain.Method.DeepQNet.Env;
 using Engine.Brain.Method.DeepQNet.Net;
+using Engine.Brain.Method.Discriminate;
 using Engine.Brain.Utils;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Tools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Engine.Brain.Extend;
 
 namespace Examples
 {
@@ -59,6 +60,11 @@ namespace Examples
         /// </summary>
         string imdbDir = Directory.GetCurrentDirectory() + @"\Datasets\aclImdb\";
 
+        /// <summary>
+        /// feature layer
+        /// </summary>
+        string saveModelFilename = Directory.GetCurrentDirectory() + @"\Datasets\model.bin";
+
         [TestMethod]
         public void ClassificationByDQNWithRasterEnv()
         {
@@ -76,7 +82,7 @@ namespace Examples
             IDeepQNet dqn = new DQN(actor, critic, actionsNumber, featuresNumber, actionKeys);
             //in order to do this quickly, we set training epochs equals 10.
             //please do not use so few training steps in actual use.
-            dqn.PrepareLearn(env, 10, 0.0f);
+            dqn.PrepareLearn(env, 20, 0.0f);
             //register event to get information while training
             dqn.OnLearningLossEventHandler += (double loss, double totalReward, double accuracy, double progress, string epochesTime) => { _loss = loss; };
             //start dqn alogrithm learning
@@ -100,6 +106,7 @@ namespace Examples
         {
             //read sample and create environment
             IEnv env;
+            string deviceName = NP.CNTKHelper.DeviceCollection[0];
             //read samples
             List<List<float>> inputList = new List<List<float>>();
             List<int> outputList = new List<int>();
@@ -134,13 +141,13 @@ namespace Examples
             int[] actionKeys = env.RandomSeedKeys;
             double dloss = 1;
             //use DNet2(CNN) for dqn training
-            ISupportNet actor = new DNetCNN(NP.CNTKHelper.DeviceCollection[0], 9, 9, 18, keys.Count);
-            ISupportNet critic = new DNetCNN(NP.CNTKHelper.DeviceCollection[0], 9, 9, 18, keys.Count);
+            ISupportNet actor = new DNetCNN(deviceName, 9, 9, 18, keys.Count);
+            ISupportNet critic = new DNetCNN(deviceName, 9, 9, 18, keys.Count);
             //create dqn alogrithm
             IDeepQNet dqn = new DQN(actor, critic, actionsNumber, featuresNumber, actionKeys);
             //in order to test fast, we set training epochs equals 10.
             //please do not use so few training steps in actual use.
-            dqn.PrepareLearn(env, 10, 0.0f);
+            dqn.PrepareLearn(env, 6, 0.0f);
             //register event to get information while training
             dqn.OnLearningLossEventHandler += (double loss, double totalReward, double accuracy, double progress, string epochesTime) =>
             {
@@ -149,6 +156,28 @@ namespace Examples
             //start dqn alogrithm learning
             dqn.Learn();
             Assert.IsTrue(dloss < 1.0);
+            //apply 
+            GRasterLayer featureLayer = new GRasterLayer(featureFilename);
+            IRasterLayerCursorTool pRasterLayerCursorTool = new GRasterLayerCursorTool();
+            pRasterLayerCursorTool.Visit(featureLayer);
+            float[] state = pRasterLayerCursorTool.PickRagneNormalValue(50, 50, 9, 9);
+            int cover1 = dqn.Predict(state);
+            int seed = 0;
+            //
+            Parallel.For(0, 10000, new ParallelOptions() {
+                MaxDegreeOfParallelism = 4
+            } , (i) =>
+            {
+                float[] raw = pRasterLayerCursorTool.PickRagneNormalValue(i%featureLayer.XSize, i/featureLayer.XSize, 9, 9);
+                int cover = dqn.Predict(state);
+                seed++;
+            });
+            //save 
+            NP.SupportModel.SaveModel(dqn, saveModelFilename);
+            IDeepQNet loaded = NP.SupportModel.Load(saveModelFilename, deviceName) as IDeepQNet;
+            int cover2 =  loaded.Predict(state);
+            //
+            Assert.Equals(cover1, cover2);
         }
 
         [TestMethod]

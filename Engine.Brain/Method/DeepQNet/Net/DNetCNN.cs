@@ -66,14 +66,11 @@ namespace Engine.Brain.Method.DeepQNet.Net
             trainer = Trainer.CreateTrainer(classifierOutput, trainingLoss, prediction, parameterLearners);
         }
 
-        public DNetCNN(MemoryStream modelStream, string deviceName)
+        public DNetCNN(byte[] buffer, string deviceName)
         {
             device = NP.CNTKHelper.GetDeviceByName(deviceName);
-            byte[] bytes = new byte[modelStream.Length];
-            modelStream.Read(bytes, 0, bytes.Length);
-            modelStream.Seek(0, SeekOrigin.Begin);
             //read model and set parameters
-            classifierOutput = Function.Load(bytes, device);
+            classifierOutput = Function.Load(buffer, device);
             inputVariable = classifierOutput.Inputs.First(v => v.Name == "inputVariable");
             outputVariable = Variable.InputVariable(classifierOutput.Output.Shape, DataType.Float, "labelVariable");
             var trainingLoss = CNTKLib.SquaredError(classifierOutput, outputVariable);
@@ -150,8 +147,7 @@ namespace Engine.Brain.Method.DeepQNet.Net
         /// <returns></returns>
         public static DNetCNN Load(byte[] bytes, string deviceName)
         {
-            MemoryStream modelStream = new MemoryStream(bytes);
-            return new DNetCNN(modelStream, deviceName);
+            return new DNetCNN(bytes, deviceName);
         }
 
         /// <summary>

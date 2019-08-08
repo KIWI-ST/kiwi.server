@@ -105,16 +105,16 @@ namespace Engine.Brain.Method.DeepQNet
         /// </summary>
         /// <param name="actor"></param>
         /// <param name="critic"></param>
-        /// <param name="actionsNumber"></param>
-        /// <param name="featuresNumber"></param>
+        /// <param name="actionsNum"></param>
+        /// <param name="featuresNum"></param>
         /// <param name="actionKeys"></param>
         public DQN(
             ISupportNet actor, ISupportNet critic,
-            int actionsNumber, int featuresNumber,
+            int actionsNum, int featuresNum,
             int[] actionKeys)
         {
-            _actionsNumber = actionsNumber;
-            _featuresNumber = featuresNumber;
+            _actionsNumber = actionsNum;
+            _featuresNumber = featuresNum;
             _actionKeys = actionKeys;
             _actorNet = actor;
             _criticNet = critic;
@@ -125,18 +125,18 @@ namespace Engine.Brain.Method.DeepQNet
         /// </summary>
         /// <param name="actorBuffer"></param>
         /// <param name="criticBuffer"></param>
-        /// <param name="actionsNumber"></param>
-        /// <param name="featuresNumber"></param>
+        /// <param name="actionsNum"></param>
+        /// <param name="featuresNum"></param>
         /// <param name="actionKeys"></param>
         public DQN(
             byte[] actorBuffer, byte[] criticBuffer, 
-            int actionsNumber, int featuresNumber, 
+            int actionsNum, int featuresNum, 
             int[] actionKeys, 
             string innerTypeName,
             string deviceName)
         {
-            _actionsNumber = actionsNumber;
-            _featuresNumber = featuresNumber;
+            _actionsNumber = actionsNum;
+            _featuresNumber = featuresNum;
             _actionKeys = actionKeys;
             //初始化数据
             if(innerTypeName == typeof(DNetCNN).Name)
@@ -169,7 +169,7 @@ namespace Engine.Brain.Method.DeepQNet
         /// <returns></returns>
         public int Predict(float[] state)
         {
-            var (action, q) = ChooseAction(state);
+            var (action, _) = ChooseAction(state);
             int typeValue = ActionToRawValue(NP.Argmax(action));
             return typeValue;
         }
@@ -178,7 +178,7 @@ namespace Engine.Brain.Method.DeepQNet
         /// convert action to raw byte value
         /// </summary>
         /// <param name="action"></param>
-        /// <returns></returns>
+        /// <returns>the raw value , represent of action</returns>
         public int ActionToRawValue(int action)
         {
             return _actionKeys[action];
@@ -190,7 +190,7 @@ namespace Engine.Brain.Method.DeepQNet
         /// 存储在内存中
         /// </summary>
         /// <returns></returns>
-        public (byte[] actorBuffer, byte[] cirticBuffer, string innerTypeName, int actionsNumber, int featuresNumber, int[] actionKeys) PersistencMemory()
+        public (byte[] actorBuffer, byte[] cirticBuffer, string innerTypeName, int actionsNum, int featuresNum, int[] actionKeys) PersistencMemory()
         {
             //actor and critic must be the same type
             string innerTypeName = _actorNet.GetType().Name;
@@ -210,28 +210,14 @@ namespace Engine.Brain.Method.DeepQNet
         /// <param name="env"></param>
         /// <param name="epochs"></param>
         /// <returns></returns>
-        public static DQN Load(byte[] actorBuffer, byte[] ciritcBuffer)
+        public static DQN Load(
+            byte[] actorBuffer, byte[] criticBuffer,
+            int actionsNum, int featuresNum,
+            int[] actionKeys,
+            string innerTypeName,
+            string deviceName)
         {
-            ////0.读取参数配置
-            //Dictionary<string, string> paramaters = new Dictionary<string, string>();
-            //using (StreamReader sr = new StreamReader(modelDirectoryname + @"\paramaters.log"))
-            //{
-            //    string text = sr.ReadLine();
-            //    do
-            //    {
-            //        string[] key = text.Split(':');
-            //        paramaters[key[0]] = key[1];
-            //        text = sr.ReadLine();
-            //    } while (text != null);
-            //}
-            ////是用Dnet构造
-            //if (paramaters["netType"] == typeof(DNetCNN).Name)
-            //{
-            //    var critic = DNetCNN.Load(modelDirectoryname + @"\critic.model", deviceName);
-            //    var actor = DNetCNN.Load(modelDirectoryname + @"\actor.model", deviceName);
-            //    return new DQN(env, actor, critic, epochs: epochs, switchEpoch: switchEpoch);
-            //}
-            return null;
+            return new DQN(actorBuffer, criticBuffer, actionsNum, featuresNum, actionKeys, innerTypeName, deviceName);
         }
 
         #endregion
