@@ -162,18 +162,10 @@ namespace Examples
             pRasterLayerCursorTool.Visit(featureLayer);
             float[] state = pRasterLayerCursorTool.PickRagneNormalValue(50, 50, 9, 9);
             int cover1 = dqn.Predict(state);
-            int seed = 0;
-            //
-            Parallel.For(0, 10000, (i) =>{
-                float[] raw = pRasterLayerCursorTool.PickRagneNormalValue(i%featureLayer.XSize, i/featureLayer.XSize, 9, 9);
-                int cover = dqn.Predict(state);
-                seed++;
-            });
             //save 
             NP.SupportModel.SaveModel(dqn, saveModelFilename);
             IDeepQNet loaded = NP.SupportModel.Load(saveModelFilename, deviceName) as IDeepQNet;
             int cover2 =  loaded.Predict(state);
-            //
             Assert.Equals(cover1, cover2);
         }
 
