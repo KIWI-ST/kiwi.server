@@ -467,39 +467,6 @@ namespace Host.UI
                         dqnClassifyJob.Start();
                     }
                     break;
-                    //scene classification
-                case "Scene_Classification_ToolStripMenuItem":
-                    {
-                        DQNSceneForm dqnSceneForm = new DQNSceneForm();
-                        if (dqnSceneForm.ShowDialog() == DialogResult.OK)
-                        {
-                            string trainDirectoryName = dqnSceneForm.SampleBatchesDirectoryName;
-                            string applyDirectoryName = dqnSceneForm.ApplyDirectoryName;
-                            int epochs = dqnSceneForm.Epochs;
-                            int switchEpochs = dqnSceneForm.SwitchEpochs;
-                            IJob dqnSceneClassifyJob = new JobSceneClassify(trainDirectoryName, applyDirectoryName, epochs, switchEpochs);
-                            RegisterJob(dqnSceneClassifyJob);
-                            dqnSceneClassifyJob.Start();
-                        }
-                    }
-                    break;
-                    //reload scene classification
-                case "Reloac_SceneClassification_ToolStripMenuItem":
-                    {
-                        DQNSceneReloadForm dqnSceneReloadForm = new DQNSceneReloadForm();
-                        if (dqnSceneReloadForm.ShowDialog() == DialogResult.OK)
-                        {
-                            string trainDirectoryName = dqnSceneReloadForm.SampleBatchesDirectoryName;
-                            string applyDirectoryName = dqnSceneReloadForm.ApplyDirectoryName;
-                            string dqnModelDirectoryName = dqnSceneReloadForm.DQNModelDirectoryName;
-                            int epochs = dqnSceneReloadForm.Epochs;
-                            int switchEpochs = dqnSceneReloadForm.SwitchEpochs;
-                            IJob dqnSceneReloadClassifyJob = new JobSceneReloadClassify(trainDirectoryName, applyDirectoryName, dqnModelDirectoryName, epochs, switchEpochs);
-                            RegisterJob(dqnSceneReloadClassifyJob);
-                            dqnSceneReloadClassifyJob.Start();
-                        }
-                    }
-                    break;
                     //cnn classification
                 case "CNN_toolStripButton":
                     CNNForm convForm = new CNNForm();

@@ -31,24 +31,7 @@ namespace Engine.Brain.Utils
             /// get device map collection
             /// </summary>
             public static List<string> DeviceCollection { get { return devices.Keys.ToList(); } }
-            
-            /// <summary>
-            /// load IConvNet type model
-            /// </summary>
-            /// <param name="modelFilename"></param>
-            /// <param name="deviceName"></param>
-            /// <returns></returns>
-            public static IConvNet LoadModel(string modelFilename, string deviceName)
-            {
-                string modelType = System.IO.Path.GetFileNameWithoutExtension(modelFilename).Split('_').Last();
-                var device = devices[deviceName];
-                var outputClassifier = Function.Load(modelFilename, device);
-                if (modelType == typeof(FullyChannelNet9).Name)
-                    return new FullyChannelNet9(outputClassifier, deviceName);
-                else
-                    return null;
-            }
-            
+
             /// <summary>
             /// load data from binary file
             /// </summary>

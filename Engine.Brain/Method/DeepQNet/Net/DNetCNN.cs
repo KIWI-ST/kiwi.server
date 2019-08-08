@@ -55,8 +55,8 @@ namespace Engine.Brain.Method.DeepQNet.Net
             device = NP.CNTKHelper.GetDeviceByName(deviceName);
             int[] inputDim = new int[] { w, h, c };
             int[] outputDim = new int[] { o };
-            inputVariable = Variable.InputVariable(NDShape.CreateNDShape(inputDim), DataType.Double, "inputVariable");
-            outputVariable = Variable.InputVariable(NDShape.CreateNDShape(outputDim), DataType.Double, "labelVariable");
+            inputVariable = Variable.InputVariable(NDShape.CreateNDShape(inputDim), DataType.Float, "inputVariable");
+            outputVariable = Variable.InputVariable(NDShape.CreateNDShape(outputDim), DataType.Float, "labelVariable");
             classifierOutput = CreateFullyChannelNetwork(inputVariable, c, o);
             var trainingLoss = CNTKLib.SquaredError(classifierOutput, outputVariable);
             var prediction = CNTKLib.SquaredError(classifierOutput, outputVariable);
@@ -75,7 +75,7 @@ namespace Engine.Brain.Method.DeepQNet.Net
             //read model and set parameters
             classifierOutput = Function.Load(bytes, device);
             inputVariable = classifierOutput.Inputs.First(v => v.Name == "inputVariable");
-            outputVariable = Variable.InputVariable(classifierOutput.Output.Shape, DataType.Double, "labelVariable");
+            outputVariable = Variable.InputVariable(classifierOutput.Output.Shape, DataType.Float, "labelVariable");
             var trainingLoss = CNTKLib.SquaredError(classifierOutput, outputVariable);
             var prediction = CNTKLib.SquaredError(classifierOutput, outputVariable);
             TrainingParameterScheduleDouble learningRatePerSample = new TrainingParameterScheduleDouble(0.00178125, 1); //0.00178125
@@ -108,14 +108,11 @@ namespace Engine.Brain.Method.DeepQNet.Net
         public void Accept(ISupportNet sourceNet)
         {
             //convert to bytes 
-            Stream modelStream = sourceNet.PersistenceMemory();
-            byte[] bytes = new byte[modelStream.Length];
-            modelStream.Read(bytes, 0, bytes.Length);
-            modelStream.Seek(0, SeekOrigin.Begin);
+            byte[] bytes = sourceNet.PersistenceMemory();
             //read model and set parameters
             classifierOutput = Function.Load(bytes, device);
             inputVariable = classifierOutput.Inputs.First(v => v.Name == "inputVariable");
-            outputVariable = Variable.InputVariable(classifierOutput.Output.Shape, DataType.Double, "labelVariable");
+            outputVariable = Variable.InputVariable(classifierOutput.Output.Shape, DataType.Float, "labelVariable");
             var trainingLoss = CNTKLib.SquaredError(classifierOutput, outputVariable);
             var prediction = CNTKLib.SquaredError(classifierOutput, outputVariable);
             TrainingParameterScheduleDouble learningRatePerSample = new TrainingParameterScheduleDouble(0.00178125, 1); //0.00178125
@@ -125,29 +122,35 @@ namespace Engine.Brain.Method.DeepQNet.Net
         }
 
         /// <summary>
-        /// store in memeory
+        /// 
         /// </summary>
         /// <returns></returns>
-        public Stream PersistenceMemory()
+        public byte[] PersistenceMemory()
         {
-            byte[] model = classifierOutput.Save();
-            Stream stream = new MemoryStream(model);
-            return stream;
+            byte[] modelBytes = classifierOutput.Save();
+            return modelBytes;
         }
 
         public string PersistencNative(string modelFilename = null)
         {
-            Stream modelStream = this.PersistenceMemory();
-            using(FileStream fileStream = File.Create(modelFilename))
+            byte[] bytes = PersistenceMemory();
+            Stream modelStream = new MemoryStream(bytes);
+            using (FileStream fileStream = File.Create(modelFilename))
             {
                 modelStream.CopyTo(fileStream);
             }
             return modelFilename;
         }
 
-        public static DNetCNN Load(string modelFilename, string deviceName)
+        /// <summary>
+        /// 载入方法
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <param name="deviceName"></param>
+        /// <returns></returns>
+        public static DNetCNN Load(byte[] bytes, string deviceName)
         {
-            MemoryStream modelStream = new MemoryStream(File.ReadAllBytes(modelFilename));
+            MemoryStream modelStream = new MemoryStream(bytes);
             return new DNetCNN(modelStream, deviceName);
         }
 

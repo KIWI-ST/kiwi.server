@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using Engine.Brain.Extend;
 using Engine.Brain.Method;
 using Engine.Brain.Method.DeepQNet;
 using Engine.Brain.Method.DeepQNet.Env;
@@ -115,7 +116,10 @@ namespace Host.UI.Jobs
                 Summary = "模型训练中";
                 //create actor and critic
                 ISupportNet actor = null, critic = null;
-                if(supportNetName == typeof(DNetDNN).Name)
+                int actionNumber = _env.ActionNum;
+                int feturesNumber = _env.FeatureNum.Product();
+                int[] actionKeys = _env.RandomSeedKeys;
+                if (supportNetName == typeof(DNetDNN).Name)
                 {
                     actor = new DNetDNN(new int[] { width, height, depth }, _env.ActionNum);
                     critic = new DNetDNN(new int[] { width, height, depth }, _env.ActionNum);
@@ -125,8 +129,9 @@ namespace Host.UI.Jobs
                     actor = new DNetCNN(deviceName, width, height, depth, _env.ActionNum);
                     critic = new DNetCNN(deviceName, width, height, depth, _env.ActionNum);
                 }
-                _dqn = new DQN(_env, actor, critic ,epochs: epochs, gamma: _gamma);
+                _dqn = new DQN(actor, critic, actionNumber, feturesNumber, actionKeys);
                 _dqn.OnLearningLossEventHandler += _dqn_OnLearningLossEventHandler;
+                _dqn.PrepareLearn(_env, epochs, _gamma);
                 _dqn.Learn();
                 //classification
                 Summary = "分类应用中";

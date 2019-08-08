@@ -48,14 +48,9 @@
             this.CNN_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.DQN_Classification_toolStripSplitButton = new System.Windows.Forms.ToolStripSplitButton();
             this.DQN_PolSAR_Classification_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
-            this.Scene_Classification_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.Reloac_SceneClassification_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.Smaple_Batches_toolStripSplitButton = new System.Windows.Forms.ToolStripSplitButton();
             this.Single_Batch_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
-            this.Multi_Batches_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Accuracy_toolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.Open_RawFile_toolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -228,10 +223,7 @@
             // 
             this.DQN_Classification_toolStripSplitButton.DropDownButtonWidth = 23;
             this.DQN_Classification_toolStripSplitButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.DQN_PolSAR_Classification_ToolStripMenuItem,
-            this.toolStripMenuItem3,
-            this.Scene_Classification_ToolStripMenuItem,
-            this.Reloac_SceneClassification_ToolStripMenuItem});
+            this.DQN_PolSAR_Classification_ToolStripMenuItem});
             this.DQN_Classification_toolStripSplitButton.Image = global::Host.UI.Properties.Resources.icons8_area_chart_50;
             this.DQN_Classification_toolStripSplitButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.DQN_Classification_toolStripSplitButton.Name = "DQN_Classification_toolStripSplitButton";
@@ -243,31 +235,10 @@
             // 
             this.DQN_PolSAR_Classification_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_account_50;
             this.DQN_PolSAR_Classification_ToolStripMenuItem.Name = "DQN_PolSAR_Classification_ToolStripMenuItem";
-            this.DQN_PolSAR_Classification_ToolStripMenuItem.Size = new System.Drawing.Size(342, 34);
+            this.DQN_PolSAR_Classification_ToolStripMenuItem.Size = new System.Drawing.Size(297, 42);
             this.DQN_PolSAR_Classification_ToolStripMenuItem.Text = "PolSAR Classification";
             this.DQN_PolSAR_Classification_ToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.DQN_PolSAR_Classification_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
-            // 
-            // toolStripMenuItem3
-            // 
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(339, 6);
-            // 
-            // Scene_Classification_ToolStripMenuItem
-            // 
-            this.Scene_Classification_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_workflow_50;
-            this.Scene_Classification_ToolStripMenuItem.Name = "Scene_Classification_ToolStripMenuItem";
-            this.Scene_Classification_ToolStripMenuItem.Size = new System.Drawing.Size(342, 34);
-            this.Scene_Classification_ToolStripMenuItem.Text = "Scene Classification";
-            this.Scene_Classification_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
-            // 
-            // Reloac_SceneClassification_ToolStripMenuItem
-            // 
-            this.Reloac_SceneClassification_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_configurator_50;
-            this.Reloac_SceneClassification_ToolStripMenuItem.Name = "Reloac_SceneClassification_ToolStripMenuItem";
-            this.Reloac_SceneClassification_ToolStripMenuItem.Size = new System.Drawing.Size(342, 34);
-            this.Reloac_SceneClassification_ToolStripMenuItem.Text = "Reload Scene Classification";
-            this.Reloac_SceneClassification_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
             // toolStripSeparator3
             // 
@@ -278,9 +249,7 @@
             // 
             this.Smaple_Batches_toolStripSplitButton.DropDownButtonWidth = 23;
             this.Smaple_Batches_toolStripSplitButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.Single_Batch_ToolStripMenuItem,
-            this.toolStripMenuItem2,
-            this.Multi_Batches_ToolStripMenuItem});
+            this.Single_Batch_ToolStripMenuItem});
             this.Smaple_Batches_toolStripSplitButton.Image = global::Host.UI.Properties.Resources.icons8_database_export_50;
             this.Smaple_Batches_toolStripSplitButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.Smaple_Batches_toolStripSplitButton.Name = "Smaple_Batches_toolStripSplitButton";
@@ -292,22 +261,9 @@
             // 
             this.Single_Batch_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_database_50;
             this.Single_Batch_ToolStripMenuItem.Name = "Single_Batch_ToolStripMenuItem";
-            this.Single_Batch_ToolStripMenuItem.Size = new System.Drawing.Size(227, 34);
+            this.Single_Batch_ToolStripMenuItem.Size = new System.Drawing.Size(278, 42);
             this.Single_Batch_ToolStripMenuItem.Text = "Single Batch";
             this.Single_Batch_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
-            // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(224, 6);
-            // 
-            // Multi_Batches_ToolStripMenuItem
-            // 
-            this.Multi_Batches_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_database_view_50;
-            this.Multi_Batches_ToolStripMenuItem.Name = "Multi_Batches_ToolStripMenuItem";
-            this.Multi_Batches_ToolStripMenuItem.Size = new System.Drawing.Size(227, 34);
-            this.Multi_Batches_ToolStripMenuItem.Text = "Multi Batches";
-            this.Multi_Batches_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
             // Accuracy_toolStripButton
             // 
@@ -864,13 +820,8 @@
         private System.Windows.Forms.PictureBox NLP_pictureBox;
         private System.Windows.Forms.ToolStripSplitButton DQN_Classification_toolStripSplitButton;
         private System.Windows.Forms.ToolStripMenuItem DQN_PolSAR_Classification_ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem Scene_Classification_ToolStripMenuItem;
         private System.Windows.Forms.ToolStripSplitButton Smaple_Batches_toolStripSplitButton;
         private System.Windows.Forms.ToolStripMenuItem Single_Batch_ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
-        private System.Windows.Forms.ToolStripMenuItem Multi_Batches_ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
-        private System.Windows.Forms.ToolStripMenuItem Reloac_SceneClassification_ToolStripMenuItem;
     }
 }
 

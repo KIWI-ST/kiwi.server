@@ -1,31 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using Engine.Brain.Extend;
 using Engine.Brain.Method.DeepQNet.Net;
 using Engine.Brain.Utils;
 
 namespace Engine.Brain.Method.DeepQNet
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="loss">loss value</param>
-    /// <param name="totalReward">rewards</param>
-    /// <param name="accuracy">train accuracy</param>
-    /// <param name="epochesTime"></param>
-    public delegate void UpdateLearningLossHandler(double loss, double totalReward, double accuracy, double progress, string epochesTime);
-
-    /// <summary>
-    /// 切换学习环境
-    /// </summary>
-    public delegate void SwitchEnvironmentHandler();
-
-    /// <summary>
-    /// 保存环境
-    /// </summary>
-    public delegate void SaveCheckpointHandler(int i);
-
     /// <summary>
     /// memory
     /// </summary>
@@ -69,16 +49,6 @@ namespace Engine.Brain.Method.DeepQNet
         public event UpdateLearningLossHandler OnLearningLossEventHandler;
 
         /// <summary>
-        /// switch envrionment
-        /// </summary>
-        public event SwitchEnvironmentHandler OnSwitchEnvironmentHandler;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public event SaveCheckpointHandler OnSaveCheckpointHandler;
-
-        /// <summary>
         /// memory
         /// </summary>
         private readonly List<Memory> _memoryList = new List<Memory>();
@@ -97,6 +67,9 @@ namespace Engine.Brain.Method.DeepQNet
 
         //environment
         public IEnv Env { get; set; }
+
+        //random seed
+        int[] _actionKeys { get; set; }
 
         //memory limit
         readonly int _memoryCapacity = 512;
@@ -117,93 +90,88 @@ namespace Engine.Brain.Method.DeepQNet
         readonly float _alpha = 0.6f;
 
         //q值印象权重
-        readonly float _gamma = 0.0f;
+        float _gamma = 0.0f;
 
         //输入feature长度
-        readonly int _featuresNumber;
+        int _featuresNumber;
 
         //输入action长度
-        readonly int _actionsNumber;
-
-        //切换环境步长
-        readonly int _switchEpoch;
-
-        #endregion
-
-        #region 模型存储
-
-        public string PersistencNative()
-        {
-            string timex = DateTime.Now.ToShortDateString().Replace('/', '-') + "#" + DateTime.Now.ToLongTimeString().Replace(':', '_');
-            //1. crearte checkpoint
-            string directoryname = Directory.GetCurrentDirectory() + @"\tmp\" + timex;
-            if (!Directory.Exists(directoryname)) Directory.CreateDirectory(directoryname);
-            //2. save paramaters
-            using (StreamWriter sw = new StreamWriter(directoryname + @"\paramaters.log"))
-            {
-                sw.WriteLine(string.Format("{0}:{1}", "actionsNumber", _actionsNumber));
-                sw.WriteLine(string.Format("{0}:{1}", "featuresNumber", _featuresNumber));
-                sw.WriteLine(string.Format("{0}:{1}", "netType", _actorNet.GetType().Name));
-            }
-            //3. return checpoint filename;
-            string criticFilename = directoryname + @"\critic.model";
-            string actorFilename = directoryname + @"\actor.model";
-            _criticNet.PersistencNative(criticFilename);
-            _actorNet.PersistencNative(actorFilename);
-            //_criticNet.PersistencNative
-            return directoryname;
-        }
-
-        /// <summary>
-        /// env的类型必须和之前的
-        /// </summary>
-        /// <param name="modelFilename"></param>
-        /// <param name="env"></param>
-        /// <param name="epochs"></param>
-        /// <returns></returns>
-        public static DQN ReLoad(string modelDirectoryname, string deviceName, IEnv env, int epochs = 3000, int switchEpoch = -1)
-        {
-            //0.读取参数配置
-            Dictionary<string, string> paramaters = new Dictionary<string, string>();
-            using (StreamReader sr = new StreamReader(modelDirectoryname + @"\paramaters.log"))
-            {
-                string text = sr.ReadLine();
-                do
-                {
-                    string[] key = text.Split(':');
-                    paramaters[key[0]] = key[1];
-                    text = sr.ReadLine();
-                } while (text != null);
-            }
-            //是用Dnet构造
-            if (paramaters["netType"] == typeof(DNetCNN).Name)
-            {
-                var critic = DNetCNN.Load(modelDirectoryname + @"\critic.model", deviceName);
-                var actor = DNetCNN.Load(modelDirectoryname + @"\actor.model", deviceName);
-                return new DQN(env, actor, critic, epochs: epochs, switchEpoch: switchEpoch);
-            }
-            return null;
-        }
+        int _actionsNumber;
 
         #endregion
 
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="actor"></param>
+        /// <param name="critic"></param>
+        /// <param name="actionsNumber"></param>
+        /// <param name="featuresNumber"></param>
+        /// <param name="actionKeys"></param>
+        public DQN(
+            ISupportNet actor, ISupportNet critic,
+            int actionsNumber, int featuresNumber,
+            int[] actionKeys)
+        {
+            _actionsNumber = actionsNumber;
+            _featuresNumber = featuresNumber;
+            _actionKeys = actionKeys;
+            _actorNet = actor;
+            _criticNet = critic;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="actorBuffer"></param>
+        /// <param name="criticBuffer"></param>
+        /// <param name="actionsNumber"></param>
+        /// <param name="featuresNumber"></param>
+        /// <param name="actionKeys"></param>
+        public DQN(
+            byte[] actorBuffer, byte[] criticBuffer, 
+            int actionsNumber, int featuresNumber, 
+            int[] actionKeys, 
+            string innerTypeName,
+            string deviceName)
+        {
+            _actionsNumber = actionsNumber;
+            _featuresNumber = featuresNumber;
+            _actionKeys = actionKeys;
+            //初始化数据
+            if(innerTypeName == typeof(DNetCNN).Name)
+            {
+                _actorNet = DNetCNN.Load(actorBuffer, deviceName);
+                _criticNet = DNetCNN.Load(criticBuffer, deviceName);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="env"></param>
-        public DQN(IEnv env = null, ISupportNet actor = null, ISupportNet critic = null, int epochs = 3000, float gamma = 0.0f, int switchEpoch = -1)
+        /// <param name="epochs"></param>
+        /// <param name="gamma"></param>
+        public void PrepareLearn(IEnv env, int epochs = 3000, float gamma = 0.0f)
         {
             Env = env;
-            _gamma = gamma;
             _epoches = epochs;
-            //设置切换环境步长
-            _switchEpoch = switchEpoch == -1 ? _epoches : switchEpoch;
-            //input and output
+            _gamma = gamma;
+            _actionKeys = Env.RandomSeedKeys;
             _actionsNumber = Env.ActionNum;
             _featuresNumber = Env.FeatureNum.Product();
-            //actor-critic
-            _actorNet = actor ?? new DNetDNN(Env.FeatureNum, _actionsNumber);
-            _criticNet = critic ?? new DNetDNN(Env.FeatureNum, _actionsNumber);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns></returns>
+        public int Predict(float[] state)
+        {
+            var (action, q) = ChooseAction(state);
+            int typeValue = ActionToRawValue(NP.Argmax(action));
+            return typeValue;
         }
 
         /// <summary>
@@ -213,8 +181,60 @@ namespace Engine.Brain.Method.DeepQNet
         /// <returns></returns>
         public int ActionToRawValue(int action)
         {
-            return Env.RandomSeedKeys[action];
+            return _actionKeys[action];
         }
+
+        #region 模型存储
+
+        /// <summary>
+        /// 存储在内存中
+        /// </summary>
+        /// <returns></returns>
+        public (byte[] actorBuffer, byte[] cirticBuffer, string innerTypeName, int actionsNumber, int featuresNumber, int[] actionKeys) PersistencMemory()
+        {
+            //actor and critic must be the same type
+            string innerTypeName = _actorNet.GetType().Name;
+            byte[] actorBuffer = _actorNet.PersistenceMemory();
+            byte[] cirticBuffer = _criticNet.PersistenceMemory();
+            int[] actionKeys = Env.RandomSeedKeys;
+            return (actorBuffer, cirticBuffer, innerTypeName, _actionsNumber, _featuresNumber, actionKeys);
+        }
+
+        /// <summary>
+        /// DQN model.
+        /// you should set a new env object to DQN.Env before train it.
+        /// and there is no need env if you apply it only
+        /// string modelDirectoryname, string deviceName, IEnv env, int epochs = 3000, int switchEpoch = -1
+        /// </summary>
+        /// <param name="modelFilename"></param>
+        /// <param name="env"></param>
+        /// <param name="epochs"></param>
+        /// <returns></returns>
+        public static DQN Load(byte[] actorBuffer, byte[] ciritcBuffer)
+        {
+            ////0.读取参数配置
+            //Dictionary<string, string> paramaters = new Dictionary<string, string>();
+            //using (StreamReader sr = new StreamReader(modelDirectoryname + @"\paramaters.log"))
+            //{
+            //    string text = sr.ReadLine();
+            //    do
+            //    {
+            //        string[] key = text.Split(':');
+            //        paramaters[key[0]] = key[1];
+            //        text = sr.ReadLine();
+            //    } while (text != null);
+            //}
+            ////是用Dnet构造
+            //if (paramaters["netType"] == typeof(DNetCNN).Name)
+            //{
+            //    var critic = DNetCNN.Load(modelDirectoryname + @"\critic.model", deviceName);
+            //    var actor = DNetCNN.Load(modelDirectoryname + @"\actor.model", deviceName);
+            //    return new DQN(env, actor, critic, epochs: epochs, switchEpoch: switchEpoch);
+            //}
+            return null;
+        }
+
+        #endregion
 
         /// <summary>
         /// 控制记忆容量
@@ -377,8 +397,6 @@ namespace Engine.Brain.Method.DeepQNet
             }
         }
 
-        int _switchStep = 0;
-
         /// <summary>
         /// 批次训练
         /// </summary>
@@ -389,14 +407,6 @@ namespace Engine.Brain.Method.DeepQNet
             PreRemember(_memoryCapacity);
             for (int e = 1; e <= _epoches; e++)
             {
-                //如果达到需要切换环境的步长，则提出构建策略
-                _switchStep++;
-                if (_switchStep > _switchEpoch)
-                {
-                    OnSaveCheckpointHandler?.Invoke(e / _switchEpoch);
-                    OnSwitchEnvironmentHandler?.Invoke();
-                    _switchStep = 0;
-                }
                 float[] state = Env.Reset();
                 DateTime now = DateTime.Now;
                 double loss = 0, accuracy = 0, totalRewards = 0;
@@ -423,6 +433,5 @@ namespace Engine.Brain.Method.DeepQNet
                 OnLearningLossEventHandler?.Invoke(loss, totalRewards, accuracy, (float)e / _epoches, (DateTime.Now - now).TotalSeconds.ToString());
             }
         }
-
     }
 }

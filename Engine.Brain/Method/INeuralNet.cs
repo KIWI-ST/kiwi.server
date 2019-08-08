@@ -24,5 +24,11 @@
         /// persistence in local dir, default in debug/tmp
         /// </summary>
         string PersistencNative(string modelFilename = null);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        byte[] PersistenceMemory();
     }
 }

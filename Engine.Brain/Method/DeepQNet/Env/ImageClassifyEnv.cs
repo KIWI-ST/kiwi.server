@@ -179,7 +179,7 @@ namespace Engine.Brain.Method.DeepQNet.Env
             for (int i = 0; i < batchSize; i++)
             {
                 var (x, y, classIndex) = RandomAccessMemory();
-                float[] normal = _pGRasterLayerCursorTool.PickRagneNormalValue(x, y);
+                float[] normal = _pGRasterLayerCursorTool.PickNormalValue(x, y);
                 states.Add(normal);
                 labels[i] = classIndex;
             }

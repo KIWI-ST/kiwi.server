@@ -175,7 +175,6 @@
     <Compile Include="Jobs\IJobRPCRectify.cs" />
     <Compile Include="Jobs\JobAnnotationText.cs" />
     <Compile Include="Jobs\JobCNNClassify.cs" />
-    <Compile Include="Jobs\JobCNNDQNClassify.cs" />
     <Compile Include="Jobs\JobCNNSVMClassify.cs" />
     <Compile Include="Jobs\JobCOVRaster.cs" />
     <Compile Include="Jobs\JobDQNClassify.cs" />
@@ -184,8 +183,6 @@
     <Compile Include="Jobs\JobReadRaster.cs" />
     <Compile Include="Jobs\JobRFClassify.cs" />
     <Compile Include="Jobs\JobRFCSV.cs" />
-    <Compile Include="Jobs\JobSceneReloadClassify.cs" />
-    <Compile Include="Jobs\JobSceneClassify.cs" />
     <Compile Include="Jobs\JobSVMClassify.cs" />
     <Compile Include="Jobs\JobSVMCSV.cs" />
     <Compile Include="Main.cs">

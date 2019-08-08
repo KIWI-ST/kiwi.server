@@ -18,9 +18,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{395E5C41-57D1-4FD4-AC98-3BB508282945}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engine", "Engine", "{BF36A91B-E31B-4B40-8AB3-63E96C1EFAD9}"
-	ProjectSection(SolutionItems) = preProject
-		Engine.Brain\Method\Embedding\IGloveNet.cs = Engine.Brain\Method\Embedding\IGloveNet.cs
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

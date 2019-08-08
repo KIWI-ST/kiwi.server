@@ -86,7 +86,7 @@ namespace Engine.Brain.Method.DeepQNet.Net
 
         public double Train(float[][] inputs, float[][] outputs)
         {
-     
+
             int samples = inputs.GetLength(0);
             double loss = _teacher.RunEpoch(NP.FloatArrayToDoubleArray(inputs), NP.FloatArrayToDoubleArray(outputs)) / samples;
             return loss;
@@ -104,17 +104,23 @@ namespace Engine.Brain.Method.DeepQNet.Net
             return fileName;
         }
 
-        public Stream PersistenceMemory()
+        public byte[] PersistenceMemory()
         {
             MemoryStream memory = new MemoryStream();
             _network.Save(memory);
             memory.Seek(0, SeekOrigin.Begin);
-            return memory;
+            //
+            byte[] bytes = new byte[memory.Length];
+            memory.Read(bytes, 0, bytes.Length);
+            memory.Seek(0, SeekOrigin.Begin);
+            return bytes;
         }
 
         public void Accept(ISupportNet sourceNet)
         {
-            _network = Network.Load(sourceNet.PersistenceMemory()) as ActivationNetwork;
+            byte[] bytes = sourceNet.PersistenceMemory();
+            Stream stream = new MemoryStream(bytes);
+            _network = Network.Load(stream) as ActivationNetwork;
             _teacher = new BackPropagationLearning(_network)
             {
                 LearningRate = _learningRate,

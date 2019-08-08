@@ -8,11 +8,6 @@ namespace Engine.Brain.Method.DeepQNet
     public interface ISupportNet : INeuralNet
     {
         /// <summary>
-        /// persistence in memory
-        /// </summary>
-        Stream PersistenceMemory();
-
-        /// <summary>
         /// copy sourceNet parameters to this Net
         /// </summary>
         /// <param name="sourceNet"></param>

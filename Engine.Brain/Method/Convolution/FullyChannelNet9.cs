@@ -68,9 +68,10 @@ namespace Engine.Brain.Method.Convolution
         /// </summary>
         /// <param name="model"></param>
         /// <param name="deviceName"></param>
-        public FullyChannelNet9(Function model, string deviceName)
+        public FullyChannelNet9(byte[] modelBuffer, string deviceName)
         {
             device = NP.CNTKHelper.GetDeviceByName(deviceName);
+            Function model = Function.Load(modelBuffer, device);
             inputVariable = model.Inputs.First(v => v.Name == "inputVariable");
             outputVariable = Variable.InputVariable(model.Output.Shape, DataType.Float, "labelVariable");
             classifierOutput = model;
@@ -82,6 +83,24 @@ namespace Engine.Brain.Method.Convolution
             trainer = Trainer.CreateTrainer(classifierOutput, trainingLoss, prediction, parameterLearners);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="modelBuffer"></param>
+        /// <param name="deviceName"></param>
+        /// <returns></returns>
+        public static FullyChannelNet9 Load(byte[] modelBuffer, string deviceName)
+        {
+            return new FullyChannelNet9(modelBuffer, deviceName);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="inputChannel"></param>
+        /// <param name="outputClassNum"></param>
+        /// <returns></returns>
         private Function CreateFullyChannelNetwork(Variable input, int inputChannel, int outputClassNum)
         {
             int[] channels = new int[] { inputChannel, inputChannel, Math.Max(inputChannel / 2, 3), Math.Max(inputChannel / 3, 3), Math.Max(inputChannel / 3, 3) };
@@ -92,6 +111,12 @@ namespace Engine.Brain.Method.Convolution
             return NP.CNTKHelper.Dense(pooling4, outputClassNum, device, CNTKLib.ReLU, "ouput");
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="inputs"></param>
+        /// <param name="outputs"></param>
+        /// <returns></returns>
         public double Train(float[][] inputs, float[][] outputs)
         {
             //ensure that data is destroyed after use
@@ -105,19 +130,14 @@ namespace Engine.Brain.Method.Convolution
             }
         }
 
-        public void Accept(INeuralNet sourceNet)
-        {
-            throw new NotImplementedException();
-        }
-
         public void ConvertToExtractNetwork()
         {
             throw new NotImplementedException();
         }
 
-        public Stream PersistenceMemory()
+        public byte[] PersistenceMemory()
         {
-            throw new NotImplementedException();
+            return classifierOutput.Save();
         }
 
         public string PersistencNative(string modelFilename = null)
