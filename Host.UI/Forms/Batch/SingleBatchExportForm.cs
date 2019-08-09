@@ -15,24 +15,29 @@ namespace Host.UI.SettingForm
         {
             InitializeComponent();
         }
+
         /// <summary>
         /// 
         /// </summary>
         string selectedFeatureLayer;
+
         /// <summary>
         /// 
         /// </summary>
         string selectLabelLayer;
+
         /// <summary>
         /// 
         /// </summary>
         string pickMethod;
 
         Dictionary<string, RowCol> ROWCOL_DICT;
+
         /// <summary>
         /// 
         /// </summary>
         int[] _masks = new int[] { 1, 3, 5, 7, 9, 11, 13, 15, 17, 19 };
+
         /// <summary>
         /// pick value methods enmu
         /// </summary>

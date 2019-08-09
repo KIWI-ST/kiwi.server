@@ -9,28 +9,46 @@ namespace Host.UI.Jobs
 {
     public class JobReadRaster : IJob
     {
-
+        /// <summary>
+        /// read raster task
+        /// </summary>
         public string Name => "ReadRasterTask";
 
+        /// <summary>
+        /// remark
+        /// </summary>
         public string Summary { get; private set; } = "";
 
+        /// <summary>
+        /// process
+        /// </summary>
         public double Process { get; private set; } = 0.0;
 
-        public DateTime StartTime { get; private set; } = DateTime.Now;
+        /// <summary>
+        /// create  time
+        /// </summary>
+        public DateTime CreateTime { get; private set; } = DateTime.Now;
+
         /// <summary>
         /// 
         /// </summary>
         public bool Complete { get; private set; } = false;
+
         /// <summary>
         /// 
         /// </summary>
         public event OnTaskCompleteHandler OnTaskComplete;
 
-        public event OnStateChangedHandler OnStateChanged;
         /// <summary>
-        /// 
+        /// task state changed
+        /// </summary>
+        public event OnStateChangedHandler OnStateChanged;
+
+        /// <summary>
+        /// thread
         /// </summary>
         Thread _t;
+
         /// <summary>
         /// 
         /// </summary>
@@ -74,7 +92,6 @@ namespace Host.UI.Jobs
         /// <param name="paramaters"></param>
         public void Start()
         {
-            StartTime = DateTime.Now;
             _t.IsBackground = true;
             _t.Start();
         }

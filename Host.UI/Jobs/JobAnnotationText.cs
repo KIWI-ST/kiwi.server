@@ -16,7 +16,7 @@ namespace Host.UI.Jobs
 
         public string Summary { get; private set; } = "";
 
-        public DateTime StartTime { get; private set; } = DateTime.Now;
+        public DateTime CreateTime { get; private set; } = DateTime.Now;
 
         public bool Complete { get; private set; } = false;
 
@@ -53,7 +53,7 @@ namespace Host.UI.Jobs
         /// </summary>
         public void Start()
         {
-            StartTime = DateTime.Now;
+            CreateTime = DateTime.Now;
             _t.IsBackground = true;
             _t.Start();
         }

@@ -172,7 +172,6 @@
       <DependentUpon>TaskMonitor.cs</DependentUpon>
     </Compile>
     <Compile Include="Jobs\IJob.cs" />
-    <Compile Include="Jobs\IJobRPCRectify.cs" />
     <Compile Include="Jobs\JobAnnotationText.cs" />
     <Compile Include="Jobs\JobCNNClassify.cs" />
     <Compile Include="Jobs\JobCNNSVMClassify.cs" />
@@ -193,6 +192,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\HostHelper.cs" />
     <EmbeddedResource Include="Forms\Band\BandExportForm.resx">
       <DependentUpon>BandExportForm.cs</DependentUpon>
     </EmbeddedResource>

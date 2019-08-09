@@ -18,7 +18,7 @@ namespace Host.UI.Jobs
 
         public double Process { get; private set; } = 0.0;
 
-        public DateTime StartTime { get; private set; } = DateTime.Now;
+        public DateTime CreateTime { get; private set; } = DateTime.Now;
 
         public event OnTaskCompleteHandler OnTaskComplete;
 
@@ -104,7 +104,7 @@ namespace Host.UI.Jobs
 
         public void Start()
         {
-            StartTime = DateTime.Now;
+            CreateTime = DateTime.Now;
             _t.IsBackground = true;
             _t.Start();
         }

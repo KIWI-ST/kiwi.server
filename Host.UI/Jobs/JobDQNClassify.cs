@@ -49,7 +49,7 @@ namespace Host.UI.Jobs
         /// <summary>
         /// task start time
         /// </summary>
-        public DateTime StartTime { get; private set; }
+        public DateTime CreateTime { get; private set; }
 
         /// <summary>
         /// 
@@ -195,7 +195,7 @@ namespace Host.UI.Jobs
         /// </summary>
         public void Start()
         {
-            StartTime = DateTime.Now;
+            CreateTime = DateTime.Now;
             _t.IsBackground = true;
             _t.Start();
         }
