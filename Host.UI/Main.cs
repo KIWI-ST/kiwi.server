@@ -14,9 +14,9 @@ using Engine.GIS.GOperation.Arithmetic;
 using Engine.NLP.Forms;
 using Engine.NLP.Utils;
 using Host.UI.Forms;
-using Host.UI.Forms.DQN;
 using Host.UI.Jobs;
 using Host.UI.SettingForm;
+using Host.UI.Util;
 
 namespace Host.UI
 {
@@ -421,16 +421,6 @@ namespace Host.UI
             ToolStripItem item = sender as ToolStripItem;
             switch (item.Name)
             {
-                    //rpc transform
-                case "RPC_ToolStripMenuItem":
-                    RPCForm rpcForm = new RPCForm();
-                    if (rpcForm.ShowDialog() == DialogResult.OK)
-                    {
-                        IJob rpcRectifyJob = new JobRPCRectify(rpcForm.A, rpcForm.B, rpcForm.C, rpcForm.D, rpcForm.RPCParamaters, rpcForm.RawBinRasterFullFilenames);
-                        RegisterJob(rpcRectifyJob);
-                        rpcRectifyJob.Start();
-                    }
-                    break;
                     //task
                 case "Tasks_Monitor_toolStripButton":
                     TaskMonitor mapTaskForm = new TaskMonitor();
