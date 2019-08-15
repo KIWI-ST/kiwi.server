@@ -42,7 +42,7 @@ namespace Host.UI.Util
         /// </summary>
         /// <param name="fullFilename"></param>
         /// <returns></returns>
-        public static (string incident, string impact, string response) ReadIOPF(string fullFilename)
+        public static (string[] incident, string[] impact, string[] response) ReadIOPF(string fullFilename)
         {
             //https://itextpdf.com/en/resources/books/itext-7-jump-start-tutorial-net/chapter-5-manipulating-existing-pdf-document
             using (PdfDocument pdf = new PdfDocument(new PdfReader(fullFilename)))
@@ -53,13 +53,30 @@ namespace Host.UI.Util
                     text += PdfTextExtractor.GetTextFromPage(pdf.GetPage(i));
                 string[] lines = Regex.Split(text, "\n");
                 //提取 incident, impact 和 response
-                string incident = "";
-                //1. extract form
-
-                //PdfAcroForm form = pdf. .GetAcroForm(pdf, false);
-                //IDictionary<String, PdfFormField> fields = form.GetFormFields();
+                int incidentIdx = 0, impactIdx = 0, responseIdx = 0, applicabilityIdx = 0;
+                //1. extract form text 
+                for(int i = 0; i < lines.Count(); i++)
+                {
+                    string line = lines[i];
+                    if (line == "Incident")
+                        incidentIdx = i;
+                    else if (line == "Impact")
+                        impactIdx = i;
+                    else if (line == "Response operations")
+                        responseIdx = i;
+                    else if (line == "Applicability of the Conventions")
+                        applicabilityIdx = i;
+                }
+                //2. return result
+                List<string> collection = lines.ToList();
+                collection.RemoveRange(0, incidentIdx);
+                string[] indicent = collection.Take(impactIdx - incidentIdx).ToArray();
+                collection.RemoveRange(0, impactIdx - incidentIdx);
+                string[] impact = collection.Take(responseIdx - impactIdx).ToArray();
+                collection.RemoveRange(0, responseIdx - impactIdx);
+                string[] response = collection.Take(applicabilityIdx - responseIdx).ToArray();
+                return (indicent, impact, response);
             }
-            return ("", "", "");
         }
 
         /// <summary>

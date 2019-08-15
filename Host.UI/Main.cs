@@ -575,7 +575,7 @@ namespace Host.UI
                         opg.Filter = "IOPF记录文件|*.pdf";
                         if (opg.ShowDialog() == DialogResult.OK)
                         {
-              
+                            var ( indcident, impact, response) = HostHelper.ReadIOPF(opg.FileName);
                         }
                     }
                     break;
