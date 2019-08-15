@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Canvas.Parser;
 
 namespace Host.UI.Util
 {
@@ -33,6 +35,44 @@ namespace Host.UI.Util
         public static void Useage()
         {
 
+        }
+
+        /// <summary>
+        /// load and analysis file
+        /// </summary>
+        /// <param name="fullFilename"></param>
+        /// <returns></returns>
+        public static (string incident, string impact, string response) ReadIOPF(string fullFilename)
+        {
+            //https://itextpdf.com/en/resources/books/itext-7-jump-start-tutorial-net/chapter-5-manipulating-existing-pdf-document
+            using (PdfDocument pdf = new PdfDocument(new PdfReader(fullFilename)))
+            {
+                int count = pdf.GetNumberOfPages();
+                string text = "";
+                for (int i = 1; i <= count; i++)
+                    text += PdfTextExtractor.GetTextFromPage(pdf.GetPage(i));
+                string[] lines = Regex.Split(text, "\n");
+                //提取 incident, impact 和 response
+                string incident = "";
+                //1. extract form
+
+                //PdfAcroForm form = pdf. .GetAcroForm(pdf, false);
+                //IDictionary<String, PdfFormField> fields = form.GetFormFields();
+            }
+            return ("", "", "");
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="extention"></param>
+        /// <returns></returns>
+        public static string GetTemporaryFilename(string extention)
+        {
+            string dir = Directory.GetCurrentDirectory() + @"\tmp";
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+            return string.Format(@"{0}\{1}{2}", dir, Now, extention);
         }
 
         /// <summary>

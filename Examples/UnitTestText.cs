@@ -27,50 +27,6 @@ namespace Examples
 
         //string rawTextzh = "2010年7月15日,快速的棕色狐狸跳过了懒惰的狗";
 
-        TextAnalyticsClient _client;
-
-        public RecognizersText()
-        {
-            ApiKeyServiceClientCredentials credentials = new ApiKeyServiceClientCredentials(NLPConfiguration.SubscriptionKey);
-            _client = new TextAnalyticsClient(credentials) { Endpoint = NLPConfiguration.Endpoint };
-        }
-
-        /// <summary>
-        /// 命名实体识别
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="rawText"></param>
-        /// <returns></returns>
-        private static async Task<EntitiesBatchResult> RecognizeNamedEntity(TextAnalyticsClient client, List<string> sentences)
-        {
-            List<MultiLanguageInput> list = new List<MultiLanguageInput>() {
-                new MultiLanguageInput(language:"en",id: "0",text: string.Join(" ", sentences.ToArray()))
-            };
-            MultiLanguageBatchInput inputDocuments = new MultiLanguageBatchInput(list);
-            EntitiesBatchResult entitiesResult = await client.EntitiesAsync(false, inputDocuments);
-            return entitiesResult;
-        }
-
-        private static async Task<KeyPhraseBatchResult> RecognizeKeyPhrase(TextAnalyticsClient client, List<string> sentences)
-        {
-            List<MultiLanguageInput> list = new List<MultiLanguageInput>() {
-                new MultiLanguageInput(language:"en",id: "0",text: string.Join(" ", sentences.ToArray()))
-            };
-            MultiLanguageBatchInput inputDocuments = new MultiLanguageBatchInput(list);
-            KeyPhraseBatchResult keyPhraseResult = await client.KeyPhrasesAsync(multiLanguageBatchInput: inputDocuments);
-            return keyPhraseResult;
-        }
-
-        private static async Task<KeyPhraseBatchResult> RecognizeEntityMention(TextAnalyticsClient client, List<string> sentences)
-        {
-            List<MultiLanguageInput> list = new List<MultiLanguageInput>() {
-                new MultiLanguageInput(language:"en",id: "0",text: string.Join(" ", sentences.ToArray()))
-            };
-            MultiLanguageBatchInput inputDocuments = new MultiLanguageBatchInput(list);
-            KeyPhraseBatchResult keyPhraseResult = await client.KeyPhrasesAsync(multiLanguageBatchInput: inputDocuments);
-            return keyPhraseResult;
-        }
-
         [TestMethod]
         public void RecognizeTextNumber()
         {

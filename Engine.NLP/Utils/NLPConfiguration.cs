@@ -1,5 +1,4 @@
-﻿using System;
-using System.Configuration;
+﻿using System.Configuration;
 using System.IO;
 using System.Reflection;
 
@@ -9,16 +8,6 @@ namespace Engine.NLP.Utils
     {
 
         #region Properties
-
-        /// <summary>
-        /// congnitive key
-        /// </summary>
-        private static readonly string subscriptionKey = "d6eb316b989f4a6b8bfd13b9ae330878";
-
-        /// <summary>
-        /// congnitive server endpoint
-        /// </summary>
-        private static readonly string endpoint = "https://chinanorth.api.cognitive.azure.cn";
 
         /// <summary>
         /// corenlp server address
@@ -82,36 +71,6 @@ namespace Engine.NLP.Utils
             set
             {
                 UpdateConfigKeyValue("GloVeEmbeddingString", value);
-            }
-        }
-
-        /// <summary>
-        /// congnitive api key
-        /// </summary>
-        public static string SubscriptionKey
-        {
-            get
-            {
-                return GetConfigValueByKey("SubscriptionKey", subscriptionKey);
-            }
-            set
-            {
-                UpdateConfigKeyValue("SubscriptionKey", value);
-            }
-        }
-
-        /// <summary>
-        /// congnitive server endpoint
-        /// </summary>
-        public static string Endpoint
-        {
-            get
-            {
-                return GetConfigValueByKey("Endpoint", endpoint);
-            }
-            set
-            {
-                UpdateConfigKeyValue("Endpoint", value);
             }
         }
 

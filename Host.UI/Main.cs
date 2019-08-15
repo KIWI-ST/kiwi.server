@@ -1,11 +1,11 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Engine.Brain.Method;
 using Engine.GIS.Entity;
@@ -17,6 +17,10 @@ using Host.UI.Forms;
 using Host.UI.Jobs;
 using Host.UI.SettingForm;
 using Host.UI.Util;
+using iText.Forms;
+using iText.Forms.Fields;
+using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Canvas.Parser;
 
 namespace Host.UI
 {
@@ -409,7 +413,7 @@ namespace Host.UI
 
         #endregion
 
-        #region UI事件相应方法
+        #region UI事件响应
 
         /// <summary>
         /// 底图区域功能按钮
@@ -568,18 +572,10 @@ namespace Host.UI
                 case "Open_RawFile_toolStripButton":
                     {
                         OpenFileDialog opg = new OpenFileDialog();
-                        opg.Filter = "语料文本|*.txt";
+                        opg.Filter = "IOPF记录文件|*.pdf";
                         if (opg.ShowDialog() == DialogResult.OK)
                         {
-                            using (StreamReader sr = new StreamReader(opg.FileName, Encoding.UTF8))
-                            {
-                                string text = sr.ReadLine();
-                                while (text != null)
-                                {
-                                    NLP_RawText_listBox.Items.Add(text);
-                                    text = sr.ReadLine();
-                                }
-                            }
+              
                         }
                     }
                     break;

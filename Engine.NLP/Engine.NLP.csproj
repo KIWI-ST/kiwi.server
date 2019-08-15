@@ -151,29 +151,26 @@
     <Reference Include="jollyday, Version=0.4.9.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Stanford.NLP.CoreNLP.3.9.2.0\lib\jollyday.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Azure.CognitiveServices.Language.TextAnalytics, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Azure.CognitiveServices.Language.TextAnalytics.3.0.0\lib\net461\Microsoft.Azure.CognitiveServices.Language.TextAnalytics.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Recognizers.Definitions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Recognizers.Text.1.2.3\lib\net452\Microsoft.Recognizers.Definitions.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Recognizers.Text.1.2.6\lib\net452\Microsoft.Recognizers.Definitions.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Recognizers.Text, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Recognizers.Text.1.2.3\lib\net452\Microsoft.Recognizers.Text.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Recognizers.Text.1.2.6\lib\net452\Microsoft.Recognizers.Text.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Recognizers.Text.DataTypes.TimexExpression, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Recognizers.Text.DataTypes.TimexExpression.1.2.3\lib\net452\Microsoft.Recognizers.Text.DataTypes.TimexExpression.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Recognizers.Text.DataTypes.TimexExpression.1.2.6\lib\net452\Microsoft.Recognizers.Text.DataTypes.TimexExpression.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Recognizers.Text.DateTime, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Recognizers.Text.DateTime.1.2.3\lib\net452\Microsoft.Recognizers.Text.DateTime.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Recognizers.Text.DateTime.1.2.6\lib\net452\Microsoft.Recognizers.Text.DateTime.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Recognizers.Text.Number, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Recognizers.Text.Number.1.2.3\lib\net452\Microsoft.Recognizers.Text.Number.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Recognizers.Text.Number.1.2.6\lib\net452\Microsoft.Recognizers.Text.Number.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Recognizers.Text.NumberWithUnit, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Recognizers.Text.NumberWithUnit.1.2.3\lib\net452\Microsoft.Recognizers.Text.NumberWithUnit.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Recognizers.Text.NumberWithUnit.1.2.6\lib\net452\Microsoft.Recognizers.Text.NumberWithUnit.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Recognizers.Text.Sequence, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Recognizers.Text.Sequence.1.2.3\lib\net452\Microsoft.Recognizers.Text.Sequence.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Recognizers.Text.Sequence.1.2.6\lib\net452\Microsoft.Recognizers.Text.Sequence.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Rest.ClientRuntime, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Rest.ClientRuntime.2.3.20\lib\net461\Microsoft.Rest.ClientRuntime.dll</HintPath>
@@ -187,8 +184,8 @@
     <Reference Include="protobuf, Version=2.6.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Stanford.NLP.CoreNLP.3.9.2.0\lib\protobuf.dll</HintPath>
     </Reference>
-    <Reference Include="ScottPlot, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ScottPlot.3.0.6\lib\net45\ScottPlot.dll</HintPath>
+    <Reference Include="ScottPlot, Version=3.0.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ScottPlot.3.0.9\lib\net45\ScottPlot.dll</HintPath>
     </Reference>
     <Reference Include="slf4j-api, Version=1.7.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Stanford.NLP.CoreNLP.3.9.2.0\lib\slf4j-api.dll</HintPath>
