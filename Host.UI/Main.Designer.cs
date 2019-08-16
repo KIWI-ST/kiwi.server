@@ -77,11 +77,6 @@
             this.Open_contextMenuStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.MAP_listBox = new System.Windows.Forms.ListBox();
             this.tab_nlpview = new System.Windows.Forms.TabPage();
-            this.Nlp_splitContainer = new System.Windows.Forms.SplitContainer();
-            this.NLP_splitContainer_top = new System.Windows.Forms.SplitContainer();
-            this.NLP_RawText_listBox = new System.Windows.Forms.ListBox();
-            this.NLP_Timeline_listBox = new System.Windows.Forms.ListBox();
-            this.NLP_pictureBox = new System.Windows.Forms.PictureBox();
             this.tree_contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.bandCombine_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
@@ -95,6 +90,7 @@
             this.mapToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Tools_Configuration_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.NLP_listBox = new System.Windows.Forms.ListBox();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_main)).BeginInit();
@@ -112,15 +108,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.map_pictureBox)).BeginInit();
             this.map_contextMenuStrip.SuspendLayout();
             this.tab_nlpview.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Nlp_splitContainer)).BeginInit();
-            this.Nlp_splitContainer.Panel1.SuspendLayout();
-            this.Nlp_splitContainer.Panel2.SuspendLayout();
-            this.Nlp_splitContainer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NLP_splitContainer_top)).BeginInit();
-            this.NLP_splitContainer_top.Panel1.SuspendLayout();
-            this.NLP_splitContainer_top.Panel2.SuspendLayout();
-            this.NLP_splitContainer_top.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NLP_pictureBox)).BeginInit();
             this.tree_contextMenuStrip.SuspendLayout();
             this.map_menuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -172,7 +159,7 @@
             // 
             this.RandomForest_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_radar_plot_50;
             this.RandomForest_ToolStripMenuItem.Name = "RandomForest_ToolStripMenuItem";
-            this.RandomForest_ToolStripMenuItem.Size = new System.Drawing.Size(278, 42);
+            this.RandomForest_ToolStripMenuItem.Size = new System.Drawing.Size(236, 34);
             this.RandomForest_ToolStripMenuItem.Text = "RandomForest";
             this.RandomForest_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
@@ -180,7 +167,7 @@
             // 
             this.L2SVM_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_scatter_plot_50;
             this.L2SVM_ToolStripMenuItem.Name = "L2SVM_ToolStripMenuItem";
-            this.L2SVM_ToolStripMenuItem.Size = new System.Drawing.Size(278, 42);
+            this.L2SVM_ToolStripMenuItem.Size = new System.Drawing.Size(236, 34);
             this.L2SVM_ToolStripMenuItem.Text = "L2-SVM";
             this.L2SVM_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
@@ -200,7 +187,7 @@
             // 
             this.CNN_SVM_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_flow_chart_50;
             this.CNN_SVM_ToolStripMenuItem.Name = "CNN_SVM_ToolStripMenuItem";
-            this.CNN_SVM_ToolStripMenuItem.Size = new System.Drawing.Size(278, 42);
+            this.CNN_SVM_ToolStripMenuItem.Size = new System.Drawing.Size(200, 34);
             this.CNN_SVM_ToolStripMenuItem.Text = "CNN-SVM";
             this.CNN_SVM_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
@@ -235,7 +222,7 @@
             // 
             this.DQN_PolSAR_Classification_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_account_50;
             this.DQN_PolSAR_Classification_ToolStripMenuItem.Name = "DQN_PolSAR_Classification_ToolStripMenuItem";
-            this.DQN_PolSAR_Classification_ToolStripMenuItem.Size = new System.Drawing.Size(297, 42);
+            this.DQN_PolSAR_Classification_ToolStripMenuItem.Size = new System.Drawing.Size(289, 34);
             this.DQN_PolSAR_Classification_ToolStripMenuItem.Text = "PolSAR Classification";
             this.DQN_PolSAR_Classification_ToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.DQN_PolSAR_Classification_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
@@ -261,7 +248,7 @@
             // 
             this.Single_Batch_ToolStripMenuItem.Image = global::Host.UI.Properties.Resources.icons8_database_50;
             this.Single_Batch_ToolStripMenuItem.Name = "Single_Batch_ToolStripMenuItem";
-            this.Single_Batch_ToolStripMenuItem.Size = new System.Drawing.Size(278, 42);
+            this.Single_Batch_ToolStripMenuItem.Size = new System.Drawing.Size(216, 34);
             this.Single_Batch_ToolStripMenuItem.Text = "Single Batch";
             this.Single_Batch_ToolStripMenuItem.Click += new System.EventHandler(this.Map_function_Click);
             // 
@@ -527,79 +514,13 @@
             // 
             // tab_nlpview
             // 
-            this.tab_nlpview.Controls.Add(this.Nlp_splitContainer);
+            this.tab_nlpview.Controls.Add(this.NLP_listBox);
             this.tab_nlpview.Location = new System.Drawing.Point(4, 28);
             this.tab_nlpview.Name = "tab_nlpview";
             this.tab_nlpview.Size = new System.Drawing.Size(1108, 807);
             this.tab_nlpview.TabIndex = 2;
             this.tab_nlpview.Text = "NLPView";
             this.tab_nlpview.UseVisualStyleBackColor = true;
-            // 
-            // Nlp_splitContainer
-            // 
-            this.Nlp_splitContainer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.Nlp_splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Nlp_splitContainer.Location = new System.Drawing.Point(0, 0);
-            this.Nlp_splitContainer.Name = "Nlp_splitContainer";
-            this.Nlp_splitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // Nlp_splitContainer.Panel1
-            // 
-            this.Nlp_splitContainer.Panel1.Controls.Add(this.NLP_splitContainer_top);
-            // 
-            // Nlp_splitContainer.Panel2
-            // 
-            this.Nlp_splitContainer.Panel2.Controls.Add(this.NLP_pictureBox);
-            this.Nlp_splitContainer.Size = new System.Drawing.Size(1108, 807);
-            this.Nlp_splitContainer.SplitterDistance = 309;
-            this.Nlp_splitContainer.TabIndex = 0;
-            // 
-            // NLP_splitContainer_top
-            // 
-            this.NLP_splitContainer_top.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.NLP_splitContainer_top.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.NLP_splitContainer_top.Location = new System.Drawing.Point(0, 0);
-            this.NLP_splitContainer_top.Name = "NLP_splitContainer_top";
-            // 
-            // NLP_splitContainer_top.Panel1
-            // 
-            this.NLP_splitContainer_top.Panel1.Controls.Add(this.NLP_RawText_listBox);
-            // 
-            // NLP_splitContainer_top.Panel2
-            // 
-            this.NLP_splitContainer_top.Panel2.Controls.Add(this.NLP_Timeline_listBox);
-            this.NLP_splitContainer_top.Size = new System.Drawing.Size(1108, 309);
-            this.NLP_splitContainer_top.SplitterDistance = 548;
-            this.NLP_splitContainer_top.TabIndex = 0;
-            // 
-            // NLP_RawText_listBox
-            // 
-            this.NLP_RawText_listBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.NLP_RawText_listBox.FormattingEnabled = true;
-            this.NLP_RawText_listBox.ItemHeight = 18;
-            this.NLP_RawText_listBox.Location = new System.Drawing.Point(0, 0);
-            this.NLP_RawText_listBox.Name = "NLP_RawText_listBox";
-            this.NLP_RawText_listBox.Size = new System.Drawing.Size(544, 305);
-            this.NLP_RawText_listBox.TabIndex = 0;
-            // 
-            // NLP_Timeline_listBox
-            // 
-            this.NLP_Timeline_listBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.NLP_Timeline_listBox.FormattingEnabled = true;
-            this.NLP_Timeline_listBox.ItemHeight = 18;
-            this.NLP_Timeline_listBox.Location = new System.Drawing.Point(0, 0);
-            this.NLP_Timeline_listBox.Name = "NLP_Timeline_listBox";
-            this.NLP_Timeline_listBox.Size = new System.Drawing.Size(552, 305);
-            this.NLP_Timeline_listBox.TabIndex = 0;
-            // 
-            // NLP_pictureBox
-            // 
-            this.NLP_pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.NLP_pictureBox.Location = new System.Drawing.Point(0, 0);
-            this.NLP_pictureBox.Name = "NLP_pictureBox";
-            this.NLP_pictureBox.Size = new System.Drawing.Size(1104, 490);
-            this.NLP_pictureBox.TabIndex = 0;
-            this.NLP_pictureBox.TabStop = false;
             // 
             // tree_contextMenuStrip
             // 
@@ -711,6 +632,18 @@
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(93, 28);
             this.helpToolStripMenuItem.Text = "Help(&H)";
             // 
+            // NLP_listBox
+            // 
+            this.NLP_listBox.BackColor = System.Drawing.Color.Black;
+            this.NLP_listBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.NLP_listBox.ForeColor = System.Drawing.Color.White;
+            this.NLP_listBox.FormattingEnabled = true;
+            this.NLP_listBox.ItemHeight = 18;
+            this.NLP_listBox.Location = new System.Drawing.Point(0, 0);
+            this.NLP_listBox.Name = "NLP_listBox";
+            this.NLP_listBox.Size = new System.Drawing.Size(1108, 807);
+            this.NLP_listBox.TabIndex = 0;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
@@ -747,15 +680,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.map_pictureBox)).EndInit();
             this.map_contextMenuStrip.ResumeLayout(false);
             this.tab_nlpview.ResumeLayout(false);
-            this.Nlp_splitContainer.Panel1.ResumeLayout(false);
-            this.Nlp_splitContainer.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.Nlp_splitContainer)).EndInit();
-            this.Nlp_splitContainer.ResumeLayout(false);
-            this.NLP_splitContainer_top.Panel1.ResumeLayout(false);
-            this.NLP_splitContainer_top.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.NLP_splitContainer_top)).EndInit();
-            this.NLP_splitContainer_top.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.NLP_pictureBox)).EndInit();
             this.tree_contextMenuStrip.ResumeLayout(false);
             this.map_menuStrip.ResumeLayout(false);
             this.map_menuStrip.PerformLayout();
@@ -795,8 +719,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripButton Tasks_Monitor_toolStripButton;
         private System.Windows.Forms.TabPage tab_nlpview;
-        private System.Windows.Forms.SplitContainer Nlp_splitContainer;
-        private System.Windows.Forms.SplitContainer NLP_splitContainer_top;
         private System.Windows.Forms.ToolStripButton Open_RawFile_toolStripButton;
         private System.Windows.Forms.ToolStripButton Clear_NLPRawTextView_toolStripButton;
         private System.Windows.Forms.ToolStripButton Load_Words_Embedding_ToolStripMenuItem;
@@ -804,8 +726,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
         private System.Windows.Forms.ToolStripMenuItem mapToolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
-        private System.Windows.Forms.ListBox NLP_Timeline_listBox;
-        private System.Windows.Forms.ListBox NLP_RawText_listBox;
         private System.Windows.Forms.ToolStripButton Annotation_toolStripButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripSplitButton Haplo_toolStripSplitButton;
@@ -817,11 +737,11 @@
         private System.Windows.Forms.ToolStripButton Accuracy_toolStripButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem Tools_Configuration_ToolStripMenuItem;
-        private System.Windows.Forms.PictureBox NLP_pictureBox;
         private System.Windows.Forms.ToolStripSplitButton DQN_Classification_toolStripSplitButton;
         private System.Windows.Forms.ToolStripMenuItem DQN_PolSAR_Classification_ToolStripMenuItem;
         private System.Windows.Forms.ToolStripSplitButton Smaple_Batches_toolStripSplitButton;
         private System.Windows.Forms.ToolStripMenuItem Single_Batch_ToolStripMenuItem;
+        private System.Windows.Forms.ListBox NLP_listBox;
     }
 }
 

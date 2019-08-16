@@ -4,8 +4,6 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Engine.Brain.Method;
 using Engine.GIS.Entity;
@@ -17,10 +15,6 @@ using Host.UI.Forms;
 using Host.UI.Jobs;
 using Host.UI.SettingForm;
 using Host.UI.Util;
-using iText.Forms;
-using iText.Forms.Fields;
-using iText.Kernel.Pdf;
-using iText.Kernel.Pdf.Canvas.Parser;
 
 namespace Host.UI
 {
@@ -123,8 +117,8 @@ namespace Host.UI
             Invoke(new UpdateListBoxHandler((msg) =>
             {
                 if (msg == null) return;
-                NLP_Timeline_listBox.Items.Add(msg);
-                NLP_Timeline_listBox.SelectedIndex = NLP_Timeline_listBox.Items.Count - 1;
+                NLP_listBox.Items.Add(msg);
+                NLP_listBox.SelectedIndex = NLP_listBox.Items.Count - 1;
             }), e.Data);
         }
 
@@ -575,7 +569,31 @@ namespace Host.UI
                         opg.Filter = "IOPF记录文件|*.pdf";
                         if (opg.ShowDialog() == DialogResult.OK)
                         {
-                            var ( indcident, impact, response) = HostHelper.ReadIOPF(opg.FileName);
+                            var (indcident, impact, response) = HostHelper.ReadIOPF(opg.FileName);
+                            //add indcident
+                            if (indcident.Length > 0)
+                            {
+                                NLP_listBox.Items.Add("------------------------------------------------------------------------------------------------------------------------------------------------");
+                                Array.ForEach(indcident, (text) => {
+                                    NLP_listBox.Items.Add(text);
+                                });
+                            }
+                            //add impact
+                            if (impact.Length > 0)
+                            {
+                                NLP_listBox.Items.Add("------------------------------------------------------------------------------------------------------------------------------------------------");
+                                Array.ForEach(impact, (text) => {
+                                    NLP_listBox.Items.Add(text);
+                                });
+                            }
+                            //add response
+                            if (response.Length > 0)
+                            {
+                                NLP_listBox.Items.Add("------------------------------------------------------------------------------------------------------------------------------------------------");
+                                Array.ForEach(response, (text) => {
+                                    NLP_listBox.Items.Add(text);
+                                });
+                            }
                         }
                     }
                     break;
@@ -583,14 +601,14 @@ namespace Host.UI
                 case "Clear_NLPRawTextView_toolStripButton":
                     {
                         if (MessageBox.Show("是否清除原始文本数据？", "清除文本数据警告", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
-                            NLP_RawText_listBox.Items.Clear();
+                            NLP_listBox.Items.Clear();
                     }
                     break;
                 case "Annotation_toolStripButton":
                     {
-                        string rawText = "";
-                        foreach (var element in NLP_RawText_listBox.Items)
-                            rawText += element;
+                        //string rawText = "";
+                        //foreach (var element in NLP_RawText_listBox.Items)
+                        //    rawText += element;
 
 
                         //TimeMarkupAnnotation annotation = new TimeMarkupAnnotation();

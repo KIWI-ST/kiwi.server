@@ -50,10 +50,10 @@ namespace Host.UI.Util
                 int count = pdf.GetNumberOfPages();
                 string text = "";
                 for (int i = 1; i <= count; i++)
-                    text += PdfTextExtractor.GetTextFromPage(pdf.GetPage(i));
+                    text += PdfTextExtractor.GetTextFromPage(pdf.GetPage(i))+"\n";
                 string[] lines = Regex.Split(text, "\n");
                 //提取 incident, impact 和 response
-                int incidentIdx = 0, impactIdx = 0, responseIdx = 0, applicabilityIdx = 0;
+                int incidentIdx = -1, impactIdx = -1, responseIdx = -1, applicabilityIdx = -1;
                 //1. extract form text 
                 for(int i = 0; i < lines.Count(); i++)
                 {
@@ -67,6 +67,8 @@ namespace Host.UI.Util
                     else if (line == "Applicability of the Conventions")
                         applicabilityIdx = i;
                 }
+                //fix: if there is misssing response operations
+                responseIdx = responseIdx == -1 ? applicabilityIdx : responseIdx;
                 //2. return result
                 List<string> collection = lines.ToList();
                 collection.RemoveRange(0, incidentIdx);
