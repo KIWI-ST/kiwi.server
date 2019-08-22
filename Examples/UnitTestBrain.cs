@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using Engine.Brain.Extend;
 using Engine.Brain.Method;
 using Engine.Brain.Method.Convolution;
