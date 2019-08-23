@@ -26,6 +26,8 @@ namespace Host.UI
         public Main()
         {
             InitializeComponent();
+            //Initialization Forms
+            InitializationHostForms();
         }
 
         bool _is_firstBallon = true;
@@ -48,6 +50,14 @@ namespace Host.UI
                 }
                 Hide();
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void InitializationHostForms()
+        {
+
         }
 
         /// <summary>

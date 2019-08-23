@@ -22,37 +22,37 @@ namespace Examples
         /// <summary>
         /// 
         /// </summary>
-        string envFilename3x3x18 = Directory.GetCurrentDirectory() + @"\Datasets\3x3x18x100.txt";
+        readonly string envFilename3x3x18 = Directory.GetCurrentDirectory() + @"\Datasets\3x3x18x100.txt";
 
         /// <summary>
         /// dqn environment full filename
         /// </summary>
-        string envFilename9x9x18 = Directory.GetCurrentDirectory() + @"\Datasets\9x9x18x100.txt";
+        readonly string envFilename9x9x18 = Directory.GetCurrentDirectory() + @"\Datasets\9x9x18x100.txt";
 
         /// <summary>
         /// feature layer
         /// </summary>
-        string featureFilename = Directory.GetCurrentDirectory() + @"\Datasets\Band18.tif";
+        readonly string featureFilename = Directory.GetCurrentDirectory() + @"\Datasets\Band18.tif";
 
         /// <summary>
         /// train layerg
         /// </summary>
-        string trainFilename = Directory.GetCurrentDirectory() + @"\Datasets\Train.tif";
+        readonly string trainFilename = Directory.GetCurrentDirectory() + @"\Datasets\Train.tif";
 
         /// <summary>
         /// test layer
         /// </summary>
-        string testFullFilename = Directory.GetCurrentDirectory() + @"\Datasets\Test.tif";
+        readonly string testFullFilename = Directory.GetCurrentDirectory() + @"\Datasets\Test.tif";
 
         /// <summary>
         /// RF samples
         /// </summary>
-        string samplesFilename = Directory.GetCurrentDirectory() + @"\Datasets\Samples.txt";
+        readonly string samplesFilename = Directory.GetCurrentDirectory() + @"\Datasets\Samples.txt";
 
         /// <summary>
         /// glove model 
         /// </summary>
-        string gloVeFilename = Directory.GetCurrentDirectory() + @"\Datasets\glove.840B.300d.txt";
+        readonly string gloVeFilename = Directory.GetCurrentDirectory() + @"\Datasets\glove.840B.300d.txt";
 
         /// <summary>
         /// 
@@ -62,7 +62,7 @@ namespace Examples
         /// <summary>
         /// feature layer
         /// </summary>
-        string saveModelFilename = Directory.GetCurrentDirectory() + @"\Datasets\model.bin";
+        readonly string saveModelFilename = Directory.GetCurrentDirectory() + @"\Datasets\model.bin";
 
         [TestMethod]
         public void ClassificationByDQNWithRasterEnv()
