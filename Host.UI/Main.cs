@@ -26,8 +26,6 @@ namespace Host.UI
         public Main()
         {
             InitializeComponent();
-            //Initialization Forms
-            InitializationHostForms();
         }
 
         bool _is_firstBallon = true;
@@ -50,14 +48,6 @@ namespace Host.UI
                 }
                 Hide();
             }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private void InitializationHostForms()
-        {
-
         }
 
         /// <summary>
@@ -581,10 +571,11 @@ namespace Host.UI
                         if (opg.ShowDialog() == DialogResult.OK)
                         {
                             var (indcident, impact, response) = HostHelper.ReadIOPF(opg.FileName);
+                            string spilt = "------------------------------------------------------------------------------------------------------------------------------------------------";
                             //add indcident
                             if (indcident.Length > 0)
                             {
-                                NLP_listBox.Items.Add("------------------------------------------------------------------------------------------------------------------------------------------------");
+                                NLP_listBox.Items.Add(spilt);
                                 Array.ForEach(indcident, (text) => {
                                     NLP_listBox.Items.Add(text);
                                 });
@@ -592,7 +583,7 @@ namespace Host.UI
                             //add impact
                             if (impact.Length > 0)
                             {
-                                NLP_listBox.Items.Add("------------------------------------------------------------------------------------------------------------------------------------------------");
+                                NLP_listBox.Items.Add(spilt);
                                 Array.ForEach(impact, (text) => {
                                     NLP_listBox.Items.Add(text);
                                 });
@@ -600,7 +591,7 @@ namespace Host.UI
                             //add response
                             if (response.Length > 0)
                             {
-                                NLP_listBox.Items.Add("------------------------------------------------------------------------------------------------------------------------------------------------");
+                                NLP_listBox.Items.Add(spilt);
                                 Array.ForEach(response, (text) => {
                                     NLP_listBox.Items.Add(text);
                                 });
@@ -611,16 +602,16 @@ namespace Host.UI
                 //clear nlp raw text view items
                 case "Clear_NLPRawTextView_toolStripButton":
                     {
-                        if (MessageBox.Show("是否清除原始文本数据？", "清除文本数据警告", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+                        if (MessageBox.Show("是否清除原始文本数据？", "警告", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
                             NLP_listBox.Items.Clear();
                     }
                     break;
                 case "Annotation_toolStripButton":
                     {
-                        //string rawText = "";
+                        string rawText = HostHelper.IncidentText;
+                        //
                         //foreach (var element in NLP_RawText_listBox.Items)
                         //    rawText += element;
-
 
                         //TimeMarkupAnnotation annotation = new TimeMarkupAnnotation();
                         //IJob annotatorJob = new JobAnnotationText(rawText);

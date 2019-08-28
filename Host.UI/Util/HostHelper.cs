@@ -19,6 +19,46 @@ namespace Host.UI.Util
     /// </summary>
     public class HostHelper
     {
+
+        #region IOPF文件解析
+
+        private static string[] _incident, _impact, _response;
+
+        public static string IncidentText
+        {
+            get
+            {
+                if (_incident == null)
+                    return null;
+                else
+                    return string.Join(".", _incident);
+            }
+        }
+
+        public static string ImpactText
+        {
+            get
+            {
+                if (_impact == null)
+                    return null;
+                else
+                    return string.Join(".", _impact);
+            }
+        }
+
+        public static string ResponseText
+        {
+            get
+            {
+                if (_response == null)
+                    return null;
+                else
+                    return string.Join(".", _response);
+            }
+        }
+
+        #endregion
+
         /// <summary>
         /// 匹配样本文件名参数规则的正则
         /// </summary>
@@ -50,12 +90,12 @@ namespace Host.UI.Util
                 int count = pdf.GetNumberOfPages();
                 string text = "";
                 for (int i = 1; i <= count; i++)
-                    text += PdfTextExtractor.GetTextFromPage(pdf.GetPage(i))+"\n";
+                    text += PdfTextExtractor.GetTextFromPage(pdf.GetPage(i)) + "\n";
                 string[] lines = Regex.Split(text, "\n");
                 //提取 incident, impact 和 response
                 int incidentIdx = -1, impactIdx = -1, responseIdx = -1, applicabilityIdx = -1;
                 //1. extract form text 
-                for(int i = 0; i < lines.Count(); i++)
+                for (int i = 0; i < lines.Count(); i++)
                 {
                     string line = lines[i];
                     if (line == "Incident")
@@ -72,12 +112,17 @@ namespace Host.UI.Util
                 //2. return result
                 List<string> collection = lines.ToList();
                 collection.RemoveRange(0, incidentIdx);
-                string[] indicent = collection.Take(impactIdx - incidentIdx).ToArray();
+                string[] incident = collection.Take(impactIdx - incidentIdx).ToArray();
                 collection.RemoveRange(0, impactIdx - incidentIdx);
                 string[] impact = collection.Take(responseIdx - impactIdx).ToArray();
                 collection.RemoveRange(0, responseIdx - impactIdx);
                 string[] response = collection.Take(applicabilityIdx - responseIdx).ToArray();
-                return (indicent, impact, response);
+                //cache
+                _incident = incident;
+                _impact = impact;
+                _response = response;
+                //
+                return (incident, impact, response);
             }
         }
 
