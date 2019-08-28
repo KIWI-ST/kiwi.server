@@ -1,11 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using Engine.NLP;
 using Engine.NLP.Annotation;
 using Engine.NLP.Entity;
-using Engine.NLP.Utils;
-using Microsoft.Azure.CognitiveServices.Language.TextAnalytics;
-using Microsoft.Azure.CognitiveServices.Language.TextAnalytics.Models;
 using Microsoft.Recognizers.Text;
 using Microsoft.Recognizers.Text.DateTime;
 using Microsoft.Recognizers.Text.Matcher;

@@ -573,6 +573,7 @@ namespace Host.UI
             switch (item.Name)
             {
                 //open raw text file
+                case "AddText_toolStripMenuItem":
                 case "Open_RawFile_toolStripButton":
                     {
                         OpenFileDialog opg = new OpenFileDialog();

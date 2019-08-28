@@ -1,9 +1,9 @@
-﻿using Engine.GIS.GeoType;
+﻿using System.Collections.Generic;
+using Engine.GIS.GeoType;
 using GeoAPI.Geometries;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
-using System.Collections.Generic;
 
 namespace Engine.GIS.File
 {
@@ -14,19 +14,15 @@ namespace Engine.GIS.File
 
         bool _isReaded = false;
 
-        ShapefileDataReader _reader = null;
+        readonly ShapefileDataReader _reader = null;
 
-        GBound _bound = null;
+        readonly Envelope _envelope = null;
 
-        Envelope _envelope = null;
+        readonly DbaseFileHeader _header = null;
 
-        DbaseFileHeader _header = null;
+        public FeatureCollection FeaureCollection { get; } = new FeatureCollection();
 
-        FeatureCollection _feaures = new FeatureCollection();
-
-        public FeatureCollection FeaureCollection { get => _feaures; }
-
-        public GBound Bounds { get => _bound; }
+        public GBound Bounds { get; } = null;
 
         #endregion
 
@@ -36,7 +32,7 @@ namespace Engine.GIS.File
             //1.边界读取
             _envelope = _reader.ShapeHeader.Bounds;
             //2.边界转换
-            _bound = _toBound(_envelope);
+            Bounds = _toBound(_envelope);
             //3.顶点
             _header = _reader.DbaseHeader;
         }
@@ -57,7 +53,7 @@ namespace Engine.GIS.File
         public FeatureCollection Read()
         {
             if (_isReaded)
-                return _feaures;
+                return FeaureCollection;
             while (_reader.Read())
             {
                 Feature feature = new Feature { Geometry = _reader.Geometry };
@@ -65,16 +61,16 @@ namespace Engine.GIS.File
                 for (int i = 0; i < _header.NumFields; i++)
                     attrs.Add(_header.Fields[i].Name, _reader.GetValue(i));
                 feature.Attributes = attrs;
-                _feaures.Add(feature);
+                FeaureCollection.Add(feature);
                 _isReaded = true;
             }
-            return _feaures;
+            return FeaureCollection;
         }
 
         public void AddFeature(IGeometry geo, AttributesTable table)
         {
             Feature f = new Feature(geo, table);
-            _feaures.Add(f);
+            FeaureCollection.Add(f);
         }
 
         public void Write(string shpfile)

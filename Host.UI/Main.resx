@@ -118,31 +118,34 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <metadata name="map_toolStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1037, 17</value>
+    <value>888, 17</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="Open_RawFile_toolStripButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAEASURBVGhD7Zo/DgFBGMXngms1egdwAWsLOokLOIFoVP71
-        GnoncAPFJgoF8yaTWMwWGMnL7vslr5nvk5lfQfISRjSBJFt1k/56GIyd+TV+0ny574xm13S8u5TjzuzM
-        r/HTzjaH3vR4m2zPT8EZZn6NH4mwIRE2JMKGRNiQCBsSYUMibEgkBqigaG+46Ne0BouiSgSz0Gc+Dd4a
-        rM3o06iiuCxG8vnpTQRnod1vgrfizf75D3CIXv16OWvwVokwpRki9fiy1+XnNya4qEoEM7/Gj0TYkAgb
-        EmFDImxIhA2JsCERNiTCBtqb+7uG7dXluDM782v8oIKiTwfz73oqKDDmDkSxb0Kcu5SpAAAAAElFTkSu
+        YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAEASURBVGhD7Zo9CgIxFIRzwXVt7D2AF3DdQjvBC3gBwcbK
+        v95Ge0/gDSwWLCw0EwKumi3UCMPufDBN3pPkKxQGNKIJJNmqm/TXw2DszK/xk+bLfWc0u6bj3aUcd2Zn
+        fo2fdrY59KbH22R7fgrOMPNr/EiEDYmwIRE2JMKGRNiQCBsSYUMiMUAFRXvDRb+mNVgUVSKYhT7zafDW
+        YG1Gn0YVxWUxks9PbyI4C+1+E7wVb/bPf4BD9OrXy1mDt0qEKc0QqceXvS4/vzHBRVUimPk1fiTChkTY
+        kAgbEmFDImxIhA2JsCERNtDe3N81bK8ux53ZmV/jBxUUfTqYf9dTQYExd6eebzrcwJDNAAAAAElFTkSu
         QmCC
 </value>
   </data>
   <metadata name="map_statusStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>367, 17</value>
+    <value>218, 17</value>
   </metadata>
   <metadata name="map_contextMenuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1223, 17</value>
+    <value>1074, 17</value>
+  </metadata>
+  <metadata name="text_contextMenuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>1342, 17</value>
   </metadata>
   <metadata name="tree_contextMenuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>570, 17</value>
+    <value>421, 17</value>
   </metadata>
   <metadata name="main_notifyIcon.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>834, 17</value>
+    <value>685, 17</value>
   </metadata>
   <data name="main_notifyIcon.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -1293,7 +1296,7 @@
 </value>
   </data>
   <metadata name="map_menuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>166, 17</value>
+    <value>17, 17</value>
   </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>64</value>
