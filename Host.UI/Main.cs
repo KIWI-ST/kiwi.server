@@ -9,6 +9,7 @@ using Engine.Brain.Method;
 using Engine.GIS.Entity;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Arithmetic;
+using Engine.NLP.Entity;
 using Engine.NLP.Forms;
 using Engine.NLP.Utils;
 using Host.UI.Forms;
@@ -608,7 +609,9 @@ namespace Host.UI
                     break;
                 case "Annotation_toolStripButton":
                     {
-                        string rawText = HostHelper.IncidentText;
+                        string incidentText = HostHelper.IncidentText;
+                        SentenceGroup sGroup = new SentenceGroup(incidentText);
+                        sGroup.RegroupByTimeline();
                         //
                         //foreach (var element in NLP_RawText_listBox.Items)
                         //    rawText += element;

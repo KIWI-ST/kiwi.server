@@ -103,6 +103,11 @@ namespace Engine.NLP.Entity
             return (start, end);
         }
 
+        /// <summary>
+        /// resolve time string
+        /// </summary>
+        /// <param name="timeResult"></param>
+        /// <returns></returns>
         private string GetTimexString(ModelResult timeResult)
         {
             string timeString = "";
