@@ -30,7 +30,6 @@
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.Cognitive_Endpoint_Command_textBox = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
             this.Cognitive_Key_textBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -42,6 +41,7 @@
             this.GloVe_File_button = new System.Windows.Forms.Button();
             this.GloVe_File_textBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -66,15 +66,6 @@
             this.Cognitive_Endpoint_Command_textBox.Name = "Cognitive_Endpoint_Command_textBox";
             this.Cognitive_Endpoint_Command_textBox.Size = new System.Drawing.Size(494, 28);
             this.Cognitive_Endpoint_Command_textBox.TabIndex = 4;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(52, 130);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(179, 18);
-            this.label5.TabIndex = 3;
-            this.label5.Text = "Cognitive Endpoint:";
             // 
             // Cognitive_Key_textBox
             // 
@@ -181,6 +172,15 @@
             this.label2.TabIndex = 1;
             this.label2.Text = "GloVe文件地址：";
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(178, 130);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(53, 18);
+            this.label5.TabIndex = 3;
+            this.label5.Text = "Port:";
+            // 
             // NLPConfigForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
@@ -214,7 +214,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox Cognitive_Endpoint_Command_textBox;
-        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button OK_button;
+        private System.Windows.Forms.Label label5;
     }
 }
