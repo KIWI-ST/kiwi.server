@@ -9,7 +9,6 @@ using Engine.Brain.Method;
 using Engine.GIS.Entity;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Arithmetic;
-using Engine.NLP.Entity;
 using Engine.NLP.Forms;
 using Engine.NLP.Utils;
 using Host.UI.Forms;
@@ -568,35 +567,10 @@ namespace Host.UI
                 case "Open_RawFile_toolStripButton":
                     {
                         OpenFileDialog opg = new OpenFileDialog();
-                        opg.Filter = "IOPF记录文件|*.pdf";
+                        opg.Filter = "报道记录文件|*.doc;*.docx|IOPF记录文件|*.pdf";
                         if (opg.ShowDialog() == DialogResult.OK)
                         {
-                            var (indcident, impact, response) = HostHelper.ReadIOPF(opg.FileName);
-                            string spilt = "------------------------------------------------------------------------------------------------------------------------------------------------";
-                            //add indcident
-                            if (indcident.Length > 0)
-                            {
-                                NLP_listBox.Items.Add(spilt);
-                                Array.ForEach(indcident, (text) => {
-                                    NLP_listBox.Items.Add(text);
-                                });
-                            }
-                            //add impact
-                            if (impact.Length > 0)
-                            {
-                                NLP_listBox.Items.Add(spilt);
-                                Array.ForEach(impact, (text) => {
-                                    NLP_listBox.Items.Add(text);
-                                });
-                            }
-                            //add response
-                            if (response.Length > 0)
-                            {
-                                NLP_listBox.Items.Add(spilt);
-                                Array.ForEach(response, (text) => {
-                                    NLP_listBox.Items.Add(text);
-                                });
-                            }
+                            _ = HostHelper.ReadFlatText(opg.FileName);
                         }
                     }
                     break;
@@ -609,17 +583,18 @@ namespace Host.UI
                     break;
                 case "Annotation_toolStripButton":
                     {
-                        string incidentText = HostHelper.IncidentText;
-                        SentenceGroup sGroup = new SentenceGroup(incidentText);
-                        sGroup.RegroupByTimeline();
-                        //
-                        //foreach (var element in NLP_RawText_listBox.Items)
-                        //    rawText += element;
+                        //1. regorup incident
+                        //string incidentText = HostHelper.Iopf.IncidentText;
+                        //SentenceGroup incidentGroup = new SentenceGroup(incidentText);
+                        //incidentGroup.RegroupByTimeline();
 
-                        //TimeMarkupAnnotation annotation = new TimeMarkupAnnotation();
-                        //IJob annotatorJob = new JobAnnotationText(rawText);
-                        //RegisterJob(annotatorJob);
-                        //annotatorJob.Start();
+                        //2. regroup impact
+
+                        //3. regroup response
+
+                        //4. mixture three aspects
+
+                        //5. annotator
                     }
                     break;
                 //load gloVe model

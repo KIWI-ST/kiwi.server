@@ -15,9 +15,9 @@ namespace Engine.NLP.Entity
         /// </summary>
         static string _boundaryTokenRegex = "[.。]|[!?！？]+";
 
-        string _rawText;
+        readonly string _rawText;
 
-        string[] _sentences;
+        readonly string[] _sentences;
 
         /// <summary>
         /// groups

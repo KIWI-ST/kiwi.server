@@ -2,14 +2,60 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas.Parser;
+using NPOI.XWPF.UserModel;
 
 namespace Host.UI.Util
 {
+    /// <summary>
+    /// IOPF text file
+    /// </summary>
+    public class IOPF
+    {
+        public string[] _incident, _impact, _response;
+        /// <summary>
+        /// 
+        /// </summary>
+        public string IncidentText
+        {
+            get
+            {
+                if (_incident == null)
+                    return null;
+                else
+                    return string.Join(".", _incident);
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        public string ImpactText
+        {
+            get
+            {
+                if (_impact == null)
+                    return null;
+                else
+                    return string.Join(".", _impact);
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        public string ResponseText
+        {
+            get
+            {
+                if (_response == null)
+                    return null;
+                else
+                    return string.Join(".", _response);
+            }
+        }
+    }
+
     /// <summary>
     /// host 辅助类库，提供
     /// 1. 模型统一存储
@@ -22,40 +68,7 @@ namespace Host.UI.Util
 
         #region IOPF文件解析
 
-        private static string[] _incident, _impact, _response;
-
-        public static string IncidentText
-        {
-            get
-            {
-                if (_incident == null)
-                    return null;
-                else
-                    return string.Join(".", _incident);
-            }
-        }
-
-        public static string ImpactText
-        {
-            get
-            {
-                if (_impact == null)
-                    return null;
-                else
-                    return string.Join(".", _impact);
-            }
-        }
-
-        public static string ResponseText
-        {
-            get
-            {
-                if (_response == null)
-                    return null;
-                else
-                    return string.Join(".", _response);
-            }
-        }
+        public static IOPF Iopf { get; private set; } = new IOPF();
 
         #endregion
 
@@ -79,6 +92,8 @@ namespace Host.UI.Util
 
         /// <summary>
         /// load and analysis file
+        /// @example 
+        ///  var (indcident, impact, response) = HostHelper.ReadIOPF(opg.FileName);
         /// </summary>
         /// <param name="fullFilename"></param>
         /// <returns></returns>
@@ -118,11 +133,27 @@ namespace Host.UI.Util
                 collection.RemoveRange(0, responseIdx - impactIdx);
                 string[] response = collection.Take(applicabilityIdx - responseIdx).ToArray();
                 //cache
-                _incident = incident;
-                _impact = impact;
-                _response = response;
-                //
+                Iopf._incident = incident;
+                Iopf._impact = impact;
+                Iopf._response = response;
                 return (incident, impact, response);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fullFilename"></param>
+        /// <returns></returns>
+        public static string ReadFlatText(string fullFilename)
+        {
+            using (FileStream fs = new FileStream(fullFilename, FileMode.Open))
+            {
+                XWPFDocument doc = new XWPFDocument(fs);
+                string text = "";
+                foreach(var paragraph in doc.Paragraphs)
+                    text += paragraph.ParagraphText;
+                return text;
             }
         }
 
