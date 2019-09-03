@@ -78,9 +78,14 @@ namespace Host.UI.Util
         private static Regex _reg = new Regex(@"_\d+");
 
         /// <summary>
-        /// datetime now string
+        /// datetime to utc filename string
         /// </summary>
-        public static string Now { get { return DateTime.Now.ToFileTimeUtc().ToString(); } }
+        public static string NowFile { get { return DateTime.Now.ToFileTimeUtc().ToString(); } }
+
+        /// <summary>
+        /// now time string
+        /// </summary>
+        public static string Now { get { return DateTime.Now.ToLongTimeString().ToString(); } }
 
         /// <summary>
         /// 使用模型
@@ -145,15 +150,15 @@ namespace Host.UI.Util
         /// </summary>
         /// <param name="fullFilename"></param>
         /// <returns></returns>
-        public static string ReadFlatText(string fullFilename)
+        public static string[] ReadFlatText(string fullFilename)
         {
             using (FileStream fs = new FileStream(fullFilename, FileMode.Open))
             {
                 XWPFDocument doc = new XWPFDocument(fs);
-                string text = "";
-                foreach(var paragraph in doc.Paragraphs)
-                    text += paragraph.ParagraphText;
-                return text;
+                List<string> strs = new List<string>();
+                foreach (var paragraph in doc.Paragraphs)
+                    strs.Add(paragraph.ParagraphText);
+                return strs.ToArray();
             }
         }
 
@@ -167,7 +172,7 @@ namespace Host.UI.Util
             string dir = Directory.GetCurrentDirectory() + @"\tmp";
             if (!Directory.Exists(dir))
                 Directory.CreateDirectory(dir);
-            return string.Format(@"{0}\{1}{2}", dir, Now, extention);
+            return string.Format(@"{0}\{1}{2}", dir, NowFile, extention);
         }
 
         /// <summary>
@@ -176,7 +181,7 @@ namespace Host.UI.Util
         /// <returns></returns>
         public static string PackSampleFile(int row, int col, int band)
         {
-            return string.Format("{0}_{1}_{2}_{3}", Now, row, col, band) + ".txt";
+            return string.Format("{0}_{1}_{2}_{3}", NowFile, row, col, band) + ".txt";
         }
 
         /// <summary>

@@ -78,6 +78,8 @@
             this.MAP_listBox = new System.Windows.Forms.ListBox();
             this.tab_nlpview = new System.Windows.Forms.TabPage();
             this.NLP_listBox = new System.Windows.Forms.ListBox();
+            this.text_contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.AddText_toolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tree_contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.bandCombine_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
@@ -91,8 +93,6 @@
             this.mapToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Tools_Configuration_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.text_contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.AddText_toolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.map_toolStrip.SuspendLayout();
             this.map_statusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_main)).BeginInit();
@@ -110,9 +110,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.map_pictureBox)).BeginInit();
             this.map_contextMenuStrip.SuspendLayout();
             this.tab_nlpview.SuspendLayout();
+            this.text_contextMenuStrip.SuspendLayout();
             this.tree_contextMenuStrip.SuspendLayout();
             this.map_menuStrip.SuspendLayout();
-            this.text_contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // map_toolStrip
@@ -530,13 +530,31 @@
             this.NLP_listBox.BackColor = System.Drawing.Color.Black;
             this.NLP_listBox.ContextMenuStrip = this.text_contextMenuStrip;
             this.NLP_listBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.NLP_listBox.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.NLP_listBox.ForeColor = System.Drawing.Color.White;
             this.NLP_listBox.FormattingEnabled = true;
-            this.NLP_listBox.ItemHeight = 18;
+            this.NLP_listBox.HorizontalScrollbar = true;
+            this.NLP_listBox.ItemHeight = 24;
             this.NLP_listBox.Location = new System.Drawing.Point(0, 0);
             this.NLP_listBox.Name = "NLP_listBox";
             this.NLP_listBox.Size = new System.Drawing.Size(1108, 807);
             this.NLP_listBox.TabIndex = 0;
+            // 
+            // text_contextMenuStrip
+            // 
+            this.text_contextMenuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.text_contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.AddText_toolStripMenuItem});
+            this.text_contextMenuStrip.Name = "map_contextMenuStrip";
+            this.text_contextMenuStrip.ShowImageMargin = false;
+            this.text_contextMenuStrip.Size = new System.Drawing.Size(164, 34);
+            // 
+            // AddText_toolStripMenuItem
+            // 
+            this.AddText_toolStripMenuItem.Name = "AddText_toolStripMenuItem";
+            this.AddText_toolStripMenuItem.Size = new System.Drawing.Size(163, 30);
+            this.AddText_toolStripMenuItem.Text = "Add Text (&A)";
+            this.AddText_toolStripMenuItem.Click += new System.EventHandler(this.NLP_funciton_Click);
             // 
             // tree_contextMenuStrip
             // 
@@ -613,7 +631,6 @@
             // map_menuStrip
             // 
             this.map_menuStrip.BackColor = System.Drawing.Color.White;
-            this.map_menuStrip.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.map_menuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.map_menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.文件FToolStripMenuItem,
@@ -649,22 +666,6 @@
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(93, 28);
             this.helpToolStripMenuItem.Text = "Help(&H)";
             // 
-            // text_contextMenuStrip
-            // 
-            this.text_contextMenuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.text_contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.AddText_toolStripMenuItem});
-            this.text_contextMenuStrip.Name = "map_contextMenuStrip";
-            this.text_contextMenuStrip.ShowImageMargin = false;
-            this.text_contextMenuStrip.Size = new System.Drawing.Size(216, 67);
-            // 
-            // AddText_toolStripMenuItem
-            // 
-            this.AddText_toolStripMenuItem.Name = "AddText_toolStripMenuItem";
-            this.AddText_toolStripMenuItem.Size = new System.Drawing.Size(215, 30);
-            this.AddText_toolStripMenuItem.Text = "Add Text (&A)";
-            this.AddText_toolStripMenuItem.Click += new System.EventHandler(this.NLP_funciton_Click);
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
@@ -681,6 +682,7 @@
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "AI-Based Toolkit";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.Resize += new System.EventHandler(this.Main_Resize);
             this.map_toolStrip.ResumeLayout(false);
             this.map_toolStrip.PerformLayout();
@@ -701,10 +703,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.map_pictureBox)).EndInit();
             this.map_contextMenuStrip.ResumeLayout(false);
             this.tab_nlpview.ResumeLayout(false);
+            this.text_contextMenuStrip.ResumeLayout(false);
             this.tree_contextMenuStrip.ResumeLayout(false);
             this.map_menuStrip.ResumeLayout(false);
             this.map_menuStrip.PerformLayout();
-            this.text_contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

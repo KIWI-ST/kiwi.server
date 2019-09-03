@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
@@ -26,6 +27,27 @@ namespace Host.UI
         public Main()
         {
             InitializeComponent();
+            SettingInitialization();
+        }
+
+        /// <summary>
+        /// 提升用户体验，缓存习惯设置
+        /// </summary>
+        private void SettingInitialization()
+        {
+            string mainTabIndex = HostConfiguration.MainTabViewIndex;
+            if (mainTabIndex != null)
+                Main_tabControl.SelectedIndex = Convert.ToInt32(mainTabIndex);
+        }
+
+        /// <summary>
+        /// 关闭操作
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Main_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            HostConfiguration.MainTabViewIndex = Main_tabControl.SelectedIndex.ToString();
         }
 
         bool _is_firstBallon = true;
@@ -419,24 +441,24 @@ namespace Host.UI
             ToolStripItem item = sender as ToolStripItem;
             switch (item.Name)
             {
-                    //task
+                //task
                 case "Tasks_Monitor_toolStripButton":
                     TaskMonitor mapTaskForm = new TaskMonitor();
                     mapTaskForm.Jobs = _jobs;
                     mapTaskForm.ShowDialog();
                     break;
-                    //calucte kappa and oa
+                //calucte kappa and oa
                 case "Accuracy_toolStripButton":
                     KappaOaForm koaForm = new KappaOaForm();
                     koaForm.RasterDic = _rasterDic;
                     koaForm.ShowDialog();
                     break;
-                    //添加图像
+                //添加图像
                 case "Open_toolstripmenuitem":
                 case "Open_contextMenuStrip":
                     ReadImage();
                     break;
-                    //DQN PolSAR Classification 
+                //DQN PolSAR Classification 
                 case "DQN_PolSAR_Classification_ToolStripMenuItem":
                     DQNPolSARForm dqnForm = new DQNPolSARForm();
                     dqnForm.RasterDic = _rasterDic;
@@ -455,7 +477,7 @@ namespace Host.UI
                         dqnClassifyJob.Start();
                     }
                     break;
-                    //cnn classification
+                //cnn classification
                 case "CNN_toolStripButton":
                     CNNForm convForm = new CNNForm();
                     convForm.RasterDic = _rasterDic;
@@ -466,7 +488,7 @@ namespace Host.UI
                         cnnTrainingJob.Start();
                     }
                     break;
-                    //random forest classification
+                //random forest classification
                 case "RandomForest_ToolStripMenuItem":
                     RFForm rfForm = new RFForm();
                     rfForm.RasterDic = _rasterDic;
@@ -486,20 +508,20 @@ namespace Host.UI
                         }
                     }
                     break;
-                    //make samples in single-minibatch
+                //make samples in single-minibatch
                 case "Single_Batch_ToolStripMenuItem":
                     SingleBatchExportForm Single_batch_form = new SingleBatchExportForm();
                     Single_batch_form.RasterDic = _rasterDic;
                     Single_batch_form.ShowDialog();
                     break;
-                    //make sample in multi-minibatches
+                //make sample in multi-minibatches
                 case "Multi_Batches_ToolStripMenuItem":
                     {
                         MultiBatchesExprotForm multi_batch_form = new MultiBatchesExprotForm();
                         multi_batch_form.ShowDialog();
                     }
                     break;
-                    //svm function
+                //svm function
                 case "L2SVM_ToolStripMenuItem":
                     SVMFrom svm_Form = new SVMFrom();
                     svm_Form.RasterDic = _rasterDic;
@@ -570,7 +592,14 @@ namespace Host.UI
                         opg.Filter = "报道记录文件|*.doc;*.docx|IOPF记录文件|*.pdf";
                         if (opg.ShowDialog() == DialogResult.OK)
                         {
-                            _ = HostHelper.ReadFlatText(opg.FileName);
+                            string[] text = HostHelper.ReadFlatText(opg.FileName);
+                            int seed = 1;
+                            Array.ForEach(text, paragraph =>
+                            {
+                                string formatText = string.Format("{0} 段落 {1} : {2}", HostHelper.Now, seed, paragraph);
+                                NLP_listBox.Items.Add(formatText);
+                                seed++;
+                            });
                         }
                     }
                     break;
