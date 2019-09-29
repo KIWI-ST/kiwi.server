@@ -1,7 +1,7 @@
 # kiwi.server
 kiwi.server is a tool set that integrates gdal, accord.net, cntk to solve some problems in the field of GIS by using machine learning algorihtms...There is complied executable program [released software](https://github.com/axmand/kiwi.server/releases) for testing.
 ### Examples ###
->in general, code samples in [Examples and Tests](https://github.com/axmand/kiwi.server/tree/master/Examples) are updated as functionality increases
+>code samples in [Examples and Tests](https://github.com/axmand/kiwi.server/tree/master/Examples) are updated as functionality increases
 The commonly used operations are packaged, mainly the following modules
 ### Engine.GIS ####
 >a little sample style api library based on gdal. 
