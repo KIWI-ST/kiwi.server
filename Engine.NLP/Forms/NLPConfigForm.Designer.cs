@@ -29,8 +29,9 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.Cognitive_Endpoint_Command_textBox = new System.Windows.Forms.TextBox();
-            this.Cognitive_Key_textBox = new System.Windows.Forms.TextBox();
+            this.StanfordNLP_Server_Port_textBox = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.StanfordNLP_Server_Url_textBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.OK_button = new System.Windows.Forms.Button();
@@ -41,16 +42,15 @@
             this.GloVe_File_button = new System.Windows.Forms.Button();
             this.GloVe_File_textBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.Cognitive_Endpoint_Command_textBox);
+            this.groupBox1.Controls.Add(this.StanfordNLP_Server_Port_textBox);
             this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.Cognitive_Key_textBox);
+            this.groupBox1.Controls.Add(this.StanfordNLP_Server_Url_textBox);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
@@ -60,24 +60,33 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Stanford NLP Core";
             // 
-            // Cognitive_Endpoint_Command_textBox
+            // StanfordNLP_Server_Port_textBox
             // 
-            this.Cognitive_Endpoint_Command_textBox.Location = new System.Drawing.Point(252, 126);
-            this.Cognitive_Endpoint_Command_textBox.Name = "Cognitive_Endpoint_Command_textBox";
-            this.Cognitive_Endpoint_Command_textBox.Size = new System.Drawing.Size(494, 28);
-            this.Cognitive_Endpoint_Command_textBox.TabIndex = 4;
+            this.StanfordNLP_Server_Port_textBox.Location = new System.Drawing.Point(252, 126);
+            this.StanfordNLP_Server_Port_textBox.Name = "StanfordNLP_Server_Port_textBox";
+            this.StanfordNLP_Server_Port_textBox.Size = new System.Drawing.Size(494, 28);
+            this.StanfordNLP_Server_Port_textBox.TabIndex = 4;
             // 
-            // Cognitive_Key_textBox
+            // label5
             // 
-            this.Cognitive_Key_textBox.Location = new System.Drawing.Point(252, 45);
-            this.Cognitive_Key_textBox.Name = "Cognitive_Key_textBox";
-            this.Cognitive_Key_textBox.Size = new System.Drawing.Size(494, 28);
-            this.Cognitive_Key_textBox.TabIndex = 1;
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(8, 131);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(233, 18);
+            this.label5.TabIndex = 3;
+            this.label5.Text = "Stanford NLP Server Port:";
+            // 
+            // StanfordNLP_Server_Url_textBox
+            // 
+            this.StanfordNLP_Server_Url_textBox.Location = new System.Drawing.Point(252, 45);
+            this.StanfordNLP_Server_Url_textBox.Name = "StanfordNLP_Server_Url_textBox";
+            this.StanfordNLP_Server_Url_textBox.Size = new System.Drawing.Size(494, 28);
+            this.StanfordNLP_Server_Url_textBox.TabIndex = 1;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(43, 50);
+            this.label1.Location = new System.Drawing.Point(51, 50);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(188, 18);
             this.label1.TabIndex = 0;
@@ -172,15 +181,6 @@
             this.label2.TabIndex = 1;
             this.label2.Text = "GloVe文件地址：";
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(178, 130);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(53, 18);
-            this.label5.TabIndex = 3;
-            this.label5.Text = "Port:";
-            // 
             // NLPConfigForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
@@ -203,7 +203,7 @@
         #endregion
 
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.TextBox Cognitive_Key_textBox;
+        private System.Windows.Forms.TextBox StanfordNLP_Server_Url_textBox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.TextBox GloVe_File_textBox;
@@ -213,7 +213,7 @@
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox Cognitive_Endpoint_Command_textBox;
+        private System.Windows.Forms.TextBox StanfordNLP_Server_Port_textBox;
         private System.Windows.Forms.Button OK_button;
         private System.Windows.Forms.Label label5;
     }
