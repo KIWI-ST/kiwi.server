@@ -9,7 +9,7 @@ using Engine.Brain.Method.DeepQNet;
 namespace Engine.Brain.Utils
 {
 
-    class MachineEntity
+    class NetEntity
     {
         /// <summary>
         /// 模型类型，与需要与类名一致
@@ -20,7 +20,7 @@ namespace Engine.Brain.Utils
     /// <summary>
     /// 模型保存实体
     /// </summary>
-    class NeuralNetEntity : MachineEntity
+    class NeuralNetEntity : NetEntity
     {
         /// <summary>
         /// 模型的byte数据
@@ -31,7 +31,7 @@ namespace Engine.Brain.Utils
     /// <summary>
     /// support store deepQNet
     /// </summary>
-    class DeepQNetEntity : MachineEntity
+    class DeepQNetEntity : NetEntity
     {
         /// <summary>
         /// actor
@@ -97,7 +97,7 @@ namespace Engine.Brain.Utils
             }
 
             /// <summary>
-            /// save model
+            /// save model (Neural Network)
             /// </summary>
             public static void SaveModel(INeuralNet network, string filename)
             {
@@ -127,13 +127,18 @@ namespace Engine.Brain.Utils
             }
 
             /// <summary>
-            /// save DQN network
+            /// save model (Deep Q Network)
             /// </summary>
             /// <param name="network"></param>
             /// <param name="filename"></param>
             public static void SaveModel(IDeepQNet network, string filename)
             {
+                //check dir
+                string dir = Path.GetDirectoryName(filename);
+                if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+                //binary buffer
                 var (actorBuffer, criticBuffer, innerTypeName, actionsNum, featuresNum ,actionKeys) = network.PersistencMemory();
+                //save model by typeName
                 string typeName = network.GetType().Name;
                 DeepQNetEntity entity = new DeepQNetEntity()
                 {
@@ -145,6 +150,7 @@ namespace Engine.Brain.Utils
                     ActionsNum = actionsNum,
                     ActionKeys = actionKeys
                 };
+                //config
                 string jsonText = Newtonsoft.Json.JsonConvert.SerializeObject(entity);
                 using (Stream ms = new MemoryStream())
                 using (StreamWriter sw = new StreamWriter(ms))
@@ -167,7 +173,7 @@ namespace Engine.Brain.Utils
                     byte[] heByte = new byte[fsLen];
                     int r = fs.Read(heByte, 0, heByte.Length);
                     string jsonText = System.Text.Encoding.UTF8.GetString(heByte);
-                    MachineEntity entity = Newtonsoft.Json.JsonConvert.DeserializeObject<MachineEntity>(jsonText);
+                    NetEntity entity = Newtonsoft.Json.JsonConvert.DeserializeObject<NetEntity>(jsonText);
                     if (entity.TypeName == typeof(FullyChannelNet9).Name) //cnn
                     {
                         NeuralNetEntity neuralNetEntity = Newtonsoft.Json.JsonConvert.DeserializeObject<NeuralNetEntity>(jsonText);
