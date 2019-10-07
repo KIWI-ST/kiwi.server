@@ -46,9 +46,6 @@
     <Reference Include="Cntk.Core.Managed-2.7, Version=2.7.0.0, Culture=neutral, PublicKeyToken=a82c1f3f67b62253, processorArchitecture=AMD64">
       <HintPath>..\packages\CNTK.GPU.2.7.0\lib\netstandard2.0\Cntk.Core.Managed-2.7.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Bot.Builder.AI.Luis, Version=4.5.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Bot.Builder.AI.Luis.4.5.1\lib\netstandard2.0\Microsoft.Bot.Builder.AI.Luis.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Extensions.Configuration, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.Configuration.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.dll</HintPath>

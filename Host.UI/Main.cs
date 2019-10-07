@@ -10,6 +10,7 @@ using Engine.Brain.Method;
 using Engine.GIS.Entity;
 using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Arithmetic;
+using Engine.NLP.Entity;
 using Engine.NLP.Forms;
 using Engine.NLP.Utils;
 using Host.UI.Forms;
@@ -612,9 +613,13 @@ namespace Host.UI
                     break;
                 case "Annotation_toolStripButton":
                     {
+                        
+                        SentenceGroup pipline = new SentenceGroup(HostHelper.FullText);
+                        pipline.RegroupByTimeline("zh-cn");
+                        //逐行处理
                         //1. regorup incident
                         //string incidentText = HostHelper.Iopf.IncidentText;
-                        //SentenceGroup incidentGroup = new SentenceGroup(incidentText);
+                        //
                         //incidentGroup.RegroupByTimeline();
 
                         //2. regroup impact

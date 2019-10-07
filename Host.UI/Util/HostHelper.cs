@@ -66,8 +66,16 @@ namespace Host.UI.Util
     public class HostHelper
     {
 
+        /// <summary>
+        /// 全文保存
+        /// </summary>
+        public static string FullText { get; private set; } = "";
+
         #region IOPF文件解析
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static IOPF Iopf { get; private set; } = new IOPF();
 
         #endregion
@@ -154,10 +162,15 @@ namespace Host.UI.Util
         {
             using (FileStream fs = new FileStream(fullFilename, FileMode.Open))
             {
+                FullText = "";
                 XWPFDocument doc = new XWPFDocument(fs);
                 List<string> strs = new List<string>();
                 foreach (var paragraph in doc.Paragraphs)
-                    strs.Add(paragraph.ParagraphText);
+                {
+                    string text = paragraph.ParagraphText;
+                    strs.Add(text);
+                    FullText += text;
+                }
                 return strs.ToArray();
             }
         }
