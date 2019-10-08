@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Engine.NLP.Entity;
 using Engine.NLP.Utils;
 

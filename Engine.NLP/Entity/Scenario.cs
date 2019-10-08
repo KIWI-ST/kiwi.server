@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Engine.NLP.Entity
 {
@@ -12,7 +8,7 @@ namespace Engine.NLP.Entity
     /// </summary>
     public class Scenario
     {
-        List<Pipline> _piplines = new List<Pipline>();
+        readonly List<Pipline> _piplines = new List<Pipline>();
 
         public void MergePipline(Pipline p)
         {
