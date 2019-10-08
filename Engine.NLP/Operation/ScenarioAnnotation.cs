@@ -13,7 +13,7 @@ namespace Engine.NLP.Annotation
     /// 2. split words
     /// 3. 
     /// </summary>
-    public class ScenarioAnnotation : IScenarioAnnotation
+    public class ScenarioAnnotation
     {
 
         #region Annotation ClassName

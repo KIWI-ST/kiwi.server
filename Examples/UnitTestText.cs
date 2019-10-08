@@ -46,8 +46,8 @@ namespace Examples
         [TestMethod]
         public void RecognizeScenarioNumericWithUnit()
         {
-            IScenarioAnnotation annotation2 = new ScenarioAnnotation();
-            _ = annotation2.Process("2010年7月15日Tanker Pacific Management (Singapore) Pte Ltd（新加坡太平洋油轮公司）所属利比里亚籍（最初误报道为巴拿马籍[1]）“COSMIC JEWEL”(“宇宙宝石”)号30万吨级VLCC油轮在大连新港向国际储运公司原油灌区卸送中石油控股的中油燃料油股份有限公司委托中国联合石油有限责任公司进口的委内瑞拉祖阿塔原油15.3万吨，卸载入中国联合石油有限责任公司租赁的国际储运公司原油灌区304、401、403号罐。");
+           // IScenarioAnnotation annotation2 = new ScenarioAnnotation();
+           // _ = annotation2.Process("2010年7月15日Tanker Pacific Management (Singapore) Pte Ltd（新加坡太平洋油轮公司）所属利比里亚籍（最初误报道为巴拿马籍[1]）“COSMIC JEWEL”(“宇宙宝石”)号30万吨级VLCC油轮在大连新港向国际储运公司原油灌区卸送中石油控股的中油燃料油股份有限公司委托中国联合石油有限责任公司进口的委内瑞拉祖阿塔原油15.3万吨，卸载入中国联合石油有限责任公司租赁的国际储运公司原油灌区304、401、403号罐。");
             //Scenario s1 =  annotation2.Process("7月15日20时，油轮开始用2号输油管线向国际储运公司的原油罐区卸送，祥诚公司作业人员开始通过原油罐区内一套内径90厘米输油管道上的排空阀向输油管道内注入脱硫剂。");
             //annotation2.Process("加剂过程中由于由于输油管内压力高，加注软管多处出现超压鼓泡，连接处脱落造成脱硫化剂泄漏等情况，致使加注作业多次中断共计约4个小时，以致未能按计划在17小时卸油作业中加入全部的脱硫剂。");
         }
@@ -61,13 +61,13 @@ namespace Examples
             SentenceGroup sGroup = new SentenceGroup(rawTextzh);
             sGroup.RegroupByTimeline(Culture.Chinese);
             //2. annotation
-            IScenarioAnnotation annotation = new ScenarioAnnotation();
-            foreach (var group in sGroup.Groups)
-            {
-                string timeStamp = group.Key;
-                string rawText = string.Join(".", group.Value.ToArray());
-                Scenario scenario =  annotation.Process(rawText);
-            }
+            //IScenarioAnnotation annotation = new ScenarioAnnotation();
+            //foreach (var group in sGroup.Groups)
+            //{
+               // string timeStamp = group.Key;
+                //string rawText = string.Join(".", group.Value.ToArray());
+                //Scenario scenario =  annotation.Process(rawText);
+            //}
             //print scenario
 
         }

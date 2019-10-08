@@ -232,7 +232,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Annotation\ScenarioAnnotation.cs" />
+    <Compile Include="Operation\ScenarioAnnotation.cs" />
     <Compile Include="Entity\Pipline.cs" />
     <Compile Include="Entity\Scenario.cs" />
     <Compile Include="Forms\NLPConfigForm.cs">
@@ -253,7 +253,6 @@
     <Compile Include="Forms\NLPScottPlotForm.Designer.cs">
       <DependentUpon>NLPScottPlotForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="IAnnotation.cs" />
     <Compile Include="Extend\StringExtend.cs" />
     <Compile Include="Lexicon\HalfmanTree.cs" />
     <Compile Include="Lexicon\Lexicon.cs" />
