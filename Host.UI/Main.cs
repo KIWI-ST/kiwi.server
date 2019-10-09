@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
@@ -12,6 +11,8 @@ using Engine.GIS.GLayer.GRasterLayer;
 using Engine.GIS.GOperation.Arithmetic;
 using Engine.NLP.Entity;
 using Engine.NLP.Forms;
+using Engine.NLP.Process;
+using Engine.NLP.Process.Tools;
 using Engine.NLP.Utils;
 using Host.UI.Forms;
 using Host.UI.Jobs;
@@ -29,6 +30,15 @@ namespace Host.UI
         {
             InitializeComponent();
             SettingInitialization();
+            //}{debug
+            DebugCode();
+        }
+
+        private void DebugCode()
+        {
+            string text = "2010年7月15日,快速的棕色狐狸跳过了懒惰的狗";
+            IRegimentTool tool = new RegimentTool();
+            tool.RegimentTextByTimeline(text);
         }
 
         /// <summary>

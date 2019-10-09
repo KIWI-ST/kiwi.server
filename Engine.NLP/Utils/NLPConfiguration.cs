@@ -48,17 +48,17 @@ namespace Engine.NLP.Utils
         /// <summary>
         /// https://console.bce.baidu.com/ai/?_=1570501352525&fromai=1#/ai/nlp/app/list
         /// </summary>
-        private static readonly string baiduAIAppId = "17451194";
+        private const string baiduAIAppId = "17451194";
 
         /// <summary>
         /// https://console.bce.baidu.com/ai/?_=1570501352525&fromai=1#/ai/nlp/app/list
         /// </summary>
-        private static readonly string baiduAIAPIKey = "UGcTi6Y5mRWna8ddEXrbhuCt";
+        private const string baiduAIAPIKey = "UGcTi6Y5mRWna8ddEXrbhuCt";
 
         /// <summary>
         /// https://console.bce.baidu.com/ai/?_=1570501352525&fromai=1#/ai/nlp/app/list
         /// </summary>
-        private static readonly string baiduAISecretKey = "YlvUOTUN5fcTUM3041vpLMSC074GQG42 ";
+        private const string baiduAISecretKey = "YlvUOTUN5fcTUM3041vpLMSC074GQG42 ";
 
         public static string BaiduAIAppId
         {
@@ -103,12 +103,12 @@ namespace Engine.NLP.Utils
         /// <summary>
         /// corenlp server address
         /// </summary>
-        private static readonly string corenlpaddress = @"http://127.0.0.1";
+        private const string corenlpaddress = @"http://127.0.0.1";
 
         /// <summary>
         /// port of core nlp server
         /// </summary>
-        private static readonly string corenlpport = "9000";
+        private const string corenlpport = "9000";
 
         /// <summary>
         ///  store configuration file

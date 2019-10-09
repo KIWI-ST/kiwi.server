@@ -181,7 +181,6 @@
     <Compile Include="UnitTestCNTK.cs" />
     <Compile Include="UnitTestGIS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UnitTestText2.cs" />
     <Compile Include="UnitTestText.cs" />
   </ItemGroup>
   <ItemGroup>
