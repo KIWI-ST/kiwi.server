@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Baidu.Aip.Nlp;
 using Engine.NLP.Utils;
 using Newtonsoft.Json.Linq;
@@ -6,6 +7,9 @@ using Newtonsoft.Json.Linq;
 namespace Engine.NLP.Process.Tools
 {
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class LexerItem
     {
         public int byte_length { get; set; }
@@ -17,16 +21,6 @@ namespace Engine.NLP.Process.Tools
         public string uri { get; set; }
         public List<string> loc_details { get; set; }
         public List<string> basic_words { get; set; }
-    }
-
-    /// <summary>
-    /// 词法分析返回对象
-    /// </summary>
-    public class Response
-    {
-        public int status { get; set; }
-        public string version { get; set; }
-        public List<LexerItem> results { get; set; }
     }
 
     /// <summary>
@@ -59,12 +53,12 @@ namespace Engine.NLP.Process.Tools
             foreach (JProperty item in result.Children())
             {
                 //https://ai.baidu.com/docs#/NLP-Csharp-SDK/e31833ea
-                //处理items的问题
+                //处理items的（结果）
                 if (item.Name == "items")
                 {
                     JToken values = item.Value;
                     //analysis
-                    ProcessLexer(values);
+                    ProcessBaiduAILexer(values);
                 }
             }
             //
@@ -72,15 +66,61 @@ namespace Engine.NLP.Process.Tools
         }
 
         /// <summary>
+        /// return node value by node name
+        /// </summary>
+        /// <param name="json"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        private string JTokenSelectNode(JToken json, string name)
+        {
+            try
+            {
+                string result = "";
+                //这里6.0版块可以用正则匹配
+                var node = json.SelectToken("$.." + name);
+                if (node != null)
+                {
+                    //判断节点类型
+                    if (node.Type == JTokenType.String || node.Type == JTokenType.Integer || node.Type == JTokenType.Float)
+                    {
+                        //返回string值
+                        result = node.Value<object>().ToString();
+                    }
+                }
+                return result;
+            }
+            catch (Exception)
+            {
+                return "";
+            }
+        }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="lexers"></param>
-        private void ProcessLexer(JToken lexers)
+        private List<LexerItem> ProcessBaiduAILexer(JToken lexers)
         {
-            foreach(JToken element in lexers)
-            {
-
-            }
+            string[] tokens = new string[] {
+            "byte_length",
+            "byte_offset",
+            "formal",
+            "item",
+            "ne",
+            "pos",
+            "uri",
+            "loc_details",
+            "basic_words",
+            };
+            //反馈items
+            List<LexerItem> items = new List<LexerItem>();
+            foreach(JToken token in lexers)
+                foreach(string name in tokens)
+                {
+                    string value = JTokenSelectNode(token, name);
+                }
+            //
+            return null;
         }
 
     }
