@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace Engine.NLP.Utils
 {
@@ -85,6 +86,29 @@ namespace Engine.NLP.Utils
                     return outTime;
             }
             return DateTime.MinValue;
+        }
+
+        /// <summary>
+        /// return node value by node name
+        /// </summary>
+        /// <param name="json"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static string JTokenSelectNode(JToken json, string name)
+        {
+            try
+            {
+                if (json == null) return "";
+                JToken node = json.SelectToken("$.." + name);
+                if (node != null)
+                    if (node.Type == JTokenType.String || node.Type == JTokenType.Integer || node.Type == JTokenType.Float|| node.Type == JTokenType.Array)
+                        return node.Value<object>().ToString();
+                return "";
+            }
+            catch (Exception)
+            {
+                return "";
+            }
         }
 
     }

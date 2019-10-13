@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Baidu.Aip.Nlp;
 using Engine.NLP.Utils;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Engine.NLP.Process.Tools
@@ -56,43 +58,11 @@ namespace Engine.NLP.Process.Tools
                 //处理items的（结果）
                 if (item.Name == "items")
                 {
-                    JToken values = item.Value;
                     //analysis
-                    ProcessBaiduAILexer(values);
+                    List<LexerItem> items =  ProcessBaiduAILexer(item.Value);
                 }
             }
             //
-
-        }
-
-        /// <summary>
-        /// return node value by node name
-        /// </summary>
-        /// <param name="json"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        private string JTokenSelectNode(JToken json, string name)
-        {
-            try
-            {
-                string result = "";
-                //这里6.0版块可以用正则匹配
-                var node = json.SelectToken("$.." + name);
-                if (node != null)
-                {
-                    //判断节点类型
-                    if (node.Type == JTokenType.String || node.Type == JTokenType.Integer || node.Type == JTokenType.Float)
-                    {
-                        //返回string值
-                        result = node.Value<object>().ToString();
-                    }
-                }
-                return result;
-            }
-            catch (Exception)
-            {
-                return "";
-            }
         }
 
         /// <summary>
@@ -101,6 +71,7 @@ namespace Engine.NLP.Process.Tools
         /// <param name="lexers"></param>
         private List<LexerItem> ProcessBaiduAILexer(JToken lexers)
         {
+            //返回词法分析结果属性
             string[] tokens = new string[] {
             "byte_length",
             "byte_offset",
@@ -114,14 +85,24 @@ namespace Engine.NLP.Process.Tools
             };
             //反馈items
             List<LexerItem> items = new List<LexerItem>();
+            //序列化构造对象
             foreach(JToken token in lexers)
-                foreach(string name in tokens)
-                {
-                    string value = JTokenSelectNode(token, name);
-                }
-            //
-            return null;
+            {
+                string lexerString = JsonConvert.SerializeObject(token);
+                LexerItem item = JsonConvert.DeserializeObject<LexerItem>(lexerString);
+                items.Add(item);
+            }
+            //返回结果
+            return items;
         }
 
     }
 }
+
+//  foreach (string name in tokens)
+//  {
+//          string value = NLPHelper.JTokenSelectNode(token, name);
+//          PropertyInfo property = item.GetType().GetProperty(name);
+//          var s = JsonConvert.DeserializeObject(value);
+//          item.GetType().GetProperty(name).SetValue(item, value);
+//  }
