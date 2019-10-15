@@ -12,7 +12,7 @@ namespace Engine.NLP.Annotation
     /// 2. split words
     /// 3. 
     /// </summary>
-    public class ScenarioAnnotation
+    public class ScenarioAnnotate
     {
 
         #region Annotation ClassName
@@ -102,8 +102,9 @@ namespace Engine.NLP.Annotation
         /// <summary>
         ///  Annotation with SUTime
         /// </summary>
-        public ScenarioAnnotation()
+        public ScenarioAnnotate()
         {
+            //annotate properites
             _props = new java.util.Properties();
             //refrenece https://stanfordnlp.github.io/CoreNLP/annotators.html
             _props.setProperty("annotators",
@@ -119,6 +120,24 @@ namespace Engine.NLP.Annotation
                 "ner, " +
                 //parse https://stanfordnlp.github.io/CoreNLP/parse.html
                 "parse");
+        }
+
+
+        /// <summary>
+        /// 执行regroup, 
+        /// </summary>
+        /// <param name="rawText"></param>
+        public void ProcessTimeAbstract(string rawText)
+        {
+            if (rawText == null || rawText.Length == 0) return;
+            edu.stanford.nlp.pipeline.StanfordCoreNLPClient pipeline = new edu.stanford.nlp.pipeline.StanfordCoreNLPClient(_props, NLPConfiguration.CoreNLPAddress, Convert.ToInt32(NLPConfiguration.CoreNLPPort));
+            edu.stanford.nlp.pipeline.Annotation document = new edu.stanford.nlp.pipeline.Annotation(rawText);
+            pipeline.annotate(document);
+            java.util.AbstractList sentences = document.get(sentencesAnnotationClass) as java.util.AbstractList;
+            foreach (edu.stanford.nlp.util.CoreMap sentence in sentences)
+            {
+                //
+            }
         }
 
         /// <summary>

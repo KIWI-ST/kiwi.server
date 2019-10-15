@@ -1,7 +1,0 @@
-﻿[*.cs]
-
-# IDE0052: 删除未读的私有成员
-dotnet_diagnostic.IDE0052.severity = silent
-
-# CA1031: 不捕获常规异常类型
-dotnet_diagnostic.CA1031.severity = none
