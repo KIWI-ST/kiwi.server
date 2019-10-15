@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using Baidu.Aip.Nlp;
+﻿using Baidu.Aip.Nlp;
 using Engine.NLP.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Engine.NLP.Process.Tools
 {
@@ -56,7 +54,7 @@ namespace Engine.NLP.Process.Tools
     /// <summary>
     /// 重组合原始预料，根据时间 (datetime.v2）规则重组预料
     /// </summary>
-    public class RegimentTool : IRegimentTool
+    public class RegimentTool
     {
         /// <summary>
         /// 
